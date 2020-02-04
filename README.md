@@ -28,7 +28,7 @@ Projet Intégrateur.
             <td rowspan="5">Noyau logiciel</td>
         </tr>
         <tr>
-            <td>**Arthur**</td>
+            <td><b>Arthur</b></td>
         </tr>
         <tr>
             <td>Robin</td>
@@ -42,7 +42,7 @@ Projet Intégrateur.
         <tr>
             <td rowspan="2">Réseau</td>
             <td>Interaction client / serveur</td>
-            <td>**Emeric**</td>
+            <td><b>Emeric</b></td>
         </tr>
         <tr>
             <td>Bases de données</td>
@@ -51,7 +51,7 @@ Projet Intégrateur.
         <tr>
             <td rowspan="3">Design</td>
             <td rowspan="3">Design</td>
-            <td>**Romaric**</td>
+            <td><b>Romaric</b></td>
         </tr>
         <tr>
             <td>Alexandre</td>
