@@ -7,7 +7,7 @@ enum CardType
     Faction
 }
 
-public enum Facing 
+enum Facing 
 {
     UP, 
     DOWN
