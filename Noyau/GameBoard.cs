@@ -5,25 +5,13 @@ public class GameBoard {
 	
 	// Défausses des différents types de cartes
 	private List<Card> m_hermit;
-	public List<Card> Hermit {
-		get {
-			return m_hermit;
-		}
-	}
+	public List<Card> Hermit {get;}
 	
 	private List<Card> m_black;
-	public List<Card> Black {
-		get {
-			return m_black;
-		}
-	}
+	public List<Card> Black {get;}
 	
 	private List<Card> m_white;
-	public List<Card> White {
-		get {
-			return m_white;
-		}
-	}
+	public List<Card> White {get;}
 	
 	// Lieux du plateau
 	private Card[] m_areas;

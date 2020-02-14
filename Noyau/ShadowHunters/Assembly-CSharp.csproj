@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{CA52FAB4-2FCD-83E1-30C3-C65A8A1915A1}</ProjectGuid>
+    <ProjectGuid>{52B9E182-DB6D-9DD3-3FDF-011122EB3F4A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -66,41 +66,42 @@
     <Compile Include="Assets\Scripts\CardEvent.cs" />
     <Compile Include="Assets\Scripts\DrawCard.cs" />
     <Compile Include="Assets\Scripts\GivePlayerCard.cs" />
+    <Compile Include="Assets\Scripts\MoveCharacter.cs" />
     <Compile Include="Assets\Scripts\NewPlayer.cs" />
     <Compile Include="Assets\Scripts\ScriptableObjects\Card.cs" />
     <Compile Include="Assets\Scripts\ScriptableObjects\Character.cs" />
     <Reference Include="Unity.Timeline.Editor">
-      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Unity/ShadowHunter/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Noyau/ShadowHunters/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
-      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Unity/ShadowHunter/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Noyau/ShadowHunters/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Unity/ShadowHunter/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Noyau/ShadowHunters/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Unity/ShadowHunter/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Noyau/ShadowHunters/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Unity/ShadowHunter/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Noyau/ShadowHunters/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Unity/ShadowHunter/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Noyau/ShadowHunters/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Unity/ShadowHunter/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Noyau/ShadowHunters/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Unity/ShadowHunter/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
+      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Noyau/ShadowHunters/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Tilemap.Editor">
-      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Unity/ShadowHunter/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
+      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Noyau/ShadowHunters/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Unity/ShadowHunter/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Noyau/ShadowHunters/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Unity/ShadowHunter/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+      <HintPath>C:/Users/nassi/Documents/Projet Integrateur/projet-integrateur---groupe-mn/Noyau/ShadowHunters/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.0f6/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
