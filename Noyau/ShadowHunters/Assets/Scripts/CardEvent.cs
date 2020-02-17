@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class CardEvent : MonoBehaviour
 {
-    public GameObject discardPile;
-    // Start is called before the first frame update
-    public IEnumerator UsePower()
+
+    public void UsePower(Card card)
     {
-        Debug.Log("Carte initialisée");
-        yield return new WaitForSeconds(3f);
-        transform.SetParent(discardPile.transform, false);
-        Debug.Log("la carte elle est utilisée p'tit bg");
+        Debug.Log("Carte : " + card.cardName);
+        Debug.Log("Effet : " + card.effect);
     }
 
 }

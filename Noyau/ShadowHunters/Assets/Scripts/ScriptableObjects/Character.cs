@@ -6,7 +6,16 @@ using UnityEngine;
 public class Character : ScriptableObject
 {
     public string characterName;
+    public CharacterTeam team;
     public int characterHP;
     public string characterPower;
     public string characterVictoryCondition;
+    public Sprite sprite;
+}
+
+public enum CharacterTeam
+{
+    Shadow,
+    Hunter,
+    Neutral
 }

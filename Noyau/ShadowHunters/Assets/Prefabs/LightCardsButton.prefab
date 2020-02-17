@@ -142,10 +142,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2830916d0a75a445bf9e32e96e3133e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Cards:
-  - {fileID: 1475065386767619259, guid: d74d020a034c58a46aa4e94f74453b07, type: 3}
-  playerCards: {fileID: 5412000759318006424, guid: 076dab25f5608ec44a71769c267caff1,
+  cardPrefab: {fileID: 3082920907157964236, guid: 283f6d9d02ce5134fbdfa77a78e6d6de,
     type: 3}
+  cards:
+  - {fileID: 0}
+  - {fileID: 0}
+  deck: []
+  playerCards: {fileID: 0}
+  usedCards: []
+  discardPile: {fileID: 0}
 --- !u!1 &6642864352156119532
 GameObject:
   m_ObjectHideFlags: 0

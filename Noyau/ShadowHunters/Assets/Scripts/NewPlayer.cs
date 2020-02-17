@@ -9,13 +9,7 @@ public class NewPlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerCards.transform.SetParent(transform);
-        Debug.Log("A new player has connected.");
+        Debug.Log("Un nouveau joueur s'est connecté.");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

@@ -13,7 +13,7 @@ TagManager:
   - UI
   - 
   - 
-  - Card
+  - 
   - 
   - 
   - 
@@ -38,8 +38,8 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Card
-    uniqueID: 3401774569
+  - name: Background
+    uniqueID: 2090978611
     locked: 0
   - name: Default
     uniqueID: 0

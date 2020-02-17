@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c8f3e5552ff92844b53cedaa846b7b4, type: 3}
+  m_Name: Allie
+  m_EditorClassIdentifier: 
+  characterName: Allie
+  team: 2
+  characterHP: 8
+  characterPower: Amour maternel
+  characterVictoryCondition: "\xCAtre encore en vie quand la partie se termine."
+  sprite: {fileID: 21300000, guid: 29a0299389003894583eea6c90a37d47, type: 3}
