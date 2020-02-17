@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\GivePlayerCard.cs" />
     <Compile Include="Assets\Scripts\MoveCharacter.cs" />
     <Compile Include="Assets\Scripts\NewPlayer.cs" />
+    <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\ScriptableObjects\Card.cs" />
     <Compile Include="Assets\Scripts\ScriptableObjects\Character.cs" />
     <Reference Include="Unity.Timeline.Editor">

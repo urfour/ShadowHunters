@@ -14,7 +14,7 @@ public class GivePlayerCard : MonoBehaviour
         playerCard.GetComponent<SpriteRenderer>().sprite = characterCards[0].sprite;
         playerCard.transform.localScale = new Vector2(1, 1);
         playerCard.transform.SetParent(playerCards.transform, false);
-        Debug.Log("Vous êtes " + characterCards[0].characterName + ", vous êtes donc dans l'équipe des " + characterCards[0].team + "s.");
+        int i = Random.Range(0, characterCards.Count - 1);
+        Debug.Log("Vous êtes " + characterCards[i].characterName + ", vous êtes donc dans l'équipe des " + characterCards[i].team + "s.");
     }
-
 }

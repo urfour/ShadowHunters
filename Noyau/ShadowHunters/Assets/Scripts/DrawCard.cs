@@ -17,12 +17,7 @@ public class DrawCard : MonoBehaviour
 
     void Start()
     {
-        for (int i = 0; i < 50; i++)
-        {
-            deck.Add(cards[i%cards.Count]);
-        }
-        deck.Shuffle<Card>();
-        // Il faudra ajouter les différents types de cartes
+        PrepareDecks();
     }
 
     public IEnumerator Draw()
@@ -39,6 +34,26 @@ public class DrawCard : MonoBehaviour
         playerCard.transform.SetParent(discardPile.transform, false);
         playerCard.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
         Debug.Log("L'effet a été utilisé, retour à la défausse.");
+        if (deck.Count == 0)
+            ResetDecks();
+    }
+
+    public void PrepareDecks()
+    {
+        for (int i = 0; i < cards.Count; i++)
+            deck.Add(cards[i]);
+        deck.Shuffle<Card>();
+        // Il faudra ajouter les différents types de cartes
+    }
+
+    public void ResetDecks()
+    {
+        Debug.Log("Le deck est vide, redistribution des cartes.");
+        for (int i = 0; i < usedCards.Count; i++)
+            usedCards.RemoveAt(i);
+        PrepareDecks();
+        foreach (Transform child in discardPile.transform)
+            Destroy(child.gameObject);
     }
     public void OnClick()
     {
