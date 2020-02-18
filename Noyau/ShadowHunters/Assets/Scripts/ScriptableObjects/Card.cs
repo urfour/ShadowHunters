@@ -13,10 +13,24 @@ public class Card : ScriptableObject
         Light,
         Darkness
     }
+
     public string cardName;
     public CardType cardType;
     public bool isEquipement;
     public string effect;
     public Sprite sprite;
     public bool isHidden;
+
 }
+
+public enum Position
+{
+    Antre,
+    Cimetiere,
+    Foret,
+    Monastere,
+    Porte,
+    Sanctuaire
+}
+
+

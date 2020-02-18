@@ -2,35 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : ScriptableObject
 {
-
-    public string name;             // nom du pesonnage
+    public string playerName;       // nom du pesonnage
     public CharacterTeam team;      // shadow/hunter/neutre
     public int life;                // nombre de points de vie
     public int wound;               // nombre de blessure
     public bool revealed;           // carte révélée à tous ou cachée
     public bool dead;               // vivant ou mort
     public bool usedPower;          // pouvoir déjà utilisé ou non
-    //public Card[] listCard;       // liste des cartes possédées par le joueur
-
+    public Position position;       // position du joueur
+    public Card[] listCard;         // liste des cartes possédées par le joueur
 
     public Player(string name, CharacterTeam team, int life)
     {
-        this.name = name;
+        this.playerName = name;
         this.team = team;
         this.life = life;
         this.wound = 0;
         this.revealed = false;
         this.dead = false;
         this.usedPower = false;
-        //listCard = [];
     }
 
     public string Name
     {
-        get { return name; }
-        set { name = value; }
+        get { return playerName; }
+        set {playerName = value; }
     }
 
     public CharacterTeam Team
@@ -68,18 +66,24 @@ public class Player : MonoBehaviour
         set { usedPower = value; }
     }
 
-    public void wounded(int damage)
+    public Position Position
+    {
+        get { return position; }
+        set { position = value; }
+    }
+
+    public void Wounded(int damage)
     {
         if (damage > 0)
             this.Wound += damage;
 
-        if (this.isDead())
+        if (this.IsDead())
             this.Dead = true;
     }
 
-    public void healed(int heal)
+    public void Healed(int heal)
     {
-        if (this.isDead())
+        if (this.IsDead())
             return;
 
         if (heal > 0)
@@ -89,7 +93,7 @@ public class Player : MonoBehaviour
             this.Wound = 0;
     }
 
-    public bool isDead()
+    public bool IsDead()
     {
         if (this.Wound >= this.Life)
             return true;
