@@ -5,31 +5,62 @@ using UnityEngine;
 public class GameLogic : MonoBehaviour
 {
     private int m_nbPlayers = 0;
-    public int NbPlayers { get; set; }
+    public int NbPlayers
+    {
+        get => m_nbPlayers;
+        private set => m_nbPlayers = value;
+    }
 
     private int m_nbHunters = 0;
-    public int NbHunters { get; set; }
+    public int NbHunters
+    {
+        get => m_nbHunters;
+        private set => m_nbHunters = value;
+    }
 
     private int m_nbHuntersDead = 0;
-    public int NbHuntersDead { get; set; }
+    public int NbHuntersDead
+    {
+        get => m_nbHuntersDead;
+        private set => m_nbHuntersDead = value;
+    }
 
     private int m_nbShadows = 0;
-    public int NbShadows { get; set; }
+    public int NbShadows
+    {
+        get => m_nbShadows;
+        private set => m_nbShadows = value;
+    }
 
     private int m_nbShadowsDeads = 0;
-    public int NbShadowDeads { get; set; }
+    public int NbShadowsDeads
+    {
+        get => m_nbShadowsDeads;
+        private set => m_nbShadowsDeads;
+    }
 
     private int m_nbNeutrals = 0;
-    public int NbNeutrals { get; set; }
+    public int NbNeutrals
+    {
+        get => m_nbNeutrals;
+        private set => m_nbNeutrals = value;
+    }
 
     private int m_nbNeutralsDeads = 0;
-    public int NbNeutralsDeads { get; set; }
+    public int NeutralsDeads
+    {
+        get => m_nbNeutralsDeads;
+        private set => m_nbNeutralsDeads = value;
+    }
 
     private int m_playerTurn = 0;
-    public int PlayerTurn { get; set; }
+    public int PlayerTurn
+    {
+        get => m_playerTurn;
+        private set => m_playerTurn = value;
+    }
 
-    private List<Player> players;
-    public List<Player> Players { get; }
+    private List<Player> m_players;
 
     private GameBoard gameBoard;
     public GameBoard GameBoard { get; }
@@ -41,21 +72,36 @@ public class GameLogic : MonoBehaviour
     public List<Card> m_locationCards;
     public List<Card> m_characterCards;
 
-    public GameLogic(int players)
-    {
-        m_nbPlayers = players;
-    }
-
     void Start()
     {
  
     }
+
+    public void AddPlayer(Player p)
+    {
+        this.m_players.Add(p);
+        NbPlayers++;
+    }
+
+    public void DeletePlayer(Player p)
+    {
+        for (int i = 0; i < this.m_players.Count; ++i)
+        {
+            if (this.m_players[i] == p)
+            {
+                this.m_players.RemoveAt(i);
+                NbPlayers--;
+                break;
+            }
+        }
+    }
+
     public void PrepareGame(int nbPlayers)
     {
-        gameBoard = new GameBoard(PrepareDecks(m_locationCards), PrepareDecks(m_visionCards),
-            PrepareDecks(m_darknessCards), PrepareDecks(m_lightCards), nbPlayers);
-
-
+        gameBoard = new GameBoard(PrepareDecks(m_locationCards), nbPlayers);
+        PrepareDecks(m_visionCards);
+        PrepareDecks(m_darknessCards);
+        PrepareDecks(m_lightCards);
 
 
     }
@@ -69,51 +115,57 @@ public class GameLogic : MonoBehaviour
         return deck;
     }
 
-    public List<Card> PrepareCharacterCards(List<Card> cards)
+    public void AddCharacterCards(List<Card> deck, List<Card> deckCharacter,int nb)
     {
+        for (int i = 0; i < nb; i++)
+        {
+            deck.Add(deckCharacter[i]);
+        }
+    }
+
+    public List<Card> PrepareCharacterCards(List<Card> cardHunters, List<Card> cardShadows, List<Card> cardNeutrals)
+    {
+        List<Card> HuntersCards = new List<Card>();
+        List<Card> ShadowsCards = new List<Card>();
+        List<Card> NeutralsCards = new List<Card>();
         List<Card> characterCards = new List<Card>();
-        switch (m_nbPlayers)
+        switch (NbPlayers)
         {
             case 4:
-                m_nbHunters = 2;
-                m_nbShadows = 2;
+                m_nbHunters = m_nbShadows = 2;
                 break;
             case 5:
-                m_nbHunters = 2;
-                m_nbShadows = 2;
+                m_nbHunters = m_nbShadows = 2;
                 m_nbNeutrals = 1;
                 break;
             case 6:
-                m_nbHunters = 2;
-                m_nbShadows = 2;
-                m_nbNeutrals = 2;
+                m_nbHunters = m_nbShadows = m_nbNeutrals = 2;
                 break;
             case 7:
-                m_nbHunters = 2;
-                m_nbShadows = 2;
+                m_nbHunters = m_nbShadows = 2;
                 m_nbNeutrals = 3;
                 // enlever Bob
                 break;
             case 8:
-                m_nbHunters = 3;
-                m_nbShadows = 3;
+                m_nbHunters = m_nbShadows = 3;
                 m_nbNeutrals = 2;
+                //enlever Bob
                 break;
         }
+        cardHunters=PrepareDecks(HuntersCards);
+        cardShadows=PrepareDecks(ShadowsCards);
+        cardNeutrals=PrepareDecks(NeutralsCards);
 
+        AddCharacterCards(characterCards,cardHunters,NbHunters);
+        AddCharacterCards(characterCards,cardShadows,NbShadows);
+        AddCharacterCards(characterCards,cardNeutrals,NbNeutrals);
         return characterCards;
     }
 
     void SetLocation()
     {
-
+        
     }
-
-    void PrepareDecks()
-    {
-
-    }
-
 
 }
 
