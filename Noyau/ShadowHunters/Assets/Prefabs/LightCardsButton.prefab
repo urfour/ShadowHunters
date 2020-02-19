@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6642864351862459285}
   - component: {fileID: 6642864351862459282}
   - component: {fileID: 6642864351862459283}
-  - component: {fileID: 6642864351862459280}
   m_Layer: 5
   m_Name: LightCardsButton
   m_TagString: Untagged
@@ -119,7 +118,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6642864351862459280}
+      - m_Target: {fileID: 0}
         m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
@@ -130,27 +129,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6642864351862459280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6642864351862459374}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2830916d0a75a445bf9e32e96e3133e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cardPrefab: {fileID: 3082920907157964236, guid: 283f6d9d02ce5134fbdfa77a78e6d6de,
-    type: 3}
-  cards:
-  - {fileID: 0}
-  - {fileID: 0}
-  deck: []
-  playerCards: {fileID: 0}
-  usedCards: []
-  discardPile: {fileID: 0}
 --- !u!1 &6642864352156119532
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,7 +8,6 @@ public class Card : ScriptableObject
     public enum CardType
     {
         Location,
-        Character,
         Vision,
         Light,
         Darkness

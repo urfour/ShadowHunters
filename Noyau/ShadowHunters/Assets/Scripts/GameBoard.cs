@@ -6,23 +6,41 @@ public class GameBoard
 {
 	// Decks des différents types de cartes
 	private List<Card> m_visionDeck;
-	public List<Card> VisionDeck { get; }
+	public List<Card> VisionDeck
+	{
+		get { return m_visionDeck; }
+	}
 
 	private List<Card> m_darknessDeck;
-	public List<Card> DarknessDeck { get; }
+	public List<Card> DarknessDeck
+	{
+		get { return m_darknessDeck; }
+	}
 
 	private List<Card> m_lightDeck;
-	public List<Card> LightDeck { get; }
+	public List<Card> LightDeck
+	{
+		get { return m_lightDeck; }
+	}
 
 	// Défausses des différents types de cartes
 	private List<Card> m_hermit;
-	public List<Card> Hermit { get; }
+	public List<Card> Hermit
+	{
+		get { return m_hermit; }
+	}
 
 	private List<Card> m_black;
-	public List<Card> Black { get; }
+	public List<Card> Black 
+	{
+		get { return m_black; }
+	}
 
 	private List<Card> m_white;
-	public List<Card> White { get; }
+	public List<Card> White
+	{
+		get { return m_white; }
+	}
 
 	// Lieux du plateau
 	private Card[] m_areas;

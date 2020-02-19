@@ -2,33 +2,58 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : ScriptableObject
+public class Player
 {
-    public string playerName;       // nom du pesonnage
-    public CharacterTeam team;      // shadow/hunter/neutre
-    public int life;                // nombre de points de vie
-    public int wound;               // nombre de blessure
-    public bool revealed;           // carte révélée à tous ou cachée
-    public bool dead;               // vivant ou mort
-    public bool usedPower;          // pouvoir déjà utilisé ou non
-    public Position position;       // position du joueur
-    public Card[] listCard;         // liste des cartes possédées par le joueur
+    private int id;                  // ordre du jeu d'un joueur
+    private string playerName;       // nom du pesonnage
+    private CharacterTeam team;      // shadow/hunter/neutre
+    private int life;                // nombre de points de vie
+    private int wound;               // nombre de blessure
+    private bool revealed;           // carte révélée à tous ou cachée
+    private bool dead;               // vivant ou mort
+    private bool usedPower;          // pouvoir déjà utilisé ou non
+    private bool isTurn;
+    private Position position;       // position du joueur
+    private Character character;     // personnage du joueur
+    private List<Card> listCard;     // liste des cartes possédées par le joueur
 
-    public Player(string name, CharacterTeam team, int life)
+    public Player(int id)
     {
-        this.playerName = name;
-        this.team = team;
-        this.life = life;
+        this.id = id;
+        this.playerName = "undefined";
+        this.life = 0;
         this.wound = 0;
         this.revealed = false;
         this.dead = false;
         this.usedPower = false;
+        this.isTurn = false;
+        this.listCard = new List<Card>();
+    }
+
+    public Player(int id, Character characterCard)
+    {
+        this.id = id;
+        this.playerName = characterCard.characterName;
+        this.team = characterCard.team;
+        this.life = characterCard.characterHP;
+        this.wound = 0;
+        this.revealed = false;
+        this.dead = false;
+        this.usedPower = false;
+        this.isTurn = false;
+        this.character = characterCard;
+    }
+
+    public int Id
+    {
+        get { return id; }
+        set { id = value; }
     }
 
     public string Name
     {
         get { return playerName; }
-        set {playerName = value; }
+        set { playerName = value; }
     }
 
     public CharacterTeam Team
@@ -72,6 +97,12 @@ public class Player : ScriptableObject
         set { position = value; }
     }
 
+    public bool IsTurn
+    {
+        get { return isTurn; }
+        set { isTurn = value; }
+    }
+
     public void Wounded(int damage)
     {
         if (damage > 0)
@@ -100,4 +131,28 @@ public class Player : ScriptableObject
 
         return false;
     }
-}
+
+    public List<Card> ListCard
+    {
+        get { return listCard; }
+    }
+
+    public void PrintCards()
+    {
+        foreach (Card c in listCard)
+            Debug.Log("Carte : " + c.cardName);
+    }
+
+    public void AddCard(Card card)
+    { 
+        listCard.Add(card);
+    }
+
+    public void SetCharacter(Character character)
+    {
+        this.playerName = character.characterName;
+        this.team = character.team;
+        this.life = character.characterHP;
+        this.character = character;
+    }
+}   

@@ -89,7 +89,6 @@ GameObject:
   - component: {fileID: 1107092884582795331}
   - component: {fileID: 1107092884582795332}
   - component: {fileID: 1107092884582795333}
-  - component: {fileID: 1107092884582795334}
   m_Layer: 5
   m_Name: VisionCardsButton
   m_TagString: Untagged
@@ -196,7 +195,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1107092884582795334}
+      - m_Target: {fileID: 0}
         m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
@@ -207,24 +206,3 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1107092884582795334
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1107092884582795320}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2830916d0a75a445bf9e32e96e3133e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cardPrefab: {fileID: 3082920907157964236, guid: 283f6d9d02ce5134fbdfa77a78e6d6de,
-    type: 3}
-  cards:
-  - {fileID: 0}
-  - {fileID: 0}
-  deck: []
-  playerCards: {fileID: 0}
-  usedCards: []
-  discardPile: {fileID: 0}
