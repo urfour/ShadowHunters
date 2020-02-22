@@ -51,14 +51,14 @@ public class GameBoard
 	}
 
 	// Position de chaque joueur (index = nbPlayers)
-	private int[] m_position;
+	private Position[] m_position;
 
-	public int getPositionOf(int index)
+	public Position getPositionOf(int index)
 	{
 		return m_position[index];
 	}
 
-	public void setPositionOfAt(int player, int position)
+	public void setPositionOfAt(int player, Position position)
 	{
 		m_position[player] = position;
 	}
@@ -80,13 +80,24 @@ public class GameBoard
 	public GameBoard(List<Card> l_areas, List<Card> l_hermit, List<Card> l_black, List<Card> l_white, int nbPlayers)
 	{
 
-		m_hermit = l_hermit;
-		m_black = l_black;
-		m_white = l_white;
+		m_visionDeck = l_hermit;
+		m_darknessDeck = l_black;
+		m_lightDeck = l_white;
+
+		m_hermit = new List<Card>();
+		m_black = new List<Card>();
+		m_white = new List<Card>();
 
 		m_areas = l_areas.ToArray();
 
-		m_position = new int[nbPlayers];
+		m_position = new Position[nbPlayers];
 		m_damage = new int[nbPlayers];
 	}
+
+	public void PrintLog()
+    {
+		Debug.Log("Ténèbre : " + m_darknessDeck.Count);
+		Debug.Log("Vision : " + m_visionDeck.Count);
+		Debug.Log("Lumière : " + m_lightDeck.Count);
+    }
 }

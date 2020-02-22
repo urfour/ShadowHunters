@@ -16,5 +16,5 @@ MonoBehaviour:
   cardType: 0
   isEquipement: 0
   effect: "Vous pouvez piocher une carte Lumi\xE8re"
-  sprite: {fileID: 21300000, guid: 7eeea98482431194db3384277a68df66, type: 3}
+  sprite: {fileID: 21300000, guid: 6161acd85540a2548ac63220a1edf050, type: 3}
   isHidden: 0

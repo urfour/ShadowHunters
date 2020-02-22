@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd00cdcff8bd8c14d8e47b2f452ac2d1, type: 3}
+  m_Name: AraigneeSanguinaire
+  m_EditorClassIdentifier: 
+  cardName: "Araign\xE9e sanguinaire"
+  cardType: 3
+  isEquipement: 0
+  effect: "Vous infligez 2 Blessures au personnage de votre choix, puis vous subissez
+    vous-m\xEAme 2 Blessures. "
+  sprite: {fileID: 21300000, guid: 6012a74826aa3fb478f2bbea929dcdd2, type: 3}
+  isHidden: 1

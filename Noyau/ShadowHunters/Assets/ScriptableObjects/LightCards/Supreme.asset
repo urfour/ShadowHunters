@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd00cdcff8bd8c14d8e47b2f452ac2d1, type: 3}
+  m_Name: Supreme
+  m_EditorClassIdentifier: 
+  cardName: "Av\xE8nement Supr\xEAme"
+  cardType: 2
+  isEquipement: 0
+  effect: "Si vous \xEAtes un Hunter, vous pouvez r\xE9v\xE9ler votre identit\xE9.
+    Si vous le faites, ou si vous \xEAtes d\xE9j\xE0 r\xE9v\xE9l\xE9, vous soignez
+    toutes vos Blessures."
+  sprite: {fileID: 21300000, guid: 134113fa7358fb14b84659f2c6c06673, type: 3}
+  isHidden: 1

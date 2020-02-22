@@ -16,5 +16,5 @@ MonoBehaviour:
   cardType: 0
   isEquipement: 0
   effect: "Vous pouvez piocher une carte T\xE9n\xE8bres."
-  sprite: {fileID: 21300000, guid: e1f45edbfa73f3a49aa57246796e1c21, type: 3}
+  sprite: {fileID: 21300000, guid: 0ace0e2822d5a51479722b30af97b5a5, type: 3}
   isHidden: 0

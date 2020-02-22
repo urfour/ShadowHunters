@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd00cdcff8bd8c14d8e47b2f452ac2d1, type: 3}
+  m_Name: MiroirDivin
+  m_EditorClassIdentifier: 
+  cardName: Miroir divin
+  cardType: 2
+  isEquipement: 0
+  effect: "Si vous \xEAtes un Shadow autre que M\xE9tamorphe, vous devez r\xE9v\xE9ler
+    votre identit\xE9."
+  sprite: {fileID: 21300000, guid: a7fac74ba5740344eb02f684d717e568, type: 3}
+  isHidden: 1

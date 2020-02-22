@@ -139,6 +139,7 @@ public class Player
 
     public void PrintCards()
     {
+        Debug.Log("Joueur " + playerName + " : ");
         foreach (Card c in listCard)
             Debug.Log("Carte : " + c.cardName);
     }
