@@ -58,6 +58,18 @@ public class GameBoard
 		return m_position[index];
 	}
 
+	public int GetCardIndexByName(string name)
+	{
+		for (int i = 0; i < m_areas.Length; i++)
+			if (m_areas[i].cardName == name)
+			{
+				Debug.Log("Carte trouvée : " + m_areas[i].cardName);
+				return i;
+			}
+
+		return -1;
+	}
+
 	public void setPositionOfAt(int player, Position position)
 	{
 		m_position[player] = position;

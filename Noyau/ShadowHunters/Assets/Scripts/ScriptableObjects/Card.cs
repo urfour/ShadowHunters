@@ -13,10 +13,16 @@ public class Card : ScriptableObject
         Darkness
     }
 
+    public enum CardEffect
+    {
+
+    }
+
     public string cardName;
     public CardType cardType;
     public bool isEquipement;
-    public string effect;
+    public string description;
+    public CardEffect cardEffect;
     public Sprite sprite;
     public bool isHidden;
 

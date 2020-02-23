@@ -8,7 +8,7 @@ public class CardEvent : MonoBehaviour
     public void UsePower(Card card)
     {
         Debug.Log("Carte : " + card.cardName);
-        Debug.Log("Effet : " + card.effect);
+        Debug.Log("Effet : " + card.description);
     }
 
 }

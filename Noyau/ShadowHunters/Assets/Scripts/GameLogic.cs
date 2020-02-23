@@ -79,17 +79,17 @@ public class GameLogic : MonoBehaviour
         const int NB_PLAYERS = 5;
         PrepareGame(NB_PLAYERS);
         ChooseNextPlayer();
-        gameBoard.PrintLog();
+        //gameBoard.PrintLog();
 
     }
 
-    public void AddPlayer(Player p)
+    void AddPlayer(Player p)
     {
         this.m_players.Add(p);
         m_nbPlayers++;
     }
 
-    public void DeletePlayer(Player p)
+    void DeletePlayer(Player p)
     {
         for (int i = 0; i < this.m_players.Count; ++i)
         {
@@ -102,7 +102,7 @@ public class GameLogic : MonoBehaviour
         }
     }
 
-    public void PrepareGame(int nbPlayers)
+    void PrepareGame(int nbPlayers)
     {
         m_players = new List<Player>();
         Player p;
@@ -122,7 +122,7 @@ public class GameLogic : MonoBehaviour
 
     }
 
-    public List<Card> PrepareDecks(List<Card> cards)
+    List<Card> PrepareDecks(List<Card> cards)
     {
         List<Card> deck = new List<Card>();
         for (int i = 0; i < cards.Count; i++)
@@ -131,7 +131,7 @@ public class GameLogic : MonoBehaviour
         return deck;
     }
 
-    public List<Character> PrepareCharacters(List<Character> cards)
+    List<Character> PrepareCharacters(List<Character> cards)
     {
         List<Character> deck = new List<Character>();
         for (int i = 0; i < cards.Count; i++)
@@ -140,7 +140,7 @@ public class GameLogic : MonoBehaviour
         return deck;
     }
 
-    public void AddCharacterCards(List<Character> deck, List<Character> deckCharacter, int nb, bool addBob)
+    void AddCharacterCards(List<Character> deck, List<Character> deckCharacter, int nb, bool addBob)
     {
         for (int i = 0; i < nb; i++)
         {
@@ -151,7 +151,7 @@ public class GameLogic : MonoBehaviour
         }
     }
 
-    public List<Character> PrepareCharacterCards(List<Character> cardHunters, List<Character> cardShadows, List<Character> cardNeutrals)
+    List<Character> PrepareCharacterCards(List<Character> cardHunters, List<Character> cardShadows, List<Character> cardNeutrals)
     {
         List<Character> HuntersCards = new List<Character>();
         List<Character> ShadowsCards = new List<Character>();
@@ -191,13 +191,97 @@ public class GameLogic : MonoBehaviour
         return characterCards;
     }
 
-    public void ChooseNextPlayer()
+    void MoveCharacter()
+    {
+        int lancer1 = Random.Range(1, 6);
+        int lancer2 = Random.Range(1, 4);
+        int lancerTotal = lancer1 + lancer2;
+        string carte = "";
+        Debug.Log("Le lancer de dés donne " + lancer1 + " et " + lancer2 + " (" + lancerTotal + ").");
+        switch (lancerTotal)
+        {
+            case 2:
+            case 3:
+                m_players[m_playerTurn].Position = Position.Antre;
+                gameBoard.setPositionOfAt(m_playerTurn, Position.Antre);
+                carte = "Antre de l'Ermite";
+                break;
+            case 4:
+            case 5:
+                m_players[m_playerTurn].Position = Position.Porte;
+                gameBoard.setPositionOfAt(m_playerTurn, Position.Porte);
+                carte = "Porte de l'outremonde";
+                break;
+            case 6:
+                m_players[m_playerTurn].Position = Position.Monastere;
+                gameBoard.setPositionOfAt(m_playerTurn, Position.Monastere);
+                carte = "Monastère";
+                break;
+            case 7:
+                Debug.Log("Où souhaitez-vous aller ?");
+                m_players[m_playerTurn].Position = Position.Antre;
+                gameBoard.setPositionOfAt(m_playerTurn, Position.Antre);
+                // TODO choix du lieu
+                carte = "Antre de l'Ermite";
+                break;
+            case 8:
+                m_players[m_playerTurn].Position = Position.Cimetiere;
+                gameBoard.setPositionOfAt(m_playerTurn, Position.Cimetiere);
+                carte = "Cimetière";
+                break;
+            case 9:
+                m_players[m_playerTurn].Position = Position.Foret;
+                gameBoard.setPositionOfAt(m_playerTurn, Position.Foret);
+                carte = "Forêt hantée";
+                break;
+            case 10:
+                m_players[m_playerTurn].Position = Position.Sanctuaire;
+                gameBoard.setPositionOfAt(m_playerTurn, Position.Sanctuaire);
+                carte = "Sanctuaire ancien";
+                break;
+        }
+        Debug.Log("Le joueur " + m_playerTurn + " se rend sur la carte " + carte + ".");
+    }
+
+    void ActivateLocationPower()
+    {
+        // TODO : activer les pouvoirs des lieux
+        return;
+    }
+
+    void Attack()
+    {
+        int playerAttackedId = Random.Range(0, m_nbPlayers);
+        // TODO : méthode pour choisir le joueur à attaquer
+        if (playerAttackedId == m_playerTurn)
+            Debug.Log("Vous choisissez de ne pas attaquer.");
+        else
+        {
+            int lancer1 = Random.Range(1, 6);
+            int lancer2 = Random.Range(1, 4);
+            int lancerTotal = Mathf.Abs(lancer1 - lancer2);
+            m_players[playerAttackedId].Wounded(lancerTotal);
+            Debug.Log("Vous infligez " + lancerTotal + " Blessures au joueur " + playerAttackedId + ".");
+            if (m_players[playerAttackedId].IsDead())
+                Debug.Log("Le joueur " + playerAttackedId + " est mort !");
+        }
+    }
+
+    void ChooseNextPlayer()
     {
         if (m_playerTurn == -1)
             m_playerTurn = Random.Range(0, m_nbPlayers - 1);
         else
             m_playerTurn = (m_playerTurn + 1) % m_nbPlayers;
         Debug.Log("C'est au joueur " + m_playerTurn + " de jouer.");
+    }
+
+    public void PlayTurn()
+    {
+        MoveCharacter();
+        ActivateLocationPower();
+        Attack();
+        ChooseNextPlayer();
     }
 
 }
