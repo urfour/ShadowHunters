@@ -15,6 +15,7 @@ MonoBehaviour:
   cardName: "Cimeti\xE8re"
   cardType: 0
   isEquipement: 0
-  effect: "Vous pouvez piocher une carte T\xE9n\xE8bres."
+  description: "Vous pouvez piocher une carte T\xE9n\xE8bres."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: 0ace0e2822d5a51479722b30af97b5a5, type: 3}
   isHidden: 0

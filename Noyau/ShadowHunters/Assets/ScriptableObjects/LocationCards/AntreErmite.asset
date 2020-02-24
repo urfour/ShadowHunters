@@ -15,6 +15,7 @@ MonoBehaviour:
   cardName: Antre de l'ermite
   cardType: 0
   isEquipement: 0
-  effect: Vous pouvez piocher une carte Vision.
+  description: Vous pouvez piocher une carte Vision.
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: 32237b4d14ae4a64984af74b8d88c917, type: 3}
   isHidden: 0

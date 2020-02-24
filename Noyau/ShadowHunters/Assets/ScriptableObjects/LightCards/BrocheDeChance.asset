@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Broche de chance
   cardType: 2
-  isEquipement: 0
-  effect: "Un joueur dans la For\xEAt hant\xE9e ne peut pas utiliser le pouvoir du
-    Lieu pour vous infligez des Blessures (mais il peut toujours vous gu\xE9rir)."
+  isEquipement: 1
+  description: "Un joueur dans la For\xEAt hant\xE9e ne peut utiliser le pouvoir
+    du Lieu pour vous infliger des Blessures (mais il peut toujours vous gu\xE9rir)."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: b812e799462b4c14f8fb87ad550d0f66, type: 3}
   isHidden: 1

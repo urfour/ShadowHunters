@@ -15,6 +15,7 @@ MonoBehaviour:
   cardName: Sanctuaire ancien
   cardType: 0
   isEquipement: 0
-  effect: "Vous pouvez voler une carte \xE9quipement \xE0 un autre joueur."
+  description: "Vous pouvez voler une carte \xE9quipement \xE0 un autre joueur."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: fd519bb82dfca384eb13094a8dfdc85d, type: 3}
   isHidden: 0

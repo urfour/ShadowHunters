@@ -15,6 +15,7 @@ MonoBehaviour:
   cardName: "Eau b\xE9nite"
   cardType: 2
   isEquipement: 0
-  effect: "Vous \xEAtes soign\xE9 de 2 Blessures."
+  description: "Vous \xEAtes soign\xE9 de 2 Blessures."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: 50a5474f9c01e134e9d21c27885aad50, type: 3}
   isHidden: 1

@@ -106,7 +106,10 @@ public class Player
     public void Wounded(int damage)
     {
         if (damage > 0)
+        {
             this.Wound += damage;
+            Debug.Log("Le joueur " + id + " subit " + damage + " Blessures !");
+        }
 
         if (this.IsDead())
             this.Dead = true;
@@ -118,7 +121,10 @@ public class Player
             return;
 
         if (heal > 0)
+        {
             this.Wound -= heal;
+            Debug.Log("Le joueur " + id + " est soigné de " + heal + " Blessures !");
+        }
 
         if (this.Wound < 0)
             this.Wound = 0;
@@ -147,6 +153,11 @@ public class Player
     public void AddCard(Card card)
     { 
         listCard.Add(card);
+    }
+
+    public void RemoveLastDrawnCard()
+    {
+        listCard.RemoveAt(0);
     }
 
     public void SetCharacter(Character character)

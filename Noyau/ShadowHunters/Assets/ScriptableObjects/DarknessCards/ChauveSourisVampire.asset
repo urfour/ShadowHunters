@@ -15,7 +15,8 @@ MonoBehaviour:
   cardName: Chauve-souris vampire
   cardType: 3
   isEquipement: 0
-  effect: Infligez 2 Blessures au joueur de votre choix, puis soignez une de vos
-    Blessures.
+  description: Infligez 2 Blessures au joueur de votre choix puis soignez une de
+    vos Blessures.
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: b541d8e35b754c3428b346a66c181071, type: 3}
   isHidden: 1

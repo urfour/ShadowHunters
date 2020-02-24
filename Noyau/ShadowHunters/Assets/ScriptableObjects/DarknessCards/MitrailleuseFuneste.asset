@@ -15,7 +15,8 @@ MonoBehaviour:
   cardName: Mitrailleuse funeste
   cardType: 3
   isEquipement: 1
-  effect: "Votre attaque affecte tous les personnages qui sont \xE0 votre port\xE9e.
+  description: "Votre attaque affecte tous les personnages qui sont \xE0 votre port\xE9e.
     Effectuez un seul jet de Blessures pour tous les joueurs concern\xE9s."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: 4aab2f1b5e938c947981ae08498dca28, type: 3}
   isHidden: 1

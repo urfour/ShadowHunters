@@ -15,7 +15,8 @@ MonoBehaviour:
   cardName: Ange gardien
   cardType: 2
   isEquipement: 0
-  effect: "Les attaques ne vous infligent aucune Blessure jusqu'\xE0 votre prochain
+  description: "Les attaques ne vous infligent aucune Blessure jusqu'au prochain
     tour (d\xE9faussez alors cette carte)."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: a4fb35f79e92e7843bce233a9ea5d94d, type: 3}
   isHidden: 1

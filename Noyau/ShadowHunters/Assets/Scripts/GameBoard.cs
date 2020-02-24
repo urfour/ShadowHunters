@@ -5,8 +5,8 @@ using UnityEngine;
 public class GameBoard
 {
 	// Decks des différents types de cartes
-	private List<Card> m_visionDeck;
-	public List<Card> VisionDeck
+	private List<VisionCard> m_visionDeck;
+	public List<VisionCard> VisionDeck
 	{
 		get { return m_visionDeck; }
 	}
@@ -24,8 +24,8 @@ public class GameBoard
 	}
 
 	// Défausses des différents types de cartes
-	private List<Card> m_hermit;
-	public List<Card> Hermit
+	private List<VisionCard> m_hermit;
+	public List<VisionCard> Hermit
 	{
 		get { return m_hermit; }
 	}
@@ -89,14 +89,14 @@ public class GameBoard
 	}
 
 	//Constructeur (l_areas = liste mélangée des 6 lieux utilisés)
-	public GameBoard(List<Card> l_areas, List<Card> l_hermit, List<Card> l_black, List<Card> l_white, int nbPlayers)
+	public GameBoard(List<Card> l_areas, List<VisionCard> l_hermit, List<Card> l_black, List<Card> l_white, int nbPlayers)
 	{
 
 		m_visionDeck = l_hermit;
 		m_darknessDeck = l_black;
 		m_lightDeck = l_white;
 
-		m_hermit = new List<Card>();
+		m_hermit = new List<VisionCard>();
 		m_black = new List<Card>();
 		m_white = new List<Card>();
 
@@ -112,4 +112,30 @@ public class GameBoard
 		Debug.Log("Vision : " + m_visionDeck.Count);
 		Debug.Log("Lumière : " + m_lightDeck.Count);
     }
+
+	public Card DrawCard(CardType cardType)
+	{
+		Card pickedCard = ScriptableObject.CreateInstance("Card") as Card;
+		switch (cardType)
+		{
+			case CardType.Vision:
+				pickedCard = m_visionDeck[0];
+				m_visionDeck.RemoveAt(0);
+				break;
+			case CardType.Darkness:
+				pickedCard = m_darknessDeck[0];
+				m_darknessDeck.RemoveAt(0);
+				break;
+			case CardType.Light:
+				pickedCard = m_lightDeck[0];
+				m_lightDeck.RemoveAt(0);
+				break;
+		}
+		if (cardType != CardType.Vision)
+		{
+			Debug.Log("Carte piochée : " + pickedCard.cardName);
+			Debug.Log("Effet : " + pickedCard.description);
+		}
+		return pickedCard;
+	}
 }

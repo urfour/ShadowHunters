@@ -15,7 +15,8 @@ MonoBehaviour:
   cardName: "Sabre hant\xE9 masamune"
   cardType: 3
   isEquipement: 1
-  effect: "Vous \xEAtes oblig\xE9 d'attaquer durant votre tour. Lancez uniquement
+  description: "Vous \xEAtes oblig\xE9 d'attaquer durant votre tour. Lancez uniquement
     le d\xE9 \xE0 4 faces, le r\xE9sultat indique les Blessures que vous infligez."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: 6c1d4b13a8a4286419b966e71567d918, type: 3}
   isHidden: 1

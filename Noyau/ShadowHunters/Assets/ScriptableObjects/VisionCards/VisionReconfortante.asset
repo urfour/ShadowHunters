@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2381ca97e59fa1a4cb0607f8ce717ea2, type: 3}
+  m_Name: VisionReconfortante
+  m_EditorClassIdentifier: 
+  cardName: "Vision R\xE9confortante"
+  cardType: 1
+  isEquipement: 0
+  description: Je pense que tu es Neutre\nSi c'est le cas, soigne 1 Blessure. (Toutefois,
+    si tu n'avais aucune Blessure, subis 1 Blessure !)
+  sprite: {fileID: 21300000, guid: f7eb746fda1d58e488152234b2f6cb0c, type: 3}
+  isHidden: 1
+  visionEffect:
+    effectOnShadow: 0
+    effectOnHunter: 0
+    effectOnNeutral: 1
+    effectOnLowHP: 0
+    effectOnHighHP: 0
+    effectSupremeVision: 0
+    effectGivingEquipementCard: 0
+    effectHealingOneWound: 0
+    effectOneWound: 1
+    effectTwoWounds: 0

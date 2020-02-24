@@ -15,6 +15,7 @@ MonoBehaviour:
   cardName: Porte de l'outremonde
   cardType: 0
   isEquipement: 0
-  effect: Vous pouvez piocher une carte de la pile de votre choix.
+  description: Vous pouvez piocher une carte de la pile de votre choix.
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: 4b6921f0035d4c24982c8ead6803e37b, type: 3}
   isHidden: 0

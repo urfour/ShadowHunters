@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Hache tueuse
   cardType: 3
-  isEquipement: 0
-  effect: Si votre attaque inflige des Blessures, la victime subit 1 Blessure en
-    plus.
+  isEquipement: 1
+  description: Si votre attaque inflige des Blessures, la victime subit 1 Blessure
+    en plus.
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: 6af24401cb63c29459525c15f75b682a, type: 3}
   isHidden: 1

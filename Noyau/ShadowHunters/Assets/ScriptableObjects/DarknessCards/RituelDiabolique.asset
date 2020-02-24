@@ -15,7 +15,8 @@ MonoBehaviour:
   cardName: Rituel diabolique
   cardType: 3
   isEquipement: 0
-  effect: "Si vous \xEAtes un Shadow et si vous d\xE9cidez de r\xE9v\xE9ler (ou avez
-    d\xE9j\xE0 r\xE9v\xE9l\xE9) votre identit\xE9, soignez toutes vos Blessures."
+  description: "Si vous \xEAtes un Shadow et vous d\xE9cidez de r\xE9v\xE9ler (ou
+    avez d\xE9j\xE0 r\xE9v\xE9l\xE9) votre identit\xE9, soignez toutes vos Blessures."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: 5bc83ec5cde0101428d713ca7b122448, type: 3}
   isHidden: 1

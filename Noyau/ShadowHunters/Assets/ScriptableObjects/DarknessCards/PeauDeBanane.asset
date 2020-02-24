@@ -15,7 +15,8 @@ MonoBehaviour:
   cardName: Peau de banane
   cardType: 3
   isEquipement: 0
-  effect: "Donnez une de vos cartes \xE9quipement \xE0 un autre personnage. Si vous
+  description: "Donnez une carte \xE9quipement \xE0 un autre personnage. Si vous
     n'en poss\xE9dez aucune, vous encaissez 1 Blessure."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: 58d5f7ceb3e05a9498c199bf3af49f49, type: 3}
   isHidden: 1

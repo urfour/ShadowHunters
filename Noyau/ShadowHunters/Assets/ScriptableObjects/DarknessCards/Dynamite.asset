@@ -15,8 +15,9 @@ MonoBehaviour:
   cardName: Dynamite
   cardType: 3
   isEquipement: 0
-  effect: "Lancez les 2 d\xE9s et infligez 3 Blessures \xE0 tous les joueurs (vous
-    compris) se trouvant dans le secteur d\xE9sign\xE9 par le total des 2 d\xE9s.
+  description: "Lancez les 2 d\xE9s et infligez 3 Blessures \xE0 tous les joueurs
+    (vous compris) se trouvant dans le secteur d\xE9sign\xE9 par le total des 2 d\xE9s.
     Il ne se passe rien si le total est 7."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: f6be835754525574da64d34c001386fb, type: 3}
   isHidden: 1

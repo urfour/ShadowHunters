@@ -15,7 +15,8 @@ MonoBehaviour:
   cardName: "Araign\xE9e sanguinaire"
   cardType: 3
   isEquipement: 0
-  effect: "Vous infligez 2 Blessures au personnage de votre choix, puis vous subissez
-    vous-m\xEAme 2 Blessures. "
+  description: "Vous infligez 2 Blessures au personnage de votre choix, puis vous
+    subissez vous-m\xEAme 2 Blessures."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: 6012a74826aa3fb478f2bbea929dcdd2, type: 3}
   isHidden: 1

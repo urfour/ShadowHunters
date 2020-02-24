@@ -15,7 +15,8 @@ MonoBehaviour:
   cardName: Premiers secours
   cardType: 2
   isEquipement: 0
-  effect: Placez le marqueur de Blessures du joueur de votre choix (y compris vous)
-    sur le 7.
+  description: "Placez le marqueur de Blessures du joueur de votre choix (y compris
+    vous-m\xEAme) sur le 7."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: 02dfab8046e14a54e80431619c72d788, type: 3}
   isHidden: 1

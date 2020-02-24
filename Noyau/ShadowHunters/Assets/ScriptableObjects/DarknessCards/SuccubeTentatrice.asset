@@ -15,6 +15,7 @@ MonoBehaviour:
   cardName: Succube tentatrice
   cardType: 3
   isEquipement: 0
-  effect: "Volez une carte \xE9quipement au joueur de votre choix."
+  description: "Volez une carte \xE9quipement au joueur de votre choix."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: fbf061737279f7e46bfd401ac10127ec, type: 3}
   isHidden: 1

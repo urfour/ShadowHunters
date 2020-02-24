@@ -139,10 +139,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08b7da8f0147b324db81f8bc72f39688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_visionCards: []
+  m_visionCards:
+  - {fileID: 11400000, guid: 31f3375b1ac3ffb4d8c9059c44017b18, type: 2}
+  - {fileID: 11400000, guid: 7e46ca61d5abe4d47bc5ca45d45cd5d1, type: 2}
+  - {fileID: 11400000, guid: d1173cab08c399b4aa2cb626d8417a0d, type: 2}
+  - {fileID: 11400000, guid: a9160848a2738a14987389b2117dfdcc, type: 2}
+  - {fileID: 11400000, guid: 3b76d51f7f0b94b49a9afc0f5335f467, type: 2}
+  - {fileID: 11400000, guid: 9d09eb6db9272b741ba0070eb139b18d, type: 2}
+  - {fileID: 11400000, guid: 1890622ad9f92f24bb0b95b27afc15ff, type: 2}
+  - {fileID: 11400000, guid: 1890622ad9f92f24bb0b95b27afc15ff, type: 2}
+  - {fileID: 11400000, guid: f908f7fc9e7b8ee43aba2e1df5df30e1, type: 2}
+  - {fileID: 11400000, guid: 6073903efdc959e40af3259d7b6cea34, type: 2}
+  - {fileID: 11400000, guid: dd271a5ecf7144a49a1bcb30025f80fb, type: 2}
+  - {fileID: 11400000, guid: 698c4fcaf123f3147984113f69a5781f, type: 2}
+  - {fileID: 11400000, guid: ec62f5cca00567e4fbba6228629f018e, type: 2}
   m_darknessCards:
   - {fileID: 11400000, guid: e405a1ecb0ef45145a750b31544da874, type: 2}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: c778b7fc6f647bf41a5b7d8ee9b005fe, type: 2}
   - {fileID: 11400000, guid: c778b7fc6f647bf41a5b7d8ee9b005fe, type: 2}
   - {fileID: 11400000, guid: 3b5b6c102778faa429000bc9d59d6c65, type: 2}
   - {fileID: 11400000, guid: 92ef3a3bd94dc9d4c9f3f097d5be7b83, type: 2}

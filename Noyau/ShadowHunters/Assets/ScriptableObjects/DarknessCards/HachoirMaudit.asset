@@ -15,7 +15,8 @@ MonoBehaviour:
   cardName: Hachoir maudit
   cardType: 3
   isEquipement: 1
-  effect: Si votre attaque inflige des Blessures, la victime subit 1 Blessure en
-    plus.
+  description: Si votre attaque inflige des Blessures, la victime subit 1 Blessure
+    en plus.
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: 659485349a1aec341ba6fde841028038, type: 3}
   isHidden: 1

@@ -15,7 +15,8 @@ MonoBehaviour:
   cardName: Crucifix en argent
   cardType: 2
   isEquipement: 1
-  effect: "Si vous attaquez et tuez un autre personnage, vous r\xE9cup\xE9rez toutes
-    ses cartes \xE9quipement."
+  description: "Si vous attaquez et tuez un autre personnage, vous r\xE9cup\xE9rez
+    toutes ses cartes \xE9quipement."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: 2a550cd639ab73643ae7dbb9d36cda3b, type: 3}
   isHidden: 1

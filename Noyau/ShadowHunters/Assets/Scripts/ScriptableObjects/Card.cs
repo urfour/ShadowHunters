@@ -2,30 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Card", menuName = "Card/Card", order = 2)]
-public class Card : ScriptableObject
+[System.Serializable]
+public struct VisionEffect
 {
-    public enum CardType
-    {
-        Location,
-        Vision,
-        Light,
-        Darkness
-    }
+    // Types de cartes vision
+    public bool effectOnShadow; // "Je pense que tu es Shadow"
+    public bool effectOnHunter; // "Je pense que tu es Hunter"
+    public bool effectOnNeutral; // "Je pense que tu es Neutre"
+    public bool effectOnLowHP; // "Je pense que tu es un personnage de 11 Points de vie ou moins"
+    public bool effectOnHighHP; // "Je pense que tu es un personnage de 12 Points de vie ou plus"
 
-    public enum CardEffect
-    {
+    // Effet des cartes
+    public bool effectSupremeVision; // Carte Vision Suprême
+    public bool effectGivingEquipementCard; // Donner une carte équipement ou subir 1 Blessure
+    public bool effectHealingOneWound; // Soigner 1 Blessure
+    public bool effectOneWound; // Subir 1 Blessure
+    public bool effectTwoWounds; // Subir 2 Blessures
+}
 
-    }
-
-    public string cardName;
-    public CardType cardType;
-    public bool isEquipement;
-    public string description;
-    public CardEffect cardEffect;
-    public Sprite sprite;
-    public bool isHidden;
-
+public enum CardType
+{
+    Location,
+    Vision,
+    Light,
+    Darkness
 }
 
 public enum Position
@@ -36,6 +36,18 @@ public enum Position
     Monastere,
     Porte,
     Sanctuaire
+}
+
+[CreateAssetMenu(fileName = "Card", menuName = "Card/Card", order = 2)]
+[System.Serializable]
+public class Card : ScriptableObject
+{
+    public string cardName;
+    public CardType cardType;
+    public bool isEquipement;
+    public string description;
+    public Sprite sprite;
+    public bool isHidden;
 }
 
 

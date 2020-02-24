@@ -15,6 +15,7 @@ MonoBehaviour:
   cardName: Eclair purificateur
   cardType: 2
   isEquipement: 0
-  effect: "Chaque personnage, \xE0 l'exception de vous-m\xEAme, subit 2 Blessures."
+  description: "Chaque personnage, \xE0 l'exception de vous-m\xEAme, subit 2 Blessures."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: 9779f1ffd4643ae448de6253d92124a9, type: 3}
   isHidden: 1

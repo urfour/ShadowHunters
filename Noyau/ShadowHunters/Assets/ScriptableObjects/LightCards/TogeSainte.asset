@@ -15,7 +15,8 @@ MonoBehaviour:
   cardName: Toge Sainte
   cardType: 2
   isEquipement: 1
-  effect: "Vos attaques infligent 1 Blessure de moins et les Blessures que vous subissez
-    sont r\xE9duites de 1."
+  description: "Vos attaques infligent 1 Blessure de moins et les Blessures que vous
+    subissez sont r\xE9duites de 1."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: a3607cec2049f7f499e2a87b495e7f69, type: 3}
   isHidden: 1

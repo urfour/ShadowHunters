@@ -15,7 +15,8 @@ MonoBehaviour:
   cardName: "B\xE9n\xE9diction"
   cardType: 2
   isEquipement: 0
-  effect: "Choisissez un joueur autre que vous et lancez le d\xE9 \xE0 6 faces. Ce
-    joueur gu\xE9rit d'autant de Blessures que le r\xE9sultat du d\xE9."
+  description: "Choisissez un joueur autre que vous et lancez le d\xE9 \xE0 6 faces.
+    Ce joueur gu\xE9rit d'autant de Blessure que le r\xE9sultat du d\xE9."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: e1c742e32b881784d8c2b6a13d0eba1a, type: 3}
   isHidden: 1

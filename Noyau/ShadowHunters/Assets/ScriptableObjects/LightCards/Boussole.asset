@@ -15,7 +15,8 @@ MonoBehaviour:
   cardName: Boussole mystique
   cardType: 2
   isEquipement: 1
-  effect: "Quand vous vous d\xE9placez, vous pouvez lancer 2 fois les d\xE9s et choisir
-    quel r\xE9sultat utiliser."
+  description: "Quand vous vous d\xE9placez, vous pouvez lancer 2 fois les d\xE9s
+    et choisir quel r\xE9sultat utiliser."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: 8c18e61a0841e9346936d9a2cc4a6221, type: 3}
   isHidden: 1

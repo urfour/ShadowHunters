@@ -15,8 +15,9 @@ MonoBehaviour:
   cardName: "Av\xE8nement Supr\xEAme"
   cardType: 2
   isEquipement: 0
-  effect: "Si vous \xEAtes un Hunter, vous pouvez r\xE9v\xE9ler votre identit\xE9.
+  description: "Si vous \xEAtes un Hunter, vous pouvez r\xE9v\xE9ler votre identit\xE9.
     Si vous le faites, ou si vous \xEAtes d\xE9j\xE0 r\xE9v\xE9l\xE9, vous soignez
     toutes vos Blessures."
+  cardEffect: 0
   sprite: {fileID: 21300000, guid: 134113fa7358fb14b84659f2c6c06673, type: 3}
   isHidden: 1
