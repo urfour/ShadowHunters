@@ -279,15 +279,32 @@ public class GameLogic : MonoBehaviour
             case Position.Porte:
                 // TODO choix de la carte piochée
                 Debug.Log("Le joueur " + m_playerTurn + " choisit de piocher une carte Ténèbres.");
-                m_players[m_playerTurn].AddCard(gameBoard.DrawCard(CardType.Darkness));
+                DarknessCard choosenCard = gameBoard.DrawCard(CardType.Darkness) as DarknessCard;
+                if (choosenCard.isEquipement)
+                {
+                    m_players[m_playerTurn].AddCard(choosenCard);
+                    Debug.Log("La carte " + choosenCard.cardName + " a été ajoutée à la main du joueur " + m_playerTurn + ".");
+                }
+                DarknessCardPower(choosenCard);
                 break;
             case Position.Monastere:
                 Debug.Log("Le joueur " + m_playerTurn + " pioche une carte Lumière.");
-                m_players[m_playerTurn].AddCard(gameBoard.DrawCard(CardType.Light));
+                LightCard lightCard = gameBoard.DrawCard(CardType.Light) as LightCard;
+                if (lightCard.isEquipement)
+                {
+                    m_players[m_playerTurn].AddCard(lightCard);
+                    Debug.Log("La carte " + lightCard.cardName + " a été ajoutée à la main du joueur " + m_playerTurn + ".");
+                }
                 break;
             case Position.Cimetiere:
                 Debug.Log("Le joueur " + m_playerTurn + " pioche une carte Ténèbres.");
-                m_players[m_playerTurn].AddCard(gameBoard.DrawCard(CardType.Darkness));
+                DarknessCard darknessCard = gameBoard.DrawCard(CardType.Darkness) as DarknessCard;
+                if (darknessCard.isEquipement)
+                {
+                    m_players[m_playerTurn].AddCard(darknessCard);
+                    Debug.Log("La carte " + darknessCard.cardName + " a été ajoutée à la main du joueur " + m_playerTurn + ".");
+                }
+                DarknessCardPower(darknessCard);
                 break;
             case Position.Foret:
                 // TODO choix du joueur + infliger les Blessures ou en soigner
@@ -348,6 +365,71 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+    void DarknessCardPower(DarknessCard pickedCard)
+    {
+        int playerChoosenId = m_playerTurn;
+        switch (pickedCard.darknessEffect)
+        {
+            case DarknessEffect.Araignee:
+                // TODO choix de la personne à qui infliger des Blessures
+                while (playerChoosenId == m_playerTurn)
+                    playerChoosenId = Random.Range(0, m_nbPlayers - 1);
+                Debug.Log("Le joueur " + playerChoosenId + " subit l'effet de l'Araignée Sanguinaire !");
+                m_players[playerChoosenId].Wounded(2);
+                m_players[m_playerTurn].Wounded(2);
+                break;
+            case DarknessEffect.Banane:
+                // TODO effet de la carte
+                Debug.Log("Implémentation en cours");
+                break;
+            case DarknessEffect.ChauveSouris:
+                // TODO choix de la personne à qui infliger des Blessures
+                while (playerChoosenId == m_playerTurn)
+                    playerChoosenId = Random.Range(0, m_nbPlayers - 1);
+                Debug.Log("Le joueur " + playerChoosenId + " subit l'effet de la Chauve-Souris Vampire !");
+                m_players[playerChoosenId].Wounded(2);
+                m_players[m_playerTurn].Healed(1);
+                break;
+            case DarknessEffect.Dynamite:
+                // TODO effet de la carte
+                Debug.Log("Implémentation en cours");
+                break;
+            case DarknessEffect.Hache:
+                m_players[m_playerTurn].BonusAttack++;
+                break;
+            case DarknessEffect.Mitrailleuse:
+                m_players[m_playerTurn].HasGatling = true;
+                break;
+            case DarknessEffect.Poupee:
+                // TODO choix de la personne à qui infliger des Blessures
+                while (playerChoosenId == m_playerTurn)
+                    playerChoosenId = Random.Range(0, m_nbPlayers - 1);
+                int lancer = Random.Range(1, 6);
+                Debug.Log("Le lancer du dé à 6 faces donne " + lancer + ".");
+                if (lancer <= 4)
+                    m_players[playerChoosenId].Wounded(3);
+                else
+                    m_players[m_playerTurn].Wounded(3);
+                break;
+            case DarknessEffect.Revolver:
+                m_players[m_playerTurn].HasRevolver = true;
+                break;
+            case DarknessEffect.Rituel:
+                // TODO effet de la carte
+                Debug.Log("Implémentation en cours");
+                break;
+            case DarknessEffect.Sabre:
+                m_players[m_playerTurn].HasSaber = true;
+                break;
+            case DarknessEffect.Succube:
+                // TODO choix de la personne à qui voler une carte équipement
+                while (playerChoosenId == m_playerTurn)
+                    playerChoosenId = Random.Range(0, m_nbPlayers - 1);
+                Debug.Log("Le joueur " + m_playerTurn + " vole une carte équipement au joueur " + playerChoosenId + " !");
+                break;
+        }
+    }
+
     bool checkLowHPCharacters(string characterName)
     {
         return characterName.StartsWith("A") || characterName.StartsWith("B")
@@ -374,7 +456,7 @@ public class GameLogic : MonoBehaviour
             int lancer1 = Random.Range(1, 6);
             int lancer2 = Random.Range(1, 4);
             int lancerTotal = Mathf.Abs(lancer1 - lancer2);
-            m_players[playerAttackedId].Wounded(lancerTotal);
+            m_players[playerAttackedId].Wounded(lancerTotal + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
             if (m_players[playerAttackedId].IsDead())
                 Debug.Log("Le joueur " + playerAttackedId + " est mort !");
         }
@@ -401,9 +483,6 @@ public class GameLogic : MonoBehaviour
 
 public static class IListExtensions
 {
-    /// <summary>
-    /// Shuffles the element order of the specified list.
-    /// </summary>
     public static void Shuffle<T>(this List<T> ts)
     {
         var count = ts.Count;

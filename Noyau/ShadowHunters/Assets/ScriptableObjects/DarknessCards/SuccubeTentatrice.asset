@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd00cdcff8bd8c14d8e47b2f452ac2d1, type: 3}
+  m_Script: {fileID: 11500000, guid: c8fef972bcc0f4748920d6ea96f9dd86, type: 3}
   m_Name: SuccubeTentatrice
   m_EditorClassIdentifier: 
   cardName: Succube tentatrice
   cardType: 3
   isEquipement: 0
   description: "Volez une carte \xE9quipement au joueur de votre choix."
-  cardEffect: 0
   sprite: {fileID: 21300000, guid: fbf061737279f7e46bfd401ac10127ec, type: 3}
   isHidden: 1
+  darknessEffect: 10

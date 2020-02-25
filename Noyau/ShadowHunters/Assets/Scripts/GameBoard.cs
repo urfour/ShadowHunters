@@ -120,14 +120,17 @@ public class GameBoard
 		{
 			case CardType.Vision:
 				pickedCard = m_visionDeck[0];
+				pickedCard.isHidden = false;
 				m_visionDeck.RemoveAt(0);
 				break;
 			case CardType.Darkness:
 				pickedCard = m_darknessDeck[0];
+				pickedCard.isHidden = false;
 				m_darknessDeck.RemoveAt(0);
 				break;
 			case CardType.Light:
 				pickedCard = m_lightDeck[0];
+				pickedCard.isHidden = false;
 				m_lightDeck.RemoveAt(0);
 				break;
 		}

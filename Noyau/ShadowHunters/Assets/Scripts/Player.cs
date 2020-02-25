@@ -12,6 +12,12 @@ public class Player
     private bool revealed;           // carte révélée à tous ou cachée
     private bool dead;               // vivant ou mort
     private bool usedPower;          // pouvoir déjà utilisé ou non
+    private int bonusAttack;         // bonus d'attaque (par défaut = 0)
+    private int malusAttack;         // malus d'attaque (par défaut = 0)
+    private int reductionWounds;     // réduction du nombre de Blessures subites (par défaut = 0)
+    private bool hasGatling;
+    private bool hasRevolver;
+    private bool hasSaber;
     private bool isTurn;
     private Position position;       // position du joueur
     private Character character;     // personnage du joueur
@@ -26,22 +32,14 @@ public class Player
         this.revealed = false;
         this.dead = false;
         this.usedPower = false;
+        this.bonusAttack = 0;
+        this.malusAttack = 0;
+        this.reductionWounds = 0;
+        this.hasGatling = false;
+        this.hasRevolver = false;
+        this.hasSaber = false;
         this.isTurn = false;
         this.listCard = new List<Card>();
-    }
-
-    public Player(int id, Character characterCard)
-    {
-        this.id = id;
-        this.playerName = characterCard.characterName;
-        this.team = characterCard.team;
-        this.life = characterCard.characterHP;
-        this.wound = 0;
-        this.revealed = false;
-        this.dead = false;
-        this.usedPower = false;
-        this.isTurn = false;
-        this.character = characterCard;
     }
 
     public int Id
@@ -91,6 +89,18 @@ public class Player
         set { usedPower = value; }
     }
 
+    public int BonusAttack
+    {
+        get { return bonusAttack; }
+        set { bonusAttack = value; }
+    }
+
+    public int MalusAttack
+    {
+        get { return malusAttack; }
+        set { malusAttack = value; }
+    }
+
     public Position Position
     {
         get { return position; }
@@ -103,12 +113,33 @@ public class Player
         set { isTurn = value; }
     }
 
+    public bool HasGatling
+    {
+        get { return hasGatling; }
+        set { hasGatling = value; }
+    }
+
+    public bool HasRevolver
+    {
+        get { return hasRevolver; }
+        set { hasRevolver = value; }
+    }
+
+    public bool HasSaber
+    {
+        get { return hasSaber; }
+        set { hasSaber = value; }
+    }
+
     public void Wounded(int damage)
     {
         if (damage > 0)
         {
-            this.Wound += damage;
-            Debug.Log("Le joueur " + id + " subit " + damage + " Blessures !");
+            string blessure = " Blessure";
+            this.Wound += damage - reductionWounds;
+            if (damage > 1)
+                blessure += "s";
+            Debug.Log("Le joueur " + id + " subit " + damage + blessure + " !");
         }
 
         if (this.IsDead())
@@ -122,8 +153,11 @@ public class Player
 
         if (heal > 0)
         {
+            string blessure = " Blessure";
             this.Wound -= heal;
-            Debug.Log("Le joueur " + id + " est soigné de " + heal + " Blessures !");
+            if (heal > 1)
+                blessure += "s";
+            Debug.Log("Le joueur " + id + " est soigné de " + heal + blessure + " !");
         }
 
         if (this.Wound < 0)

@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd00cdcff8bd8c14d8e47b2f452ac2d1, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a8d1108b9b00904a9ead6c0814fdd58, type: 3}
   m_Name: Benediction
   m_EditorClassIdentifier: 
   cardName: "B\xE9n\xE9diction"
@@ -17,6 +17,6 @@ MonoBehaviour:
   isEquipement: 0
   description: "Choisissez un joueur autre que vous et lancez le d\xE9 \xE0 6 faces.
     Ce joueur gu\xE9rit d'autant de Blessure que le r\xE9sultat du d\xE9."
-  cardEffect: 0
   sprite: {fileID: 21300000, guid: e1c742e32b881784d8c2b6a13d0eba1a, type: 3}
   isHidden: 1
+  lightEffect: 0
