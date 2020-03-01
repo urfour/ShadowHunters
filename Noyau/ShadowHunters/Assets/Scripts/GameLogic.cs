@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameLogic : MonoBehaviour
 {
@@ -60,6 +61,13 @@ public class GameLogic : MonoBehaviour
         private set => m_playerTurn = value;
     }
 
+    private bool m_isGameOver = false;
+    public bool IsGameOver
+    {
+        get => m_isGameOver;
+        private set => m_isGameOver = value;
+    }
+
     private List<Player> m_players;
 
     private GameBoard gameBoard;
@@ -67,8 +75,8 @@ public class GameLogic : MonoBehaviour
 
     // Cartes possibles des différents decks
     public List<VisionCard> m_visionCards;
-    public List<Card> m_darknessCards;
-    public List<Card> m_lightCards;
+    public List<DarknessCard> m_darknessCards;
+    public List<LightCard> m_lightCards;
     public List<Card> m_locationCards;
     public List<Character> m_hunterCharacters;
     public List<Character> m_shadowCharacters;
@@ -106,7 +114,9 @@ public class GameLogic : MonoBehaviour
     {
         m_players = new List<Player>();
         Player p;
-        gameBoard = new GameBoard(PrepareDecks(m_locationCards), PrepareDecks(m_visionCards), PrepareDecks(m_darknessCards), PrepareDecks(m_lightCards), nbPlayers);
+        gameBoard = new GameBoard(m_locationCards.PrepareDecks<Card>(), 
+            m_visionCards.PrepareDecks<VisionCard>(), m_darknessCards.PrepareDecks<DarknessCard>(), 
+            m_lightCards.PrepareDecks<LightCard>(), nbPlayers);
         List<Character> characters;
         for (int i = 0; i < nbPlayers; i++)
         {
@@ -120,33 +130,6 @@ public class GameLogic : MonoBehaviour
             characters.RemoveAt(0);
         }
 
-    }
-
-    List<Card> PrepareDecks(List<Card> cards)
-    {
-        List<Card> deck = new List<Card>();
-        for (int i = 0; i < cards.Count; i++)
-            deck.Add(cards[i]);
-        deck.Shuffle<Card>();
-        return deck;
-    }
-
-    List<VisionCard> PrepareDecks(List<VisionCard> cards)
-    {
-        List<VisionCard> deck = new List<VisionCard>();
-        for (int i = 0; i < cards.Count; i++)
-            deck.Add(cards[i]);
-        deck.Shuffle<VisionCard>();
-        return deck;
-    }
-
-    List<Character> PrepareCharacters(List<Character> cards)
-    {
-        List<Character> deck = new List<Character>();
-        for (int i = 0; i < cards.Count; i++)
-            deck.Add(cards[i]);
-        deck.Shuffle<Character>();
-        return deck;
     }
 
     void ResetDecks(List<Card> oldDeck, List<Card> newDeck)
@@ -201,9 +184,9 @@ public class GameLogic : MonoBehaviour
                 addBob = false;
                 break;
         }
-        HuntersCards = PrepareCharacters(cardHunters);
-        ShadowsCards = PrepareCharacters(cardShadows);
-        NeutralsCards = PrepareCharacters(cardNeutrals);
+        HuntersCards = cardHunters.PrepareDecks<Character>();
+        ShadowsCards = cardShadows.PrepareDecks<Character>();
+        NeutralsCards = cardNeutrals.PrepareDecks<Character>();
 
         AddCharacterCards(characterCards, HuntersCards, NbHunters, addBob);
         AddCharacterCards(characterCards, ShadowsCards, NbShadows, addBob);
@@ -224,7 +207,7 @@ public class GameLogic : MonoBehaviour
             case 3:
                 m_players[m_playerTurn].Position = Position.Antre;
                 gameBoard.setPositionOfAt(m_playerTurn, Position.Antre);
-                carte = "Antre de l'Ermite";
+                carte = "Antre de l'ermite";
                 break;
             case 4:
             case 5:
@@ -242,7 +225,7 @@ public class GameLogic : MonoBehaviour
                 m_players[m_playerTurn].Position = Position.Antre;
                 gameBoard.setPositionOfAt(m_playerTurn, Position.Antre);
                 // TODO choix du lieu
-                carte = "Antre de l'Ermite";
+                carte = "Antre de l'ermite";
                 break;
             case 8:
                 m_players[m_playerTurn].Position = Position.Cimetiere;
@@ -273,8 +256,9 @@ public class GameLogic : MonoBehaviour
                 // TODO Choix du joueur à qui donner la carte vision
                 while (choosenPlayerId == m_playerTurn)
                     choosenPlayerId = Random.Range(0, m_nbPlayers - 1);
+                VisionCard visionCard = gameBoard.DrawCard(CardType.Vision) as VisionCard;
                 Debug.Log("La carte Vision a été donnée au joueur " + choosenPlayerId + ".");
-                VisionCardPower(gameBoard.DrawCard(CardType.Vision) as VisionCard, choosenPlayerId);
+                VisionCardPower(visionCard, choosenPlayerId);
                 break;
             case Position.Porte:
                 // TODO choix de la carte piochée
@@ -341,10 +325,8 @@ public class GameLogic : MonoBehaviour
                 m_players[playerId].Wounded(2);
 
             // Cas des cartes infligeant des Blessures
-            else if (pickedCard.visionEffect.effectOneWound)
-                m_players[playerId].Wounded(1);
-            else if (pickedCard.visionEffect.effectTwoWounds)
-                m_players[playerId].Wounded(2);
+            else if (pickedCard.visionEffect.effectTakeWounds)
+                m_players[playerId].Wounded(pickedCard.visionEffect.nbWounds);
             // Cas des cartes soignant des Blessures
             else if (pickedCard.visionEffect.effectHealingOneWound)
             {
@@ -363,6 +345,7 @@ public class GameLogic : MonoBehaviour
             else
                 Debug.Log("Rien ne se passe.");
         }
+        gameBoard.AddDiscard(pickedCard, CardType.Vision);
     }
 
     void DarknessCardPower(DarknessCard pickedCard)
@@ -428,6 +411,14 @@ public class GameLogic : MonoBehaviour
                 Debug.Log("Le joueur " + m_playerTurn + " vole une carte équipement au joueur " + playerChoosenId + " !");
                 break;
         }
+        if (!pickedCard.isEquipement)
+            gameBoard.AddDiscard(pickedCard, CardType.Darkness);
+    }
+
+    void LightCardPower(LightCard lightCard)
+    {
+        // TODO
+        return;
     }
 
     bool checkLowHPCharacters(string characterName)
@@ -458,7 +449,16 @@ public class GameLogic : MonoBehaviour
             int lancerTotal = Mathf.Abs(lancer1 - lancer2);
             m_players[playerAttackedId].Wounded(lancerTotal + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
             if (m_players[playerAttackedId].IsDead())
+            {
                 Debug.Log("Le joueur " + playerAttackedId + " est mort !");
+                if (m_players[playerAttackedId].Team == CharacterTeam.Hunter)
+                    m_nbHuntersDead++;
+                else if (m_players[playerAttackedId].Team == CharacterTeam.Shadow)
+                    m_nbShadowsDeads++;
+                else
+                    m_nbNeutralsDeads++;
+                // TODO vol d'une carte équipement
+            }
         }
     }
 
@@ -479,20 +479,58 @@ public class GameLogic : MonoBehaviour
         ChooseNextPlayer();
     }
 
-}
-
-public static class IListExtensions
-{
-    public static void Shuffle<T>(this List<T> ts)
+    public void hasWon(int playerId)
     {
-        var count = ts.Count;
-        var last = count - 1;
-        for (var i = 0; i < last; ++i)
+        switch (m_players[playerId].Character.characterWinningCondition)
         {
-            var r = UnityEngine.Random.Range(i, count);
-            var tmp = ts[i];
-            ts[i] = ts[r];
-            ts[r] = tmp;
+            case WinningCondition.BeingAlive:
+                if (!m_players[playerId].Dead && m_isGameOver)
+                    m_players[playerId].HasWon = true;
+                break;
+            case WinningCondition.HavingEquipement:
+                if (m_players[playerId].ListCard.Count >= 5)
+                {
+                    m_players[playerId].HasWon = true;
+                    m_isGameOver = true;
+                }
+                break;
+            case WinningCondition.Bryan:
+                // TODO vérifier si tue un perso de 13 HP ou plus
+                if (m_players[playerId].Position == Position.Sanctuaire && m_isGameOver)
+                    m_players[playerId].HasWon = true;
+                break;
+            case WinningCondition.David:
+                int nbCardsOwned = 0;
+                if (m_players[playerId].hasCard("Crucifix en argent"))
+                    nbCardsOwned++;
+                if (m_players[playerId].hasCard("Amulette"))
+                    nbCardsOwned++;
+                if (m_players[playerId].hasCard("Lance de Longinus"))
+                    nbCardsOwned++;
+                if (m_players[playerId].hasCard("Toge sainte"))
+                    nbCardsOwned++;
+                
+                if (nbCardsOwned >= 3)
+                {
+                    m_players[playerId].HasWon = true;
+                    m_isGameOver = true;
+                }
+                break;
+            case WinningCondition.HunterCondition:
+                if (m_nbShadowsDeads == m_nbShadows)
+                {
+                    m_players[playerId].HasWon = true;
+                    m_isGameOver = true;
+                } 
+                break;
+            case WinningCondition.ShadowCondition:
+                if (m_nbHuntersDead == m_nbHunters || m_nbNeutralsDeads == 3)
+                {
+                    m_players[playerId].HasWon = true;
+                    m_isGameOver = true;
+                }
+                break;
         }
     }
+
 }

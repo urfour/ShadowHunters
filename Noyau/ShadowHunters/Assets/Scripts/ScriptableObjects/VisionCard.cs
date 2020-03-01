@@ -16,8 +16,8 @@ public struct VisionEffect
     public bool effectSupremeVision; // Carte Vision Suprême
     public bool effectGivingEquipementCard; // Donner une carte équipement ou subir 1 Blessure
     public bool effectHealingOneWound; // Soigner 1 Blessure
-    public bool effectOneWound; // Subir 1 Blessure
-    public bool effectTwoWounds; // Subir 2 Blessures
+    public bool effectTakeWounds; // Subir x Blessures
+    public int nbWounds; // Nombre de Blessures subies
 }
 
 [CreateAssetMenu(fileName = "VisionCard", menuName = "Card/VisionCard", order = 3)]

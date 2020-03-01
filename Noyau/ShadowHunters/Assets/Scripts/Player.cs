@@ -15,10 +15,11 @@ public class Player
     private int bonusAttack;         // bonus d'attaque (par défaut = 0)
     private int malusAttack;         // malus d'attaque (par défaut = 0)
     private int reductionWounds;     // réduction du nombre de Blessures subites (par défaut = 0)
-    private bool hasGatling;
-    private bool hasRevolver;
-    private bool hasSaber;
-    private bool isTurn;
+    private bool hasGatling;         // le joueur possède-t-il la mitrailleuse ?
+    private bool hasRevolver;        // le joueur possède-t-il le revolver ?
+    private bool hasSaber;           // le joueur possède-t-il le sabre ?
+    private bool isTurn;             // est-ce le tour du joueur ?
+    private bool hasWon;              // le joueur a-t-il gagné ?
     private Position position;       // position du joueur
     private Character character;     // personnage du joueur
     private List<Card> listCard;     // liste des cartes possédées par le joueur
@@ -39,6 +40,7 @@ public class Player
         this.hasRevolver = false;
         this.hasSaber = false;
         this.isTurn = false;
+        this.hasWon = false;
         this.listCard = new List<Card>();
     }
 
@@ -131,6 +133,12 @@ public class Player
         set { hasSaber = value; }
     }
 
+    public bool HasWon
+    {
+        get { return hasWon; }
+        set { hasWon = value; }
+    }
+
     public void Wounded(int damage)
     {
         if (damage > 0)
@@ -200,5 +208,20 @@ public class Player
         this.team = character.team;
         this.life = character.characterHP;
         this.character = character;
+    }
+
+    public Character Character
+    {
+        get { return character; }
+    }
+
+    public bool hasCard(string cardName)
+    {
+        foreach (Card card in listCard)
+        {
+            if (string.Equals(card.cardName, cardName))
+                return true;
+        }
+        return false;
     }
 }   
