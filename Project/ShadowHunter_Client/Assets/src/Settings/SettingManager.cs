@@ -10,6 +10,11 @@ using System.IO;
 
 namespace Kernel.Settings
 {
+    /// <summary>
+    /// Conventions de nommage des settings : 
+    ///     {CatégorieName}_{SettingName}_{accéssibilité : Any/Dev/Advance/User}
+    ///     exemple : General_Lang_User
+    /// </summary>
     [Serializable]
     public partial class SettingManager
     {

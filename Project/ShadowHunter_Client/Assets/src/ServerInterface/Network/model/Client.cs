@@ -18,7 +18,7 @@ namespace Network.model
 
         public Client()
         {
-            TcpClient = new TcpClient(SettingManager.Settings.Server_IP.Value, SettingManager.Settings.Server_Port.Value);
+            TcpClient = new TcpClient(SettingManager.Settings.ServerIP.Value, SettingManager.Settings.ServerPort.Value);
             
             ListenThread = new Thread(new ThreadStart(Listen));
             ListenThread.Start();

@@ -17,9 +17,9 @@ namespace Lang
         {
             Notifier = new ListenableObject();
             if (SettingManager.Settings == null) SettingManager.Load();
-            Instance = new Language(SettingManager.Settings.Lang.Value);
+            Instance = new Language(SettingManager.Settings.General_Lang_User.Value);
 
-            SettingManager.Settings.Lang.AddListener((sender) => { Instance = new Language(SettingManager.Settings.Lang.Value); });
+            SettingManager.Settings.General_Lang_User.AddListener((sender) => { Instance = new Language(SettingManager.Settings.General_Lang_User.Value); });
         }
 
         #region SINGLOTON
