@@ -1,4 +1,5 @@
-﻿using Kernel.Settings;
+﻿using Assets.Scripts.MainMenuUI.ThemeColor;
+using Kernel.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,10 +28,11 @@ class ColoredUI : MonoBehaviour
 {
     public ElemClass elemClass = ElemClass.PARENT;
     public ElemType elemType = ElemType.AUTO;
-
+    private static FontUI font = null;
 
     private void Start()
     {
+        if (font == null) font = new FontUI();
         if (this.elemType == ElemType.AUTO)
         {
             if (gameObject.GetComponent<Text>() != null) this.elemType = ElemType.TEXT;
@@ -59,9 +61,24 @@ class ColoredUI : MonoBehaviour
         Apply();
         if (elemType == ElemType.TEXT)
         {
-            if (elemClass == ElemClass.TITLE) SettingManager.Settings.Display_TitleTextColor_Advance.AddListener((sender) => { this.Apply(); });
-            else if (elemClass == ElemClass.SUBTITLE) SettingManager.Settings.Display_SubTitleTextColor_Advance.AddListener((sender) => { this.Apply(); });
-            else if (elemClass == ElemClass.CORPS) SettingManager.Settings.Display_CorpsTextColor_Advance.AddListener((sender) => { this.Apply(); });
+            if (elemClass == ElemClass.TITLE)
+            {
+                SettingManager.Settings.Display_TitleTextColor_Advance.AddListener((sender) => { this.Apply(); });
+                SettingManager.Settings.Display_TitleTextEmMult_Advance.AddListener((sender) => { this.Apply(); });
+            }
+            else if (elemClass == ElemClass.SUBTITLE)
+            {
+                SettingManager.Settings.Display_SubTitleTextColor_Advance.AddListener((sender) => { this.Apply(); });
+                SettingManager.Settings.Display_SubTitleTextEmMult_Advance.AddListener((sender) => { this.Apply(); });
+            }
+            else if (elemClass == ElemClass.CORPS)
+            {
+                SettingManager.Settings.Display_CorpsTextColor_Advance.AddListener((sender) => { this.Apply(); });
+                SettingManager.Settings.Display_CorpsTextEmMult_Advance.AddListener((sender) => { this.Apply(); });
+            }
+            SettingManager.Settings.Display_TextBaseEm_Advance.AddListener((sender) => { this.Apply(); });
+            font.AddListener((sender) => { gameObject.GetComponent<Text>().font = font.Font; });
+            gameObject.GetComponent<Text>().font = font.Font;
         }
         else
         {
@@ -75,12 +92,26 @@ class ColoredUI : MonoBehaviour
     public void Apply()
     {
         Color c;
+        double em = 0;
         if (elemType == ElemType.TEXT)
         {
-            if (elemClass == ElemClass.TITLE) c = SettingManager.Settings.Display_TitleTextColor_Advance.Value;
-            else if (elemClass == ElemClass.SUBTITLE) c = SettingManager.Settings.Display_SubTitleTextColor_Advance.Value;
-            else if (elemClass == ElemClass.CORPS) c = SettingManager.Settings.Display_CorpsTextColor_Advance.Value;
+            if (elemClass == ElemClass.TITLE)
+            {
+                c = SettingManager.Settings.Display_TitleTextColor_Advance.Value;
+                em = SettingManager.Settings.Display_TitleTextEmMult_Advance.Value;
+            }
+            else if (elemClass == ElemClass.SUBTITLE)
+            {
+                c = SettingManager.Settings.Display_SubTitleTextColor_Advance.Value;
+                em = SettingManager.Settings.Display_SubTitleTextEmMult_Advance.Value;
+            }
+            else if (elemClass == ElemClass.CORPS)
+            {
+                c = SettingManager.Settings.Display_CorpsTextColor_Advance.Value;
+                em = SettingManager.Settings.Display_CorpsTextEmMult_Advance.Value;
+            }
             else c = Color.cyan;
+            em *= SettingManager.Settings.Display_TextBaseEm_Advance.Value;
         }
         else
         {
@@ -97,6 +128,7 @@ class ColoredUI : MonoBehaviour
                     t.color = c;
                     t.horizontalOverflow = HorizontalWrapMode.Overflow;
                     t.verticalOverflow = VerticalWrapMode.Overflow;
+                    t.fontSize = (int)em;
                 }
                 break;
             case ElemType.BUTTON:
