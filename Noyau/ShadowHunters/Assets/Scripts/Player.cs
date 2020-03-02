@@ -19,7 +19,7 @@ public class Player
     private bool hasRevolver;        // le joueur possède-t-il le revolver ?
     private bool hasSaber;           // le joueur possède-t-il le sabre ?
     private bool isTurn;             // est-ce le tour du joueur ?
-    private bool hasWon;              // le joueur a-t-il gagné ?
+    private bool hasWon;             // le joueur a-t-il gagné ?
     private Position position;       // position du joueur
     private Character character;     // personnage du joueur
     private List<Card> listCard;     // liste des cartes possédées par le joueur
