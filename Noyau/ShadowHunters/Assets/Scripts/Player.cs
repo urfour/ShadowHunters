@@ -171,6 +171,23 @@ public class Player
         if (this.Wound < 0)
             this.Wound = 0;
     }
+    
+    public void SetWound (int wound)
+    {
+		if (this.IsDead())
+            return;
+            
+        if (wound > 0)
+        {
+			string blessure = " Blessure";
+            if (wound > 1)
+				blessure += "s";
+				
+			this.Wound = wound;
+			Debug.Log("Le joueur " + id + " a maintenant " + wound + blessure + " !");
+		}
+
+	}
 
     public bool IsDead()
     {
