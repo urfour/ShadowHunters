@@ -488,8 +488,84 @@ public class GameLogic : MonoBehaviour
 
     void LightCardPower(LightCard lightCard)
     {
-        Debug.Log("Implmentation en cours");
-        // TODO
+        CharacterTeam team = m_players[playerId].Team;
+        Character character = m_players[playerId].Character.characterName;
+        bool reaveled = m_players[playerId].Reaveled;
+        int playerChoosenId = m_playerTurn;
+        
+        switch (pickedCard.lightEffect)
+        {
+			case LightEffect.Amulette:
+			
+				Debug.Log("Implémentation en cours");
+				break;
+				
+			case LightEffect.Ange: // A implémenter comme un équipement qui se discard au début du tour
+			
+				Debug.Log("Implémentation en cours");
+				break;
+				
+			case LightEffect.Supreme:
+			
+				if (team == CharacterTeam.Hunter)
+				{
+					if (reaveled)
+						m_players[m_playerTurn].SetWound(0);
+					else // A le choix de se révéler ou non pour se heal
+						Debug.Log("Implémentation en cours");
+				}
+				break;
+			
+			case LightEffect.Chocolat:
+			
+				if (character == "Allie" || character == "Emi" || character == "Métamorphe")
+				{
+					if (reaveled)
+						m_players[m_playerTurn].SetWound(0);
+					else // A le choix de se révéler ou non pour se heal
+						Debug.Log("Implémentation en cours");
+				}
+				break;
+			
+			case LightEffect.Benediction:
+				// TODO choix de la personne à qui infliger des Blessures
+                while (playerChoosenId == m_playerTurn)
+                    playerChoosenId = Random.Range(0, m_nbPlayers - 1);
+                    
+				break;
+			
+			case LightEffect.Boussole:
+				break;
+			
+			case LightEffect.Broche:
+				break;
+				
+			case LightEffect.Crucifix:
+				break;
+				
+			case LightEffect.EauBenite:
+				break;
+				
+			case LightEffect.Eclair:
+				break;
+			
+			case LightEffect.Lance:
+				break;
+				
+			case LightEffect.Miroir:
+				break;
+				
+			case LightEffect.PremiersSecours:
+				break;
+				
+			case LightEffect.Savoir:
+				break;
+			
+			case LightEffect.Toge:
+				break;
+		}
+        
+        
         return;
     }
 
@@ -648,4 +724,31 @@ public class GameLogic : MonoBehaviour
         ActivateLocationPower();
     }
 
+}
+    void playerCardPower(Character character)
+    {
+        switch(character.characterName)
+        {
+            case "Allie":
+                break;
+            case "Bryan":
+                break;
+            case "David":
+                break;
+            case "Emi":
+                break;
+            case "Metamorphe":
+                break;
+            case "Bob":
+                break;
+            case "Franklin":
+                break;
+            case "Georges":
+                break;
+            case "Loup-Garou":
+                break;
+            case "Vampire":
+                break;
+        }
+    }
 }
