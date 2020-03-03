@@ -589,4 +589,30 @@ public class GameLogic : MonoBehaviour
 
     }
 
+    void playerCardPower(Character character)
+    {
+        switch(character.characterName)
+        {
+            case "Allie":
+                break;
+            case "Bryan":
+                break;
+            case "David":
+                break;
+            case "Emi":
+                break;
+            case "Metamorphe":
+                break;
+            case "Bob":
+                break;
+            case "Franklin":
+                break;
+            case "Georges":
+                break;
+            case "Loup-Garou":
+                break;
+            case "Vampire":
+                break;
+        }
+    }
 }
