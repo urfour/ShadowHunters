@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player
 {
     private int id;                  // ordre du jeu d'un joueur
-    private string playerName;       // nom du pesonnage
+    private string playerName;       // nom du joueur
     private CharacterTeam team;      // shadow/hunter/neutre
     private int life;                // nombre de points de vie
     private int wound;               // nombre de blessure
