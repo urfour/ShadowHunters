@@ -90,6 +90,7 @@ public class GameLogic : MonoBehaviour
     public GameObject lightCardsButton;
     public GameObject attackPlayer;
     public GameObject endTurn;
+    public GameObject revealCardButton;
 
     void Start()
     {
@@ -443,7 +444,10 @@ public class GameLogic : MonoBehaviour
                 break;
             case DarknessEffect.Rituel:
                 // TODO effet de la carte
-                Debug.Log("Implémentation en cours");
+                Debug.Log("Voulez-vous vous révéler ? 10s sinon la carte se défausse");
+
+                if(m_players[m_playerTurn].Revealed)
+                    m_players[m_playerTurn].Healed(m_players[m_playerTurn].Wound);
                 break;
             case DarknessEffect.Sabre:
                 m_players[m_playerTurn].HasSaber = true;
@@ -478,6 +482,13 @@ public class GameLogic : MonoBehaviour
         return characterName.StartsWith("D") || characterName.StartsWith("F")
             || characterName.StartsWith("G") || characterName.StartsWith("L")
             || characterName.StartsWith("V");
+    }
+
+    public void RevealCard()
+    {
+        m_players[m_playerTurn].Revealed=true;
+        Debug.Log("Le joueur "+ m_playerTurn + " s'est révélé, il est : " + m_players[m_playerTurn].Character.characterName + " c'est un "+ m_players[m_playerTurn].Character.team);
+        revealCardButton.SetActive(false);
     }
 
     public void Attack()
@@ -519,12 +530,17 @@ public class GameLogic : MonoBehaviour
         lightCardsButton.SetActive(false);
         attackPlayer.SetActive(false);
         endTurn.SetActive(false);
+
         if (m_playerTurn == -1)
             m_playerTurn = Random.Range(0, m_nbPlayers - 1);
         else
             m_playerTurn = (m_playerTurn + 1) % m_nbPlayers;
         Debug.Log("C'est au joueur " + m_playerTurn + " de jouer.");
         rollDicesButton.SetActive(true);
+        if(m_players[m_playerTurn].Revealed==false)
+        {
+            revealCardButton.SetActive(true);
+        }
     }
 
     void PlayTurn()

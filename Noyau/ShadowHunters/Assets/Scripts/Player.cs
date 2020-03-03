@@ -71,7 +71,6 @@ public class Player
     public int Wound
     {
         get { return wound; }
-        set { wound = value; }
     }
     public bool Revealed
     {
@@ -144,7 +143,7 @@ public class Player
         if (damage > 0)
         {
             string blessure = " Blessure";
-            this.Wound += damage - reductionWounds;
+            this.wound += damage - reductionWounds;
             if (damage > 1)
                 blessure += "s";
             Debug.Log("Le joueur " + id + " subit " + damage + blessure + " !");
@@ -162,19 +161,19 @@ public class Player
         if (heal > 0)
         {
             string blessure = " Blessure";
-            this.Wound -= heal;
+            this.wound -= heal;
             if (heal > 1)
                 blessure += "s";
             Debug.Log("Le joueur " + id + " est soigné de " + heal + blessure + " !");
         }
 
-        if (this.Wound < 0)
-            this.Wound = 0;
+        if (this.wound < 0)
+            this.wound = 0;
     }
 
     public bool IsDead()
     {
-        if (this.Wound >= this.Life)
+        if (this.wound >= this.Life)
             return true;
 
         return false;
