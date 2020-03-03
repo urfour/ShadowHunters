@@ -77,7 +77,7 @@ public class GameLogic : MonoBehaviour
     public List<VisionCard> m_visionCards;
     public List<DarknessCard> m_darknessCards;
     public List<LightCard> m_lightCards;
-    public List<Card> m_locationCards;
+    public List<LocationCard> m_locationCards;
     public List<Character> m_hunterCharacters;
     public List<Character> m_shadowCharacters;
     public List<Character> m_neutralCharacters;
@@ -91,6 +91,8 @@ public class GameLogic : MonoBehaviour
     public GameObject attackPlayer;
     public GameObject endTurn;
     public GameObject revealCardButton;
+    public Dropdown dropdownLocation; 
+    public GameObject validateButton;
 
     void Start()
     {
@@ -101,6 +103,8 @@ public class GameLogic : MonoBehaviour
         lightCardsButton.SetActive(false);
         attackPlayer.SetActive(false);
         endTurn.SetActive(false);
+        dropdownLocation.gameObject.SetActive(false);
+        validateButton.SetActive(false);
         ChooseNextPlayer();
         //gameBoard.PrintLog();
 
@@ -129,7 +133,7 @@ public class GameLogic : MonoBehaviour
     {
         m_players = new List<Player>();
         Player p;
-        gameBoard = new GameBoard(m_locationCards.PrepareDecks<Card>(), 
+        gameBoard = new GameBoard(m_locationCards.PrepareDecks<LocationCard>(), 
             m_visionCards.PrepareDecks<VisionCard>(), m_darknessCards.PrepareDecks<DarknessCard>(), 
             m_lightCards.PrepareDecks<LightCard>(), nbPlayers);
         List<Character> characters;
@@ -209,56 +213,79 @@ public class GameLogic : MonoBehaviour
         return characterCards;
     }
 
-    void MoveCharacter()
+    bool MoveCharacter()
     {
-        int lancer1 = Random.Range(1, 6);
-        int lancer2 = Random.Range(1, 4);
-        int lancerTotal = lancer1 + lancer2;
-        string carte = "";
-        Debug.Log("Le lancer de dés donne " + lancer1 + " et " + lancer2 + " (" + lancerTotal + ").");
-        switch (lancerTotal)
+        int lancer1, lancer2, lancerTotal;
+        bool sameLocation = true;
+        while (sameLocation)
         {
-            case 2:
-            case 3:
-                m_players[m_playerTurn].Position = Position.Antre;
-                gameBoard.setPositionOfAt(m_playerTurn, Position.Antre);
-                carte = "Antre de l'ermite";
-                break;
-            case 4:
-            case 5:
-                m_players[m_playerTurn].Position = Position.Porte;
-                gameBoard.setPositionOfAt(m_playerTurn, Position.Porte);
-                carte = "Porte de l'outremonde";
-                break;
-            case 6:
-                m_players[m_playerTurn].Position = Position.Monastere;
-                gameBoard.setPositionOfAt(m_playerTurn, Position.Monastere);
-                carte = "Monastère";
-                break;
-            case 7:
-                Debug.Log("Où souhaitez-vous aller ?");
-                m_players[m_playerTurn].Position = Position.Antre;
-                gameBoard.setPositionOfAt(m_playerTurn, Position.Antre);
-                // TODO choix du lieu
-                carte = "Antre de l'ermite";
-                break;
-            case 8:
-                m_players[m_playerTurn].Position = Position.Cimetiere;
-                gameBoard.setPositionOfAt(m_playerTurn, Position.Cimetiere);
-                carte = "Cimetière";
-                break;
-            case 9:
-                m_players[m_playerTurn].Position = Position.Foret;
-                gameBoard.setPositionOfAt(m_playerTurn, Position.Foret);
-                carte = "Forêt hantée";
-                break;
-            case 10:
-                m_players[m_playerTurn].Position = Position.Sanctuaire;
-                gameBoard.setPositionOfAt(m_playerTurn, Position.Sanctuaire);
-                carte = "Sanctuaire ancien";
-                break;
+            lancer1 = Random.Range(1, 6);
+            lancer2 = Random.Range(1, 4);
+            lancerTotal = lancer1 + lancer2;
+            Debug.Log("Le lancer de dés donne " + lancer1 + " et " + lancer2 + " (" + lancerTotal + ").");
+            switch (lancerTotal)
+            {
+                case 2:
+                case 3:
+                    if (m_players[m_playerTurn].Position != Position.Antre)
+                    {
+                        sameLocation = false;
+                        m_players[m_playerTurn].Position = Position.Antre;
+                        gameBoard.setPositionOfAt(m_playerTurn, Position.Antre);
+                    }
+                    break;
+                case 4:
+                case 5:
+                    if (m_players[m_playerTurn].Position != Position.Porte)
+                    {
+                        sameLocation = false;
+                        m_players[m_playerTurn].Position = Position.Porte;
+                        gameBoard.setPositionOfAt(m_playerTurn, Position.Porte);
+                    }
+                    break;
+                case 6:
+                    if (m_players[m_playerTurn].Position != Position.Monastere)
+                    {
+                        sameLocation = false;
+                        m_players[m_playerTurn].Position = Position.Monastere;
+                        gameBoard.setPositionOfAt(m_playerTurn, Position.Monastere);
+                    }
+                    break;
+                case 7:
+                    Debug.Log("Où souhaitez-vous aller ?");
+                    dropdownLocation.gameObject.SetActive(true);
+                    SetDropdownLocations();
+                    validateButton.SetActive(true);
+                    return false;
+                case 8:
+                    if (m_players[m_playerTurn].Position != Position.Cimetiere)
+                    {
+                        sameLocation = false;
+                        m_players[m_playerTurn].Position = Position.Cimetiere;
+                        gameBoard.setPositionOfAt(m_playerTurn, Position.Cimetiere);
+                    }
+                    break;
+                case 9:
+                    if (m_players[m_playerTurn].Position != Position.Foret)
+                    {
+                        sameLocation = false;
+                        m_players[m_playerTurn].Position = Position.Foret;
+                        gameBoard.setPositionOfAt(m_playerTurn, Position.Foret);
+                    }
+                    break;
+                case 10:
+                    if (m_players[m_playerTurn].Position != Position.Sanctuaire)
+                    {
+                        sameLocation = false;
+                        m_players[m_playerTurn].Position = Position.Sanctuaire;
+                        gameBoard.setPositionOfAt(m_playerTurn, Position.Sanctuaire);
+                    }
+                    break;
+            }
         }
-        Debug.Log("Le joueur " + m_playerTurn + " se rend sur la carte " + carte + ".");
+        Debug.Log("Le joueur " + m_playerTurn + " se rend sur la carte " + 
+            gameBoard.GetAreaNameByPosition(m_players[m_playerTurn].Position) + ".");
+        return true;
     }
 
     void ActivateLocationPower()
@@ -463,10 +490,86 @@ public class GameLogic : MonoBehaviour
             gameBoard.AddDiscard(pickedCard, CardType.Darkness);
     }
 
-    void LightCardPower(LightCard lightCard)
+    void LightCardPower(LightCard pickedCard)
     {
-        Debug.Log("Implmentation en cours");
-        // TODO
+        CharacterTeam team = m_players[m_playerTurn].Team;
+        string character = m_players[m_playerTurn].Character.characterName;
+        bool revealed = m_players[m_playerTurn].Revealed;
+        int playerChoosenId = m_playerTurn;
+        
+        switch (pickedCard.lightEffect)
+        {
+			case LightEffect.Amulette:
+			
+				Debug.Log("Implémentation en cours");
+				break;
+				
+			case LightEffect.AngeGardien: // A implémenter comme un équipement qui se discard au début du tour
+			
+				Debug.Log("Implémentation en cours");
+				break;
+				
+			case LightEffect.Supreme:
+			
+				if (team == CharacterTeam.Hunter)
+				{
+					if (revealed)
+						m_players[m_playerTurn].SetWound(0);
+					else // A le choix de se révéler ou non pour se heal
+						Debug.Log("Implémentation en cours");
+				}
+				break;
+			
+			case LightEffect.Chocolat:
+			
+				if (character == "Allie" || character == "Emi" || character == "Métamorphe")
+				{
+					if (revealed)
+						m_players[m_playerTurn].SetWound(0);
+					else // A le choix de se révéler ou non pour se heal
+						Debug.Log("Implémentation en cours");
+				}
+				break;
+			
+			case LightEffect.Benediction:
+				// TODO choix de la personne à qui infliger des Blessures
+                while (playerChoosenId == m_playerTurn)
+                    playerChoosenId = Random.Range(0, m_nbPlayers - 1);
+                    
+				break;
+			
+			case LightEffect.Boussole:
+				break;
+			
+			case LightEffect.Broche:
+				break;
+				
+			case LightEffect.Crucifix:
+				break;
+				
+			case LightEffect.EauBenite:
+				break;
+				
+			case LightEffect.Eclair:
+				break;
+			
+			case LightEffect.Lance:
+				break;
+				
+			case LightEffect.Miroir:
+				break;
+				
+			case LightEffect.PremiersSecours:
+				break;
+				
+			case LightEffect.Savoir:
+				break;
+			
+			case LightEffect.Toge:
+				break;
+		}
+        
+        
         return;
     }
 
@@ -507,17 +610,24 @@ public class GameLogic : MonoBehaviour
             int lancer1 = Random.Range(1, 6);
             int lancer2 = Random.Range(1, 4);
             int lancerTotal = Mathf.Abs(lancer1 - lancer2);
-            m_players[playerAttackedId].Wounded(lancerTotal + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
-            if (m_players[playerAttackedId].IsDead())
+            if (lancerTotal > 0)
             {
-                Debug.Log("Le joueur " + playerAttackedId + " est mort !");
-                if (m_players[playerAttackedId].Team == CharacterTeam.Hunter)
-                    m_nbHuntersDead++;
-                else if (m_players[playerAttackedId].Team == CharacterTeam.Shadow)
-                    m_nbShadowsDeads++;
-                else
-                    m_nbNeutralsDeads++;
-                // TODO vol d'une carte équipement
+                m_players[playerAttackedId].Wounded(lancerTotal + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
+                if (m_players[playerAttackedId].IsDead())
+                {
+                    Debug.Log("Le joueur " + playerAttackedId + " est mort !");
+                    if (m_players[playerAttackedId].Team == CharacterTeam.Hunter)
+                        m_nbHuntersDead++;
+                    else if (m_players[playerAttackedId].Team == CharacterTeam.Shadow)
+                        m_nbShadowsDeads++;
+                    else
+                        m_nbNeutralsDeads++;
+                    // TODO vol d'une carte équipement
+                }
+            }
+            else
+            {
+                Debug.Log("Le lancer vaut 0, vous n'attaquez pas.");
             }
         }
 
@@ -543,11 +653,11 @@ public class GameLogic : MonoBehaviour
         }
     }
 
-    void PlayTurn()
+    public void PlayTurn()
     {
         rollDicesButton.SetActive(false);
-        MoveCharacter();
-        ActivateLocationPower();
+        if (MoveCharacter())
+            ActivateLocationPower();
     }
 
     void HasWon(int playerId)
@@ -605,4 +715,57 @@ public class GameLogic : MonoBehaviour
 
     }
 
+    void SetDropdownLocations()
+    {
+        List<string> locationNames = new List<string>();
+        foreach (LocationCard location in gameBoard.Areas)
+            if (location.area != m_players[m_playerTurn].Position)
+                locationNames.Add(location.cardName);
+
+        dropdownLocation.AddOptions(locationNames);
+    }
+
+    public void MoveToCorrespondingLocation()
+    {
+        string selectedLocation = dropdownLocation.captionText.text;
+        foreach (LocationCard location in gameBoard.Areas)
+            if (location.cardName.Equals(selectedLocation))
+            {
+                m_players[m_playerTurn].Position = location.area;
+                gameBoard.setPositionOfAt(m_playerTurn, location.area);
+                Debug.Log("Le joueur " + m_playerTurn + " se rend sur la carte " + location.cardName + ".");
+            }
+        dropdownLocation.gameObject.SetActive(false);
+        validateButton.SetActive(false);
+        ActivateLocationPower();
+    }
+
+    void playerCardPower(Character character)
+    {
+        switch(character.characterName)
+        {
+            case "Allie":
+                break;
+            case "Bryan":
+                break;
+            case "David":
+                break;
+            case "Emi":
+                break;
+            case "Metamorphe":
+                break;
+            case "Bob":
+                break;
+            case "Franklin":
+                break;
+            case "Georges":
+                break;
+            case "Loup-Garou":
+                break;
+            case "Vampire":
+                break;
+        }
+    }
+
 }
+

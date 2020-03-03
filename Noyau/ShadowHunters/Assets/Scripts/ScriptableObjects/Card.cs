@@ -4,17 +4,6 @@ using UnityEngine;
 
 public enum CardType { Location, Vision, Light, Darkness }
 
-public enum Position
-{
-    Antre,
-    Cimetiere,
-    Foret,
-    Monastere,
-    Porte,
-    Sanctuaire
-}
-
-[CreateAssetMenu(fileName = "Card", menuName = "Card/Card", order = 2)]
 [System.Serializable]
 public class Card : ScriptableObject
 {

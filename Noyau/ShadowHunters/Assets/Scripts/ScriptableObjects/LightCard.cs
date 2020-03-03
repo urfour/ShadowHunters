@@ -5,11 +5,11 @@ using UnityEngine;
 public enum LightEffect
 {
     Amulette,
-    Ange,
+    AngeGardien,
     Benediction,
     Boussole,
     Broche,
-    Barre,
+    Chocolat,
     Crucifix,
     EauBenite,
     Eclair,
@@ -17,7 +17,7 @@ public enum LightEffect
     Miroir,
     PremiersSecours,
     Savoir,
-    Avenement,
+    Supreme,
     Toge
 }
 

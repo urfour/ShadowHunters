@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player
 {
     private int id;                  // ordre du jeu d'un joueur
-    private string playerName;       // nom du pesonnage
+    private string playerName;       // nom du joueur
     private CharacterTeam team;      // shadow/hunter/neutre
     private int life;                // nombre de points de vie
     private int wound;               // nombre de blessure
@@ -170,6 +170,23 @@ public class Player
         if (this.wound < 0)
             this.wound = 0;
     }
+    
+    public void SetWound (int wound)
+    {
+		if (this.IsDead())
+            return;
+            
+        if (wound > 0)
+        {
+			string blessure = " Blessure";
+            if (wound > 1)
+				blessure += "s";
+				
+			this.wound = wound;
+			Debug.Log("Le joueur " + id + " a maintenant " + wound + blessure + " !");
+		}
+
+	}
 
     public bool IsDead()
     {

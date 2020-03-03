@@ -43,9 +43,13 @@ public class GameBoard
 	}
 
 	// Lieux du plateau
-	private Card[] m_areas;
+	private LocationCard[] m_areas;
+	public LocationCard[] Areas
+	{
+		get { return m_areas; }
+	}
 
-	public Card getAreaAt(int index)
+	public LocationCard getAreaAt(int index)
 	{
 		return m_areas[index];
 	}
@@ -58,16 +62,12 @@ public class GameBoard
 		return m_position[index];
 	}
 
-	public int GetCardIndexByName(string name)
+	public string GetAreaNameByPosition(Position position)
 	{
-		for (int i = 0; i < m_areas.Length; i++)
-			if (m_areas[i].cardName == name)
-			{
-				Debug.Log("Carte trouvée : " + m_areas[i].cardName);
-				return i;
-			}
-
-		return -1;
+		foreach (LocationCard location in m_areas)
+			if (location.area == position)
+				return location.cardName;
+		return null;
 	}
 
 	public void setPositionOfAt(int player, Position position)
@@ -89,7 +89,7 @@ public class GameBoard
 	}
 
 	//Constructeur (l_areas = liste mélangée des 6 lieux utilisés)
-	public GameBoard(List<Card> l_areas, List<VisionCard> l_hermit, List<DarknessCard> l_black, List<LightCard> l_white, int nbPlayers)
+	public GameBoard(List<LocationCard> l_areas, List<VisionCard> l_hermit, List<DarknessCard> l_black, List<LightCard> l_white, int nbPlayers)
 	{
 
 		m_visionDeck = l_hermit;
