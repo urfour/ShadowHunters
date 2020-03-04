@@ -623,6 +623,11 @@ public class GameLogic : MonoBehaviour
                     else
                         m_nbNeutralsDeads++;
                     // TODO vol d'une carte équipement
+
+                    if(m_players[m_playerTurn].Name == "Bryan" && m_players[playerAttackedId].Life <= 12 && !m_players[m_playerTurn].Revealed)
+                    {
+                        playerCardPower(m_players[m_playerTurn].Name);
+                    }
                 }
             }
             else
@@ -740,15 +745,41 @@ public class GameLogic : MonoBehaviour
         ActivateLocationPower();
     }
 
-    void playerCardPower(Character character)
+    void playerCardPower(Player player)
     {
-        switch(character.characterName)
+        switch(player.Name)
         {
             case "Allie":
                 break;
             case "Bryan":
+                RevealCard();
                 break;
             case "David":
+                if(player.Revealed && !player.UsedPower)
+                {
+                    List<Card> cardList;
+                    for(Card c in gameBoard.Black)
+                        if(c.isEquipement)
+				            cardList.Add(c);
+
+                    for(Card c in gameBoard.White)
+                        if(c.isEquipement)
+				            cardList.Add(c);
+
+                    // TODO choisir la carte
+                    choosenCardIndex = Random.Range(0, cardList.length - 1);
+
+                    if(cardList[choosenCardIndex].CardType == CardType.Darkness)
+                        // TODO créer la fonction removeCard(Card card, List<Card> deck) dans GameBoard.cs
+                        gameBoard.removeCard(cardList[choosenCardIndex], gameBoard.Black);
+                    else
+                        // TODO créer la fonction removeCard(Card card, List<Card> deck) dans GameBoard.cs
+                        gameBoard.removeCard(cardList[choosenCardIndex], gameBoard.White);
+
+                    player.AddCard(cardList[choosenCardIndex]);
+
+                    player.UsedPower = true;
+                }
                 break;
             case "Emi":
                 break;
