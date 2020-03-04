@@ -14,12 +14,12 @@ public class MenuSelectionManager : MonoBehaviour
         if (currentSelected != null)
         {
             currentSelected.Content.gameObject.SetActive(false);
-            currentSelected.Content.localPosition = new Vector3(0, ViewPort.rect.height / 2 + currentSelected.Content.rect.height / 2, 0);
+            currentSelected.Content.localPosition = new Vector3(0, -(ViewPort.rect.height / 2 + currentSelected.Content.rect.height / 2), 0);
         }
 
         currentSelected = ms;
         ms.Content.gameObject.SetActive(true);
-        ms.Content.localPosition = new Vector3(0, ViewPort.rect.height / 2 + ms.Content.rect.height / 2, 0);
+        ms.Content.localPosition = new Vector3(0, -(ViewPort.rect.height / 2 + ms.Content.rect.height / 2), 0);
     }
 
     public void Init(MenuSelection ms)

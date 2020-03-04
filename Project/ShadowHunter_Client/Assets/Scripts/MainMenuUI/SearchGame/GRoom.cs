@@ -1,6 +1,7 @@
 ﻿using EventSystem;
 using ServerInterface.RoomEvents;
 using ServerInterface.RoomEvents.event_in;
+using ServerInterface.RoomEvents.event_out;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace Assets.Scripts.MainMenuUI.SearchGame
                 {
                     if (r.IsSuppressed && Rooms.ContainsKey(r.Code))
                     {
-
+                        // todo
                     }
                     else if (Rooms.ContainsKey(r.Code))
                     {
@@ -38,6 +39,12 @@ namespace Assets.Scripts.MainMenuUI.SearchGame
             else if (e is JoindedWaitingRoomDataEvent)
             {
 
+            }
+            else if (e is CreateRoomEvent)
+            {
+                // TODO gestion serveur
+                RoomData r = ((CreateRoomEvent)e).RoomData;
+                Rooms.Add(r.Code, new Room(r));
             }
         }
 

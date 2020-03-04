@@ -13,13 +13,15 @@ enum ElemClass
     TITLE,
     SUBTITLE,
     CORPS,
-    PARENT
+    PARENT,
+    BACKGROUND,
 }
 
 enum ElemType
 {
     BUTTON,
     TEXT,
+    TEXT_ICON,
     PANEL,
     AUTO
 }
@@ -28,6 +30,7 @@ class ColoredUI : MonoBehaviour
 {
     public ElemClass elemClass = ElemClass.PARENT;
     public ElemType elemType = ElemType.AUTO;
+    public double emMultiplier = 1;
     private static FontUI font = null;
 
     private void Start()
@@ -44,7 +47,7 @@ class ColoredUI : MonoBehaviour
         {
             Transform parent = transform.parent;
             ColoredUI parentColoredui = null;
-            while (parent != null && (parentColoredui = parent.GetComponent<ColoredUI>()) == null)
+            while (parent != null && ((parentColoredui = parent.GetComponent<ColoredUI>()) == null) || (parent.GetComponent<ColoredUI>().elemClass == ElemClass.PARENT))
             {
                 parent = parent.parent;
             }
@@ -63,28 +66,35 @@ class ColoredUI : MonoBehaviour
         {
             if (elemClass == ElemClass.TITLE)
             {
-                SettingManager.Settings.Display_TitleTextColor_Advance.AddListener((sender) => { this.Apply(); });
-                SettingManager.Settings.Display_TitleTextEmMult_Advance.AddListener((sender) => { this.Apply(); });
+                SettingManager.Settings.UI_TitleTextColor.AddListener((sender) => { this.Apply(); });
+                SettingManager.Settings.UI_TitleTextEmMult.AddListener((sender) => { this.Apply(); });
             }
             else if (elemClass == ElemClass.SUBTITLE)
             {
-                SettingManager.Settings.Display_SubTitleTextColor_Advance.AddListener((sender) => { this.Apply(); });
-                SettingManager.Settings.Display_SubTitleTextEmMult_Advance.AddListener((sender) => { this.Apply(); });
+                SettingManager.Settings.UI_SubTitle_TextColor.AddListener((sender) => { this.Apply(); });
+                SettingManager.Settings.UI_SubTitle_TextEmMult.AddListener((sender) => { this.Apply(); });
             }
             else if (elemClass == ElemClass.CORPS)
             {
-                SettingManager.Settings.Display_CorpsTextColor_Advance.AddListener((sender) => { this.Apply(); });
-                SettingManager.Settings.Display_CorpsTextEmMult_Advance.AddListener((sender) => { this.Apply(); });
+                SettingManager.Settings.UI_Corps_TextColor.AddListener((sender) => { this.Apply(); });
+                SettingManager.Settings.UI_Corps_TextEmMult.AddListener((sender) => { this.Apply(); });
             }
-            SettingManager.Settings.Display_TextBaseEm_Advance.AddListener((sender) => { this.Apply(); });
+            SettingManager.Settings.UI_TextBaseEm.AddListener((sender) => { this.Apply(); });
             font.AddListener((sender) => { gameObject.GetComponent<Text>().font = font.Font; });
             gameObject.GetComponent<Text>().font = font.Font;
         }
+        else if (elemType == ElemType.TEXT_ICON)
+        {
+            if (elemClass == ElemClass.TITLE) SettingManager.Settings.UI_TitleTextColor.AddListener((sender) => { this.Apply(); });
+            else if (elemClass == ElemClass.SUBTITLE) SettingManager.Settings.UI_SubTitle_TextColor.AddListener((sender) => { this.Apply(); });
+            else if (elemClass == ElemClass.CORPS) SettingManager.Settings.UI_Corps_TextColor.AddListener((sender) => { this.Apply(); });
+        }
         else
         {
-            if (elemClass == ElemClass.TITLE) SettingManager.Settings.Display_TitleColor_Advance.AddListener((sender) => { this.Apply(); });
-            else if (elemClass == ElemClass.SUBTITLE) SettingManager.Settings.Display_SubTitleColor_Advance.AddListener((sender) => { this.Apply(); });
-            else if (elemClass == ElemClass.CORPS) SettingManager.Settings.Display_CorpsColor_Advance.AddListener((sender) => { this.Apply(); });
+            if (elemClass == ElemClass.TITLE) SettingManager.Settings.UI_TitleColor.AddListener((sender) => { this.Apply(); });
+            else if (elemClass == ElemClass.SUBTITLE) SettingManager.Settings.UI_SubTitle_Color.AddListener((sender) => { this.Apply(); });
+            else if (elemClass == ElemClass.CORPS) SettingManager.Settings.UI_Corps_Color.AddListener((sender) => { this.Apply(); });
+            else if (elemClass == ElemClass.BACKGROUND) SettingManager.Settings.UI_BackGround_Color.AddListener((sender) => { this.Apply(); });
         }
     }
 
@@ -97,29 +107,38 @@ class ColoredUI : MonoBehaviour
         {
             if (elemClass == ElemClass.TITLE)
             {
-                c = SettingManager.Settings.Display_TitleTextColor_Advance.Value;
-                em = SettingManager.Settings.Display_TitleTextEmMult_Advance.Value;
+                c = SettingManager.Settings.UI_TitleTextColor.Value;
+                em = SettingManager.Settings.UI_TitleTextEmMult.Value;
             }
             else if (elemClass == ElemClass.SUBTITLE)
             {
-                c = SettingManager.Settings.Display_SubTitleTextColor_Advance.Value;
-                em = SettingManager.Settings.Display_SubTitleTextEmMult_Advance.Value;
+                c = SettingManager.Settings.UI_SubTitle_TextColor.Value;
+                em = SettingManager.Settings.UI_SubTitle_TextEmMult.Value;
             }
             else if (elemClass == ElemClass.CORPS)
             {
-                c = SettingManager.Settings.Display_CorpsTextColor_Advance.Value;
-                em = SettingManager.Settings.Display_CorpsTextEmMult_Advance.Value;
+                c = SettingManager.Settings.UI_Corps_TextColor.Value;
+                em = SettingManager.Settings.UI_Corps_TextEmMult.Value;
             }
             else c = Color.cyan;
-            em *= SettingManager.Settings.Display_TextBaseEm_Advance.Value;
+            em *= SettingManager.Settings.UI_TextBaseEm.Value;
+        }
+        else if (elemType == ElemType.TEXT_ICON)
+        {
+            if (elemClass == ElemClass.TITLE) c = SettingManager.Settings.UI_TitleTextColor.Value;
+            else if (elemClass == ElemClass.SUBTITLE) c = SettingManager.Settings.UI_SubTitle_TextColor.Value;
+            else if (elemClass == ElemClass.CORPS) c = SettingManager.Settings.UI_Corps_TextColor.Value;
+            else c = Color.cyan;
         }
         else
         {
-            if (elemClass == ElemClass.TITLE) c = SettingManager.Settings.Display_TitleColor_Advance.Value;
-            else if (elemClass == ElemClass.SUBTITLE) c = SettingManager.Settings.Display_SubTitleColor_Advance.Value;
-            else if (elemClass == ElemClass.CORPS) c = SettingManager.Settings.Display_CorpsColor_Advance.Value;
+            if (elemClass == ElemClass.TITLE) c = SettingManager.Settings.UI_TitleColor.Value;
+            else if (elemClass == ElemClass.SUBTITLE) c = SettingManager.Settings.UI_SubTitle_Color.Value;
+            else if (elemClass == ElemClass.CORPS) c = SettingManager.Settings.UI_Corps_Color.Value;
+            else if (elemClass == ElemClass.BACKGROUND) c = SettingManager.Settings.UI_BackGround_Color.Value;
             else c = Color.cyan;
         }
+        em *= emMultiplier;
         switch (elemType)
         {
             case ElemType.TEXT:
@@ -144,6 +163,12 @@ class ColoredUI : MonoBehaviour
                 }
                 break;
             case ElemType.PANEL:
+                {
+                    Image p = this.GetComponent<Image>();
+                    p.color = c;
+                }
+                break;
+            case ElemType.TEXT_ICON:
                 {
                     Image p = this.GetComponent<Image>();
                     p.color = c;

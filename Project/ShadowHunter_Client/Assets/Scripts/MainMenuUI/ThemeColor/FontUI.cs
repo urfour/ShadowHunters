@@ -15,11 +15,11 @@ namespace Assets.Scripts.MainMenuUI.ThemeColor
 
         public FontUI()
         {
-            Font = Resources.Load<Font>("Fonts/" + SettingManager.Settings.Display_TextBaseFont_Advance.Value);
-            SettingManager.Settings.Display_TextBaseFont_Advance.AddListener(
+            Font = Resources.Load<Font>("Fonts/" + SettingManager.Settings.UI_TextBaseFont.Value);
+            SettingManager.Settings.UI_TextBaseFont.AddListener(
                 (sender) =>
                 {
-                    this.Font = Resources.Load<Font>("Fonts/" + SettingManager.Settings.Display_TextBaseFont_Advance.Value);
+                    this.Font = Resources.Load<Font>("Fonts/" + SettingManager.Settings.UI_TextBaseFont.Value);
                     this.TryNotify();
                 });
             this.TryNotify();

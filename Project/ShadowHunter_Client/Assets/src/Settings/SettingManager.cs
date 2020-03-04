@@ -36,7 +36,7 @@ namespace Kernel.Settings
             }
         }
 
-        public static void Save(string path)
+        public static void Save(string path = "Settings.XML")
         {
             path = IOSystem.GetFullPath(path);
             XmlSerializer serializer = new XmlSerializer(typeof(SettingManager));

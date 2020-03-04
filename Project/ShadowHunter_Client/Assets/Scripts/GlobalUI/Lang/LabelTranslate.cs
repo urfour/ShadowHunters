@@ -17,4 +17,10 @@ public class LabelTranslate : MonoBehaviour
             Lang.Language.AddListener((sender) => { t.text = Lang.Language.Translate(label); });
         }
     }
+
+    public void Refresh()
+    {
+        Text t = gameObject.GetComponent<Text>();
+        t.text = Lang.Language.Translate(label);
+    }
 }
