@@ -755,29 +755,32 @@ public class GameLogic : MonoBehaviour
                 RevealCard();
                 break;
             case "David":
+                // Il faut que le joueur se soit révélé et qu'il n'ait pas encore utilisé son pouvoir
                 if(player.Revealed && !player.UsedPower)
                 {
+                    // Liste des cartes équipements des défausses
                     List<Card> cardList;
-                    for(Card c in gameBoard.Black)
-                        if(c.isEquipement)
-				            cardList.Add(c);
 
-                    for(Card c in gameBoard.White)
+                    // On ajoute à cardList les cartes équipements de la défausse de cartes ténèbres
+                    for(DarknessCard c in gameBoard.Black)
                         if(c.isEquipement)
-				            cardList.Add(c);
+				            cardList.Add(c as Card);
+
+                    // On ajoute à cardList les cartes équipements de la défausse de cartes lumières
+                    for(LightCard c in gameBoard.White)
+                        if(c.isEquipement)
+				            cardList.Add(c as Card);
 
                     // TODO choisir la carte
                     choosenCardIndex = Random.Range(0, cardList.length - 1);
 
-                    if(cardList[choosenCardIndex].CardType == CardType.Darkness)
-                        // TODO créer la fonction removeCard(Card card, List<Card> deck) dans GameBoard.cs
-                        gameBoard.removeCard(cardList[choosenCardIndex], gameBoard.Black);
-                    else
-                        // TODO créer la fonction removeCard(Card card, List<Card> deck) dans GameBoard.cs
-                        gameBoard.removeCard(cardList[choosenCardIndex], gameBoard.White);
+                    // Retire la carte de la défausse correspondante
+                    gameBoard.RemoveDiscard(cardList[choosenCardIndex], cardList[choosenCardIndex].CardType);
 
+                    // Ajoute la carte à la liste de cartes du joueur
                     player.AddCard(cardList[choosenCardIndex]);
 
+                    // Le joueur ne peut plus utiliser son pouvoir
                     player.UsedPower = true;
                 }
                 break;
