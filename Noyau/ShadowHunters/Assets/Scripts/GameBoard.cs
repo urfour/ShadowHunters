@@ -54,6 +54,14 @@ public class GameBoard
 		return m_areas[index];
 	}
 
+	public LocationCard getAreaByPosition(Position position)
+	{
+		foreach(LocationCard location in m_areas)
+			if(location.area = position)
+				return location;
+		return null;
+	}
+
 	// Position de chaque joueur (index = nbPlayers)
 	private Position[] m_position;
 

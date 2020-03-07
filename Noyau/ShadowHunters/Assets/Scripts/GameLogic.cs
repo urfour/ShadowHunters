@@ -217,6 +217,19 @@ public class GameLogic : MonoBehaviour
     {
         int lancer1, lancer2, lancerTotal;
         bool sameLocation = true;
+
+        if(m_players[m_playerTurn].Name == "Emi" && m_players[m_playerTurn].Revealed)
+        {
+            // TODO Le joueur choisit s'il veut utiliser son pouvoir
+            int usePowerEmi = Random.Range(0, 1);
+
+            if(usePowerEmi == 1)
+            {
+                playerCardPower(m_players[m_playerTurn]);
+                sameLocation = false;
+            }
+        }
+
         while (sameLocation)
         {
             lancer1 = Random.Range(1, 6);
@@ -792,6 +805,23 @@ public class GameLogic : MonoBehaviour
                 }
                 break;
             case "Emi":
+                // On cherche le lieu de la carte position
+                LocationCard location = gameBoard.getAreaByPosition(player.Position);
+                // On cherche l'index de la carte Lieu dans la liste des lieux
+                int indexEmi = gameBoard.Areas.indexOf(location);
+
+                // Le déplacement se fait vers le lieu adjacent
+                if(indexEmi % 2 == 0)
+                    indexEmi++;
+                else
+                    indexEmi--;
+
+                // Nouvelle position du joueur
+                Position newPosition = gameBoard.getAreaAt(indexEmi).Position;
+
+                // On effectue le déplacement
+                player.Position = newPosition;
+                gameBoard.setPositionOfAt(m_playerTurn, newPosition);
                 break;
             case "Metamorphe":
                 break;
