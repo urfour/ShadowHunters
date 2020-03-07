@@ -202,4 +202,25 @@ public class GameBoard
 		}
 		Debug.Log("La carte " + type + " a été ajoutée à la défausse.");
 	}
+
+	public void RemoveDiscard(Card card, CardType cardType)
+	{
+		string type = "";
+		switch (cardType)
+		{
+			case CardType.Vision:
+				m_hermit.Remove(card as VisionCard);
+				type += "Vision";
+				break;
+			case CardType.Darkness:
+				m_black.Remove(card as DarknessCard);
+				type += "Ténèbres";
+				break;
+			case CardType.Light:
+				m_white.Remove(card as LightCard);
+				type += "Lumière";
+				break;
+		}
+		Debug.Log("La carte " + type + " a été retirée à la défausse.");
+	}
 }

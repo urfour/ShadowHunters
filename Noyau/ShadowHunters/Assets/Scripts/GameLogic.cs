@@ -238,6 +238,19 @@ public class GameLogic : MonoBehaviour
     {
         int lancer1, lancer2, lancerTotal;
         bool sameLocation = true;
+
+        if(m_players[m_playerTurn].Name == "Emi" && m_players[m_playerTurn].Revealed)
+        {
+            // TODO Le joueur choisit s'il veut utiliser son pouvoir
+            int usePowerEmi = Random.Range(0, 1);
+
+            if(usePowerEmi == 1)
+            {
+                PlayerCardPower(m_players[m_playerTurn]);
+                sameLocation = false;
+            }
+        }
+
         while (sameLocation)
         {
             lancer1 = Random.Range(1, 6);
@@ -446,10 +459,21 @@ public class GameLogic : MonoBehaviour
         VisionCard pickedCard = gameBoard.DrawCard(CardType.Vision) as VisionCard;
         Debug.Log("La carte Vision a été donnée au joueur " + m_choosenPlayer + ".");
         CharacterTeam team = m_players[playerId].Team;
+
+        // Le metamorphe peut mentir
+        bool metamorph = false;
+        if(m_players[playerId].Name == "Metamorphe")
+        {
+            // TODO Le métamorphe choisit de mentir
+            if(Random.Range(0, 1) == 0)
+                metamorph = true;
+        }
+        
         // Cartes applicables en fonction des équipes ?
         if ((team == CharacterTeam.Shadow && !pickedCard.visionEffect.effectOnShadow)
             || (team == CharacterTeam.Hunter && !pickedCard.visionEffect.effectOnHunter)
-            || (team == CharacterTeam.Neutral && !pickedCard.visionEffect.effectOnNeutral))
+            || (team == CharacterTeam.Neutral && !pickedCard.visionEffect.effectOnNeutral)
+            || (metamorph && pickedCard.visionEffect.effectOnShadow))
         {
             if (pickedCard.visionEffect.effectSupremeVision)
                 Debug.Log("C'est une carte Vision Suprême !");
@@ -952,6 +976,11 @@ public class GameLogic : MonoBehaviour
                 m_nbShadowsDeads++;
             else
                 m_nbNeutralsDeads++;
+
+            if(m_players[m_playerTurn].Name == "Bryan" && m_players[playerId].Life <= 12 && !m_players[m_playerTurn].Revealed)
+            {
+                PlayerCardPower(m_players[m_playerTurn]);
+            }
             if (m_players[playerId].ListCard.Count != 0)
                 SetDropdownPlayers(false, true, false, false, playerId, false);
         }
@@ -980,29 +1009,80 @@ public class GameLogic : MonoBehaviour
         m_choosenPlayer = -1;
     }
 
-    void playerCardPower(Character character)
+    void PlayerCardPower(Player player)
     {
-        switch(character.characterName)
+        switch(player.Character.characterType)
         {
-            case "Allie":
+            case CharacterType.Allie:
+                // Il faut que le joueur se soit révélé et qu'il n'ait pas encore utilisé son pouvoir
+                if(player.Revealed && !player.UsedPower)
+                {
+                    // Le joueur se soigne de toutes ses blessures
+                    player.Healed(player.Wound);
+                }
                 break;
-            case "Bryan":
+            case CharacterType.Bryan:
+                // Révèle son identité à tous
+                RevealCard();
                 break;
-            case "David":
+            case CharacterType.David:
+                // Il faut que le joueur se soit révélé et qu'il n'ait pas encore utilisé son pouvoir
+                if(player.Revealed && !player.UsedPower)
+                {
+                    // Liste des cartes équipements des défausses
+                    List<Card> cardList = new List<Card>();
+
+                    // On ajoute à cardList les cartes équipements de la défausse de cartes ténèbres
+                    foreach (DarknessCard c in gameBoard.Black)
+                        if(c.isEquipement)
+				            cardList.Add(c);
+
+                    // On ajoute à cardList les cartes équipements de la défausse de cartes lumières
+                    foreach (LightCard c in gameBoard.White)
+                        if(c.isEquipement)
+				            cardList.Add(c);
+
+                    // TODO choisir la carte
+                    int choosenCardIndex = Random.Range(0, cardList.Count - 1);
+
+                    // Retire la carte de la défausse correspondante
+                    gameBoard.RemoveDiscard(cardList[choosenCardIndex], cardList[choosenCardIndex].cardType);
+
+                    // Ajoute la carte à la liste de cartes du joueur
+                    player.AddCard(cardList[choosenCardIndex]);
+
+                    // Le joueur ne peut plus utiliser son pouvoir
+                    player.UsedPower = true;
+                }
                 break;
-            case "Emi":
+            case CharacterType.Emi:
+                // On cherche l'index de la carte Lieu dans la liste des lieux
+                int indexEmi = gameBoard.GetIndexOfPosition(player.Position);
+
+                // Le déplacement se fait vers le lieu adjacent
+                if(indexEmi % 2 == 0)
+                    indexEmi++;
+                else
+                    indexEmi--;
+
+                // Nouvelle position du joueur
+                Position newPosition = gameBoard.GetAreaAt(indexEmi).area;
+
+                // On effectue le déplacement
+                player.Position = newPosition;
+                gameBoard.setPositionOfAt(player.Id, newPosition);
                 break;
-            case "Metamorphe":
+            case CharacterType.Metamorphe:
                 break;
-            case "Bob":
+            case CharacterType.Bob:
                 break;
-            case "Franklin":
+            case CharacterType.Franklin:
                 break;
-            case "Georges":
+            case CharacterType.Georges:
                 break;
-            case "Loup-Garou":
+            case CharacterType.LoupGarou:
                 break;
-            case "Vampire":
+            case CharacterType.Vampire:
                 break;
         }
     }

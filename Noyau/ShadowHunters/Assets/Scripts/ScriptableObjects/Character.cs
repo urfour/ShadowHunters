@@ -8,7 +8,7 @@ public class Character : ScriptableObject
     public string characterName;
     public CharacterTeam team;
     public int characterHP;
-    public string characterPower;
+    public CharacterType characterType;
     public WinningCondition characterWinningCondition;
     public Sprite sprite;
 }
@@ -18,6 +18,20 @@ public enum CharacterTeam
     Shadow,
     Hunter,
     Neutral
+}
+
+public enum CharacterType
+{
+    Allie,
+    Bob,
+    Bryan,
+    David,
+    Emi,
+    Franklin,
+    Georges,
+    LoupGarou,
+    Metamorphe,
+    Vampire
 }
 
 public enum WinningCondition
