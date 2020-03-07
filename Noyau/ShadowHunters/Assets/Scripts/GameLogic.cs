@@ -750,8 +750,15 @@ public class GameLogic : MonoBehaviour
         switch(player.Name)
         {
             case "Allie":
+                // Il faut que le joueur se soit révélé et qu'il n'ait pas encore utilisé son pouvoir
+                if(player.Revealed && !player.UsedPower)
+                {
+                    // Le joueur se soigne de toutes ses blessures
+                    player.Healed(player.Wound);
+                }
                 break;
             case "Bryan":
+                // Révèle son identité à tous
                 RevealCard();
                 break;
             case "David":
