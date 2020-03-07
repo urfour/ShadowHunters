@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum Position
 {
+    None,
     Antre,
     Cimetiere,
     Foret,

@@ -2,6 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PlayerNames
+{
+    Alpha,
+    Bravo,
+    Charlie,
+    Delta,
+    Echo,
+    Foxtrot,
+    Golf,
+    Hotel
+}
+
 public class Player
 {
     private int id;                  // ordre du jeu d'un joueur
@@ -27,7 +39,7 @@ public class Player
     public Player(int id)
     {
         this.id = id;
-        this.playerName = "undefined";
+        this.playerName = ((PlayerNames)id).ToString();
         this.life = 0;
         this.wound = 0;
         this.revealed = false;
@@ -41,6 +53,7 @@ public class Player
         this.hasSaber = false;
         this.isTurn = false;
         this.hasWon = false;
+        this.position = Position.None;
         this.listCard = new List<Card>();
     }
 
@@ -213,14 +226,13 @@ public class Player
         listCard.Add(card);
     }
 
-    public void RemoveLastDrawnCard()
+    public void RemoveCard(int index)
     {
-        listCard.RemoveAt(0);
+        listCard.RemoveAt(index);
     }
 
     public void SetCharacter(Character character)
     {
-        this.playerName = character.characterName;
         this.team = character.team;
         this.life = character.characterHP;
         this.character = character;
@@ -231,13 +243,13 @@ public class Player
         get { return character; }
     }
 
-    public bool hasCard(string cardName)
+    public int HasCard(string cardName)
     {
-        foreach (Card card in listCard)
+        for (int i = 0 ; i < listCard.Count ; i++)
         {
-            if (string.Equals(card.cardName, cardName))
-                return true;
+            if (string.Equals(listCard[i].cardName, cardName))
+                return i;
         }
-        return false;
+        return -1;
     }
 }   

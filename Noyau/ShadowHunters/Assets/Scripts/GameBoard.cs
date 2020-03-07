@@ -49,9 +49,19 @@ public class GameBoard
 		get { return m_areas; }
 	}
 
-	public LocationCard getAreaAt(int index)
+	public LocationCard GetAreaAt(int index)
 	{
 		return m_areas[index];
+	}
+
+	public int GetIndexOfPosition(Position position)
+	{
+		int index = -1;
+		for (int i = 0 ; i < m_areas.Length ; i++)
+			if (m_areas[i].area == position)
+				index = i;
+
+		return index;
 	}
 
 	// Position de chaque joueur (index = nbPlayers)
@@ -78,12 +88,12 @@ public class GameBoard
 	// Dégâts de chaque joueur (index = nbPlayers)
 	private int[] m_damage;
 
-	public int getDamageOf(int index)
+	public int GetDamageOf(int index)
 	{
 		return m_damage[index];
 	}
 
-	public void increaseDamageOfBy(int player, int damage)
+	public void IncreaseDamageOfBy(int player, int damage)
 	{
 		m_damage[player] += damage;
 	}
