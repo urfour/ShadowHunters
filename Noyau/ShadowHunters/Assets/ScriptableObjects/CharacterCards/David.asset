@@ -15,6 +15,6 @@ MonoBehaviour:
   characterName: David
   team: 2
   characterHP: 13
-  characterPower: Pilleur de tombes
+  characterType: 3
   characterWinningCondition: 3
   sprite: {fileID: 21300000, guid: 2d82e6f6e7015f1498853893c3112051, type: 3}

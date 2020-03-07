@@ -15,6 +15,6 @@ MonoBehaviour:
   characterName: Bob
   team: 2
   characterHP: 10
-  characterPower: Braquage
+  characterType: 1
   characterWinningCondition: 1
   sprite: {fileID: 21300000, guid: 54a054069aaef4046a239372709037f5, type: 3}
