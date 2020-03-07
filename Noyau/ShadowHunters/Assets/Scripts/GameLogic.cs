@@ -391,10 +391,21 @@ public class GameLogic : MonoBehaviour
     void VisionCardPower(VisionCard pickedCard, int playerId)
     {
         CharacterTeam team = m_players[playerId].Team;
+
+        // Le metamorphe peut mentir
+        bool metamorph = false;
+        if(m_players[playerId].Name == "Metamorphe")
+        {
+            // TODO Le métamorphe choisit de mentir
+            if(Random.Range(0, 1) == 0)
+                metamorph = true;
+        }
+        
         // Cartes applicables en fonction des équipes ?
         if ((team == CharacterTeam.Shadow && !pickedCard.visionEffect.effectOnShadow)
             || (team == CharacterTeam.Hunter && !pickedCard.visionEffect.effectOnHunter)
-            || (team == CharacterTeam.Neutral && !pickedCard.visionEffect.effectOnNeutral))
+            || (team == CharacterTeam.Neutral && !pickedCard.visionEffect.effectOnNeutral)
+            || (metamorph && pickedCard.visionEffect.effectOnShadow))
         {
             if (pickedCard.visionEffect.effectSupremeVision)
                 Debug.Log("C'est une carte Vision Suprême !");
