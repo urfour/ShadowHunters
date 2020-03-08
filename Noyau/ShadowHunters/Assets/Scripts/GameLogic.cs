@@ -746,6 +746,8 @@ public class GameLogic : MonoBehaviour
     public void PlayTurn()
     {
         rollDicesButton.SetActive(false);
+        if(m_players[m_playerTurn].Name.Equals("Franklin"))
+            playerCardPower(m_players[m_playerTurn]);        
         if (MoveCharacter())
             ActivateLocationPower();
     }
@@ -1098,6 +1100,24 @@ public class GameLogic : MonoBehaviour
                 }
                 break;
             case CharacterType.Franklin:
+                if(player.Revealed && !player.UsedPower)
+                {
+                    int playerAttackedId = -1;
+                    choiceDropdown.gameObject.SetActive(false);
+                    validateChoosenPlayerButton.SetActive(false);
+                    string playerAttacked = choiceDropdown.captionText.text;
+                    choiceDropdown.ClearOptions();
+                    for (int i = 0 ; i < m_nbPlayers ; i++)
+                        if (m_players[i].Name.Equals(playerAttacked))
+                            playerAttackedId = i;
+
+                    Debug.Log("Vous choisissez d'attaquer le joueur " + playerAttackedId + ".");
+                    int lancer = Random.Range(1, 6);
+                    m_players[playerAttackedId].Wounded(lancer + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
+                    CheckPlayerDeath(playerAttackedId);
+                    // Utilisation unique du pouvoir
+                    player.UsedPower = true;
+                }
                 break;
             case CharacterType.Georges:
                 break;
