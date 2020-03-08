@@ -747,9 +747,9 @@ public class GameLogic : MonoBehaviour
     {
         rollDicesButton.SetActive(false);
         if(m_players[m_playerTurn].Name.Equals("Franklin"))
-            playerCardPower(m_players[m_playerTurn]);    
+            PlayerCardPower(m_players[m_playerTurn]);    
         if(m_players[m_playerTurn].Name.Equals("Georges"))
-            playerCardPower(m_players[m_playerTurn]);                    
+            PlayerCardPower(m_players[m_playerTurn]);                    
         if (MoveCharacter())
             ActivateLocationPower();
     }
@@ -959,14 +959,14 @@ public class GameLogic : MonoBehaviour
         if (lancerTotal > 0)
         {
             if(m_players[m_playerTurn].Name.Equals("Bob") && lancerTotal >= 2 )
-                playerCardPower(m_players[m_playerTurn]);
+                PlayerCardPower(m_players[m_playerTurn]);
             else
             {
                 m_players[playerAttackedId].Wounded(lancerTotal + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
                 if(m_players[playerAttackedId].Name.Equals("LoupGarou"))
-                    playerCardPower(m_players[playerAttackedId]);
+                    PlayerCardPower(m_players[playerAttackedId]);
                 if(m_players[playerAttackedId].Name.Equals("Vampire"))
-                    playerCardPower(m_players[playerAttackedId]);  
+                    PlayerCardPower(m_players[playerAttackedId]);  
                 CheckPlayerDeath(playerAttackedId);
             }    
         }
@@ -1121,9 +1121,9 @@ public class GameLogic : MonoBehaviour
                     int lancer = Random.Range(1, 6);
                     m_players[playerAttackedId].Wounded(lancer + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
                     if(m_players[playerAttackedId].Name.Equals("LoupGarou"))
-                        playerCardPower(m_players[playerAttackedId]);
+                        PlayerCardPower(m_players[playerAttackedId]);
                     if(m_players[playerAttackedId].Name.Equals("Vampire"))
-                        playerCardPower(m_players[playerAttackedId]);  
+                        PlayerCardPower(m_players[playerAttackedId]);  
                     CheckPlayerDeath(playerAttackedId);
                     // Utilisation unique du pouvoir
                     player.UsedPower = true;
@@ -1145,9 +1145,9 @@ public class GameLogic : MonoBehaviour
                     int lancer = Random.Range(1, 4);
                     m_players[playerAttackedId].Wounded(lancer + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
                     if(m_players[playerAttackedId].Name.Equals("LoupGarou"))
-                        playerCardPower(m_players[playerAttackedId]);
+                        PlayerCardPower(m_players[playerAttackedId]);
                     if(m_players[playerAttackedId].Name.Equals("Vampire"))
-                        playerCardPower(m_players[playerAttackedId]);    
+                        PlayerCardPower(m_players[playerAttackedId]);    
                     CheckPlayerDeath(playerAttackedId);
                     // Utilisation unique du pouvoir
                     player.UsedPower = true;
