@@ -963,6 +963,10 @@ public class GameLogic : MonoBehaviour
             else
             {
                 m_players[playerAttackedId].Wounded(lancerTotal + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
+                if(m_players[playerAttackedId].Name.Equals("LoupGarou"))
+                    playerCardPower(m_players[playerAttackedId]);
+                if(m_players[playerAttackedId].Name.Equals("Vampire"))
+                    playerCardPower(m_players[playerAttackedId]);  
                 CheckPlayerDeath(playerAttackedId);
             }    
         }
@@ -1116,6 +1120,10 @@ public class GameLogic : MonoBehaviour
                     Debug.Log("Vous choisissez d'attaquer le joueur " + playerAttackedId + ".");
                     int lancer = Random.Range(1, 6);
                     m_players[playerAttackedId].Wounded(lancer + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
+                    if(m_players[playerAttackedId].Name.Equals("LoupGarou"))
+                        playerCardPower(m_players[playerAttackedId]);
+                    if(m_players[playerAttackedId].Name.Equals("Vampire"))
+                        playerCardPower(m_players[playerAttackedId]);  
                     CheckPlayerDeath(playerAttackedId);
                     // Utilisation unique du pouvoir
                     player.UsedPower = true;
@@ -1123,27 +1131,39 @@ public class GameLogic : MonoBehaviour
                 break;
             case CharacterType.Georges:
                 if(player.Revealed && !player.UsedPower)
-                    {
-                        int playerAttackedId = -1;
-                        choiceDropdown.gameObject.SetActive(false);
-                        validateChoosenPlayerButton.SetActive(false);
-                        string playerAttacked = choiceDropdown.captionText.text;
-                        choiceDropdown.ClearOptions();
-                        for (int i = 0 ; i < m_nbPlayers ; i++)
-                            if (m_players[i].Name.Equals(playerAttacked))
-                                playerAttackedId = i;
+                {
+                    int playerAttackedId = -1;
+                    choiceDropdown.gameObject.SetActive(false);
+                    validateChoosenPlayerButton.SetActive(false);
+                    string playerAttacked = choiceDropdown.captionText.text;
+                    choiceDropdown.ClearOptions();
+                    for (int i = 0 ; i < m_nbPlayers ; i++)
+                        if (m_players[i].Name.Equals(playerAttacked))
+                            playerAttackedId = i;
 
-                        Debug.Log("Vous choisissez d'attaquer le joueur " + playerAttackedId + ".");
-                        int lancer = Random.Range(1, 4);
-                        m_players[playerAttackedId].Wounded(lancer + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
-                        CheckPlayerDeath(playerAttackedId);
-                        // Utilisation unique du pouvoir
-                        player.UsedPower = true;
-                    }
+                    Debug.Log("Vous choisissez d'attaquer le joueur " + playerAttackedId + ".");
+                    int lancer = Random.Range(1, 4);
+                    m_players[playerAttackedId].Wounded(lancer + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
+                    if(m_players[playerAttackedId].Name.Equals("LoupGarou"))
+                        playerCardPower(m_players[playerAttackedId]);
+                    if(m_players[playerAttackedId].Name.Equals("Vampire"))
+                        playerCardPower(m_players[playerAttackedId]);    
+                    CheckPlayerDeath(playerAttackedId);
+                    // Utilisation unique du pouvoir
+                    player.UsedPower = true;
+                }
                 break;
             case CharacterType.LoupGarou:
+                if(player.Revealed)
+                {
+                    AttackCorrespondingPlayer();
+                }
                 break;
             case CharacterType.Vampire:
+                if(player.Revealed)
+                {
+                    player.Healed(2);
+                }
                 break;
         }
     }
