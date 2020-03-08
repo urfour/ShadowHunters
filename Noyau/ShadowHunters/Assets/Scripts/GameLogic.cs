@@ -1100,9 +1100,8 @@ public class GameLogic : MonoBehaviour
                         // Vole une carte équipement du joueur correspondant
                         StealEquipmentCard();
                     else
-                        // Inflige les dégats précédemment calculer dans AttackCorrespondingPlayer
+                        // TODO Inflige les dégats précédemment calculer dans AttackCorrespondingPlayer
                         // avec le joueur correspondant
-                        attackPlayer();
                 }
                 break;
             case CharacterType.Franklin:
