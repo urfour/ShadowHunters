@@ -954,9 +954,13 @@ public class GameLogic : MonoBehaviour
         int lancerTotal = Mathf.Abs(lancer1 - lancer2);
         if (lancerTotal > 0)
         {
-            m_players[playerAttackedId].Wounded(lancerTotal + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
-            CheckPlayerDeath(playerAttackedId);
-
+            if(m_players[m_playerTurn].Name.Equals("Bob") && lancerTotal >= 2 )
+                playerCardPower(m_players[m_playerTurn]);
+            else
+            {
+                m_players[playerAttackedId].Wounded(lancerTotal + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
+                CheckPlayerDeath(playerAttackedId);
+            }    
         }
         else
         {
@@ -1075,6 +1079,23 @@ public class GameLogic : MonoBehaviour
             case CharacterType.Metamorphe:
                 break;
             case CharacterType.Bob:
+                // Il faut que le joueur se soit révélé et qu'il n'ait pas encore utilisé son pouvoir
+                if(player.Revealed)
+                {
+                    // Choix : voler une carte équipement ou infliger les blessures
+                    choiceDropdown.gameObject.SetActive(false);
+                    validateChoosenPlayerButton.SetActive(false);
+                    string playerChoice = choiceDropdown.captionText.text;
+                    choiceDropdown.ClearOptions();
+
+                    if(playerChoice == "steal")
+                        // Vole une carte équipement du joueur correspondant
+                        StealEquipmentCard();
+                    else
+                        // Inflige les dégats précédemment calculer dans AttackCorrespondingPlayer
+                        // avec le joueur correspondant
+                        attackPlayer();
+                }
                 break;
             case CharacterType.Franklin:
                 break;
