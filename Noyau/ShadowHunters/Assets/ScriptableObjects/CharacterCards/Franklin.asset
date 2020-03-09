@@ -15,6 +15,6 @@ MonoBehaviour:
   characterName: Franklin
   team: 1
   characterHP: 12
-  characterPower: Foudre
+  characterType: 5
   characterWinningCondition: 0
   sprite: {fileID: 21300000, guid: 03926af26d5b1204da2f142dbd05d3a2, type: 3}

@@ -18,4 +18,4 @@ MonoBehaviour:
   description: Le joueur de votre choix peut subir 2 Blessures OU soigner 1 Blessure.
   sprite: {fileID: 21300000, guid: 37da66d6a3295ad41962a0ff5ff2ac6a, type: 3}
   isHidden: 0
-  area: 2
+  area: 3

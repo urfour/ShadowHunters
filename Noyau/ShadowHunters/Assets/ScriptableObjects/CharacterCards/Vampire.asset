@@ -15,6 +15,6 @@ MonoBehaviour:
   characterName: Vampire
   team: 0
   characterHP: 13
-  characterPower: Morsure
+  characterType: 9
   characterWinningCondition: 5
   sprite: {fileID: 21300000, guid: 28e297a3ad2b61a4ebeeab6f686360a7, type: 3}
