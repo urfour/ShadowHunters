@@ -608,14 +608,13 @@ public class GameLogic : MonoBehaviour
             gameBoard.AddDiscard(pickedCard, CardType.Darkness);
     }
 
-    void LightCardPower(LightCard pickedCard)
+    void LightCardPower(LightCard lightCard)
     {
         CharacterTeam team = m_players[m_playerTurn].Team;
         string character = m_players[m_playerTurn].Character.characterName;
-        bool revealed = m_players[m_playerTurn].Revealed;
-        int playerChoosenId = m_playerTurn;
+        bool reaveled = m_players[m_playerTurn].Revealed;
         
-        switch (pickedCard.lightEffect)
+        switch (lightCard.lightEffect)
         {
 			case LightEffect.Amulette:
 			
@@ -631,7 +630,7 @@ public class GameLogic : MonoBehaviour
 			
 				if (team == CharacterTeam.Hunter)
 				{
-					if (revealed)
+					if (reaveled)
 						m_players[m_playerTurn].SetWound(0);
 					else // A le choix de se révéler ou non pour se heal
 						Debug.Log("Implémentation en cours");
@@ -642,7 +641,7 @@ public class GameLogic : MonoBehaviour
 			
 				if (character == "Allie" || character == "Emi" || character == "Métamorphe")
 				{
-					if (revealed)
+					if (reaveled)
 						m_players[m_playerTurn].SetWound(0);
 					else // A le choix de se révéler ou non pour se heal
 						Debug.Log("Implémentation en cours");
@@ -650,40 +649,79 @@ public class GameLogic : MonoBehaviour
 				break;
 			
 			case LightEffect.Benediction:
-				// TODO choix de la personne à qui infliger des Blessures
+			
+				// TODO choix de la personne à heal (pas soi même)
+                int playerChoosenId = m_playerTurn;
                 while (playerChoosenId == m_playerTurn)
                     playerChoosenId = Random.Range(0, m_nbPlayers - 1);
-                    
+                Debug.Log("Vous choisissez de soigner le joueur " + playerChoosenId + ".");
+                
+                int heal = Random.Range(1, 6);
+                
+                m_players[playerChoosenId].Healed(heal);
+                
 				break;
 			
 			case LightEffect.Boussole:
+				
+				Debug.Log("Implémentation en cours");
 				break;
 			
 			case LightEffect.Broche:
+			
+				Debug.Log("Implémentation en cours");
 				break;
 				
 			case LightEffect.Crucifix:
+			
+				Debug.Log("Implémentation en cours");
 				break;
 				
 			case LightEffect.EauBenite:
+				
+				m_players[m_playerTurn].Healed(2);
 				break;
 				
 			case LightEffect.Eclair:
+			
+				foreach (Player p in m_players)
+				{
+					if (p.Id != m_playerTurn)
+						p.Wounded(2);
+				}
 				break;
 			
 			case LightEffect.Lance:
+				
+				Debug.Log("Implémentation en cours");
 				break;
 				
 			case LightEffect.Miroir:
+				
+				if (team == CharacterTeam.Shadow && character != "Métamorphe")
+				{
+					m_players[m_playerTurn].Revealed = true;
+					Debug.Log("Vous révélez votre rôle à tous, vous êtes : " + character);
+				}
 				break;
 				
 			case LightEffect.PremiersSecours:
+				
+				// TODO : méthode pour choisir le joueur à mettre à 7 Blessures
+				playerChoosenId = Random.Range(0, m_nbPlayers);
+				m_players[playerChoosenId].SetWound(7);
 				break;
 				
-			case LightEffect.Savoir:
+			case LightEffect.Savoir: // A implémenter comme un équipement qui se discard au début du tour ou à la mort
+			
+				Debug.Log("Implémentation en cours");
 				break;
 			
 			case LightEffect.Toge:
+				
+				m_players[m_playerTurn].MalusAttack++;
+				m_players[m_playerTurn].ReductionWounds = 1;
+				Debug.Log("Implémentation en cours");
 				break;
 		}
         
