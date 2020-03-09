@@ -114,6 +114,12 @@ public class Player
         get { return malusAttack; }
         set { malusAttack = value; }
     }
+    
+    public int ReductionWounds
+    {
+        get { return reductionWounds; }
+        set { reductionWounds = value; }
+    }
 
     public Position Position
     {
