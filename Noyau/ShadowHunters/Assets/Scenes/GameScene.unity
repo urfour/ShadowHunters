@@ -207,9 +207,10 @@ MonoBehaviour:
   rollDicesButton: {fileID: 1279877996}
   visionCardsButton: {fileID: 1622182317}
   darknessCardsButton: {fileID: 433528463}
-  lightCardsButton: {fileID: 628899482}
-  attackPlayer: {fileID: 1787953176}
-  endTurn: {fileID: 1791732491}
+  lightCardsButton: {fileID: 1848703283}
+  attackPlayer: {fileID: 1363831830}
+  endTurn: {fileID: 501388728}
+  revealCardButton: {fileID: 284341552}
   dropdownLocation: {fileID: 2084156578}
   validateButton: {fileID: 723568694}
 --- !u!4 &51328583 stripped
@@ -677,6 +678,12 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 6754767891083242361}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &284341552 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7811855329484979427, guid: 1afe385ff9c7b2b4cbf5cb5ff7a5c542,
+    type: 3}
+  m_PrefabInstance: {fileID: 693446274}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &425065363
 GameObject:
   m_ObjectHideFlags: 0
@@ -797,6 +804,12 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8593906442299667693, guid: 3eacf922c167bf340afa679b6bcf70f3,
     type: 3}
   m_PrefabInstance: {fileID: 8593906442147923879}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &501388728 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1107092884582795320, guid: 5e46be9c0682943409b4bb6631cdad1b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1165282382}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
@@ -1013,11 +1026,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 16695192}
+      objectReference: {fileID: 16695193}
     - target: {fileID: 7811855329484979437, guid: 1afe385ff9c7b2b4cbf5cb5ff7a5c542,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: 
+      value: RevealCard
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1afe385ff9c7b2b4cbf5cb5ff7a5c542, type: 3}
@@ -1059,7 +1072,7 @@ RectTransform:
   m_Children:
   - {fileID: 1713735062}
   m_Father: {fileID: 2033454697}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1448,7 +1461,7 @@ PrefabInstance:
     - target: {fileID: 1107092884582795335, guid: 5e46be9c0682943409b4bb6631cdad1b,
         type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 1107092884582795335, guid: 5e46be9c0682943409b4bb6631cdad1b,
         type: 3}
@@ -1646,6 +1659,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1301904572}
   m_CullTransparentMesh: 0
+--- !u!1 &1363831830 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1107092884582795320, guid: 5e46be9c0682943409b4bb6631cdad1b,
+    type: 3}
+  m_PrefabInstance: {fileID: 227702982}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1459433477 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6566924755761199626, guid: 01bae49b73831f8489acf0ef0024e590,
@@ -1882,6 +1901,12 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 5068259490707995295}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1848703283 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6642864351862459374, guid: 2ad3e48487a41724ca24bfe37a2416ad,
+    type: 3}
+  m_PrefabInstance: {fileID: 6642864350926630097}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1872554343
 GameObject:
   m_ObjectHideFlags: 0
@@ -2074,10 +2099,10 @@ RectTransform:
   - {fileID: 1974923940}
   - {fileID: 1757869877}
   - {fileID: 260131964}
-  - {fileID: 1787953177}
-  - {fileID: 1791732492}
-  - {fileID: 693446275}
   - {fileID: 2084156577}
+  - {fileID: 1787953177}
+  - {fileID: 693446275}
+  - {fileID: 1791732492}
   - {fileID: 723568695}
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -2230,7 +2255,7 @@ RectTransform:
   - {fileID: 2078792291}
   - {fileID: 201269802}
   m_Father: {fileID: 2033454697}
-  m_RootOrder: 12
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}

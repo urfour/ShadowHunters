@@ -472,9 +472,15 @@ public class GameLogic : MonoBehaviour
             case DarknessEffect.Rituel:
                 // TODO effet de la carte
                 Debug.Log("Voulez-vous vous révéler ? 10s sinon la carte se défausse");
-
-                if(m_players[m_playerTurn].Revealed)
+                if(m_players[m_playerTurn].Revealed && m_players[m_playerTurn].Team== CharacterTeam.Shadow)
+                {
                     m_players[m_playerTurn].Healed(m_players[m_playerTurn].Wound);
+                    Debug.Log("Le joueur "+ m_playerTurn + " se soigne complètement");
+                }
+                else
+                {
+                    Invoke("WaitReveal",10);
+                }
                 break;
             case DarknessEffect.Sabre:
                 m_players[m_playerTurn].HasSaber = true;
@@ -585,6 +591,19 @@ public class GameLogic : MonoBehaviour
         return characterName.StartsWith("D") || characterName.StartsWith("F")
             || characterName.StartsWith("G") || characterName.StartsWith("L")
             || characterName.StartsWith("V");
+    }
+
+    void WaitReveal()
+    {
+        if(m_players[m_playerTurn].Revealed && m_players[m_playerTurn].Team == CharacterTeam.Shadow)
+        {
+            m_players[m_playerTurn].Healed(m_players[m_playerTurn].Wound);
+            Debug.Log("Le joueur "+ m_playerTurn + " se soigne complètement");
+        }
+        else
+        {
+            Debug.Log("Rien ne se passe");
+        }
     }
 
     public void RevealCard()
