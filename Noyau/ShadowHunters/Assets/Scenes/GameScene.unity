@@ -204,7 +204,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 882858b6bddaf524dbb7b4d14817155a, type: 2}
   - {fileID: 11400000, guid: e5cc63057eb1f8d4b9f8a2c1638fb24e, type: 2}
   - {fileID: 11400000, guid: 7583d1b4fd71d604284a37d0c3c5e4e9, type: 2}
-  choiceDropdown: {fileID: 1896127519}
+  choiceDropdown: {fileID: 0}
   rollDicesButton: {fileID: 1279877996}
   visionCardsButton: {fileID: 1622182317}
   darknessCardsButton: {fileID: 433528463}
@@ -1894,18 +1894,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 4429807092316445904}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1896127519 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4429807093641609423, guid: dfa82b6956d884a94b0fc7077e97229d,
-    type: 3}
-  m_PrefabInstance: {fileID: 4429807092316445904}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d0b652f32a2cc243917e4028fa0f046, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1942127459
 GameObject:
   m_ObjectHideFlags: 0
@@ -2088,8 +2076,8 @@ RectTransform:
   - {fileID: 260131964}
   - {fileID: 1787953177}
   - {fileID: 693446275}
-  - {fileID: 1791732492}
   - {fileID: 1896127518}
+  - {fileID: 1791732492}
   - {fileID: 723568695}
   - {fileID: 1623645789}
   - {fileID: 1808279742}
@@ -3000,7 +2988,7 @@ PrefabInstance:
     - target: {fileID: 4429807093641609422, guid: dfa82b6956d884a94b0fc7077e97229d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 4429807093641609422, guid: dfa82b6956d884a94b0fc7077e97229d,
         type: 3}

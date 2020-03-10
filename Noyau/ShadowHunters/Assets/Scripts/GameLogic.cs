@@ -356,7 +356,10 @@ public class GameLogic : MonoBehaviour
                 break;
         }
         attackPlayer.SetActive(true);
-        endTurn.SetActive(true);
+        if(m_players[m_playerTurn].HasSaber==true)   
+            endTurn.SetActive(false);
+        else
+            endTurn.SetActive(true);
     }
 
     public void VisionCardLocation()
@@ -385,7 +388,10 @@ public class GameLogic : MonoBehaviour
         }
         DarknessCardPower(darknessCard);
         attackPlayer.SetActive(true);
-        endTurn.SetActive(true);
+        if(m_players[m_playerTurn].HasSaber==true)
+            endTurn.SetActive(false);
+        else
+            endTurn.SetActive(true);
     }
 
     public void LightCardLocation()
@@ -403,7 +409,10 @@ public class GameLogic : MonoBehaviour
         }
         LightCardPower(lightCard);
         attackPlayer.SetActive(true);
-        endTurn.SetActive(true);
+        if(m_players[m_playerTurn].HasSaber==true)
+            endTurn.SetActive(false);
+        else
+            endTurn.SetActive(true);
     }
 
     public void ChooseForestPower()
@@ -558,8 +567,43 @@ public class GameLogic : MonoBehaviour
                 CheckPlayerDeath(m_playerTurn);
                 break;
             case DarknessEffect.Dynamite:
-                // TODO effet de la carte
-                Debug.Log("Implémentation en cours");
+                int lancer1 = Random.Range(1, 6);
+                int lancer2 = Random.Range(1, 4);
+                string area;
+                switch(lancer1+lancer2)
+                {
+                    case 2:
+                    case 3:
+                        area="Antre";
+                        break;
+                    case 4:
+                    case 5:
+                        area="Porte";
+                        break;
+                    case 6:
+                        area="Monastere";
+                        break;
+                    case 7:
+                        Debug.Log("Rien ne se passe");
+                        break;
+                    case 8:
+                        area="Cimetiere";
+                        break;
+                    case 9:
+                        area="Foret";
+                        break;
+                    case 10:
+                        area="Sanctuaire";
+                        break;
+                }
+                if(lancerTotal!=7)
+                {
+                    for(int i=0;i<NbPlayers;i++)
+                    {
+                        if(m_players[i].Position.Equals(area))
+                            m_players[i].Wounded(3);
+                    }
+                }
                 break;
             case DarknessEffect.Hache:
                 m_players[m_playerTurn].BonusAttack++;
@@ -588,7 +632,6 @@ public class GameLogic : MonoBehaviour
                 m_players[m_playerTurn].HasRevolver = true;
                 break;
             case DarknessEffect.Rituel:
-                // TODO effet de la carte
                 Debug.Log("Voulez-vous vous révéler ? 10s sinon la carte se défausse");
                 if(m_players[m_playerTurn].Revealed && m_players[m_playerTurn].Team== CharacterTeam.Shadow)
                 {
@@ -1012,7 +1055,7 @@ public class GameLogic : MonoBehaviour
         Debug.Log("Vous choisissez d'attaquer le joueur " + playerAttackedId + ".");
         int lancer1 = Random.Range(1, 6);
         int lancer2 = Random.Range(1, 4);
-        int lancerTotal = Mathf.Abs(lancer1 - lancer2);
+        int lancerTotal = (m_players[m_playerTurn].HasSaber==true)? lancer2 : Mathf.Abs(lancer1 - lancer2);
         if (lancerTotal > 0)
         {
             if(m_players[m_playerTurn].Name.Equals("Bob") && lancerTotal >= 2 )
@@ -1156,7 +1199,7 @@ public class GameLogic : MonoBehaviour
                     if(playerChoice == "steal")
                         // Vole une carte équipement du joueur correspondant
                         StealEquipmentCard();
-                    else
+                    else;
                         // TODO Inflige les dégats précédemment calculer dans AttackCorrespondingPlayer
                         // avec le joueur correspondant
                 }
