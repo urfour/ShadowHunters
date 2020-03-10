@@ -378,6 +378,11 @@ public class GameLogic : MonoBehaviour
 
         int choosenPlayerId = m_playerTurn;
         Debug.Log("Le joueur " + m_playerTurn + " choisit de piocher une carte Vision.");
+        
+        // Pas touche tant que l'effet n'est pas résolu
+        attackPlayer.gameObject.SetActive(false);
+        endTurn.gameObject.SetActive(false);
+
         SetDropdownPlayers(false, false, true, false, false, -1, false);
     }
 
@@ -544,6 +549,9 @@ public class GameLogic : MonoBehaviour
                 Debug.Log("Rien ne se passe.");
         }
         gameBoard.AddDiscard(pickedCard, CardType.Vision);
+        // Le tour peut continuer normalement
+        attackPlayer.gameObject.SetActive(true);
+        endTurn.gameObject.SetActive(true);
     }
 
     void DarknessCardPower(DarknessCard pickedCard)
