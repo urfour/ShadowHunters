@@ -162,7 +162,11 @@ public class Player
         if (damage > 0)
         {
             string blessure = " Blessure";
-            this.wound += damage - reductionWounds;
+            
+            if (reductionWounds > 0)
+                damage = (damage - reductionWounds < 0) ? 0 : damage - reductionWounds;
+
+            this.wound += damage;
             if (damage > 1)
                 blessure += "s";
             Debug.Log("Le joueur " + id + " subit " + damage + blessure + " !");
