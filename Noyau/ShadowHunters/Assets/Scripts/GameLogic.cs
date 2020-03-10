@@ -74,6 +74,10 @@ public class GameLogic : MonoBehaviour
     private int m_choosenPlayer;
     // Choix de l'effet pour la Forêt hantée
     private bool m_isWoundsForestEffect;
+    // Nombre de blessures subies par un joueur (effet de carte)
+    private int m_nbWoundsTaken;
+    // Nombre de blessures soignées par le joueur dont c'est le tour (effet de carte)
+    private int m_nbWoundsSelfHealed;
 
     private List<Player> m_players;
 
@@ -91,42 +95,44 @@ public class GameLogic : MonoBehaviour
 
     // Boutons d'interaction
     public Dropdown choiceDropdown; 
-    public GameObject rollDicesButton;
-    public GameObject visionCardsButton;
-    public GameObject darknessCardsButton;
-    public GameObject lightCardsButton;
-    public GameObject attackPlayer;
-    public GameObject endTurn;
-    public GameObject revealCardButton;
-    public GameObject validateLocationButton;
-    public GameObject validateChoosenPlayerButton;
-    public GameObject validateStealingCardButton;
-    public GameObject validateEquipmentCardButton;
-    public GameObject validateVisionCardButton;
+    public Button rollDicesButton;
+    public Button visionCardsButton;
+    public Button darknessCardsButton;
+    public Button lightCardsButton;
+    public Button attackPlayer;
+    public Button endTurn;
+    public Button revealCardButton;
+    public Button validateLocationButton;
+    public Button validateChoosenPlayerButton;
+    public Button validateStealingCardButton;
+    public Button validateEquipmentCardButton;
+    public Button validateVisionCardButton;
     public Toggle woundsForestToggle;
     public Toggle healForestToggle;
-    public GameObject validateForestPlayerButton;
-    public GameObject validateForestEffectButton;
+    public Button validateForestPlayerButton;
+    public Button validateForestEffectButton;
+    public Button validateTakingWoundsButton;
 
     void Start()
     {
         const int NB_PLAYERS = 5;
         PrepareGame(NB_PLAYERS);
-        visionCardsButton.SetActive(false);
-        darknessCardsButton.SetActive(false);
-        lightCardsButton.SetActive(false);
-        attackPlayer.SetActive(false);
-        endTurn.SetActive(false);
+        visionCardsButton.gameObject.SetActive(false);
+        darknessCardsButton.gameObject.SetActive(false);
+        lightCardsButton.gameObject.SetActive(false);
+        attackPlayer.gameObject.SetActive(false);
+        endTurn.gameObject.SetActive(false);
         choiceDropdown.gameObject.SetActive(false);
-        validateLocationButton.SetActive(false);
-        validateChoosenPlayerButton.SetActive(false);
-        validateStealingCardButton.SetActive(false);
-        validateEquipmentCardButton.SetActive(false);
-        validateVisionCardButton.SetActive(false);
-        validateForestPlayerButton.SetActive(false);
-        validateForestEffectButton.SetActive(false);
-        woundsForestToggle.gameObject.SetActive(false);
-        healForestToggle.gameObject.SetActive(false);
+        validateLocationButton.gameObject.SetActive(false);
+        validateChoosenPlayerButton.gameObject.SetActive(false);
+        validateStealingCardButton.gameObject.SetActive(false);
+        validateEquipmentCardButton.gameObject.SetActive(false);
+        validateVisionCardButton.gameObject.SetActive(false);
+        validateForestPlayerButton.gameObject.SetActive(false);
+        validateForestEffectButton.gameObject.SetActive(false);
+        woundsForestToggle.gameObject.gameObject.SetActive(false);
+        healForestToggle.gameObject.gameObject.SetActive(false);
+        validateTakingWoundsButton.gameObject.SetActive(false);
         ChooseNextPlayer();
 
     }
@@ -326,58 +332,58 @@ public class GameLogic : MonoBehaviour
         {
             // Possibilité de piocher une carte vision
             case Position.Antre:
-                visionCardsButton.SetActive(true);
+                visionCardsButton.gameObject.SetActive(true);
                 break;
             // Possibilité de choisir quelle carte piocher
             case Position.Porte:
                 Debug.Log("Quelle carte voulez-vous piocher ?");
-                visionCardsButton.SetActive(true);
-                darknessCardsButton.SetActive(true);
-                lightCardsButton.SetActive(true);
+                visionCardsButton.gameObject.SetActive(true);
+                darknessCardsButton.gameObject.SetActive(true);
+                lightCardsButton.gameObject.SetActive(true);
                 break;
             // Possibilité de piocher une carte lumière
             case Position.Monastere:
-                lightCardsButton.SetActive(true);
+                lightCardsButton.gameObject.SetActive(true);
                 break;
             // Possibilité de piocher une carte ténèbres
             case Position.Cimetiere:
-                darknessCardsButton.SetActive(true);
+                darknessCardsButton.gameObject.SetActive(true);
                 break;
             // Choix d'une personne à qui infliger 2 Blessures ou en soigner une
             case Position.Foret:
                 Debug.Log("Souhaitez-vous infliger des Blessures ou en soigner ?");
                 woundsForestToggle.gameObject.SetActive(true);
                 healForestToggle.gameObject.SetActive(true);
-                validateForestEffectButton.SetActive(true);
+                validateForestEffectButton.gameObject.SetActive(true);
                 break;
             case Position.Sanctuaire:
             // Possibilité de voler une carte équipement
-                SetDropdownPlayers(false, false, true, false, -1, false);
+                SetDropdownPlayers(false, false, false, true, false, -1, false);
                 break;
         }
-        attackPlayer.SetActive(true);
+        attackPlayer.gameObject.SetActive(true);
         if(m_players[m_playerTurn].HasSaber==true)   
-            endTurn.SetActive(false);
+            endTurn.gameObject.SetActive(false);
         else
-            endTurn.SetActive(true);
+            endTurn.gameObject.SetActive(true);
     }
 
     public void VisionCardLocation()
     {
-        visionCardsButton.SetActive(false);
-        darknessCardsButton.SetActive(false);
-        lightCardsButton.SetActive(false);
+        visionCardsButton.gameObject.SetActive(false);
+        darknessCardsButton.gameObject.SetActive(false);
+        lightCardsButton.gameObject.SetActive(false);
 
         int choosenPlayerId = m_playerTurn;
         Debug.Log("Le joueur " + m_playerTurn + " choisit de piocher une carte Vision.");
-        SetDropdownPlayers(false, true, false, false, -1, false);
+        SetDropdownPlayers(false, false, true, false, false, -1, false);
     }
 
     public void DarknessCardLocation()
     {
-        visionCardsButton.SetActive(false);
-        darknessCardsButton.SetActive(false);
-        lightCardsButton.SetActive(false);
+        visionCardsButton.gameObject.SetActive(false);
+        darknessCardsButton.gameObject.SetActive(false);
+        lightCardsButton.gameObject.SetActive(false);
 
         Debug.Log("Le joueur " + m_playerTurn + " choisit de piocher une carte Ténèbres.");
         DarknessCard darknessCard = gameBoard.DrawCard(CardType.Darkness) as DarknessCard;
@@ -387,18 +393,18 @@ public class GameLogic : MonoBehaviour
             Debug.Log("La carte " + darknessCard.cardName + " a été ajoutée à la main du joueur " + m_playerTurn + ".");
         }
         DarknessCardPower(darknessCard);
-        attackPlayer.SetActive(true);
+        attackPlayer.gameObject.SetActive(true);
         if(m_players[m_playerTurn].HasSaber==true)
-            endTurn.SetActive(false);
+            endTurn.gameObject.SetActive(false);
         else
-            endTurn.SetActive(true);
+            endTurn.gameObject.SetActive(true);
     }
 
     public void LightCardLocation()
     {
-        visionCardsButton.SetActive(false);
-        darknessCardsButton.SetActive(false);
-        lightCardsButton.SetActive(false);
+        visionCardsButton.gameObject.SetActive(false);
+        darknessCardsButton.gameObject.SetActive(false);
+        lightCardsButton.gameObject.SetActive(false);
 
         Debug.Log("Le joueur " + m_playerTurn + " pioche une carte Lumière.");
         LightCard lightCard = gameBoard.DrawCard(CardType.Light) as LightCard;
@@ -408,11 +414,11 @@ public class GameLogic : MonoBehaviour
             Debug.Log("La carte " + lightCard.cardName + " a été ajoutée à la main du joueur " + m_playerTurn + ".");
         }
         LightCardPower(lightCard);
-        attackPlayer.SetActive(true);
+        attackPlayer.gameObject.SetActive(true);
         if(m_players[m_playerTurn].HasSaber==true)
-            endTurn.SetActive(false);
+            endTurn.gameObject.SetActive(false);
         else
-            endTurn.SetActive(true);
+            endTurn.gameObject.SetActive(true);
     }
 
     public void ChooseForestPower()
@@ -427,17 +433,18 @@ public class GameLogic : MonoBehaviour
             m_isWoundsForestEffect = false;
             Debug.Log("Vous choisissez de soigner 1 Blessure.");
         }
-        validateForestEffectButton.SetActive(false);
+        validateForestEffectButton.gameObject.SetActive(false);
         woundsForestToggle.gameObject.SetActive(false);
         healForestToggle.gameObject.SetActive(false);
-        SetDropdownPlayers(true, false, false, false, -1, false);
+        SetDropdownPlayers(false, true, false, false, false, -1, false);
     }
 
     public void ActivateForestPower()
     {
         string playerAttacked = choiceDropdown.captionText.text;
+        choiceDropdown.ClearOptions();
         choiceDropdown.gameObject.SetActive(false);
-        validateForestPlayerButton.SetActive(false);
+        validateForestPlayerButton.gameObject.SetActive(false);
         int playerAttackedId = -1;
         for (int i = 0 ; i < m_nbPlayers ; i++)
             if (m_players[i].Name.Equals(playerAttacked))
@@ -457,7 +464,7 @@ public class GameLogic : MonoBehaviour
     public void VisionCardPower()
     {
         choiceDropdown.gameObject.SetActive(false);
-        validateVisionCardButton.SetActive(false);
+        validateVisionCardButton.gameObject.SetActive(false);
         int playerId = -1;
         string choosenPlayer = choiceDropdown.captionText.text;
         choiceDropdown.ClearOptions();
@@ -492,12 +499,12 @@ public class GameLogic : MonoBehaviour
         else
         {
             // Cas des cartes applicables en fonction des points de vie
-            if (pickedCard.visionEffect.effectOnLowHP && checkLowHPCharacters(m_players[playerId].Character.characterName))
+            if (pickedCard.visionEffect.effectOnLowHP && CheckLowHPCharacters(m_players[playerId].Character.characterName))
             {
                 m_players[playerId].Wounded(1);
                 CheckPlayerDeath(playerId);
             }
-            else if (pickedCard.visionEffect.effectOnHighHP && checkHighHPCharacters(m_players[playerId].Character.characterName))
+            else if (pickedCard.visionEffect.effectOnHighHP && CheckHighHPCharacters(m_players[playerId].Character.characterName))
             {
                 m_players[playerId].Wounded(2);
                 CheckPlayerDeath(playerId);
@@ -543,28 +550,18 @@ public class GameLogic : MonoBehaviour
         switch (pickedCard.darknessEffect)
         {
             case DarknessEffect.Araignee:
-                // TODO choix de la personne à qui infliger des Blessures
-                while (playerChoosenId == m_playerTurn)
-                    playerChoosenId = Random.Range(0, m_nbPlayers - 1);
-                Debug.Log("Le joueur " + playerChoosenId + " subit l'effet de l'Araignée Sanguinaire !");
-                m_players[playerChoosenId].Wounded(2);
-                m_players[m_playerTurn].Wounded(2);
-                CheckPlayerDeath(playerChoosenId);
-                CheckPlayerDeath(m_playerTurn);
+                m_nbWoundsTaken = 2;
+                m_nbWoundsSelfHealed = -2;
+                SetDropdownPlayers(true, false, false, false, false, -1, false);
                 break;
             case DarknessEffect.Banane:
                 // TODO effet de la carte
                 Debug.Log("Implémentation en cours");
                 break;
             case DarknessEffect.ChauveSouris:
-                // TODO choix de la personne à qui infliger des Blessures
-                while (playerChoosenId == m_playerTurn)
-                    playerChoosenId = Random.Range(0, m_nbPlayers - 1);
-                Debug.Log("Le joueur " + playerChoosenId + " subit l'effet de la Chauve-Souris Vampire !");
-                m_players[playerChoosenId].Wounded(2);
-                m_players[m_playerTurn].Healed(1);
-                CheckPlayerDeath(playerChoosenId);
-                CheckPlayerDeath(m_playerTurn);
+                m_nbWoundsTaken = 2;
+                m_nbWoundsSelfHealed = 1;
+                SetDropdownPlayers(true, false, false, false, false, -1, false);
                 break;
             case DarknessEffect.Dynamite:
                 int lancer1 = Random.Range(1, 6);
@@ -655,6 +652,31 @@ public class GameLogic : MonoBehaviour
         }
         if (!pickedCard.isEquipement)
             gameBoard.AddDiscard(pickedCard, CardType.Darkness);
+    }
+
+    public void TakingWoundsEffect()
+    {
+        string playerChoosen = choiceDropdown.captionText.text;
+        choiceDropdown.ClearOptions();
+        choiceDropdown.gameObject.SetActive(false);
+        validateTakingWoundsButton.gameObject.SetActive(false);
+        int playerChoosenId = -1;
+        foreach (Player player in m_players)
+            if (player.Name.Equals(playerChoosen))
+                playerChoosenId = player.Id;
+        
+        m_players[playerChoosenId].Wounded(m_nbWoundsTaken);
+        CheckPlayerDeath(playerChoosenId);
+        if (m_nbWoundsSelfHealed < 0)
+        {
+            m_players[m_playerTurn].Wounded(-m_nbWoundsSelfHealed);
+            CheckPlayerDeath(m_playerTurn);
+        }
+        else
+            m_players[m_playerTurn].Healed(m_nbWoundsSelfHealed);
+
+        m_nbWoundsTaken = 0;
+        m_nbWoundsSelfHealed = 0;
     }
 
     void LightCardPower(LightCard lightCard)
@@ -778,14 +800,14 @@ public class GameLogic : MonoBehaviour
         return;
     }
 
-    bool checkLowHPCharacters(string characterName)
+    bool CheckLowHPCharacters(string characterName)
     {
         return characterName.StartsWith("A") || characterName.StartsWith("B")
             || characterName.StartsWith("C") || characterName.StartsWith("E")
             || characterName.StartsWith("M");
     }
 
-    bool checkHighHPCharacters(string characterName)
+    bool CheckHighHPCharacters(string characterName)
     {
         return characterName.StartsWith("D") || characterName.StartsWith("F")
             || characterName.StartsWith("G") || characterName.StartsWith("L")
@@ -809,43 +831,49 @@ public class GameLogic : MonoBehaviour
     {
         m_players[m_playerTurn].Revealed=true;
         Debug.Log("Le joueur "+ m_playerTurn + " s'est révélé, il est : " + m_players[m_playerTurn].Character.characterName + " c'est un "+ m_players[m_playerTurn].Character.team);
-        revealCardButton.SetActive(false);
+        revealCardButton.gameObject.SetActive(false);
     }
 
     public void Attack()
     {
-        attackPlayer.SetActive(false);
-        endTurn.SetActive(false);
-        visionCardsButton.SetActive(false);
-        darknessCardsButton.SetActive(false);
-        lightCardsButton.SetActive(false);
-        Debug.Log("Quel joueur souhaitez-vous attaquer ?");
-        SetDropdownPlayers(false, false, false, false, -1, false);
+        attackPlayer.gameObject.SetActive(false);
+        endTurn.gameObject.SetActive(false);
+        visionCardsButton.gameObject.SetActive(false);
+        darknessCardsButton.gameObject.SetActive(false);
+        lightCardsButton.gameObject.SetActive(false);
+
+        if (m_players[m_playerTurn].HasGatling)
+            AttackCorrespondingPlayer();
+        else
+        {
+            Debug.Log("Quel joueur souhaitez-vous attaquer ?");
+            SetDropdownPlayers(false, false, false, false, false, -1, false);
+        }
     }
 
     public void ChooseNextPlayer()
     {
-        visionCardsButton.SetActive(false);
-        darknessCardsButton.SetActive(false);
-        lightCardsButton.SetActive(false);
-        attackPlayer.SetActive(false);
-        endTurn.SetActive(false);
+        visionCardsButton.gameObject.SetActive(false);
+        darknessCardsButton.gameObject.SetActive(false);
+        lightCardsButton.gameObject.SetActive(false);
+        attackPlayer.gameObject.SetActive(false);
+        endTurn.gameObject.SetActive(false);
 
         if (m_playerTurn == -1)
             m_playerTurn = Random.Range(0, m_nbPlayers - 1);
         else
             m_playerTurn = (m_playerTurn + 1) % m_nbPlayers;
         Debug.Log("C'est au joueur " + m_playerTurn + " de jouer.");
-        rollDicesButton.SetActive(true);
+        rollDicesButton.gameObject.SetActive(true);
         if(m_players[m_playerTurn].Revealed==false)
         {
-            revealCardButton.SetActive(true);
+            revealCardButton.gameObject.SetActive(true);
         }
     }
 
     public void PlayTurn()
     {
-        rollDicesButton.SetActive(false);
+        rollDicesButton.gameObject.SetActive(false);
         if(m_players[m_playerTurn].Name.Equals("Franklin"))
             PlayerCardPower(m_players[m_playerTurn]);    
         if(m_players[m_playerTurn].Name.Equals("Georges"))
@@ -911,8 +939,8 @@ public class GameLogic : MonoBehaviour
 
     void SetDropdownLocations()
     {
-        choiceDropdown.gameObject.SetActive(true);
-        validateLocationButton.SetActive(true);
+        choiceDropdown.gameObject.gameObject.SetActive(true);
+        validateLocationButton.gameObject.SetActive(true);
         List<string> locationNames = new List<string>();
         foreach (LocationCard location in gameBoard.Areas)
             if (location.area != m_players[m_playerTurn].Position)
@@ -924,6 +952,7 @@ public class GameLogic : MonoBehaviour
     public void MoveToCorrespondingLocation()
     {
         string selectedLocation = choiceDropdown.captionText.text;
+        choiceDropdown.ClearOptions();
         foreach (LocationCard location in gameBoard.Areas)
             if (location.cardName.Equals(selectedLocation))
             {
@@ -933,20 +962,31 @@ public class GameLogic : MonoBehaviour
             }
         choiceDropdown.ClearOptions();
         choiceDropdown.gameObject.SetActive(false);
-        validateLocationButton.SetActive(false);
+        validateLocationButton.gameObject.SetActive(false);
         ActivateLocationPower();
     }
 
-    void SetDropdownPlayers(bool isForestCase, bool isVisionCardCase, bool isStealingCardCase, bool isChoosingEquipmentCardCase, int playerId, bool attackItself)
+    void SetDropdownPlayers(bool isTakingWoundsCase, bool isForestCase, bool isVisionCardCase, bool isStealingCardCase, bool isChoosingEquipmentCardCase, int playerId, bool attackItself)
     {
         choiceDropdown.gameObject.SetActive(true);
-        if (isForestCase)
+        if (isTakingWoundsCase)
         {
-            validateForestPlayerButton.SetActive(true);
+            validateTakingWoundsButton.gameObject.SetActive(true);
             List<string> players = new List<string>();
-            for (int i = 0 ; i < m_nbPlayers ; i++)
-                if (!m_players[i].IsDead())
-                    players.Add(m_players[i].Name);
+            foreach (Player player in m_players)
+                if (!player.IsDead() && player.Id != m_playerTurn)
+                    players.Add(player.Name);
+
+            Debug.Log("A qui souhaitez-vous infliger 2 Blessures ?");
+            choiceDropdown.AddOptions(players);
+        }
+        else if (isForestCase)
+        {
+            validateForestPlayerButton.gameObject.SetActive(true);
+            List<string> players = new List<string>();
+            foreach (Player player in m_players)
+                if (!player.IsDead())
+                    players.Add(player.Name);
 
             Debug.Log("A qui souhaitez-vous appliquer cet effet ?");
             choiceDropdown.AddOptions(players);
@@ -955,7 +995,7 @@ public class GameLogic : MonoBehaviour
         // Choix du joueur à qui donner une carte vision
         else if (isVisionCardCase)
         {
-            validateVisionCardButton.SetActive(true);
+            validateVisionCardButton.gameObject.SetActive(true);
             List<string> players = new List<string>();
             for (int i = 0 ; i < m_nbPlayers ; i++)
                 if (!m_players[i].IsDead() && i != m_playerTurn)
@@ -967,7 +1007,7 @@ public class GameLogic : MonoBehaviour
         // Choix du joueur à qui voler une carte équipement
         else if (isStealingCardCase)
         {
-            validateStealingCardButton.SetActive(true);
+            validateStealingCardButton.gameObject.SetActive(true);
             List<string> players = new List<string>();
             for (int i = 0 ; i < m_nbPlayers ; i++)
                 if (m_players[m_playerTurn].ListCard.Count > 0)
@@ -976,7 +1016,7 @@ public class GameLogic : MonoBehaviour
             if (players.Count == 0)
             {
                 choiceDropdown.gameObject.SetActive(false);
-                validateStealingCardButton.SetActive(false);
+                validateStealingCardButton.gameObject.SetActive(false);
                 Debug.Log("Il n'y a aucun joueur à qui voler une carte équipement.");
             }
             else
@@ -988,7 +1028,7 @@ public class GameLogic : MonoBehaviour
         // Choix de la carte équipement à voler
         else if (isChoosingEquipmentCardCase)
         {
-            validateEquipmentCardButton.SetActive(true);
+            validateEquipmentCardButton.gameObject.SetActive(true);
             List<string> cards = new List<string>();
             foreach (Card card in m_players[playerId].ListCard)
                 cards.Add(card.cardName);
@@ -1003,8 +1043,8 @@ public class GameLogic : MonoBehaviour
             if (players.Count == 0)
             {
                 Debug.Log("Vous ne pouvez attaquer aucun joueur.");
-                choiceDropdown.gameObject.SetActive(false);
-                endTurn.gameObject.SetActive(true);
+                choiceDropdown.gameObject.gameObject.SetActive(false);
+                endTurn.gameObject.gameObject.SetActive(true);
             }
             else
             {
@@ -1013,7 +1053,7 @@ public class GameLogic : MonoBehaviour
                     playerNames.Add(player.Name);
 
                 choiceDropdown.AddOptions(playerNames);
-                validateChoosenPlayerButton.SetActive(true);
+                validateChoosenPlayerButton.gameObject.SetActive(true);
             }
         }
     }
@@ -1045,36 +1085,59 @@ public class GameLogic : MonoBehaviour
     {
         int playerAttackedId = -1;
         choiceDropdown.gameObject.SetActive(false);
-        validateChoosenPlayerButton.SetActive(false);
+        validateChoosenPlayerButton.gameObject.SetActive(false);
         string playerAttacked = choiceDropdown.captionText.text;
         choiceDropdown.ClearOptions();
-        for (int i = 0 ; i < m_nbPlayers ; i++)
-            if (m_players[i].Name.Equals(playerAttacked))
-                playerAttackedId = i;
 
-        Debug.Log("Vous choisissez d'attaquer le joueur " + playerAttackedId + ".");
         int lancer1 = Random.Range(1, 6);
         int lancer2 = Random.Range(1, 4);
         int lancerTotal = (m_players[m_playerTurn].HasSaber==true)? lancer2 : Mathf.Abs(lancer1 - lancer2);
-        if (lancerTotal > 0)
-        {
-            if(m_players[m_playerTurn].Name.Equals("Bob") && lancerTotal >= 2 )
-                PlayerCardPower(m_players[m_playerTurn]);
-            else
-            {
-                m_players[playerAttackedId].Wounded(lancerTotal + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
-                if(m_players[playerAttackedId].Name.Equals("LoupGarou"))
-                    PlayerCardPower(m_players[playerAttackedId]);
-                if(m_players[playerAttackedId].Name.Equals("Vampire"))
-                    PlayerCardPower(m_players[playerAttackedId]);  
-                CheckPlayerDeath(playerAttackedId);
-            }    
-        }
-        else
+        if (lancerTotal == 0)
         {
             Debug.Log("Le lancer vaut 0, vous n'attaquez pas.");
         }
-        endTurn.SetActive(true);
+        else
+        {
+            if (m_players[m_playerTurn].HasGatling)
+            {
+                List<Player> playersSameSector = GetPlayersSameSector(m_playerTurn, m_players[m_playerTurn].HasRevolver);
+                foreach (Player player in playersSameSector)
+                {
+                    if(m_players[m_playerTurn].Name.Equals("Bob") && lancerTotal >= 2 )
+                        PlayerCardPower(m_players[m_playerTurn]);
+                    else
+                    {
+                        m_players[player.Id].Wounded(lancerTotal + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
+                        CheckPlayerDeath(player.Id);
+                        if(m_players[player.Id].Name.Equals("LoupGarou"))
+                            PlayerCardPower(m_players[player.Id]);
+                        if(m_players[player.Id].Name.Equals("Vampire"))
+                            PlayerCardPower(m_players[player.Id]);  
+                    }    
+                }
+            }
+            else
+            {
+                for (int i = 0 ; i < m_nbPlayers ; i++)
+                    if (m_players[i].Name.Equals(playerAttacked))
+                        playerAttackedId = i;
+
+                Debug.Log("Vous choisissez d'attaquer le joueur " + playerAttackedId + ".");
+
+                if(m_players[m_playerTurn].Name.Equals("Bob") && lancerTotal >= 2 )
+                    PlayerCardPower(m_players[m_playerTurn]);
+                else
+                {
+                    m_players[playerAttackedId].Wounded(lancerTotal + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
+                    if(m_players[playerAttackedId].Name.Equals("LoupGarou"))
+                        PlayerCardPower(m_players[playerAttackedId]);
+                    if(m_players[playerAttackedId].Name.Equals("Vampire"))
+                        PlayerCardPower(m_players[playerAttackedId]);  
+                    CheckPlayerDeath(playerAttackedId);
+                }    
+            }
+        }
+        endTurn.gameObject.SetActive(true);
     }
 
     void CheckPlayerDeath(int playerId)
@@ -1094,7 +1157,7 @@ public class GameLogic : MonoBehaviour
                 PlayerCardPower(m_players[m_playerTurn]);
             }
             if (m_players[playerId].ListCard.Count != 0)
-                SetDropdownPlayers(false, true, false, false, playerId, false);
+                SetDropdownPlayers(false, false, true, false, false, playerId, false);
         }
     }
 
@@ -1102,7 +1165,7 @@ public class GameLogic : MonoBehaviour
     {
         m_choosenPlayer = choiceDropdown.value; 
         choiceDropdown.ClearOptions();
-        SetDropdownPlayers(false, false, false, true, m_choosenPlayer, false);
+        SetDropdownPlayers(false, false, false, false, true, m_choosenPlayer, false);
     }
 
     public void StealEquipmentCard()
@@ -1115,6 +1178,13 @@ public class GameLogic : MonoBehaviour
         else
         {
             m_players[m_playerTurn].AddCard(m_players[m_choosenPlayer].ListCard[indexCard]);
+            if (m_players[m_choosenPlayer].ListCard[indexCard].cardType == CardType.Darkness
+                && m_players[m_choosenPlayer].ListCard[indexCard].isEquipement)
+                DarknessCardPower(m_players[m_playerTurn].ListCard[m_players[m_playerTurn].ListCard.Count - 1] as DarknessCard);
+            else if (m_players[m_choosenPlayer].ListCard[indexCard].cardType == CardType.Light
+                && m_players[m_choosenPlayer].ListCard[indexCard].isEquipement)
+                LightCardPower(m_players[m_choosenPlayer].ListCard[indexCard] as LightCard);
+                
             m_players[m_choosenPlayer].RemoveCard(indexCard);
             Debug.Log("La carte " + stealedCard + " a été volée au joueur " + m_choosenPlayer + " par le joueur " + m_playerTurn + " !");
         }
@@ -1192,14 +1262,13 @@ public class GameLogic : MonoBehaviour
                 {
                     // Choix : voler une carte équipement ou infliger les blessures
                     choiceDropdown.gameObject.SetActive(false);
-                    validateChoosenPlayerButton.SetActive(false);
+                    validateChoosenPlayerButton.gameObject.SetActive(false);
                     string playerChoice = choiceDropdown.captionText.text;
                     choiceDropdown.ClearOptions();
 
                     if(playerChoice == "steal")
                         // Vole une carte équipement du joueur correspondant
                         StealEquipmentCard();
-                    else;
                         // TODO Inflige les dégats précédemment calculer dans AttackCorrespondingPlayer
                         // avec le joueur correspondant
                 }
@@ -1209,7 +1278,7 @@ public class GameLogic : MonoBehaviour
                 {
                     int playerAttackedId = -1;
                     choiceDropdown.gameObject.SetActive(false);
-                    validateChoosenPlayerButton.SetActive(false);
+                    validateChoosenPlayerButton.gameObject.SetActive(false);
                     string playerAttacked = choiceDropdown.captionText.text;
                     choiceDropdown.ClearOptions();
                     for (int i = 0 ; i < m_nbPlayers ; i++)
@@ -1233,7 +1302,7 @@ public class GameLogic : MonoBehaviour
                 {
                     int playerAttackedId = -1;
                     choiceDropdown.gameObject.SetActive(false);
-                    validateChoosenPlayerButton.SetActive(false);
+                    validateChoosenPlayerButton.gameObject.SetActive(false);
                     string playerAttacked = choiceDropdown.captionText.text;
                     choiceDropdown.ClearOptions();
                     for (int i = 0 ; i < m_nbPlayers ; i++)
