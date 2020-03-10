@@ -1413,10 +1413,4 @@ public class GameLogic : MonoBehaviour
                 break;
         }
     }
-
-    public void PrintCards()
-    {
-        foreach (Player p in m_players)
-            p.PrintCards();
-    }
 }
