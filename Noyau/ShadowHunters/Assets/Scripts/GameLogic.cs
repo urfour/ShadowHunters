@@ -1147,6 +1147,18 @@ public class GameLogic : MonoBehaviour
         if (m_players[playerId].IsDead())
         {
             Debug.Log("Le joueur " + playerId + " est mort !");
+
+            if(m_nbHuntersDead == 0 && m_nbShadowsDeads == 0 && m_nbNeutralsDeads == 0)
+            {
+                foreach(Player player in m_players)
+                {
+                    if(player.Character.CharacterType == CharacterType.Daniel)
+                    {
+                        PlayerCardPower(player);
+                    }
+                }
+            }
+
             if (m_players[playerId].Team == CharacterTeam.Hunter)
                 m_nbHuntersDead++;
             else if (m_players[playerId].Team == CharacterTeam.Shadow)
@@ -1333,6 +1345,17 @@ public class GameLogic : MonoBehaviour
                 if(player.Revealed)
                 {
                     player.Healed(2);
+                }
+                break;
+            case CharacterType.Charles:
+                
+                break;
+            case CharacterType.Daniel:
+                if(!player.Revealed)
+                {
+                    player.Revealed=true;
+                    Debug.Log("Le joueur "+ player.Id + " s'est révélé, il est : " + player.Character.characterName + " c'est un "+ player.Character.team);
+                    revealCardButton.gameObject.SetActive(false);
                 }
                 break;
         }

@@ -24,8 +24,8 @@ public enum CharacterType
 {
     Allie,
     Bob,
-    Bryan,
-    David,
+    Charles,
+    Daniel,
     Emi,
     Franklin,
     Georges,
