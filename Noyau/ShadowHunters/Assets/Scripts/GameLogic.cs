@@ -79,6 +79,8 @@ public class GameLogic : MonoBehaviour
     // Nombre de blessures soignées par le joueur dont c'est le tour (effet de carte)
     private int m_nbWoundsSelfHealed;
 
+    private bool m_isPuppet;
+
     private List<Player> m_players;
 
     private GameBoard gameBoard;
@@ -611,21 +613,9 @@ public class GameLogic : MonoBehaviour
                 m_players[m_playerTurn].HasGatling = true;
                 break;
             case DarknessEffect.Poupee:
-                // TODO choix de la personne à qui infliger des Blessures
-                while (playerChoosenId == m_playerTurn)
-                    playerChoosenId = Random.Range(0, m_nbPlayers - 1);
-                int lancer = Random.Range(1, 6);
-                Debug.Log("Le lancer du dé à 6 faces donne " + lancer + ".");
-                if (lancer <= 4)
-                {
-                    m_players[playerChoosenId].Wounded(3);
-                    CheckPlayerDeath(playerChoosenId);
-                }
-                else
-                {
-                    m_players[m_playerTurn].Wounded(3);
-                    CheckPlayerDeath(m_playerTurn);
-                }
+                m_isPuppet=true;
+                m_nbWoundsTaken = 3;
+                SetDropdownPlayers(true,false,false,false,false,-1,false);
                 break;
             case DarknessEffect.Revolver:
                 m_players[m_playerTurn].HasRevolver = true;
@@ -667,18 +657,38 @@ public class GameLogic : MonoBehaviour
             if (player.Name.Equals(playerChoosen))
                 playerChoosenId = player.Id;
         
-        m_players[playerChoosenId].Wounded(m_nbWoundsTaken);
-        CheckPlayerDeath(playerChoosenId);
-        if (m_nbWoundsSelfHealed < 0)
+        if(m_isPuppet)
         {
-            m_players[m_playerTurn].Wounded(-m_nbWoundsSelfHealed);
-            CheckPlayerDeath(m_playerTurn);
+            int lancer = Random.Range(1, 6);
+            Debug.Log("Vous avez fait " + lancer);
+            if(lancer<=4)
+            {
+                m_players[playerChoosenId].Wounded(m_nbWoundsTaken);
+                CheckPlayerDeath(playerChoosenId);
+            }
+            else
+            {
+                m_players[m_playerTurn].Wounded(m_nbWoundsTaken);
+                CheckPlayerDeath(m_playerTurn);
+            }
+            m_nbWoundsTaken = 0;
+            m_isPuppet=false;
         }
         else
-            m_players[m_playerTurn].Healed(m_nbWoundsSelfHealed);
+        {
+            m_players[playerChoosenId].Wounded(m_nbWoundsTaken);
+            CheckPlayerDeath(playerChoosenId);
+            if (m_nbWoundsSelfHealed < 0)
+            {
+                m_players[m_playerTurn].Wounded(-m_nbWoundsSelfHealed);
+                CheckPlayerDeath(m_playerTurn);
+            }
+            else
+                m_players[m_playerTurn].Healed(m_nbWoundsSelfHealed);
 
-        m_nbWoundsTaken = 0;
-        m_nbWoundsSelfHealed = 0;
+            m_nbWoundsTaken = 0;
+            m_nbWoundsSelfHealed = 0;
+        }
     }
 
     void LightCardPower(LightCard lightCard)
@@ -979,7 +989,7 @@ public class GameLogic : MonoBehaviour
                 if (!player.IsDead() && player.Id != m_playerTurn)
                     players.Add(player.Name);
 
-            Debug.Log("A qui souhaitez-vous infliger 2 Blessures ?");
+            Debug.Log("A qui souhaitez-vous infliger des Blessures ?");
             choiceDropdown.AddOptions(players);
         }
         else if (isForestCase)
