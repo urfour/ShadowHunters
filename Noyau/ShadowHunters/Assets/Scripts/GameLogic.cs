@@ -1217,10 +1217,16 @@ public class GameLogic : MonoBehaviour
                     player.Healed(player.Wound);
                 }
                 break;
+            /*
+             *  PERSONNAGE EXTENSION
+             */ 
             case CharacterType.Bryan:
                 // Révèle son identité à tous
                 RevealCard();
                 break;
+            /*
+             *  PERSONNAGE EXTENSION
+             */ 
             case CharacterType.David:
                 // Il faut que le joueur se soit révélé et qu'il n'ait pas encore utilisé son pouvoir
                 if(player.Revealed && !player.UsedPower)
