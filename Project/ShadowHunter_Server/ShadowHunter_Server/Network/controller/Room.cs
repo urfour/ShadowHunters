@@ -1,4 +1,5 @@
-﻿using Network.model;
+﻿using EventSystem;
+using Network.model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,12 @@ namespace Network.controller
                 if (c != sender)
                     c.Send(data);
             }
+        }
+
+
+        public void BroadCast(Client sender, Event e)
+        {
+            BroadCast(sender, e.Serialize());
         }
 
         public void ClientJoin(Client c)
