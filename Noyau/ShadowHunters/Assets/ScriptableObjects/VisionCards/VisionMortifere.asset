@@ -17,7 +17,7 @@ MonoBehaviour:
   isEquipement: 0
   description: Je pense que tu es Hunter\nSi c'est le cas, subis 1 Blessure !
   sprite: {fileID: 21300000, guid: 8f6c683b11896504bb5395a89b7827a3, type: 3}
-  isHidden: 1
+  isHidden: 0
   visionEffect:
     effectOnShadow: 0
     effectOnHunter: 1
@@ -27,5 +27,5 @@ MonoBehaviour:
     effectSupremeVision: 0
     effectGivingEquipementCard: 0
     effectHealingOneWound: 0
-    effectOneWound: 1
-    effectTwoWounds: 0
+    effectTakeWounds: 1
+    nbWounds: 1

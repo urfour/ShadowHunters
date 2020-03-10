@@ -27,6 +27,6 @@ MonoBehaviour:
     effectOnHighHP: 0
     effectSupremeVision: 0
     effectGivingEquipementCard: 0
-    effectHealingOneWound: 0
-    effectOneWound: 1
-    effectTwoWounds: 0
+    effectHealingOneWound: 1
+    effectTakeWounds: 0
+    nbWounds: 0
