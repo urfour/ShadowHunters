@@ -566,39 +566,41 @@ public class GameLogic : MonoBehaviour
             case DarknessEffect.Dynamite:
                 int lancer1 = Random.Range(1, 6);
                 int lancer2 = Random.Range(1, 4);
-                string area;
-                switch(lancer1+lancer2)
+                int lancerTotal=lancer1+lancer2;
+                Position area=Position.None;
+
+                switch(lancerTotal)
                 {
                     case 2:
                     case 3:
-                        area="Antre";
+                        area=Position.Antre;
                         break;
                     case 4:
                     case 5:
-                        area="Porte";
+                        area=Position.Porte;
                         break;
                     case 6:
-                        area="Monastere";
+                        area=Position.Monastere;
                         break;
                     case 7:
                         Debug.Log("Rien ne se passe");
                         break;
                     case 8:
-                        area="Cimetiere";
+                        area=Position.Cimetiere;
                         break;
                     case 9:
-                        area="Foret";
+                        area=Position.Foret;
                         break;
                     case 10:
-                        area="Sanctuaire";
+                        area=Position.Sanctuaire;
                         break;
                 }
                 if(lancerTotal!=7)
                 {
-                    for(int i=0;i<NbPlayers;i++)
+                    foreach (Player p in m_players)
                     {
-                        if(m_players[i].Position.Equals(area))
-                            m_players[i].Wounded(3);
+                        if(p.Position==area)
+                            p.Wounded(3);
                     }
                 }
                 break;

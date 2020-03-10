@@ -204,7 +204,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 882858b6bddaf524dbb7b4d14817155a, type: 2}
   - {fileID: 11400000, guid: e5cc63057eb1f8d4b9f8a2c1638fb24e, type: 2}
   - {fileID: 11400000, guid: 7583d1b4fd71d604284a37d0c3c5e4e9, type: 2}
-  choiceDropdown: {fileID: 1896127519}
+  choiceDropdown: {fileID: 1875509073}
   rollDicesButton: {fileID: 1279877997}
   visionCardsButton: {fileID: 1622182318}
   darknessCardsButton: {fileID: 433528464}
@@ -2130,6 +2130,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AllowSwitchOff: 0
+--- !u!114 &1875509073 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4429807093641609423, guid: dfa82b6956d884a94b0fc7077e97229d,
+    type: 3}
+  m_PrefabInstance: {fileID: 4429807092316445904}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d0b652f32a2cc243917e4028fa0f046, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1896127518 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4429807093641609422, guid: dfa82b6956d884a94b0fc7077e97229d,
