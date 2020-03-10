@@ -224,7 +224,13 @@ public class Player
     {
         Debug.Log("Joueur " + playerName + " : ");
         foreach (Card c in listCard)
+        {
             Debug.Log("Carte : " + c.cardName);
+            if (c.isEquipement)
+                Debug.Log("C'est une carte équipement !");
+            else
+                Debug.Log("C'est une carte à utilisation unique.");
+        }
     }
 
     public void AddCard(Card card)
@@ -253,7 +259,7 @@ public class Player
     {
         for (int i = 0 ; i < listCard.Count ; i++)
         {
-            if (string.Equals(listCard[i].cardName, cardName))
+            if (listCard[i].cardName.Equals(cardName))
                 return i;
         }
         return -1;

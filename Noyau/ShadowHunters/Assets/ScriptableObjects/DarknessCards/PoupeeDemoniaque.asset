@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: "Poup\xE9e d\xE9moniaque"
   cardType: 3
-  isEquipement: 1
+  isEquipement: 0
   description: "D\xE9signez un joueur et lancez le d\xE9 \xE0 6 faces.\\n1 \xE0 4
     : infligez-lui 3 Blessures.\\n5 ou 6 : subissez 3 Blessures."
   sprite: {fileID: 21300000, guid: 7a3470ac9583c8948ba336fb4f4c9907, type: 3}
-  isHidden: 1
+  isHidden: 0
   darknessEffect: 6
