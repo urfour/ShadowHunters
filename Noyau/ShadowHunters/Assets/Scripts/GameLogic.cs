@@ -1115,7 +1115,7 @@ public class GameLogic : MonoBehaviour
                 List<Player> playersSameSector = GetPlayersSameSector(m_playerTurn, m_players[m_playerTurn].HasRevolver);
                 foreach (Player player in playersSameSector)
                 {
-                    if(m_players[m_playerTurn].Character.CharacterType == Character.Bob) && lancerTotal >= 2 )
+                    if((m_players[m_playerTurn].Character.CharacterType == Character.Bob) && lancerTotal >= 2 )
                         PlayerCardPower(m_players[m_playerTurn]);
                     else
                     {
