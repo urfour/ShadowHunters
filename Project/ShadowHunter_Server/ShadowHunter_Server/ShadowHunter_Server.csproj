@@ -64,6 +64,28 @@
     <Compile Include="Settings\Setting.cs" />
     <Compile Include="Settings\SettingItem.cs" />
     <Compile Include="Settings\SettingManager.cs" />
+    <Compile Include="ServerInterface\AuthEvents\Account.cs" />
+    <Compile Include="ServerInterface\AuthEvents\AuthEvent.cs" />
+    <Compile Include="ServerInterface\AuthEvents\event_in\AccountDataEvent.cs" />
+    <Compile Include="ServerInterface\AuthEvents\event_in\AssingAccountEvent.cs" />
+    <Compile Include="ServerInterface\AuthEvents\event_in\AuthInvalidEvent.cs" />
+    <Compile Include="ServerInterface\AuthEvents\event_out\LogInEvent.cs" />
+    <Compile Include="ServerInterface\AuthEvents\event_out\LogOutEvent.cs" />
+    <Compile Include="ServerInterface\AuthEvents\event_out\SignInEvent.cs" />
+    <Compile Include="ServerInterface\RoomEvents\event_in\RoomCreatedEvent.cs" />
+    <Compile Include="ServerInterface\RoomEvents\event_in\RoomDataEvent.cs" />
+    <Compile Include="ServerInterface\RoomEvents\event_out\CreateRoomEvent.cs" />
+    <Compile Include="ServerInterface\RoomEvents\event_out\JoinRoomEvent.cs" />
+    <Compile Include="ServerInterface\RoomEvents\event_out\KickRoomEvent.cs" />
+    <Compile Include="ServerInterface\RoomEvents\event_out\LeaveRoomEvent.cs" />
+    <Compile Include="ServerInterface\RoomEvents\event_out\ModifyRoomEvent.cs" />
+    <Compile Include="ServerInterface\RoomEvents\RoomData.cs" />
+    <Compile Include="ServerInterface\RoomEvents\RoomEvent.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ServerInterface\" />
+    <Folder Include="ServerInterface\AuthEvents\" />
+    <Folder Include="ServerInterface\RoomEvents\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -29,5 +29,10 @@ namespace Network.events
         {
 
         }
+
+        public ServerOnlyEvent(string msg = null)
+        {
+            this.Msg = msg;
+        }
     }
 }
