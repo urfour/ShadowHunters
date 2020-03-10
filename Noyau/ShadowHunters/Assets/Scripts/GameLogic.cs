@@ -245,7 +245,7 @@ public class GameLogic : MonoBehaviour
         int lancer1, lancer2, lancerTotal;
         bool sameLocation = true;
 
-        if(m_players[m_playerTurn].Name == "Emi" && m_players[m_playerTurn].Revealed)
+        if(m_players[m_playerTurn].Character.CharacterType == Character.Emi && m_players[m_playerTurn].Revealed)
         {
             // TODO Le joueur choisit s'il veut utiliser son pouvoir
             int usePowerEmi = Random.Range(0, 1);
@@ -478,7 +478,7 @@ public class GameLogic : MonoBehaviour
 
         // Le metamorphe peut mentir
         bool metamorph = false;
-        if(m_players[playerId].Name == "Metamorphe")
+        if(m_players[playerId].Character.CharacterType == Character.Metamorphe)
         {
             // TODO Le métamorphe choisit de mentir
             if(Random.Range(0, 1) == 0)
@@ -876,9 +876,9 @@ public class GameLogic : MonoBehaviour
     public void PlayTurn()
     {
         rollDicesButton.gameObject.SetActive(false);
-        if(m_players[m_playerTurn].Name.Equals("Franklin"))
+        if(m_players[m_playerTurn].Character.CharacterType == Character.Franklin)
             PlayerCardPower(m_players[m_playerTurn]);    
-        if(m_players[m_playerTurn].Name.Equals("Georges"))
+        if(m_players[m_playerTurn].Character.CharacterType == Character.Georges)
             PlayerCardPower(m_players[m_playerTurn]);                    
         if (MoveCharacter())
             ActivateLocationPower();
@@ -1105,15 +1105,15 @@ public class GameLogic : MonoBehaviour
                 List<Player> playersSameSector = GetPlayersSameSector(m_playerTurn, m_players[m_playerTurn].HasRevolver);
                 foreach (Player player in playersSameSector)
                 {
-                    if(m_players[m_playerTurn].Name.Equals("Bob") && lancerTotal >= 2 )
+                    if(m_players[m_playerTurn].Character.CharacterType == Character.Bob) && lancerTotal >= 2 )
                         PlayerCardPower(m_players[m_playerTurn]);
                     else
                     {
                         m_players[player.Id].Wounded(lancerTotal + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
                         CheckPlayerDeath(player.Id);
-                        if(m_players[player.Id].Name.Equals("LoupGarou"))
+                        if(m_players[player.Id].Character.CharacterType == Character.LoupGarou)
                             PlayerCardPower(m_players[player.Id]);
-                        if(m_players[player.Id].Name.Equals("Vampire"))
+                        if(m_players[player.Id].Character.CharacterType == Character.Vampire)
                             PlayerCardPower(m_players[player.Id]);  
                     }    
                 }
@@ -1126,14 +1126,14 @@ public class GameLogic : MonoBehaviour
 
                 Debug.Log("Vous choisissez d'attaquer le joueur " + playerAttackedId + ".");
 
-                if(m_players[m_playerTurn].Name.Equals("Bob") && lancerTotal >= 2 )
+                if(m_players[m_playerTurn].Character.CharacterType == Character.Bob && lancerTotal >= 2 )
                     PlayerCardPower(m_players[m_playerTurn]);
                 else
                 {
                     m_players[playerAttackedId].Wounded(lancerTotal + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
-                    if(m_players[playerAttackedId].Name.Equals("LoupGarou"))
+                    if(m_players[playerAttackedId].Character.CharacterType == Character.LoupGarou)
                         PlayerCardPower(m_players[playerAttackedId]);
-                    if(m_players[playerAttackedId].Name.Equals("Vampire"))
+                    if(m_players[playerAttackedId].Character.CharacterType == Character.Vampire)
                         PlayerCardPower(m_players[playerAttackedId]);  
                     CheckPlayerDeath(playerAttackedId);
                 }    
@@ -1166,7 +1166,7 @@ public class GameLogic : MonoBehaviour
             else
                 m_nbNeutralsDeads++;
 
-            if(m_players[m_playerTurn].Name == "Bryan" && m_players[playerId].Life <= 12 && !m_players[m_playerTurn].Revealed)
+            if(m_players[m_playerTurn].Character.CharacterType == Character.Bryan && m_players[playerId].Life <= 12 && !m_players[m_playerTurn].Revealed)
             {
                 PlayerCardPower(m_players[m_playerTurn]);
             }
@@ -1302,9 +1302,9 @@ public class GameLogic : MonoBehaviour
                     Debug.Log("Vous choisissez d'attaquer le joueur " + playerAttackedId + ".");
                     int lancer = Random.Range(1, 6);
                     m_players[playerAttackedId].Wounded(lancer + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
-                    if(m_players[playerAttackedId].Name.Equals("LoupGarou"))
+                    if(m_players[playerAttackedId].Character.CharacterType == Character.LoupGarou)
                         PlayerCardPower(m_players[playerAttackedId]);
-                    if(m_players[playerAttackedId].Name.Equals("Vampire"))
+                    if(m_players[playerAttackedId].Character.CharacterType == Character.Vampire)
                         PlayerCardPower(m_players[playerAttackedId]);  
                     CheckPlayerDeath(playerAttackedId);
                     // Utilisation unique du pouvoir
@@ -1326,9 +1326,9 @@ public class GameLogic : MonoBehaviour
                     Debug.Log("Vous choisissez d'attaquer le joueur " + playerAttackedId + ".");
                     int lancer = Random.Range(1, 4);
                     m_players[playerAttackedId].Wounded(lancer + m_players[m_playerTurn].BonusAttack - m_players[m_playerTurn].MalusAttack);
-                    if(m_players[playerAttackedId].Name.Equals("LoupGarou"))
+                    if(m_players[playerAttackedId].Character.CharacterType == Character.LoupGarou)
                         PlayerCardPower(m_players[playerAttackedId]);
-                    if(m_players[playerAttackedId].Name.Equals("Vampire"))
+                    if(m_players[playerAttackedId].Character.CharacterType == Character.Vampire)
                         PlayerCardPower(m_players[playerAttackedId]);    
                     CheckPlayerDeath(playerAttackedId);
                     // Utilisation unique du pouvoir
@@ -1351,8 +1351,10 @@ public class GameLogic : MonoBehaviour
                 
                 break;
             case CharacterType.Daniel:
+                // Il faut que le joueur se soit révélé et qu'il n'ait pas encore utilisé son pouvoir
                 if(!player.Revealed)
                 {
+                    // Révèle le personnage
                     player.Revealed=true;
                     Debug.Log("Le joueur "+ player.Id + " s'est révélé, il est : " + player.Character.characterName + " c'est un "+ player.Character.team);
                     revealCardButton.gameObject.SetActive(false);
