@@ -9,7 +9,7 @@ namespace ServerInterface.AuthEvents.event_out
 {
     class LogInEvent : AuthEvent
     {
-        public string Login { get; set; }
+        public Account Account { get; set; }
         public string Password { get; set; }
 
         public LogInEvent()
@@ -17,9 +17,9 @@ namespace ServerInterface.AuthEvents.event_out
 
         }
 
-        public LogInEvent(string login, string password, string msg = null) : base(msg)
+        public LogInEvent(Account account, string password, string msg = null) : base(msg)
         {
-            this.Login = login;
+            this.Account = account;
             this.Password = password;
         }
     }
