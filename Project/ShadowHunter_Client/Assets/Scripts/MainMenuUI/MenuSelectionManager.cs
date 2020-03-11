@@ -25,7 +25,10 @@ public class MenuSelectionManager : MonoBehaviour
     public void Init(MenuSelection ms)
     {
         //currentSelected = ms;
-        ms.Content.gameObject.SetActive(ms == currentSelected);
+        if (ms.Content != null)
+        {
+            ms.Content.gameObject.SetActive(ms == currentSelected);
+        }
         //ms.Content.localPosition = new Vector3(0, ViewPort.rect.height / 2 + ms.Content.rect.height / 2, 0);
     }
 }

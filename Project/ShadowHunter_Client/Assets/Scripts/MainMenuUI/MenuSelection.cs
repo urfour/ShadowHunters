@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Button))]
 public class MenuSelection : MonoBehaviour {
     
     public RectTransform Content;
@@ -14,6 +15,7 @@ public class MenuSelection : MonoBehaviour {
         if (Content == null || manager == null)
         {
             Debug.LogWarning("Missing field in <" + gameObject.name + ">");
+            GetComponent<Button>().interactable = false;
         }
         manager.Init(this);
     }

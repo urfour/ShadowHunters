@@ -9,7 +9,7 @@ namespace ServerInterface.AuthEvents
     [Serializable]
     class Account
     {
-        public int Id { get; set; }
+       // public int Id { get; set; }
         public string Login { get; set; }
         public bool IsLogged { get; set; }
 
