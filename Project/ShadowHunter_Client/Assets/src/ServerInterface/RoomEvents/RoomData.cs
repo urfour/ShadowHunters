@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Scripts.MainMenuUI.SearchGame
+namespace ServerInterface.RoomEvents
 {
     [Serializable]
     class RoomData
     {
-        public RoomData(int code, string name, int maxNbPlayers, int currentNbPlayers, bool isSuppressed, bool hasPassword)
+        public RoomData(int code, string name, int maxNbPlayers, int currentNbPlayers, bool isSuppressed, bool hasPassword, bool isLaunched = false)
         {
             Code = code;
             Name = name;
@@ -17,13 +17,18 @@ namespace Assets.Scripts.MainMenuUI.SearchGame
             CurrentNbPlayer = currentNbPlayers;
             IsSuppressed = isSuppressed;
             HasPassword = hasPassword;
+            this.IsLaunched = isLaunched;
         }
 
+        // defined by server
         public int Code { get; set; }
+        public int CurrentNbPlayer { get; set; } = 0;
+        public bool IsSuppressed { get; set; } = false;
+        public bool IsLaunched { get; set; } = false;
+
+        // defined by host
         public string Name { get; set; }
         public int MaxNbPlayer { get; set; }
-        public int CurrentNbPlayer { get; set; }
-        public bool IsSuppressed { get; set; }
         public bool HasPassword { get; set; }
     }
 }

@@ -8,5 +8,15 @@ namespace ServerInterface.RoomEvents.event_out
 {
     class ModifyRoomEvent : RoomEvent
     {
+
+        public ModifyRoomEvent()
+        {
+
+        }
+
+        public ModifyRoomEvent(RoomData roomData) : base (roomData)
+        {
+
+        }
     }
 }

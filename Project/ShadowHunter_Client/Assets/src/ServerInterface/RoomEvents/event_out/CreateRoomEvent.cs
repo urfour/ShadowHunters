@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.MainMenuUI.SearchGame;
-using EventSystem;
+﻿using EventSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,3 +22,15 @@ namespace ServerInterface.RoomEvents.event_out
         }
     }
 }
+
+/*
+ 
+    création d'une partie : 
+    CLIENT HOST : emit CreateRoomEvent
+    SERVER : LISTEN CreateRoomEvent 
+        {
+           emit to host RoomCreatedEvent
+           broadcast\host RoomDataEvent
+        }
+     
+     */

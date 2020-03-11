@@ -1,4 +1,5 @@
 ﻿using EventSystem;
+using ServerInterface.AuthEvents;
 using ServerInterface.RoomEvents;
 using ServerInterface.RoomEvents.event_in;
 using ServerInterface.RoomEvents.event_out;
@@ -15,9 +16,11 @@ namespace Assets.Scripts.MainMenuUI.SearchGame
         public static GRoom Instance { get; private set; } = null;
 
         public Dictionary<int, Room> Rooms { get; private set; } = new Dictionary<int, Room>();
+        public Room JoinedRoom { get; private set; } = new Room();
 
         public void OnEvent(RoomEvent e, string[] tags = null)
         {
+            /*
             if (e is WaitingRoomListEvent)
             {
                 foreach (RoomData r in ((WaitingRoomListEvent)e).Rooms)
@@ -36,19 +39,41 @@ namespace Assets.Scripts.MainMenuUI.SearchGame
                     }
                 }
             }
-            else if (e is JoindedWaitingRoomDataEvent)
+            */
+            if (e is RoomDataEvent rde)
             {
-
+                if (rde.RoomData.IsSuppressed)
+                {
+                    // todo
+                }
+                if (JoinedRoom.Code.Value == rde.RoomData.Code)
+                {
+                    JoinedRoom.ModifData(rde.RoomData);
+                }
+                if (Rooms.ContainsKey(rde.RoomData.Code))
+                {
+                    Rooms[rde.RoomData.Code].ModifData(rde.RoomData);
+                }
+                else
+                {
+                    Rooms.Add(rde.RoomData.Code, new Room(rde.RoomData));
+                }
             }
-            else if (e is CreateRoomEvent)
+            else if (e is RoomCreatedEvent rce)
             {
                 // TODO gestion serveur
-                RoomData r = ((CreateRoomEvent)e).RoomData;
-                Rooms.Add(r.Code, new Room(r));
+                RoomData r = rce.RoomData;
+                JoinedRoom.ModifData(r);
+                Rooms.Add(r.Code, JoinedRoom);
             }
         }
 
-        public GRoom()
+        public static void Init()
+        {
+            new GRoom();
+        }
+        
+        private GRoom()
         {
             if (Instance != null) Logger.Warning("GRoom replaced");
             Instance = this;

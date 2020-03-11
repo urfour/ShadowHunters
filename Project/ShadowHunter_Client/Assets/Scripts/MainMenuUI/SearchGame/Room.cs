@@ -1,4 +1,6 @@
-﻿using Kernel.Settings;
+﻿using EventSystem;
+using Kernel.Settings;
+using ServerInterface.RoomEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +17,16 @@ namespace Assets.Scripts.MainMenuUI.SearchGame
         public Setting<int> MaxNbPlayer = new Setting<int>();
         public Setting<bool> HasPassword = new Setting<bool>();
 
+        public Setting<bool> IsActive = new Setting<bool>(false);
+
         public Room(RoomData data)
         {
             ModifData(data);
+        }
+
+        public Room()
+        {
+
         }
 
         public void ModifData(RoomData data)
@@ -27,6 +36,7 @@ namespace Assets.Scripts.MainMenuUI.SearchGame
             MaxNbPlayer.Value = data.MaxNbPlayer;
             CurrentNbPlayer.Value = data.CurrentNbPlayer;
             HasPassword.Value = data.HasPassword;
+            IsActive.Value = true;
         }
     }
 }
