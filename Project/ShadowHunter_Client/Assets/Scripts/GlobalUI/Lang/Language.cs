@@ -12,15 +12,7 @@ namespace Lang
 {
     class Language
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        public static void OnBeforeSceneLoadRuntimeMethod()
-        {
-            Notifier = new ListenableObject();
-            if (SettingManager.Settings == null) SettingManager.Load();
-            Instance = new Language(SettingManager.Settings.UI_Lang.Value);
 
-            SettingManager.Settings.UI_Lang.AddListener((sender) => { Instance = new Language(SettingManager.Settings.UI_Lang.Value); });
-        }
 
         #region SINGLOTON
         private static Language _instance;
@@ -32,6 +24,15 @@ namespace Lang
                 _instance = value;
                 Notifier.TryNotify();
             }
+        }
+
+        public static void Init()
+        {
+            Notifier = new ListenableObject();
+            //if (SettingManager.Settings == null) SettingManager.Load();
+            Instance = new Language(SettingManager.Settings.UI_Lang.Value);
+
+            SettingManager.Settings.UI_Lang.AddListener((sender) => { Instance = new Language(SettingManager.Settings.UI_Lang.Value); });
         }
 
         private static ListenableObject Notifier { get; set; } = new ListenableObject();
@@ -48,6 +49,11 @@ namespace Lang
         }
 
         public static void AddListener(OnNotification listener)
+        {
+            Notifier.AddListener(listener);
+        }
+
+        public static void RemoveListener(OnNotification listener)
         {
             Notifier.AddListener(listener);
         }

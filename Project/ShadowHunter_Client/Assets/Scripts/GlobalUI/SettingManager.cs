@@ -59,9 +59,6 @@ namespace Kernel.Settings
                 "advanced;settings.display/settings.display.corps_color;UI_Corps_Color;Prefabs/UI/Settings/ColorSelector;",
                 "advanced;settings.display/settings.display.corps_text_color;UI_Corps_TextColor;Prefabs/UI/Settings/ColorSelector;",
                 "advanced;settings.display/settings.display.corps_em_multiplier;UI_Corps_TextEmMult;Prefabs/UI/Settings/SliderDouble;max=3&min=0,5&nb_displayed_decimals=2",
-
-
-
             }
         );
     }
