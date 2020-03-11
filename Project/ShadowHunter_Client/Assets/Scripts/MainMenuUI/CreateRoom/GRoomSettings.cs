@@ -1,16 +1,18 @@
-﻿using Kernel.Settings;
+﻿using Assets.Scripts.MainMenuUI.SearchGame;
+using Assets.Scripts.MainMenuUI.Settings;
+using Kernel.Settings;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.MainMenuUI.Settings
+namespace Assets.Scripts.MainMenuUI.CreateRoom
 {
-    class GSettings : MonoBehaviour
+    class GRoomSettings : MonoBehaviour
     {
         private Dictionary<string, GameObject> categories = new Dictionary<string, GameObject>();
         private List<string> access = new List<string>
@@ -21,6 +23,7 @@ namespace Assets.Scripts.MainMenuUI.Settings
         };
 
         public string categoriePrefabPath = "Prefabs/UI/Settings/categorie";
+        public string[] settings;
         public RectTransform container;
 
         private GameObject categoriePrefab;
@@ -39,8 +42,7 @@ namespace Assets.Scripts.MainMenuUI.Settings
             {
                 Destroy(gameObject.transform.GetChild(i).gameObject);
             }
-
-            string[] settings = SettingManager.Settings.UI_Settings.Value;
+            
             RectTransform tr = this.transform as RectTransform;
             container.sizeDelta -= new Vector2(0, tr.sizeDelta.y);
             tr.sizeDelta -= new Vector2(0, tr.sizeDelta.y);
@@ -48,7 +50,8 @@ namespace Assets.Scripts.MainMenuUI.Settings
             {
                 string[] args = settings[i].Split(';');
                 // split (';') : "accessibility" ; "category path" ; "setting parametre" ; "prefab path" ; "send to prefab"
-                if (access.Contains(args[0]) && access.IndexOf(args[0]) <= accessLevel){
+                if (access.Contains(args[0]) && access.IndexOf(args[0]) <= accessLevel)
+                {
                     string[] path = args[1].Split('/');
                     if (!categories.ContainsKey(path[0]))
                     {
@@ -65,16 +68,16 @@ namespace Assets.Scripts.MainMenuUI.Settings
                     //tr.sizeDelta += new Vector2(0, setrect.sizeDelta.y + categ.content.GetComponent<VerticalLayoutGroup>().spacing);
                     //container.sizeDelta += new Vector2(0, setrect.sizeDelta.y + categ.content.GetComponent<VerticalLayoutGroup>().spacing);
                     ((RectTransform)categ.transform).sizeDelta += new Vector2(0, setrect.sizeDelta.y + categ.content.GetComponent<VerticalLayoutGroup>().spacing);
-                    PropertyInfo pi = SettingManager.Settings.GetType().GetProperty(args[2]);
+                    PropertyInfo pi = GRoom.Instance.JoinedRoom.GetType().GetProperty(args[2]);
                     SettingItem s = null;
                     if (pi != null)
                     {
-                        s = (SettingItem)pi.GetValue(SettingManager.Settings);
+                        s = (SettingItem)pi.GetValue(GRoom.Instance.JoinedRoom);
                     }
                     setting.GetComponent<SettingPrefab>().Configurate(path[path.Length - 1], s, args[4]);
                 }
             }
-            foreach (KeyValuePair<string,GameObject> o in categories)
+            foreach (KeyValuePair<string, GameObject> o in categories)
             {
                 RectTransform cat = o.Value.transform as RectTransform;
                 tr.sizeDelta += new Vector2(0, cat.sizeDelta.y);

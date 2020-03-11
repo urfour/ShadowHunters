@@ -20,6 +20,8 @@ namespace Kernel.Settings
     {
         public static SettingManager Settings { get; private set; }
 
+
+
         public static void Load(string path = "Settings.XML")
         {
             path = IOSystem.GetFullPath(path);
@@ -28,6 +30,7 @@ namespace Kernel.Settings
                 XmlSerializer serializer = new XmlSerializer(typeof(SettingManager));
                 StreamReader file = new StreamReader(path);
                 Settings = (SettingManager)serializer.Deserialize(file);
+                if (Settings == null) Settings = new SettingManager();
                 file.Close();
             }
             else
