@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Network.model
 {
-    public class Client : IListener<Event>
+    public partial class Client : IListener<Event>
     {
         private TcpClient TcpClient { get; set; }
         private Thread ListenThread { get; set; }
