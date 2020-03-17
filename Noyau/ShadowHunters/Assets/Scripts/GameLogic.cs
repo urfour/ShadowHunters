@@ -96,6 +96,7 @@ public class GameLogic : MonoBehaviour
     public Button validateButton;
     public Toggle woundsForestToggle;
     public Toggle healForestToggle;
+    public Button usePowerButton;
 
     void Start()
     {
@@ -108,10 +109,10 @@ public class GameLogic : MonoBehaviour
         endTurn.gameObject.SetActive(false);
         choiceDropdown.gameObject.SetActive(false);
         validateButton.gameObject.SetActive(false);
+        usePowerButton.gameObject.SetActive(false);
         woundsForestToggle.gameObject.gameObject.SetActive(false);
         healForestToggle.gameObject.gameObject.SetActive(false);
         ChooseNextPlayer();
-
     }
 
     void AddPlayer(Player p)
@@ -222,14 +223,15 @@ public class GameLogic : MonoBehaviour
         int lancer1, lancer2, lancerTotal;
         Position position = Position.None;
 
+        /* POUVOIR EMI SANS BOUTON 
         if(m_players[m_playerTurn].Character.characterType == CharacterType.Emi && m_players[m_playerTurn].Revealed)
         {
-            // TODO Le joueur choisit s'il veut utiliser son pouvoir
             int usePowerEmi = UnityEngine.Random.Range(0, 1);
 
             if(usePowerEmi == 1)
                 PlayerCardPower(m_players[m_playerTurn]);
         }
+        */
 
         while (position == Position.None)
         {
@@ -824,6 +826,12 @@ public class GameLogic : MonoBehaviour
             + m_players[m_playerTurn].Character.characterName + " ! Il est dans l'équipe des " 
             + m_players[m_playerTurn].Character.team + ".");
         revealCardButton.gameObject.SetActive(false);
+
+        // Si le joueur est Allie, il peut utiliser son pouvoir à tout moment
+        if(m_players[m_playerTurn].Character.characterType == CharacterType.Allie)
+        {
+            usePowerButton.gameObject.SetActive(true);
+        }
     }
 
     public void Attack()
@@ -856,20 +864,36 @@ public class GameLogic : MonoBehaviour
         {
             revealCardButton.gameObject.SetActive(true);
         }
+        else if(m_players[m_playerTurn].Character.characterType == CharacterType.Emi
+                || m_players[m_playerTurn].Character.characterType == CharacterType.Franklin
+                || m_players[m_playerTurn].Character.characterType == CharacterType.Georges)
+        {
+            usePowerButton.gameObject.SetActive(true);
+        }
     }
 
     public void RollTheDices()
     {
+        if(m_players[m_playerTurn].Character.characterType == CharacterType.Franklin
+                || m_players[m_playerTurn].Character.characterType == CharacterType.Georges)
+        {
+            usePowerButton.gameObject.SetActive(false);
+        }
         StartCoroutine(PlayTurn());
     }
 
     IEnumerator PlayTurn()
     {
         rollDicesButton.gameObject.SetActive(false);
+
+        /* POUVOIR FRANKLIN ET GEORGES SANS BOUTON
+
         if(m_players[m_playerTurn].Character.characterType == CharacterType.Franklin)
             PlayerCardPower(m_players[m_playerTurn]);    
         if(m_players[m_playerTurn].Character.characterType == CharacterType.Georges)
-            PlayerCardPower(m_players[m_playerTurn]);    
+            PlayerCardPower(m_players[m_playerTurn]);
+
+        */
 
         yield return StartCoroutine(MoveCharacter());
         yield return StartCoroutine(ActivateLocationPower());
@@ -1020,11 +1044,15 @@ public class GameLogic : MonoBehaviour
                         else
                         {
                             m_players[player.Id].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack);
+                            
                             CheckPlayerDeath(player.Id);
+                            
                             if(m_players[player.Id].Character.characterType == CharacterType.LoupGarou)
                                 PlayerCardPower(m_players[player.Id]);
-                            if(m_players[player.Id].Character.characterType == CharacterType.Vampire)
-                                PlayerCardPower(m_players[player.Id]);  
+                            
+                            if(m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
+                                && lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack > 0)
+                                PlayerCardPower(m_players[playerAttackedId]); 
                         }    
                     }
                 }
@@ -1041,10 +1069,14 @@ public class GameLogic : MonoBehaviour
                     else
                     {
                         m_players[playerAttackedId].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack);
+                        
                         if(m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou)
                             PlayerCardPower(m_players[playerAttackedId]);
-                        if(m_players[playerAttackedId].Character.characterType == CharacterType.Vampire)
+
+                        if(m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
+                            && lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack > 0)
                             PlayerCardPower(m_players[playerAttackedId]);  
+
                         CheckPlayerDeath(playerAttackedId);
                     }    
                 }
@@ -1283,6 +1315,13 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+    public void UsePower()
+    {
+        usePowerButton.gameObject.SetActive(false);
+        Debug.Log("Player : " + m_players[m_playerTurn].Id + " effectue son pouvoir");
+        //PlayerCardPower(m_players[m_playerTurn]);
+    }
+
     void PlayerCardPower(Player player)
     {
         switch(player.Character.characterType)
@@ -1351,6 +1390,9 @@ public class GameLogic : MonoBehaviour
                 // On effectue le déplacement
                 player.Position = newPosition;
                 gameBoard.setPositionOfAt(player.Id, newPosition);
+
+                // Activation du pouvoir du lieu
+                ActivateLocationPower();
                 break;
             case CharacterType.Metamorphe:
                 break;
