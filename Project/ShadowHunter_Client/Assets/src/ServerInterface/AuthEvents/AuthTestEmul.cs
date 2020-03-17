@@ -9,8 +9,16 @@ namespace ServerInterface.AuthEvents
 {
     class AuthTestEmul : IListener<AuthEvent>
     {
-        private Dictionary<string, string> passwords = new Dictionary<string, string>();
-        private Dictionary<string, Account> accounts = new Dictionary<string, Account>();
+        private Dictionary<string, string> passwords = new Dictionary<string, string>(){
+            {"lui", "lui" },
+            {"elle", "elle" },
+            {"l'autre", "l'autre" },
+        };
+        private Dictionary<string, Account> accounts = new Dictionary<string, Account>() {
+            {"lui", new Account() {Login="lui", IsLogged=false } },
+            {"elle", new Account() {Login="elle", IsLogged=false } },
+            {"l'autre", new Account() {Login="l'autre", IsLogged=false } },
+        };
 
         public void OnEvent(AuthEvent e, string[] tags = null)
         {

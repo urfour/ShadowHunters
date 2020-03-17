@@ -1,8 +1,6 @@
 ﻿using EventSystem;
 using ServerInterface.AuthEvents;
 using ServerInterface.RoomEvents;
-using ServerInterface.RoomEvents.event_in;
-using ServerInterface.RoomEvents.event_out;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,26 +18,6 @@ namespace Assets.Scripts.MainMenuUI.SearchGame
 
         public void OnEvent(RoomEvent e, string[] tags = null)
         {
-            /*
-            if (e is WaitingRoomListEvent)
-            {
-                foreach (RoomData r in ((WaitingRoomListEvent)e).Rooms)
-                {
-                    if (r.IsSuppressed && Rooms.ContainsKey(r.Code))
-                    {
-                        // todo
-                    }
-                    else if (Rooms.ContainsKey(r.Code))
-                    {
-                        Rooms[r.Code].ModifData(r);
-                    }
-                    else
-                    {
-                        Rooms.Add(r.Code, new Room(r));
-                    }
-                }
-            }
-            */
             if (e is RoomDataEvent rde)
             {
                 if (rde.RoomData.IsSuppressed)
@@ -59,10 +37,10 @@ namespace Assets.Scripts.MainMenuUI.SearchGame
                     Rooms.Add(rde.RoomData.Code, new Room(rde.RoomData));
                 }
             }
-            else if (e is RoomCreatedEvent rce)
+            else if (e is RoomJoinedEvent rje)
             {
                 // TODO gestion serveur
-                RoomData r = rce.RoomData;
+                RoomData r = rje.RoomData;
                 JoinedRoom.ModifData(r);
                 Rooms.Add(r.Code, JoinedRoom);
             }

@@ -14,13 +14,16 @@ public class InputBar : SettingPrefab
         DOUBLE
     }
 
-    public Text input;
+    public InputField input;
     public Text placeholder;
     private INPUTTYPE type;
+    SettingItem target;
 
     public override void Configurate(string label, SettingItem target, string config = null)
     {
         base.Configurate(label, target, config);
+        this.target = target;
+        
         if (config != null)
         {
             string[] args = config.Split('&');
@@ -31,7 +34,8 @@ public class InputBar : SettingPrefab
                 {
                     case "type":
                         {
-                            type = (INPUTTYPE)Enum.Parse(typeof(INPUTTYPE), args[1]);
+                            type = (INPUTTYPE)Enum.Parse(typeof(INPUTTYPE), param[1]);
+                            
                         }
                         break;
                 }
@@ -39,17 +43,27 @@ public class InputBar : SettingPrefab
         }
     }
     
+    private bool selfChanged = false;
     public void OnValueChange(string s)
     {
+        selfChanged = true;
         switch (type)
         {
             case INPUTTYPE.TEXT:
+                ((Setting<string>)target).Value = input.text;
                 break;
         }
+        selfChanged = false;
     }
 
     public void OnEndEdit(string s)
     {
 
+    }
+
+    public override void Refresh()
+    {
+        if (!selfChanged) return;
+        base.Refresh();
     }
 }

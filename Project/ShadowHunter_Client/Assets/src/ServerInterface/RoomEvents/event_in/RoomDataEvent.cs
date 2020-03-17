@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServerInterface.RoomEvents.event_in
+namespace ServerInterface.RoomEvents
 {
     class RoomDataEvent : RoomEvent
     {

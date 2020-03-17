@@ -1,6 +1,8 @@
 ﻿using Assets.Scripts.MainMenuUI.SearchGame;
 using Assets.Scripts.MainMenuUI.Settings;
+using EventSystem;
 using Kernel.Settings;
+using ServerInterface.RoomEvents;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +16,48 @@ namespace Assets.Scripts.MainMenuUI.CreateRoom
 {
     class GRoomSettings : MonoBehaviour
     {
+        public InputField name;
+        public InputField password;
+        public Slider nbPlayers;
+        public Text displayNbPlayers;
+
+        public int nbMaxPlayers = 8;
+
+        private RoomData data = new RoomData();
+
+        private void Start()
+        {
+            nbPlayers.maxValue = nbMaxPlayers;
+            nbPlayers.minValue = 4;
+
+            OnNbPlayerChange();
+            OnPassWordChange();
+            OnNameChange();
+        }
+
+        public void OnNameChange()
+        {
+            data.Name = name.text;
+        }
+
+        public void OnPassWordChange()
+        {
+            data.Password = password.text;
+            data.HasPassword = data.Password == null || data.Password.Length == 0;
+        }
+
+        public void OnNbPlayerChange()
+        {
+            data.MaxNbPlayer = (int)nbPlayers.value;
+            displayNbPlayers.text = nbPlayers.value.ToString();
+        }
+
+        public void Create()
+        {
+            EventView.Manager.Emit(new CreateRoomEvent(data));
+        }
+
+        /*
         private Dictionary<string, GameObject> categories = new Dictionary<string, GameObject>();
         private List<string> access = new List<string>
         {
@@ -84,5 +128,6 @@ namespace Assets.Scripts.MainMenuUI.CreateRoom
             }
             container.sizeDelta += new Vector2(0, tr.sizeDelta.y);
         }
+    */
     }
 }
