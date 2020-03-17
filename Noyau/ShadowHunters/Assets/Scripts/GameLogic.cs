@@ -626,7 +626,7 @@ public class GameLogic : MonoBehaviour
             case DarknessEffect.Rituel:
                 Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
                 yield return new WaitForSeconds(6f);
-                if (m_players[m_playerTurn].Revealed && team == CharacterTeam.Shadow)
+                if (m_players[m_playerTurn].Revealed && m_players[m_playerTurn].Team== CharacterTeam.Shadow)
                 {
                     m_players[m_playerTurn].Healed(m_players[m_playerTurn].Wound);
                     Debug.Log("Le joueur "+ m_players[m_playerTurn].Name + " se soigne complètement");
@@ -725,7 +725,7 @@ public class GameLogic : MonoBehaviour
 			case LightEffect.Supreme:
                 Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
                 yield return new WaitForSeconds(6f);
-                if (revealed && team == CharacterTeam.Hunter)
+                if (revealed && m_players[m_playerTurn].Team== CharacterTeam.Hunter)
                 {
                     m_players[m_playerTurn].Healed(m_players[m_playerTurn].Wound);
                     Debug.Log("Le joueur "+ m_players[m_playerTurn].Name + " se soigne complètement");
