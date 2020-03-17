@@ -13,7 +13,7 @@ namespace Network.controller
     {
         private List<Client> Clients { get; set; } = new List<Client>();
 
-        private RoomData Data { get; set; }
+        public RoomData Data { get; set; }
 
 
         public Room()

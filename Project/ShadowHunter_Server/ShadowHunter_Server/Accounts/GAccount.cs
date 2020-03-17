@@ -16,6 +16,7 @@ namespace ShadowHunter_Server.Accounts
 
         public Dictionary<Client, Account> Accounts { get; private set; } = new Dictionary<Client, Account>();
 
+
         // Régit le comportement du serveur en fonction de l'évènement
         // d'authentification reçu
         // Entrée : - Évenement héritant de AuthEvent
@@ -125,10 +126,25 @@ namespace ShadowHunter_Server.Accounts
         }
 
 
-        internal GAccount()
+
+        private GAccount()
         {
-            if (Instance != null) Logger.Warning("GAccount replaced");
-            Instance = this;
+            if (Instance != null)
+            {
+
+            }
+            else
+            {
+                Instance = this;
+            }
         }
+
+        public static void Init()
+        {
+            new GAccount();
+            Console.Write("GAccount OK");
+            EventView.Manager.AddListener(Instance, true);
+        }
+
     }
 }

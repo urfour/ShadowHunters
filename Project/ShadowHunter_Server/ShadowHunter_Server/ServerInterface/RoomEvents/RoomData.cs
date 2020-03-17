@@ -18,6 +18,7 @@ namespace ServerInterface.RoomEvents
             IsSuppressed = isSuppressed;
             HasPassword = hasPassword;
             this.IsLaunched = isLaunched;
+
         }
 
         // defined by server
@@ -25,10 +26,14 @@ namespace ServerInterface.RoomEvents
         public int CurrentNbPlayer { get; set; } = 0;
         public bool IsSuppressed { get; set; } = false;
         public bool IsLaunched { get; set; } = false;
+        public string[] Players { get; set; } = null;
+        public string Host { get; set; } = null;
 
         // defined by host
         public string Name { get; set; }
         public int MaxNbPlayer { get; set; }
         public bool HasPassword { get; set; }
+        public string Password { get; set; }
+
     }
 }
