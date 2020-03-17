@@ -30,6 +30,12 @@ public class Player
     private bool hasGatling;         // le joueur possède-t-il la mitrailleuse ?
     private bool hasRevolver;        // le joueur possède-t-il le revolver ?
     private bool hasSaber;           // le joueur possède-t-il le sabre ?
+    private bool hasAmulet;          // le joueur possède-t-il l'amulette ?
+    private bool hasCompass;         // le joueur possède-t-il la boussole ?
+    private bool hasBroche;          // le joueur possède-t-il la broche ?
+    private bool hasCrucifix;        // le joueur possède-t-il le crucifix ?
+    private bool hasSpear;           // le joueur possède-t-il la lance ?
+    private bool hasToge;            // le joueur possède-t-il la toge ?
     private bool isTurn;             // est-ce le tour du joueur ?
     private bool hasWon;             // le joueur a-t-il gagné ?
     private Position position;       // position du joueur
@@ -51,6 +57,12 @@ public class Player
         this.hasGatling = false;
         this.hasRevolver = false;
         this.hasSaber = false;
+        this.hasAmulet = false;
+        this.hasBroche = false;
+        this.hasCompass = false;
+        this.hasCrucifix = false;
+        this.hasSpear = false;
+        this.hasToge = false;
         this.isTurn = false;
         this.hasWon = false;
         this.position = Position.None;
@@ -149,6 +161,37 @@ public class Player
     {
         get { return hasSaber; }
         set { hasSaber = value; }
+    }
+
+    public bool HasAmulet
+    {
+        get{return hasAmulet;}
+        set{hasAmulet=value;}
+    }
+    public bool HasBroche
+    {
+        get{return hasBroche;}
+        set{hasBroche=value;}
+    }
+    public bool HasCompass
+    {
+        get{return hasCompass;}
+        set{hasCompass=value;}
+    }
+    public bool HasCrucifix
+    {
+        get{return hasCrucifix;}
+        set{hasCrucifix=value;}
+    }
+    public bool HasSpear
+    {
+        get{return hasSpear;}
+        set{hasSpear=value;}
+    }
+    public bool HasToge
+    {
+        get{return hasToge;}
+        set{hasToge=value;}
     }
 
     public bool HasWon

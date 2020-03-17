@@ -323,9 +323,18 @@ public class GameLogic : MonoBehaviour
                 healForestToggle.gameObject.SetActive(false);
                 List<string> players = new List<string>();
                 foreach (Player player in m_players)
+                {
                     if (!player.IsDead())
-                        players.Add(player.Name);
-
+                    {
+                        if(isWoundsForestEffect)
+                            if(!player.HasBroche)
+                                players.Add(player.Name);
+                            else
+                                continue;
+                        else
+                            players.Add(player.Name);
+                    }
+                }
                 Debug.Log("A qui souhaitez-vous appliquer cet effet ?");
                 choiceDropdown.gameObject.SetActive(true);
                 choiceDropdown.AddOptions(players);
@@ -407,7 +416,8 @@ public class GameLogic : MonoBehaviour
                 + m_players[m_playerTurn].Name + ".");
         }
         yield return StartCoroutine(DarknessCardPower(darknessCard));
-        gameBoard.AddDiscard(darknessCard, CardType.Darkness);
+        if (!darknessCard.isEquipement)
+            gameBoard.AddDiscard(darknessCard, CardType.Darkness);
         attackPlayer.gameObject.SetActive(true);
         if(m_players[m_playerTurn].HasSaber==true)
             endTurn.gameObject.SetActive(false);
@@ -437,7 +447,8 @@ public class GameLogic : MonoBehaviour
                 + m_players[m_playerTurn].Name + ".");
         }
         yield return StartCoroutine(LightCardPower(lightCard));
-        gameBoard.AddDiscard(lightCard, CardType.Light);
+        if (!lightCard.isEquipement)
+            gameBoard.AddDiscard(lightCard, CardType.Light);
         attackPlayer.gameObject.SetActive(true);
         if(m_players[m_playerTurn].HasSaber==true)
             endTurn.gameObject.SetActive(false);
@@ -595,7 +606,7 @@ public class GameLogic : MonoBehaviour
                 {
                     foreach (Player p in m_players)
                     {
-                        if(p.Position==area)
+                        if(p.Position==area && !p.HasAmulet)
                             p.Wounded(3);
                     }
                 }
@@ -615,7 +626,7 @@ public class GameLogic : MonoBehaviour
             case DarknessEffect.Rituel:
                 Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
                 yield return new WaitForSeconds(6f);
-                if (m_players[m_playerTurn].Revealed && m_players[m_playerTurn].Team== CharacterTeam.Shadow)
+                if (m_players[m_playerTurn].Revealed && team == CharacterTeam.Shadow)
                 {
                     m_players[m_playerTurn].Healed(m_players[m_playerTurn].Wound);
                     Debug.Log("Le joueur "+ m_players[m_playerTurn].Name + " se soigne complètement");
@@ -640,9 +651,18 @@ public class GameLogic : MonoBehaviour
         validateButton.gameObject.SetActive(true);
         List<string> players = new List<string>();
         foreach (Player player in m_players)
+        {
             if (!player.IsDead() && player.Id != m_playerTurn)
-                players.Add(player.Name);
-
+            {
+                if(isPuppet)
+                    players.Add(player.Name);
+                else
+                {
+                    if(!player.HasAmulet)
+                        players.Add(player.Name);
+                }
+            }
+        }
         Debug.Log("A qui souhaitez-vous infliger des Blessures ?");
         choiceDropdown.AddOptions(players);
         yield return WaitUntilEvent(validateButton.onClick);
@@ -685,18 +705,17 @@ public class GameLogic : MonoBehaviour
         }
     }
 
-    IEnumerator LightCardPower(LightCard lightCard)
+    IEnumerator LightCardPower(LightCard pickedCard)
     {
         CharacterTeam team = m_players[m_playerTurn].Team;
         string character = m_players[m_playerTurn].Character.characterName;
-        bool reaveled = m_players[m_playerTurn].Revealed;
-        
-        switch (lightCard.lightEffect)
+        bool revealed = m_players[m_playerTurn].Revealed;
+        Debug.Log(pickedCard.lightEffect);
+        switch (pickedCard.lightEffect)
         {
 			case LightEffect.Amulette:
-			
-				Debug.Log("Implémentation en cours");
-				break;
+                m_players[m_playerTurn].HasAmulet=true;
+                break;
 				
 			case LightEffect.AngeGardien: // A implémenter comme un équipement qui se discard au début du tour
 			
@@ -704,26 +723,32 @@ public class GameLogic : MonoBehaviour
 				break;
 				
 			case LightEffect.Supreme:
-			
-				if (team == CharacterTeam.Hunter)
-				{
-					if (reaveled)
-						m_players[m_playerTurn].SetWound(0);
-					else // A le choix de se révéler ou non pour se heal
-						Debug.Log("Implémentation en cours");
-				}
-				break;
-			
+                Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
+                yield return new WaitForSeconds(6f);
+                if (revealed && team == CharacterTeam.Hunter)
+                {
+                    m_players[m_playerTurn].Healed(m_players[m_playerTurn].Wound);
+                    Debug.Log("Le joueur "+ m_players[m_playerTurn].Name + " se soigne complètement");
+                }
+                else
+                {
+                    Debug.Log("Rien ne se passe.");
+                }
+                break;
+
 			case LightEffect.Chocolat:
-			
-				if (character == "Allie" || character == "Emi" || character == "Métamorphe")
-				{
-					if (reaveled)
-						m_players[m_playerTurn].SetWound(0);
-					else // A le choix de se révéler ou non pour se heal
-						Debug.Log("Implémentation en cours");
-				}
-				break;
+                Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
+                yield return new WaitForSeconds(6f);
+                if (revealed && (character == "Allie" || character == "Emi" || character == "Metamorphe"))
+                {
+                    m_players[m_playerTurn].Healed(m_players[m_playerTurn].Wound);
+                    Debug.Log("Le joueur "+ m_players[m_playerTurn].Name + " se soigne complètement");
+                }
+                else
+                {
+                    Debug.Log("Rien ne se passe.");
+                }
+                break;
 			
 			case LightEffect.Benediction:
 			
@@ -740,17 +765,16 @@ public class GameLogic : MonoBehaviour
 				break;
 			
 			case LightEffect.Boussole:
-				
+				m_players[m_playerTurn].HasCompass=true;
 				Debug.Log("Implémentation en cours");
 				break;
 			
 			case LightEffect.Broche:
-			
-				Debug.Log("Implémentation en cours");
-				break;
+                m_players[m_playerTurn].HasBroche=true;
+                break;
 				
 			case LightEffect.Crucifix:
-			
+                m_players[m_playerTurn].HasCrucifix=true;
 				Debug.Log("Implémentation en cours");
 				break;
 				
@@ -769,13 +793,16 @@ public class GameLogic : MonoBehaviour
 				break;
 			
 			case LightEffect.Lance:
-				
-				Debug.Log("Implémentation en cours");
+				m_players[m_playerTurn].HasSpear=true;
+				if(team== CharacterTeam.Hunter && revealed)
+                {
+                    m_players[m_playerTurn].BonusAttack+=2;
+                }
 				break;
 				
 			case LightEffect.Miroir:
 				
-				if (team == CharacterTeam.Shadow && character != "Métamorphe")
+				if (team == CharacterTeam.Shadow && character != "Metamorphe")
 				{
 					m_players[m_playerTurn].Revealed = true;
 					Debug.Log("Vous révélez votre rôle à tous, vous êtes : " + character);
@@ -795,12 +822,11 @@ public class GameLogic : MonoBehaviour
 				break;
 			
 			case LightEffect.Toge:
-				
+				m_players[m_playerTurn].HasToge=true;
 				m_players[m_playerTurn].MalusAttack++;
 				m_players[m_playerTurn].ReductionWounds = 1;
 				break;
 		}
-        yield return null;
     }
 
     bool CheckLowHPCharacters(string characterName)
@@ -897,13 +923,13 @@ public class GameLogic : MonoBehaviour
                 break;
             case WinningCondition.David:
                 int nbCardsOwned = 0;
-                if (m_players[playerId].HasCard("Crucifix en argent") != -1)
+                if (m_players[playerId].HasCrucifix)
                     nbCardsOwned++;
-                if (m_players[playerId].HasCard("Amulette") != -1)
+                if (m_players[playerId].HasAmulet)
                     nbCardsOwned++;
-                if (m_players[playerId].HasCard("Lance de Longinus") != -1)
+                if (m_players[playerId].HasSpear)
                     nbCardsOwned++;
-                if (m_players[playerId].HasCard("Toge sainte") != -1)
+                if (m_players[playerId].HasToge)
                     nbCardsOwned++;
                 
                 if (nbCardsOwned >= 3)
@@ -927,7 +953,6 @@ public class GameLogic : MonoBehaviour
                 }
                 break;
         }
-
     }
 
     IEnumerator ChooseLocation()
@@ -951,8 +976,8 @@ public class GameLogic : MonoBehaviour
                 gameBoard.setPositionOfAt(m_playerTurn, location.area);
                 Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " se rend sur la carte " + location.cardName + ".");
             }
-            choiceDropdown.gameObject.SetActive(false);
-            validateButton.gameObject.SetActive(false);
+        choiceDropdown.gameObject.SetActive(false);
+        validateButton.gameObject.SetActive(false);
     }
 
     public List<Player> GetPlayersSameSector(int playerId, bool hasRevolver)
@@ -1140,7 +1165,6 @@ public class GameLogic : MonoBehaviour
 
             string choosenPlayer = choiceDropdown.captionText.text;
             choiceDropdown.ClearOptions();
-            validateButton.gameObject.SetActive(false);
             foreach (Player p in m_players)
                 if (p.Name.Equals(choosenPlayer))
                     playerId = p.Id;
@@ -1229,6 +1253,7 @@ public class GameLogic : MonoBehaviour
         else
         {
             int playerId = -1;
+            choiceDropdown.gameObject.SetActive(true);
             validateButton.gameObject.SetActive(true);
             List<string> choices = new List<string>();
             foreach (Player player in m_players)
