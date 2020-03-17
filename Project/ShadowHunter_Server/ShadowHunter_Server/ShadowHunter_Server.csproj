@@ -82,12 +82,14 @@
     <Compile Include="ServerInterface\RoomEvents\RoomData.cs" />
     <Compile Include="ServerInterface\RoomEvents\RoomEvent.cs" />
     <Compile Include="Accounts\GAccount.cs" />
+    <Compile Include="Rooms\GRoom.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ServerInterface\" />
     <Folder Include="ServerInterface\AuthEvents\" />
     <Folder Include="ServerInterface\RoomEvents\" />
     <Folder Include="Accounts\" />
+    <Folder Include="Rooms\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

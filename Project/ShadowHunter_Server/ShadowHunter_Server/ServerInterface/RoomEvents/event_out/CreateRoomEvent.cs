@@ -9,7 +9,7 @@ namespace ServerInterface.RoomEvents.event_out
 {
     class CreateRoomEvent : RoomEvent
     {
-        public RoomData RoomData { get; set; }
+        //public RoomData RoomData { get; set; }
 
         public CreateRoomEvent()
         {

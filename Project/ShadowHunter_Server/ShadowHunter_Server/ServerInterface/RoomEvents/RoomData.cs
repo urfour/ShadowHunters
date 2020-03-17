@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ServerInterface.RoomEvents
 {
     [Serializable]
-    class RoomData
+    public class RoomData
     {
         public RoomData(int code, string name, int maxNbPlayers, int currentNbPlayers, bool isSuppressed, bool hasPassword, bool isLaunched = false)
         {
