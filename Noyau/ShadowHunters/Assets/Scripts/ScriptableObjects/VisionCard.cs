@@ -20,6 +20,9 @@ public struct VisionEffect
     public int nbWounds; // Nombre de Blessures subies
 }
 
+/// <summary>
+/// Définition des cartes Vision
+/// </summary>
 [CreateAssetMenu(fileName = "VisionCard", menuName = "Card/VisionCard", order = 3)]
 [System.Serializable]
 public class VisionCard : Card

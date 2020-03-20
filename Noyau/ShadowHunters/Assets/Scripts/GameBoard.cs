@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Plateau de jeu comportant les différentes cartes
+/// </summary>
 public class GameBoard
 {
 	// Decks des différents types de cartes

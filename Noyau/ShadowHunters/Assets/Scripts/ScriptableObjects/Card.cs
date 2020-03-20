@@ -4,6 +4,10 @@ using UnityEngine;
 
 public enum CardType { Location, Vision, Light, Darkness }
 
+/// <summary>
+/// Définition d'une carte
+/// (les cartes Lieu utilisent cette implémentation)
+/// </summary>
 [System.Serializable]
 public class Card : ScriptableObject
 {
@@ -14,5 +18,3 @@ public class Card : ScriptableObject
     public Sprite sprite;
     public bool isHidden;
 }
-
-

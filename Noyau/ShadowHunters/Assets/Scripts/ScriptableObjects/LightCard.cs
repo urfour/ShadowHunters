@@ -21,6 +21,9 @@ public enum LightEffect
     Toge
 }
 
+/// <summary>
+/// Définition des cartes Vision
+/// </summary>
 [CreateAssetMenu(fileName = "LightCard", menuName = "Card/LightCard", order = 5)]
 public class LightCard : Card
 {

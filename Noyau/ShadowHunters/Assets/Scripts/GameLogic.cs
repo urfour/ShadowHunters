@@ -5,83 +5,160 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
+/// <summary>
+/// Classe représentant la logique du jeu, à savoir la gestion des règles et des interactions 
+/// </summary>
 public class GameLogic : MonoBehaviour
 {
+    /// <summary>
+    /// Nombre de joueurs de la partie courante
+    /// </summary>
     private int m_nbPlayers = 0;
+    /// <summary>
+    /// Propriété d'accès au nombre de joueurs
+    /// </summary>
     public int NbPlayers
     {
         get => m_nbPlayers;
         private set => m_nbPlayers = value;
     }
-
+    /// <summary>
+    /// Nombre de Hunters dans la partie
+    /// </summary>
     private int m_nbHunters = 0;
+    /// <summary>
+    /// Propriété d'accès au nombre de Hunters
+    /// </summary>
     public int NbHunters
     {
         get => m_nbHunters;
         private set => m_nbHunters = value;
     }
-
+    /// <summary>
+    /// Nombre de Hunters morts
+    /// </summary>
     private int m_nbHuntersDead = 0;
+    /// <summary>
+    /// Propriété d'accès au nombre de Hunters morts
+    /// </summary>
     public int NbHuntersDead
     {
         get => m_nbHuntersDead;
         private set => m_nbHuntersDead = value;
     }
-
+    /// <summary>
+    /// Nombre de Shadows dans la partie
+    /// </summary>
     private int m_nbShadows = 0;
+    /// <summary>
+    /// Propriété d'accès au nombre de Shadows
+    /// </summary>
     public int NbShadows
     {
         get => m_nbShadows;
         private set => m_nbShadows = value;
     }
-
+    /// <summary>
+    /// Nombre de Shadow morts
+    /// </summary>
     private int m_nbShadowsDeads = 0;
+    /// <summary>
+    /// Propriété d'accès au nombre de Shadow morts
+    /// </summary>
     public int NbShadowsDeads
     {
         get => m_nbShadowsDeads;
         private set => m_nbShadowsDeads = value;
     }
-
+    /// <summary>
+    /// Nombre de Neutres dans la partie
+    /// </summary>
     private int m_nbNeutrals = 0;
+    /// <summary>
+    /// Propriété d'accès au nombre de Neutres
+    /// </summary>
     public int NbNeutrals
     {
         get => m_nbNeutrals;
         private set => m_nbNeutrals = value;
     }
-
+    /// <summary>
+    /// Nombre de Neutres morts
+    /// </summary>
     private int m_nbNeutralsDeads = 0;
+    /// <summary>
+    /// Propriété d'accès au nombre de Neutres morts
+    /// </summary>
     public int NeutralsDeads
     {
         get => m_nbNeutralsDeads;
         private set => m_nbNeutralsDeads = value;
     }
-
+    /// <summary>
+    /// Id du joueur dont c'est le tour
+    /// </summary>
     private int m_playerTurn = -1;
+    /// <summary>
+    /// Propriété d'accès à l'id du joueur dont c'est le tour
+    /// </summary>
     public int PlayerTurn
     {
         get => m_playerTurn;
         private set => m_playerTurn = value;
     }
-
+    /// <summary>
+    /// Booléen représentant l'état actuel du jeu (terminé ou non)
+    /// </summary>
     private bool m_isGameOver = false;
+    /// <summary>
+    /// Propriété d'accès à l'état actuel du jeu
+    /// </summary>
     public bool IsGameOver
     {
         get => m_isGameOver;
         private set => m_isGameOver = value;
     }
-
+    /// <summary>
+    /// Liste comportant les informations de tous les joueurs
+    /// </summary>
     private List<Player> m_players;
-
+    /// <summary>
+    /// Plateau du jeu comportant les différentes cartes et leur position
+    /// </summary>
     private GameBoard gameBoard;
+    /// <summary>
+    /// Propriété d'accès au plateau du jeu
+    /// </summary>
     public GameBoard GameBoard { get; }
 
     // Cartes possibles des différents decks
+    /// <summary>
+    /// Liste des différentes cartes Vision
+    /// </summary>
     public List<VisionCard> m_visionCards;
+    /// <summary>
+    /// Liste des différentes cartes Ténèbre
+    /// </summary>
     public List<DarknessCard> m_darknessCards;
+    /// <summary>
+    /// Liste des différentes cartes Lumière
+    /// </summary>
     public List<LightCard> m_lightCards;
+    /// <summary>
+    /// Liste des différentes cartes Lieu
+    /// </summary>
     public List<LocationCard> m_locationCards;
+    /// <summary>
+    /// Liste des différents personnages Hunter
+    /// </summary>
     public List<Character> m_hunterCharacters;
+    /// <summary>
+    /// Liste des différents personnages Shadow
+    /// </summary>
     public List<Character> m_shadowCharacters;
+    /// <summary>
+    /// Liste des différents personnages Neutre
+    /// </summary>
     public List<Character> m_neutralCharacters;
 
     // Boutons d'interaction
@@ -98,6 +175,10 @@ public class GameLogic : MonoBehaviour
     public Toggle healForestToggle;
     public Button usePowerButton;
 
+    /// <summary>
+    /// Fonction appelée dès l'instanciation du GameObject auquel est lié le script,
+    /// permettant de préparer le jeu.
+    /// </summary>
     void Start()
     {
         const int NB_PLAYERS = 5;
@@ -115,12 +196,20 @@ public class GameLogic : MonoBehaviour
         ChooseNextPlayer();
     }
 
+    /// <summary>
+    /// Ajout d'un joueur à la partie
+    /// </summary>
+    /// <param name="p">Joueur à ajouter dans la partie</param>
     void AddPlayer(Player p)
     {
         this.m_players.Add(p);
         m_nbPlayers++;
     }
 
+    /// <summary>
+    /// Suppression d'un joueur à la partie (lors d'une déconnexion par exemple)
+    /// </summary>
+    /// <param name="p">Joueur à supprimer de la partie</param>
     void DeletePlayer(Player p)
     {
         for (int i = 0; i < this.m_players.Count; ++i)
@@ -134,6 +223,10 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Préparation des decks de cartes et répartition des personnages aux joueurs
+    /// </summary>
+    /// <param name="nbPlayers">Nombre de joueurs de la partie</param>
     void PrepareGame(int nbPlayers)
     {
         m_players = new List<Player>();
@@ -147,7 +240,7 @@ public class GameLogic : MonoBehaviour
             p = new Player(i);
             AddPlayer(p);
         }
-        characters = PrepareCharacterCards(m_hunterCharacters, m_shadowCharacters, m_neutralCharacters);
+        characters = PrepareCharacterCards();
         for (int i = 0; i < nbPlayers; i++)
         {
             m_players[i].SetCharacter(characters[0]);
@@ -156,6 +249,11 @@ public class GameLogic : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Redistribution des cartes lorsqu'une des pioches est vide
+    /// </summary>
+    /// <param name="oldDeck">Pile de défausse</param>
+    /// <param name="newDeck">Pioche à refaire</param>
     void ResetDecks(List<Card> oldDeck, List<Card> newDeck)
     {
         Debug.Log("Le deck est vide, redistribution des cartes.");
@@ -167,6 +265,13 @@ public class GameLogic : MonoBehaviour
         newDeck.Shuffle<Card>();
     }
 
+    /// <summary>
+    /// Fonction permettant de préparer un deck de cartes en fonction du nombre de joueurs
+    /// </summary>
+    /// <param name="deck">Deck final construit</param>
+    /// <param name="deckCharacter">Deck comportant les cartes personnages du même type</param>
+    /// <param name="nb">Nombre de cartes à ajouter dans la pile finale</param>
+    /// <param name="addBob">Booléen représentant la nécessité d'ajouter Bob ou non</param>
     void AddCharacterCards(List<Character> deck, List<Character> deckCharacter, int nb, bool addBob)
     {
         for (int i = 0; i < nb; i++)
@@ -178,7 +283,11 @@ public class GameLogic : MonoBehaviour
         }
     }
 
-    List<Character> PrepareCharacterCards(List<Character> cardHunters, List<Character> cardShadows, List<Character> cardNeutrals)
+    /// <summary>
+    /// Préparation des cartes Personnage en fonction du nombre de joueurs
+    /// </summary>
+    /// <returns>Liste des cartes Personnage préparée</returns>
+    List<Character> PrepareCharacterCards()
     {
         List<Character> HuntersCards = new List<Character>();
         List<Character> ShadowsCards = new List<Character>();
@@ -208,9 +317,9 @@ public class GameLogic : MonoBehaviour
                 addBob = false;
                 break;
         }
-        HuntersCards = cardHunters.PrepareDecks<Character>();
-        ShadowsCards = cardShadows.PrepareDecks<Character>();
-        NeutralsCards = cardNeutrals.PrepareDecks<Character>();
+        HuntersCards = m_hunterCharacters.PrepareDecks<Character>();
+        ShadowsCards = m_shadowCharacters.PrepareDecks<Character>();
+        NeutralsCards = m_shadowCharacters.PrepareDecks<Character>();
 
         AddCharacterCards(characterCards, HuntersCards, NbHunters, addBob);
         AddCharacterCards(characterCards, ShadowsCards, NbShadows, addBob);
@@ -218,6 +327,10 @@ public class GameLogic : MonoBehaviour
         return characterCards;
     }
 
+    /// <summary>
+    /// Lancer de dé d'un personnage et déplacement en fonction du lancer de dés
+    /// </summary>
+    /// <returns>Itération terminée</returns>
     IEnumerator MoveCharacter()
     {
         int lancer1, lancer2, lancerTotal;
@@ -279,6 +392,10 @@ public class GameLogic : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Activation de l'effet des cartes Lieu en fonction de la position du personnage courant
+    /// </summary>
+    /// <returns>Itération terminée</returns>
     IEnumerator ActivateLocationPower()
     {
         switch (m_players[m_playerTurn].Position)
@@ -371,11 +488,18 @@ public class GameLogic : MonoBehaviour
             endTurn.gameObject.SetActive(true);
     }
     
+    /// <summary>
+    /// Fonction appelée par le bouton de pioche d'une carte Vision
+    /// </summary>
     public void MoveVisionCardLocation()
     {
         StartCoroutine(VisionCardLocation());
     }
 
+    /// <summary>
+    /// Pioche d'une carte vision
+    /// </summary>
+    /// <returns>Itération terminée</returns>
     IEnumerator VisionCardLocation()
     {
         visionCardsButton.gameObject.SetActive(false);
@@ -395,12 +519,19 @@ public class GameLogic : MonoBehaviour
         else
             endTurn.gameObject.SetActive(true);
     }
-
+    
+    /// <summary>
+    /// Fonction appelée par le bouton de pioche d'une carte Ténèbre
+    /// </summary>
     public void MoveDarknessCardLocation()
     {
         StartCoroutine(DarknessCardLocation());
     }
 
+    /// <summary>
+    /// Pioche d'une carte Ténèbre
+    /// </summary>
+    /// <returns>Itération terminée</returns>
     IEnumerator DarknessCardLocation()
     {
         visionCardsButton.gameObject.SetActive(false);
@@ -427,11 +558,18 @@ public class GameLogic : MonoBehaviour
             endTurn.gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// Fonction appelée par le bouton de pioche d'une carte Lumière
+    /// </summary>
     public void MoveLightCardLocation()
     {
         StartCoroutine(LightCardLocation());
     }
 
+    /// <summary>
+    /// Pioche d'une carte Lumière
+    /// </summary>
+    /// <returns>Itération terminée</returns>
     IEnumerator LightCardLocation()
     {
         visionCardsButton.gameObject.SetActive(false);
@@ -458,6 +596,20 @@ public class GameLogic : MonoBehaviour
             endTurn.gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// Activation de l'effet d'une carte Vision piochée
+    /// </summary>
+    /// <remarks>
+    /// Le déroulement suit le procédé suivant : le jeu va afficher au joueur
+    /// la liste des joueurs à qui il peut donner la carte vision (donc tous
+    /// les joueurs vivants sauf lui-même) et va attendre que le joueur
+    /// choisisse la personne à qui la donner. Dès lors, l'effet va s'activer
+    /// (ou non) automatiquement en fonction du type de la carte Vision.
+    /// Metamorphe, quant à lui, aura la possibilité de choisir
+    /// s'il souhaite déclencher la carte ou non
+    /// </remarks>
+    /// <param name="pickedCard">Carte Vision piochée</param>
+    /// <returns>Itération terminée</returns>
     IEnumerator VisionCardPower(VisionCard pickedCard)
     {
         Debug.Log("Message au joueur " + m_players[m_playerTurn].Name + " : ");
@@ -559,6 +711,11 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Activation de l'effet d'une carte Ténèbre piochée
+    /// </summary>
+    /// <param name="pickedCard">Carte Ténèbre piochée</param>
+    /// <returns>Itération terminée</returns>
     IEnumerator DarknessCardPower(DarknessCard pickedCard)
     {
         switch (pickedCard.darknessEffect)
@@ -647,6 +804,14 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Choix du joueur à qui infliger des Blessures
+    /// </summary>
+    /// <param name="isPuppet">Booléen représentant si l'effet est issu de la
+    /// carte Poupée sanguinaire ou non</param>
+    /// <param name="nbWoundsTaken">Nombre de Blessures à infliger</param>
+    /// <param name="nbWoundsSelfHealed">Nombre de Blessures éventuellement soignées</param>
+    /// <returns>Itération terminée</returns>
     IEnumerator TakingWoundsEffect(bool isPuppet, int nbWoundsTaken, int nbWoundsSelfHealed)
     {
         choiceDropdown.gameObject.SetActive(true);
@@ -707,6 +872,11 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Activation de l'effet d'une carte Lumière piochée
+    /// </summary>
+    /// <param name="pickedCard">Carte Lumière piochée</param>
+    /// <returns>Itération terminée</returns>
     IEnumerator LightCardPower(LightCard pickedCard)
     {
         CharacterTeam team = m_players[m_playerTurn].Team;
@@ -831,6 +1001,11 @@ public class GameLogic : MonoBehaviour
 		}
     }
 
+    /// <summary>
+    /// Vérifie si un personnage est un personnage avec 11 PDV ou moins
+    /// </summary>
+    /// <param name="characterName">Nom du personnage</param>
+    /// <returns>Booléen représentant le type du personnage</returns>
     bool CheckLowHPCharacters(string characterName)
     {
         return characterName.StartsWith("A") || characterName.StartsWith("B")
@@ -838,6 +1013,11 @@ public class GameLogic : MonoBehaviour
             || characterName.StartsWith("M");
     }
 
+    /// <summary>
+    /// Vérifie si un personnage est un personnage avec 12 PDV ou plus
+    /// </summary>
+    /// <param name="characterName">Nom du personnage</param>
+    /// <returns>Booléen représentant le type du personnage</returns>
     bool CheckHighHPCharacters(string characterName)
     {
         return characterName.StartsWith("D") || characterName.StartsWith("F")
@@ -845,6 +1025,9 @@ public class GameLogic : MonoBehaviour
             || characterName.StartsWith("V");
     }
 
+    /// <summary>
+    /// Fonction permettant de révéler son identité
+    /// </summary>
     public void RevealCard()
     {
         m_players[m_playerTurn].Revealed=true;
@@ -860,6 +1043,9 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Fonction appelée par le bouton permettant d'attaquer
+    /// </summary>
     public void Attack()
     {
         attackPlayer.gameObject.SetActive(false);
@@ -872,6 +1058,9 @@ public class GameLogic : MonoBehaviour
         StartCoroutine(AttackCorrespondingPlayer(m_playerTurn));
     }
 
+    /// <summary>
+    /// Permet à un joueur de finir son tour, pour pouvoir choisir le prochain joueur
+    /// </summary>
     public void ChooseNextPlayer()
     {
         visionCardsButton.gameObject.SetActive(false);
@@ -898,6 +1087,9 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Fonction permetant de lancer le tour d'un joueur
+    /// </summary>
     public void RollTheDices()
     {
         if(m_players[m_playerTurn].Character.characterType == CharacterType.Franklin
@@ -908,6 +1100,10 @@ public class GameLogic : MonoBehaviour
         StartCoroutine(PlayTurn());
     }
 
+    /// <summary>
+    /// Exécution du tour d'un joueur
+    /// </summary>
+    /// <returns>Itération terminée</returns>
     IEnumerator PlayTurn()
     {
         rollDicesButton.gameObject.SetActive(false);
@@ -925,6 +1121,10 @@ public class GameLogic : MonoBehaviour
         yield return StartCoroutine(ActivateLocationPower());
     }
 
+    /// <summary>
+    /// Test de victoire d'un joueur
+    /// </summary>
+    /// <param name="playerId">Id du joueur à tester</param>
     void HasWon(int playerId)
     {
         switch (m_players[playerId].Character.characterWinningCondition)
@@ -979,6 +1179,11 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Choix de la carte Lieu sur laquelle se rendre après avoir fait 7
+    /// à son lancer de dés
+    /// </summary>
+    /// <returns>Itération terminée</returns>
     IEnumerator ChooseLocation()
     {
         choiceDropdown.gameObject.SetActive(true);
@@ -1004,6 +1209,14 @@ public class GameLogic : MonoBehaviour
         validateButton.gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Récupération des joueurs se trouvant dans le même secteur qu'un
+    /// autre joueur
+    /// </summary>
+    /// <param name="playerId">Id du joueur</param>
+    /// <param name="hasRevolver">Booléen représentant la possesion du 
+    /// Revolver</param>
+    /// <returns>Liste des joueurs se trouvant dans le même secteur</returns>
     public List<Player> GetPlayersSameSector(int playerId, bool hasRevolver)
     {
         int positionIndex = gameBoard.GetIndexOfPosition(m_players[playerId].Position);
@@ -1027,6 +1240,11 @@ public class GameLogic : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Fonction du choix d'un joueur à attaquer
+    /// </summary>
+    /// <param name="playerAttackingId">Id du joueur attaquant</param>
+    /// <returns>Iteration terminée</returns>
     IEnumerator AttackCorrespondingPlayer(int playerAttackingId)
     {
         choiceDropdown.gameObject.SetActive(true);
@@ -1110,6 +1328,10 @@ public class GameLogic : MonoBehaviour
         endTurn.gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// Test de mort d'un joueur après avoir subi des Blessures
+    /// </summary>
+    /// <param name="playerId">Id du joueur à tester</param>
     void CheckPlayerDeath(int playerId)
     {
         if (m_players[playerId].IsDead())
@@ -1141,6 +1363,12 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Test de l'assassinat d'un joueur par un autre
+    /// </summary>
+    /// <param name="attackerId">Id du joueur attaquant</param>
+    /// <param name="playerId">Id du joueur attaqué</param>
+    /// <returns>Itération terminée</returns>
     IEnumerator CheckKilledPlayer(int attackerId, int playerId)
     {
         if (m_players[playerId].IsDead())
@@ -1173,6 +1401,11 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Choix du joueur à qui voler une carte équipement
+    /// </summary>
+    /// <param name="thiefId">Id du joueur voleur</param>
+    /// <returns>Itération terminée</returns>
     IEnumerator StealEquipmentCard(int thiefId)
     {
         choiceDropdown.gameObject.SetActive(true);
@@ -1236,6 +1469,12 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Vol d'une carte équipement à un joueur précis
+    /// </summary>
+    /// <param name="thiefId">Id du joueur voleur</param>
+    /// <param name="playerId">Id du joueur à qui voler une carte</param>
+    /// <returns></returns>
     IEnumerator StealEquipmentCard(int thiefId, int playerId)
     {
         validateButton.gameObject.SetActive(true);
@@ -1273,6 +1512,11 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Choix d'une carte équipement à donner et du joueur à qui la donner
+    /// </summary>
+    /// <param name="giverPlayerId">Id du joueur donneur</param>
+    /// <returns>Itération terminée</returns>
     IEnumerator GiveEquipmentCard (int giverPlayerId)
     {
         if (m_players[giverPlayerId].ListCard.Count == 0)
@@ -1340,6 +1584,9 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Utilisation du pouvoir d'un personnage
+    /// </summary>
     public void UsePower()
     {
         usePowerButton.gameObject.SetActive(false);
@@ -1347,6 +1594,11 @@ public class GameLogic : MonoBehaviour
         //PlayerCardPower(m_players[m_playerTurn]);
     }
 
+    /// <summary>
+    /// Activation de l'effet d'une carte Personnage
+    /// </summary>
+    /// <param name="player">Joueur utilisant l'effet de sa carte 
+    /// Personnage</param>
     void PlayerCardPower(Player player)
     {
         switch(player.Character.characterType)
@@ -1512,6 +1764,11 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Fonction d'attente de l'activation d'un événement Unity
+    /// </summary>
+    /// <param name="unityEvent">Événement Unity à attendre</param>
+    /// <returns>Itération terminée</returns>
     IEnumerator WaitUntilEvent(UnityEvent unityEvent) 
     {
         var trigger = false;

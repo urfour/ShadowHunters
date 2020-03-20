@@ -14,6 +14,9 @@ public enum PlayerNames
     Hotel
 }
 
+/// <summary>
+/// Définition d'un joueur dans une partie
+/// </summary>
 public class Player
 {
     private int id;                  // ordre du jeu d'un joueur

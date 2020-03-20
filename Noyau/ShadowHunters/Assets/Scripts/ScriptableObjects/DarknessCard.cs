@@ -17,6 +17,9 @@ public enum DarknessEffect
     Succube
 }
 
+/// <summary>
+/// Définition des cartes Vision
+/// </summary>
 [CreateAssetMenu(fileName = "DarknessCard", menuName = "Card/DarknessCard", order = 4)]
 public class DarknessCard : Card
 {
