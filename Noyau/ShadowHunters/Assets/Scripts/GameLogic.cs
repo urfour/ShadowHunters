@@ -1691,21 +1691,30 @@ public class GameLogic : MonoBehaviour
                 // On cherche l'index de la carte Lieu dans la liste des lieux
                 int indexEmi = gameBoard.GetIndexOfPosition(player.Position);
 
-                // Le déplacement se fait vers le lieu adjacent
-                if(indexEmi % 2 == 0)
-                    indexEmi++;
+                if(indexEmi == -1)
+                {
+                    StartCoroutine(MoveCharacter());
+                    StartCoroutine(ActivateLocationPower());
+                }
                 else
-                    indexEmi--;
+                {
+                    // Le déplacement se fait vers le lieu adjacent
+                    if(indexEmi % 2 == 0)
+                        indexEmi++;
+                    else
+                        indexEmi--;
 
-                // Nouvelle position du joueur
-                Position newPosition = gameBoard.GetAreaAt(indexEmi).area;
+                    // Nouvelle position du joueur
+                    Position newPosition = gameBoard.GetAreaAt(indexEmi).area;
 
-                // On effectue le déplacement
-                player.Position = newPosition;
-                gameBoard.setPositionOfAt(player.Id, newPosition);
+                    // On effectue le déplacement
+                    player.Position = newPosition;
+                    gameBoard.setPositionOfAt(player.Id, newPosition);
 
-                // Activation du pouvoir du lieu
-                ActivateLocationPower();
+                    // Activation du pouvoir du lieu
+                    StartCoroutine(ActivateLocationPower());
+                }
+                
                 break;
             case CharacterType.Metamorphe:
                 break;
