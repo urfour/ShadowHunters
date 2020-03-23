@@ -95,6 +95,10 @@ public class GameLogic : MonoBehaviour
         private set => m_nbNeutralsDeads = value;
     }
     /// <summary>
+    /// Carte vision donné au métamorphe
+    /// </summary>
+    private VisionCard pickedVisionCard;
+    /// <summary>
     /// Id du joueur dont c'est le tour
     /// </summary>
     private int m_playerTurn = -1;
@@ -652,20 +656,16 @@ public class GameLogic : MonoBehaviour
         Debug.Log("La carte Vision a été donnée au joueur " + choosenPlayer + ".");
         CharacterTeam team = m_players[playerId].Team;
 
-        // Le metamorphe peut mentir
-        bool metamorph = false;
         if(m_players[playerId].Character.characterType == CharacterType.Metamorphe)
         {
-            // TODO Le métamorphe choisit de mentir
-            if(UnityEngine.Random.Range(0, 1) == 0)
-                metamorph = true;
+            usePowerButton.gameObject.SetActive(true);
+            dontUsePowerButton.gameObject.SetActive(true);
+            pickedVisionCard = pickedCard;
         }
-        
         // Cartes applicables en fonction des équipes ?
-        if ((team == CharacterTeam.Shadow && !pickedCard.visionEffect.effectOnShadow)
+        else if ((team == CharacterTeam.Shadow && !pickedCard.visionEffect.effectOnShadow)
             || (team == CharacterTeam.Hunter && !pickedCard.visionEffect.effectOnHunter)
-            || (team == CharacterTeam.Neutral && !pickedCard.visionEffect.effectOnNeutral)
-            || (metamorph && pickedCard.visionEffect.effectOnShadow))
+            || (team == CharacterTeam.Neutral && !pickedCard.visionEffect.effectOnNeutral))
         {
             if (pickedCard.visionEffect.effectSupremeVision)
                 //TODO montrer la carte personnage
@@ -1627,7 +1627,73 @@ public class GameLogic : MonoBehaviour
         usePowerButton.gameObject.SetActive(false);
         dontUsePowerButton.gameObject.SetActive(false);
 
-        Debug.Log("Player : " + m_players[m_playerTurn].Id + " n'effectue pas son pouvoir");
+        Player p = m_players[m_playerTurn];
+
+        Debug.Log("Player : " + p.Id + " n'effectue pas son pouvoir");
+        switch(p.Character.characterType)
+        {
+            case CharacterType.Metamorphe:
+                if (!pickedVisionCard.visionEffect.effectOnShadow)
+                {
+                    if (pickedVisionCard.visionEffect.effectSupremeVision)
+                        //TODO montrer la carte personnage
+                        Debug.Log("C'est une carte Vision Suprême !");
+                    else
+                        Debug.Log("Rien ne se passe.");
+                }
+                else
+                {
+                    // Cas des cartes applicables en fonction des points de vie
+                    if (pickedVisionCard.visionEffect.effectOnLowHP && CheckLowHPCharacters(p.Character.characterName))
+                    {
+                        p.Wounded(1);
+                        CheckPlayerDeath(p.Id);
+                    }
+                    else if (pickedVisionCard.visionEffect.effectOnHighHP && CheckHighHPCharacters(p.Character.characterName))
+                    {
+                        p.Wounded(2);
+                        CheckPlayerDeath(p.Id);
+                    }
+
+                    // Cas des cartes infligeant des Blessures
+                    else if (pickedVisionCard.visionEffect.effectTakeWounds)
+                    {
+                        p.Wounded(pickedVisionCard.visionEffect.nbWounds);
+                        CheckPlayerDeath(p.Id);
+                    }
+                    // Cas des cartes soignant des Blessures
+                    else if (pickedVisionCard.visionEffect.effectHealingOneWound)
+                    {
+                        if (p.Wound == 0)
+                        {
+                            p.Wounded(1);
+                            CheckPlayerDeath(p.Id);
+                        }
+                        else
+                        {
+                            p.Healed(1);
+                            CheckPlayerDeath(p.Id);
+                        }
+                    }
+                    // Cas des cartes volant une carte équipement ou infligeant des Blessures
+                    else if (pickedVisionCard.visionEffect.effectGivingEquipementCard)
+                    {
+                        if (p.ListCard.Count == 0)
+                        {
+                            Debug.Log("Vous ne possédez pas de carte équipement.");
+                            p.Wounded(1);
+                        }
+                        else
+                        // TODO don d'une carte équipement
+                        {
+                            GiveEquipmentCard(p.Id);
+                        }
+                    }
+                    else
+                        Debug.Log("Rien ne se passe.");
+                }
+                break;
+        }
     }
 
     /// <summary>
@@ -1717,6 +1783,65 @@ public class GameLogic : MonoBehaviour
                 
                 break;
             case CharacterType.Metamorphe:
+                if (pickedVisionCard.visionEffect.effectOnShadow)
+                {
+                    if (pickedVisionCard.visionEffect.effectSupremeVision)
+                        //TODO montrer la carte personnage
+                        Debug.Log("C'est une carte Vision Suprême !");
+                    else
+                        Debug.Log("Rien ne se passe.");
+                }
+                else
+                {
+                    // Cas des cartes applicables en fonction des points de vie
+                    if (pickedVisionCard.visionEffect.effectOnLowHP && CheckLowHPCharacters(player.Character.characterName))
+                    {
+                        player.Wounded(1);
+                        CheckPlayerDeath(player.Id);
+                    }
+                    else if (pickedVisionCard.visionEffect.effectOnHighHP && CheckHighHPCharacters(player.Character.characterName))
+                    {
+                        player.Wounded(2);
+                        CheckPlayerDeath(player.Id);
+                    }
+
+                    // Cas des cartes infligeant des Blessures
+                    else if (pickedVisionCard.visionEffect.effectTakeWounds)
+                    {
+                        player.Wounded(pickedVisionCard.visionEffect.nbWounds);
+                        CheckPlayerDeath(player.Id);
+                    }
+                    // Cas des cartes soignant des Blessures
+                    else if (pickedVisionCard.visionEffect.effectHealingOneWound)
+                    {
+                        if (player.Wound == 0)
+                        {
+                            player.Wounded(1);
+                            CheckPlayerDeath(player.Id);
+                        }
+                        else
+                        {
+                            player.Healed(1);
+                            CheckPlayerDeath(player.Id);
+                        }
+                    }
+                    // Cas des cartes volant une carte équipement ou infligeant des Blessures
+                    else if (pickedVisionCard.visionEffect.effectGivingEquipementCard)
+                    {
+                        if (player.ListCard.Count == 0)
+                        {
+                            Debug.Log("Vous ne possédez pas de carte équipement.");
+                            player.Wounded(1);
+                        }
+                        else
+                        // TODO don d'une carte équipement
+                        {
+                            GiveEquipmentCard(player.Id);
+                        }
+                    }
+                    else
+                        Debug.Log("Rien ne se passe.");
+                }
                 break;
             case CharacterType.Bob:
                 // Il faut que le joueur se soit révélé et qu'il n'ait pas encore utilisé son pouvoir
