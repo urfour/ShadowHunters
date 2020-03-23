@@ -1024,7 +1024,6 @@ public class GameLogic : MonoBehaviour
 				
 			case LightEffect.Crucifix:
                 m_players[m_playerTurn].HasCrucifix=true;
-				Debug.Log("Implémentation en cours");
 				break;
 				
 			case LightEffect.EauBenite:
@@ -1092,6 +1091,7 @@ public class GameLogic : MonoBehaviour
                 break;
 
             case LightEffect.Toge:
+
 				m_players[m_playerTurn].HasToge=true;
 				m_players[m_playerTurn].MalusAttack++;
 				m_players[m_playerTurn].ReductionWounds = 1;
@@ -1586,7 +1586,27 @@ public class GameLogic : MonoBehaviour
             //     PlayerCardPower(m_players[m_playerTurn]);
             // }
             if (m_players[playerId].ListCard.Count != 0)
-                yield return StartCoroutine(StealEquipmentCard(attackerId, playerId));
+            {
+                if (m_players[attackerId].HasCrucifix) // vole tous les équipements
+                {
+                    for (int i = 0; i < m_players[playerId].ListCard.Count; i++)
+                    {
+                        m_players[attackerId].AddCard(m_players[playerId].ListCard[i]);
+                        if (m_players[playerId].ListCard[i].cardType == CardType.Darkness
+                            && m_players[playerId].ListCard[i].isEquipement)
+                            yield return StartCoroutine(DarknessCardPower(m_players[attackerId].ListCard[m_players[attackerId].ListCard.Count - 1] as DarknessCard));
+                        else if (m_players[playerId].ListCard[i].cardType == CardType.Light
+                            && m_players[playerId].ListCard[i].isEquipement)
+                            yield return StartCoroutine(LightCardPower(m_players[attackerId].ListCard[m_players[attackerId].ListCard.Count - 1] as LightCard));
+
+                        m_players[playerId].RemoveCard(i);
+                        Debug.Log("La carte " + m_players[attackerId].ListCard[m_players[attackerId].ListCard.Count - 1] + " a été volée au joueur "
+                            + m_players[playerId].Name + " par le joueur " + m_players[attackerId].Name + " !");
+                    }
+                }
+                else
+                    yield return StartCoroutine(StealEquipmentCard(attackerId, playerId));
+            }
         }
     }
 
