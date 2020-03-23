@@ -905,9 +905,9 @@ public class GameLogic : MonoBehaviour
                 break;
 				
 			case LightEffect.AngeGardien: // A implémenter comme un équipement qui se discard au début du tour
-			
-				Debug.Log("Implémentation en cours");
-				break;
+
+                m_players[m_playerTurn].HasGuardian = true;
+                break;
 				
 			case LightEffect.Supreme:
                 Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
@@ -1094,6 +1094,13 @@ public class GameLogic : MonoBehaviour
         else
             m_playerTurn = (m_playerTurn + 1) % m_nbPlayers;
         Debug.Log("C'est au joueur " + m_players[m_playerTurn].Name + " de jouer.");
+
+        if (m_players[m_playerTurn].HasGuardian)
+        {
+            m_players[m_playerTurn].HasGuardian = false;
+            Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " n'est plus affecté par l'Ange Gardien !");
+        }
+
         rollDicesButton.gameObject.SetActive(true);
         if(m_players[m_playerTurn].Revealed==false)
         {

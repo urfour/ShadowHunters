@@ -39,6 +39,7 @@ public class Player
     private bool hasCrucifix;        // le joueur possède-t-il le crucifix ?
     private bool hasSpear;           // le joueur possède-t-il la lance ?
     private bool hasToge;            // le joueur possède-t-il la toge ?
+    private bool hasGuardian;         // le joueur est-il sous l'effet de l'ange gardien ?
     private bool isTurn;             // est-ce le tour du joueur ?
     private bool hasWon;             // le joueur a-t-il gagné ?
     private Position position;       // position du joueur
@@ -66,6 +67,7 @@ public class Player
         this.hasCrucifix = false;
         this.hasSpear = false;
         this.hasToge = false;
+        this.hasGuardian = false;
         this.isTurn = false;
         this.hasWon = false;
         this.position = Position.None;
@@ -196,6 +198,11 @@ public class Player
         get{return hasToge;}
         set{hasToge=value;}
     }
+    public bool HasGuardian
+    {
+        get { return hasGuardian; }
+        set { hasGuardian = value; }
+    }
 
     public bool HasWon
     {
@@ -205,7 +212,7 @@ public class Player
 
     public void Wounded(int damage)
     {
-        if (damage > 0)
+        if (damage > 0 && !HasGuardian)
         {
             string blessure = " Blessure";
             
@@ -216,6 +223,11 @@ public class Player
             if (damage > 1)
                 blessure += "s";
             Debug.Log("Le joueur " + id + " subit " + damage + blessure + " !");
+        }
+
+        if (HasGuardian)
+        {
+            Debug.Log("Le joueur " + id + " est protégé par l'Ange Gardien !");
         }
 
         if (this.IsDead())
