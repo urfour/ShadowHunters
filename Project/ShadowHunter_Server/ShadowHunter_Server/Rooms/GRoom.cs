@@ -50,7 +50,7 @@ namespace ShadowHunter_Server.Rooms
                     GAccount.Accounts[cre.GetSender()].Login;
                 newRoom.Data.Host= GAccount.Accounts[cre.GetSender()].Login;
                 // prévenir le joueur qu'il a été ajouté à la salle
-                cre.GetSender().Send(new JoinRoomEvent() { RoomData = newRoom.Data });
+                cre.GetSender().Send(new RoomJoinedEvent() { RoomData = newRoom.Data });
                 // broadcast de RoomDataEvent
                 EventView.Manager.Emit(new RoomDataEvent() { RoomData = newRoom.Data });
 
@@ -64,7 +64,12 @@ namespace ShadowHunter_Server.Rooms
             if (e is JoinRoomEvent jre)
             {
                 // on ne peut rejoindre une salle que s'il reste de la place
+                if (jre.RoomData.CurrentNbPlayer < jre.RoomData.MaxNbPlayer)
+                {
+                    //jre.GetSender().Send()
+                }
 
+                // on 
             }
         }
         public static void Init()

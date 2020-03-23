@@ -8,5 +8,6 @@ namespace ServerInterface.RoomEvents.event_out
 {
     class JoinRoomEvent : RoomEvent
     {
+        public string password;
     }
 }

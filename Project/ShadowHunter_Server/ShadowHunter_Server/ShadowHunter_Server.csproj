@@ -83,6 +83,7 @@
     <Compile Include="ServerInterface\RoomEvents\RoomEvent.cs" />
     <Compile Include="Accounts\GAccount.cs" />
     <Compile Include="Rooms\GRoom.cs" />
+    <Compile Include="ServerInterface\RoomEvents\event_in\RoomFailureEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ServerInterface\" />
