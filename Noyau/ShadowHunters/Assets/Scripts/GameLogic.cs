@@ -1086,12 +1086,12 @@ public class GameLogic : MonoBehaviour
                 m_players[playerChoosenId2].SetWound(7);
 				break;
 				
-			case LightEffect.Savoir: // A implémenter comme un équipement qui se discard au début du tour ou à la mort
-			
-				Debug.Log("Implémentation en cours");
-				break;
-			
-			case LightEffect.Toge:
+			case LightEffect.Savoir:
+
+                m_players[m_playerTurn].HasAncestral = true;
+                break;
+
+            case LightEffect.Toge:
 				m_players[m_playerTurn].HasToge=true;
 				m_players[m_playerTurn].MalusAttack++;
 				m_players[m_playerTurn].ReductionWounds = 1;
@@ -1174,6 +1174,11 @@ public class GameLogic : MonoBehaviour
 
         if (m_playerTurn == -1)
             m_playerTurn = UnityEngine.Random.Range(0, m_nbPlayers - 1);
+        else if (m_players[m_playerTurn].HasAncestral) // si le joueur a utilisé le savoir ancestral, le joueur suivant reste lui
+        {
+            Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " rejoue grâce au Savoir Ancestral !");
+            m_players[m_playerTurn].HasAncestral = false;
+        }
         else
             m_playerTurn = (m_playerTurn + 1) % m_nbPlayers;
         Debug.Log("C'est au joueur " + m_players[m_playerTurn].Name + " de jouer.");

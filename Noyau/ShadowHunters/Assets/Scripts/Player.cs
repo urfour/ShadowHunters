@@ -39,7 +39,8 @@ public class Player
     private bool hasCrucifix;        // le joueur possède-t-il le crucifix ?
     private bool hasSpear;           // le joueur possède-t-il la lance ?
     private bool hasToge;            // le joueur possède-t-il la toge ?
-    private bool hasGuardian;         // le joueur est-il sous l'effet de l'ange gardien ?
+    private bool hasGuardian;        // le joueur est-il sous l'effet de l'ange gardien ?
+    private bool hasAncestral;       // le joueur est-il sous l'effet du savoir ancestral ?
     private bool isTurn;             // est-ce le tour du joueur ?
     private bool hasWon;             // le joueur a-t-il gagné ?
     private Position position;       // position du joueur
@@ -68,6 +69,7 @@ public class Player
         this.hasSpear = false;
         this.hasToge = false;
         this.hasGuardian = false;
+        this.hasAncestral = false;
         this.isTurn = false;
         this.hasWon = false;
         this.position = Position.None;
@@ -202,6 +204,11 @@ public class Player
     {
         get { return hasGuardian; }
         set { hasGuardian = value; }
+    }
+    public bool HasAncestral
+    {
+        get { return hasAncestral; }
+        set { hasAncestral = value; }
     }
 
     public bool HasWon
