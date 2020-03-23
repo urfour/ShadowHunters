@@ -352,7 +352,7 @@ public class GameLogic : MonoBehaviour
     /// <returns>Itération terminée</returns>
     IEnumerator MoveCharacter()
     {
-        int lancer1, lancer2, lancerTotal;
+        int lancer1 = 0, lancer2 = 0, lancerTotal = 0;
         Position position = Position.None;
 
         /* POUVOIR EMI SANS BOUTON 
@@ -367,9 +367,53 @@ public class GameLogic : MonoBehaviour
 
         while (position == Position.None)
         {
-            lancer1 = UnityEngine.Random.Range(1, 6);
-            lancer2 = UnityEngine.Random.Range(1, 4);
-            lancerTotal = lancer1 + lancer2;
+            if (m_players[m_playerTurn].HasCompass)
+            {
+                int lancer01 = UnityEngine.Random.Range(1, 6);
+                int lancer02 = UnityEngine.Random.Range(1, 4);
+                int lancerTotal0 = lancer01 + lancer02;
+
+                int lancer11 = UnityEngine.Random.Range(1, 6);
+                int lancer12 = UnityEngine.Random.Range(1, 4);
+                int lancerTotal1 = lancer11 + lancer12;
+
+                choiceDropdown.gameObject.SetActive(true);
+                validateButton.gameObject.SetActive(true);
+                List<string> rolls = new List<string>();
+
+                rolls.Add(lancerTotal0.ToString());
+                rolls.Add(lancerTotal1.ToString());
+
+                Debug.Log("Quel jet préférez-vous effectuer ?");
+                choiceDropdown.AddOptions(rolls);
+                yield return WaitUntilEvent(validateButton.onClick);
+
+                string rollChoosen = choiceDropdown.captionText.text;
+                choiceDropdown.ClearOptions();
+                choiceDropdown.gameObject.SetActive(false);
+                validateButton.gameObject.SetActive(false);
+
+                lancerTotal = int.Parse(rollChoosen);
+
+                if (lancerTotal == lancerTotal0)
+                {
+                    lancer1 = lancer01;
+                    lancer2 = lancer02;
+                }
+                else if (lancerTotal == lancerTotal1)
+                {
+                    lancer1 = lancer11;
+                    lancer2 = lancer12;
+                }
+
+            }
+            else
+            {
+                lancer1 = UnityEngine.Random.Range(1, 6);
+                lancer2 = UnityEngine.Random.Range(1, 4);
+                lancerTotal = lancer1 + lancer2;
+            }
+
             Debug.Log("Le lancer de dés donne " + lancer1 + " et " + lancer2 + " (" + lancerTotal + ").");
             switch (lancerTotal)
             {
@@ -972,7 +1016,6 @@ public class GameLogic : MonoBehaviour
 			
 			case LightEffect.Boussole:
 				m_players[m_playerTurn].HasCompass=true;
-				Debug.Log("Implémentation en cours");
 				break;
 			
 			case LightEffect.Broche:
