@@ -1316,6 +1316,8 @@ public class GameLogic : MonoBehaviour
                     for (int i = 0 ; i < m_nbPlayers ; i++)
                         if (m_players[i].Name.Equals(playerAttacked))
                             playerAttackedId = i;
+                    
+                    m_playerAttackedId = playerAttackedId;
 
                     Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[playerAttackedId].Name + ".");
 
@@ -1338,6 +1340,77 @@ public class GameLogic : MonoBehaviour
             }
         }
         endTurn.gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// Fonction du choix d'un joueur à attaquer
+    /// </summary>
+    /// <param name="playerAttackingId">Id du joueur attaquant</param>
+    /// <param name="targetId">Id du joueur attaqué</param>
+    /// <returns>Iteration terminée</returns>
+    IEnumerator AttackCorrespondingPlayer(int playerAttackingId, int targetId)
+    {
+        List<Player> players = GetPlayersSameSector(playerAttackingId, m_players[playerAttackingId].HasRevolver);
+        if (players.Count == 0)
+        {
+            Debug.Log("Vous ne pouvez attaquer aucun joueur.");
+        }
+        else
+        {
+            m_playerAttackedId = targetId;
+
+            int lancer1 = UnityEngine.Random.Range(1, 6);
+            int lancer2 = UnityEngine.Random.Range(1, 4);
+            int lancerTotal = (m_players[playerAttackingId].HasSaber==true)? lancer2 : Mathf.Abs(lancer1 - lancer2);
+            if (lancerTotal == 0)
+            {
+                Debug.Log("Le lancer vaut 0, vous n'attaquez pas.");
+            }
+            else
+            {
+                if (m_players[playerAttackingId].HasGatling)
+                {
+                        if((m_players[playerAttackingId].Character.characterType == CharacterType.Bob) && lancerTotal >= 2 )
+                            PlayerCardPower(m_players[playerAttackingId]);
+                        else
+                        {
+                            m_players[targetId].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack);
+                            
+                            CheckPlayerDeath(targetId);
+                            
+                            if(m_players[targetId].Character.characterType == CharacterType.LoupGarou)
+                                PlayerCardPower(m_players[targetId]);
+                            
+                            if(m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
+                                && lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack > 0)
+                                PlayerCardPower(m_players[targetId]); 
+                        }    
+                }
+                else
+                {
+
+                    Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[targetId].Name + ".");
+
+                    if(m_players[playerAttackingId].Character.characterType == CharacterType.Bob && lancerTotal >= 2 )
+                        PlayerCardPower(m_players[playerAttackingId]);
+                    else
+                    {
+                        m_players[targetId].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack);
+                        
+                        if(m_players[targetId].Character.characterType == CharacterType.LoupGarou)
+                            PlayerCardPower(m_players[targetId]);
+
+                        if(m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
+                            && lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack > 0)
+                            PlayerCardPower(m_players[targetId]);  
+
+                        CheckPlayerDeath(targetId);
+                    }    
+                }
+            }
+        }
+        endTurn.gameObject.SetActive(true);
+        yield return null;
     }
 
     /// <summary>
@@ -1753,7 +1826,7 @@ public class GameLogic : MonoBehaviour
             case CharacterType.LoupGarou:
                 if(player.Revealed)
                 {
-                    //AttackCorrespondingPlayer();
+                    StartCoroutine(AttackCorrespondingPlayer(player.Id, m_playerTurn));
                 }
                 break;
             case CharacterType.Vampire:
@@ -1763,7 +1836,11 @@ public class GameLogic : MonoBehaviour
                 }
                 break;
             case CharacterType.Charles:
-                
+                if(player.Revealed)
+                {
+                    player.Wounded(2);
+                    StartCoroutine(AttackCorrespondingPlayer(player.Id, m_playerAttackedId));
+                }
                 break;
             case CharacterType.Daniel:
                 // Il faut que le joueur se soit révélé et qu'il n'ait pas encore utilisé son pouvoir
