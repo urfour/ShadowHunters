@@ -99,6 +99,10 @@ public class GameLogic : MonoBehaviour
     /// </summary>
     private int m_playerTurn = -1;
     /// <summary>
+    /// Id du joueur récemment attaqué
+    private int m_playerAttackedId = -1;
+    /// </summary>
+    /// <summary>
     /// Propriété d'accès à l'id du joueur dont c'est le tour
     /// </summary>
     public int PlayerTurn
