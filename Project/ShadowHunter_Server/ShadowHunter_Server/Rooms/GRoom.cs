@@ -54,22 +54,48 @@ namespace ShadowHunter_Server.Rooms
                 // broadcast de RoomDataEvent
                 EventView.Manager.Emit(new RoomDataEvent() { RoomData = newRoom.Data });
 
-
-                /* public int Code { get; set; }
-            public int CurrentNbPlayer { get; set; } = 0;
-            public bool IsSuppressed { get; set; } = false;
-            public bool IsLaunched { get; set; } = false; */
             }
 
             if (e is JoinRoomEvent jre)
             {
+
                 // on ne peut rejoindre une salle que s'il reste de la place
                 if (jre.RoomData.CurrentNbPlayer < jre.RoomData.MaxNbPlayer)
                 {
-                    //jre.GetSender().Send()
+                    // vérification du mot de passe
+                    if ((Rooms[jre.code].Data.HasPassword == false) ||
+                            ((Rooms[jre.code].Data.HasPassword == true) && 
+                                (String.Compare(jre.password, Rooms[jre.code].Data.Password) == 0)))
+                    {
+                        // on ajoute le joueur à la salle et on actualise les infos
+                        jre.GetSender().JoinRoom(Rooms[jre.code]);
+                        Rooms[jre.code].Data.CurrentNbPlayer++;
+                        Rooms[jre.code].Data.Players[Rooms[jre.code].Data.CurrentNbPlayer] =
+                            GAccount.Accounts[jre.GetSender()].Login;
+                        // prévenir le joueur qu'il a été ajouté à la salle
+                        jre.GetSender().Send(new RoomJoinedEvent() 
+                            { RoomData = Rooms[jre.code].Data });
+                        // broadcast des nouvelles infos de la salle
+                        EventView.Manager.Emit(new RoomDataEvent() 
+                            { RoomData = Rooms[jre.code].Data });
+                    }
+
+                    // si le mot de passe est faux
+                    else
+                    {
+                        jre.GetSender().Send(new RoomFailureEvent()
+                        { Msg = "room.wrong_password" });
+                    }
+
                 }
 
-                // on 
+                // si la salle est pleine
+                else
+                {
+                    jre.GetSender().Send(new RoomFailureEvent()
+                        { Msg = "room.full" });
+                }
+
             }
         }
         public static void Init()
