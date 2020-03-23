@@ -20,6 +20,8 @@ namespace ShadowHunter_Server.Rooms
         public Dictionary<int, Room> Rooms { get; private set; } 
             = new Dictionary<int, Room>();
         public Random rand = new Random();
+
+        // on instancie ici le gestionnaire de comptes pour y avoir accès
         GAccount GAccount { get; set; }
 
         public void OnEvent(RoomEvent e, string[] tags = null)
@@ -47,9 +49,11 @@ namespace ShadowHunter_Server.Rooms
                 newRoom.Data.Players[0] = 
                     GAccount.Accounts[cre.GetSender()].Login;
                 newRoom.Data.Host= GAccount.Accounts[cre.GetSender()].Login;
-                // TODO : prévenir le joueur qu'il a été ajouté à la salle,
-                // et broadcast de RoomDataEvent aux joueurs qui ne sont dans
-                // aucune salle
+                // prévenir le joueur qu'il a été ajouté à la salle
+                cre.GetSender().Send(new JoinRoomEvent() { RoomData = newRoom.Data });
+                // broadcast de RoomDataEvent
+                EventView.Manager.Emit(new RoomDataEvent() { RoomData = newRoom.Data });
+
 
                 /* public int Code { get; set; }
             public int CurrentNbPlayer { get; set; } = 0;
@@ -57,53 +61,11 @@ namespace ShadowHunter_Server.Rooms
             public bool IsLaunched { get; set; } = false; */
             }
 
+            if (e is JoinRoomEvent jre)
+            {
+                // on ne peut rejoindre une salle que s'il reste de la place
 
-            /*
-            if (e is WaitingRoomListEvent)
-            {
-                foreach (RoomData r in ((WaitingRoomListEvent)e).Rooms)
-                {
-                    if (r.IsSuppressed && Rooms.ContainsKey(r.Code))
-                    {
-                        // todo
-                    }
-                    else if (Rooms.ContainsKey(r.Code))
-                    {
-                        Rooms[r.Code].ModifData(r);
-                    }
-                    else
-                    {
-                        Rooms.Add(r.Code, new Room(r));
-                    }
-                }
             }
-            */
-            /*if (e is RoomDataEvent rde)
-            {
-                if (rde.RoomData.IsSuppressed)
-                {
-                    // todo
-                }
-                if (JoinedRoom.Code.Value == rde.RoomData.Code)
-                {
-                    JoinedRoom.ModifData(rde.RoomData);
-                }
-                if (Rooms.ContainsKey(rde.RoomData.Code))
-                {
-                    Rooms[rde.RoomData.Code].ModifData(rde.RoomData);
-                }
-                else
-                {
-                    Rooms.Add(rde.RoomData.Code, new Room(rde.RoomData));
-                }
-            }
-            else if (e is RoomCreatedEvent rce)
-            {
-                // TODO gestion serveur
-                RoomData r = rce.RoomData;
-                JoinedRoom.ModifData(r);
-                Rooms.Add(r.Code, JoinedRoom);
-            }*/
         }
         public static void Init()
         {

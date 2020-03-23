@@ -14,7 +14,8 @@ namespace ShadowHunter_Server.Accounts
 
         public static GAccount Instance { get; private set; } = null;
 
-        public Dictionary<Client, Account> Accounts { get; private set; } = new Dictionary<Client, Account>();
+        public Dictionary<Client, Account> Accounts { get; private set; } = 
+            new Dictionary<Client, Account>();
 
 
         // Régit le comportement du serveur en fonction de l'évènement
