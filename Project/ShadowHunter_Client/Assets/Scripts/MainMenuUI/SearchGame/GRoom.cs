@@ -42,7 +42,14 @@ namespace Assets.Scripts.MainMenuUI.SearchGame
                 // TODO gestion serveur
                 RoomData r = rje.RoomData;
                 JoinedRoom.ModifData(r);
-                Rooms.Add(r.Code, JoinedRoom);
+                if (Rooms.ContainsKey(r.Code))
+                {
+                    Rooms[r.Code].ModifData(r);
+                }
+                else
+                {
+                    Rooms.Add(r.Code, new Room(r));
+                }
             }
         }
 

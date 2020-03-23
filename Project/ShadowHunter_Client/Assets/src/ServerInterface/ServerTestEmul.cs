@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ServerInterface.AuthEvents;
+using ServerInterface.RoomEvents;
 
 namespace ServerInterface
 {
@@ -13,6 +14,7 @@ namespace ServerInterface
         public static void Init()
         {
             EventView.Manager.AddListener(new AuthTestEmul());
+            EventView.Manager.AddListener(new RoomTestEmul());
         }
     }
 }

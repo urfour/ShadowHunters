@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ServerInterface.RoomEvents
 {
-    class RoomTextEmul : IListener<RoomEvent>
+    class RoomTestEmul : IListener<RoomEvent>
     {
 
         Dictionary<int, RoomData> Rooms { get; set; } = new Dictionary<int, RoomData>();
@@ -32,6 +32,7 @@ namespace ServerInterface.RoomEvents
                 r.Players[0] = GAccount.Instance.LoggedAccount.Login;
                 r.Host = GAccount.Instance.LoggedAccount.Login;
                 Rooms.Add(code, r);
+                EventView.Manager.Emit(new RoomDataEvent() { RoomData = r });
                 EventView.Manager.Emit(new RoomJoinedEvent() { RoomData = r });
             }
         }

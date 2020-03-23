@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using EventSystem;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,6 +10,7 @@ public class MenuSelection : MonoBehaviour {
     
     public RectTransform Content;
     public MenuSelectionManager manager;
+    public ListenableObject OnClicked = new ListenableObject();
 
     public void Start()
     {
@@ -26,5 +28,6 @@ public class MenuSelection : MonoBehaviour {
         //Text.r;
         //Button b;
         manager.SetSelected(this);
+        OnClicked.Notify();
     }
 }

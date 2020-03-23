@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.MainMenuUI.SearchGame
 {
-    class Room
+    public class Room
     {
-        public Setting<int> Code = new Setting<int>();
-        public Setting<string> Name = new Setting<string>();
-        public Setting<int> CurrentNbPlayer = new Setting<int>();
-        public Setting<int> MaxNbPlayer = new Setting<int>();
-        public Setting<bool> HasPassword = new Setting<bool>();
+        public Setting<int> Code = new Setting<int>(0);
+        public Setting<string> Name = new Setting<string>("");
+        public Setting<int> CurrentNbPlayer = new Setting<int>(0);
+        public Setting<int> MaxNbPlayer = new Setting<int>(0);
+        public Setting<bool> HasPassword = new Setting<bool>(false);
 
         public Setting<bool> IsActive = new Setting<bool>(false);
 
