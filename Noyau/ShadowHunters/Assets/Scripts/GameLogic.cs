@@ -186,6 +186,8 @@ public class GameLogic : MonoBehaviour
     public Toggle woundsForestToggle;
     public Toggle healForestToggle;
     public Button usePowerButton;
+    public Button dontUsePowerButton;
+    
 
     /// <summary>
     /// Fonction appelée dès l'instanciation du GameObject auquel est lié le script,
@@ -203,6 +205,7 @@ public class GameLogic : MonoBehaviour
         choiceDropdown.gameObject.SetActive(false);
         validateButton.gameObject.SetActive(false);
         usePowerButton.gameObject.SetActive(false);
+        dontUsePowerButton.gameObject.SetActive(false);
         woundsForestToggle.gameObject.gameObject.SetActive(false);
         healForestToggle.gameObject.gameObject.SetActive(false);
         ChooseNextPlayer();
@@ -1049,7 +1052,12 @@ public class GameLogic : MonoBehaviour
         revealCardButton.gameObject.SetActive(false);
 
         // Si le joueur est Allie, il peut utiliser son pouvoir à tout moment
-        if(m_players[m_playerTurn].Character.characterType == CharacterType.Allie)
+        // Si le joueur est Emi, Franklin ou Georges et qu'il est au début de son tour, il peut utiliser son pouvoir
+        if(m_players[m_playerTurn].Character.characterType == CharacterType.Allie 
+            || (rollDicesButton.gameObject.activeInHierarchy 
+                && (m_players[m_playerTurn].Character.characterType == CharacterType.Emi
+                    || m_players[m_playerTurn].Character.characterType == CharacterType.Franklin 
+                    || m_players[m_playerTurn].Character.characterType == CharacterType.Georges)))
         {
             usePowerButton.gameObject.SetActive(true);
         }
@@ -1104,8 +1112,9 @@ public class GameLogic : MonoBehaviour
     /// </summary>
     public void RollTheDices()
     {
-        if(m_players[m_playerTurn].Character.characterType == CharacterType.Franklin
-                || m_players[m_playerTurn].Character.characterType == CharacterType.Georges)
+        if(m_players[m_playerTurn].Character.characterType == CharacterType.Emi
+            || m_players[m_playerTurn].Character.characterType == CharacterType.Franklin
+            || m_players[m_playerTurn].Character.characterType == CharacterType.Georges)
         {
             usePowerButton.gameObject.SetActive(false);
         }
@@ -1602,8 +1611,23 @@ public class GameLogic : MonoBehaviour
     public void UsePower()
     {
         usePowerButton.gameObject.SetActive(false);
+        dontUsePowerButton.gameObject.SetActive(false);
+
         Debug.Log("Player : " + m_players[m_playerTurn].Id + " effectue son pouvoir");
-        //PlayerCardPower(m_players[m_playerTurn]);
+
+        // A changer avec le personnage du joueur quand le réseau sera fait
+        PlayerCardPower(m_players[m_playerTurn]);
+    }
+
+    /// <summary>
+    /// Non utilisation du pouvoir d'un personnage
+    /// </summary>
+    public void DontUsePower()
+    {
+        usePowerButton.gameObject.SetActive(false);
+        dontUsePowerButton.gameObject.SetActive(false);
+
+        Debug.Log("Player : " + m_players[m_playerTurn].Id + " n'effectue pas son pouvoir");
     }
 
     /// <summary>
