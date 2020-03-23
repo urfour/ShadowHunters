@@ -18,5 +18,5 @@ MonoBehaviour:
   description: "Si vous \xEAtes un Shadow autre que M\xE9tamorphe, vous devez r\xE9v\xE9ler
     votre identit\xE9."
   sprite: {fileID: 21300000, guid: a7fac74ba5740344eb02f684d717e568, type: 3}
-  isHidden: 1
-  lightEffect: 0
+  isHidden: 0
+  lightEffect: 10

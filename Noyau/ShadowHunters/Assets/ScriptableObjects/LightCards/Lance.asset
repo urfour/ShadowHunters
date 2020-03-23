@@ -19,5 +19,5 @@ MonoBehaviour:
     chaque fois qu'une de vos attaques inflige des Blessures, vous infligez 2 Blessures
     suppl\xE9mentaires."
   sprite: {fileID: 21300000, guid: fe47c71209e215744b3d034e2fd76772, type: 3}
-  isHidden: 1
-  lightEffect: 0
+  isHidden: 0
+  lightEffect: 9

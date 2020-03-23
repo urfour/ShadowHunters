@@ -18,5 +18,5 @@ MonoBehaviour:
   description: "Si vous attaquez et tuez un autre personnage, vous r\xE9cup\xE9rez
     toutes ses cartes \xE9quipement."
   sprite: {fileID: 21300000, guid: 2a550cd639ab73643ae7dbb9d36cda3b, type: 3}
-  isHidden: 1
-  lightEffect: 0
+  isHidden: 0
+  lightEffect: 6

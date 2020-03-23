@@ -19,5 +19,5 @@ MonoBehaviour:
     Si vous le faites, ou si vous \xEAtes d\xE9j\xE0 r\xE9v\xE9l\xE9, vous soignez
     toutes vos Blessures."
   sprite: {fileID: 21300000, guid: 134113fa7358fb14b84659f2c6c06673, type: 3}
-  isHidden: 1
-  lightEffect: 0
+  isHidden: 0
+  lightEffect: 13

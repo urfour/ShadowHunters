@@ -19,5 +19,5 @@ MonoBehaviour:
     de r\xE9v\xE9ler (ou avez d\xE9j\xE0 r\xE9v\xE9l\xE9) votre identit\xE9, vous
     soignez toutes vos Blessures."
   sprite: {fileID: 21300000, guid: 1d3251ad89295bc40a89a3cc05e24b51, type: 3}
-  isHidden: 1
-  lightEffect: 0
+  isHidden: 0
+  lightEffect: 5
