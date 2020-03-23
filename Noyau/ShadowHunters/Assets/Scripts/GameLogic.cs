@@ -904,7 +904,7 @@ public class GameLogic : MonoBehaviour
                 m_players[m_playerTurn].HasAmulet=true;
                 break;
 				
-			case LightEffect.AngeGardien: // A implémenter comme un équipement qui se discard au début du tour
+			case LightEffect.AngeGardien:
 
                 m_players[m_playerTurn].HasGuardian = true;
                 break;
@@ -938,11 +938,30 @@ public class GameLogic : MonoBehaviour
                 break;
 			
 			case LightEffect.Benediction:
-			
-				// TODO choix de la personne à heal (pas soi même)
-                int playerChoosenId = m_playerTurn;
-                while (playerChoosenId == m_playerTurn)
-                    playerChoosenId = UnityEngine.Random.Range(0, m_nbPlayers - 1);
+
+                choiceDropdown.gameObject.SetActive(true);
+                validateButton.gameObject.SetActive(true);
+                List<string> players = new List<string>();
+                foreach (Player player in m_players)
+                {
+                    if (!player.IsDead() && player.Id != m_playerTurn)
+                    {
+                        players.Add(player.Name);
+                    }
+                }
+                Debug.Log("Qui souhaitez-vous soigner ?");
+                choiceDropdown.AddOptions(players);
+                yield return WaitUntilEvent(validateButton.onClick);
+
+                string playerChoosen = choiceDropdown.captionText.text;
+                choiceDropdown.ClearOptions();
+                choiceDropdown.gameObject.SetActive(false);
+                validateButton.gameObject.SetActive(false);
+                int playerChoosenId = -1;
+                foreach (Player player in m_players)
+                    if (player.Name.Equals(playerChoosen))
+                        playerChoosenId = player.Id;
+
                 Debug.Log("Vous choisissez de soigner le joueur " + m_players[playerChoosenId].Name + ".");
                 
                 int heal = UnityEngine.Random.Range(1, 6);
@@ -997,10 +1016,31 @@ public class GameLogic : MonoBehaviour
 				break;
 				
 			case LightEffect.PremiersSecours:
-				
-				// TODO : méthode pour choisir le joueur à mettre à 7 Blessures
-				playerChoosenId = UnityEngine.Random.Range(0, m_nbPlayers);
-				m_players[playerChoosenId].SetWound(7);
+
+                choiceDropdown.gameObject.SetActive(true);
+                validateButton.gameObject.SetActive(true);
+                List<string> players2 = new List<string>();
+                foreach (Player player in m_players)
+                {
+                    if (!player.IsDead())
+                    {
+                        players2.Add(player.Name);
+                    }
+                }
+                Debug.Log("Qui souhaitez-vous placer à exactement 7 Blessures ?");
+                choiceDropdown.AddOptions(players2);
+                yield return WaitUntilEvent(validateButton.onClick);
+
+                string playerChoosen2 = choiceDropdown.captionText.text;
+                choiceDropdown.ClearOptions();
+                choiceDropdown.gameObject.SetActive(false);
+                validateButton.gameObject.SetActive(false);
+                int playerChoosenId2 = -1;
+                foreach (Player player in m_players)
+                    if (player.Name.Equals(playerChoosen2))
+                        playerChoosenId2 = player.Id;
+
+                m_players[playerChoosenId2].SetWound(7);
 				break;
 				
 			case LightEffect.Savoir: // A implémenter comme un équipement qui se discard au début du tour ou à la mort
