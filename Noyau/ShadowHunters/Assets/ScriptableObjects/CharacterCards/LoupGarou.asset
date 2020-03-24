@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c8f3e5552ff92844b53cedaa846b7b4, type: 3}
+  m_Name: LoupGarou
+  m_EditorClassIdentifier: 
+  characterName: Loup-Garou
+  team: 0
+  characterHP: 14
+  characterType: 7
+  characterWinningCondition: 5
+  sprite: {fileID: 21300000, guid: 79e6aec26eca86d4483bf59fad4b63e9, type: 3}

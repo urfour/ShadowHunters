@@ -15,6 +15,6 @@ MonoBehaviour:
   characterName: Emi
   team: 1
   characterHP: 10
-  characterPower: "T\xE9l\xE9portation"
-  characterVictoryCondition: Tous les personnages Shadow sont morts.
+  characterType: 4
+  characterWinningCondition: 4
   sprite: {fileID: 21300000, guid: d96f28212c331aa4db45c97a42c73fc7, type: 3}

@@ -9,9 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 944627813585360565}
-  - component: {fileID: 944627813585360564}
   - component: {fileID: 1941455696}
-  - component: {fileID: 1941455698}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -34,19 +32,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &944627813585360564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 944627813585360567}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e68657dcedb0be478c940def09cca00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerCards: {fileID: 944627813636490364}
 --- !u!212 &1941455696
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -97,27 +82,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1941455698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 944627813585360567}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 212b44283f068f54584c2fbeb1c032f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterCards:
-  - {fileID: 11400000, guid: db346a3f5ec034f4f85eed31427c2f41, type: 2}
-  - {fileID: 11400000, guid: 882858b6bddaf524dbb7b4d14817155a, type: 2}
-  - {fileID: 11400000, guid: e5cc63057eb1f8d4b9f8a2c1638fb24e, type: 2}
-  - {fileID: 11400000, guid: 7583d1b4fd71d604284a37d0c3c5e4e9, type: 2}
-  - {fileID: 11400000, guid: 34fbe6f6e1f052e45894bf282bee5760, type: 2}
-  cardPrefab: {fileID: 3082920907157964236, guid: 283f6d9d02ce5134fbdfa77a78e6d6de,
-    type: 3}
-  playerCards: {fileID: 944627813636490364}
 --- !u!1001 &5044233866547203812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -245,12 +209,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 076dab25f5608ec44a71769c267caff1, type: 3}
---- !u!1 &944627813636490364 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5412000759318006424, guid: 076dab25f5608ec44a71769c267caff1,
-    type: 3}
-  m_PrefabInstance: {fileID: 5044233866547203812}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &944627813636490365 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5412000759318006425, guid: 076dab25f5608ec44a71769c267caff1,

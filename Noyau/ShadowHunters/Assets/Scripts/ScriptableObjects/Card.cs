@@ -2,35 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Card", menuName = "Card/Card", order = 2)]
+public enum CardType { Location, Vision, Light, Darkness }
+
+/// <summary>
+/// Définition d'une carte
+/// (les cartes Lieu utilisent cette implémentation)
+/// </summary>
+[System.Serializable]
 public class Card : ScriptableObject
 {
-    public enum CardType
-    {
-        Location,
-        Character,
-        Vision,
-        Light,
-        Darkness
-    }
-
     public string cardName;
     public CardType cardType;
     public bool isEquipement;
-    public string effect;
+    public string description;
     public Sprite sprite;
     public bool isHidden;
-
 }
-
-public enum Position
-{
-    Antre,
-    Cimetiere,
-    Foret,
-    Monastere,
-    Porte,
-    Sanctuaire
-}
-
-

@@ -15,7 +15,6 @@ MonoBehaviour:
   characterName: Bryan
   team: 2
   characterHP: 10
-  characterPower: Oh my God!
-  characterVictoryCondition: "Tuer un personnage de 13 Points de Vie ou plus OU \xEAtre
-    dans le Sanctuaire ancien \xE0 la fin du jeu."
+  characterType: 2
+  characterWinningCondition: 2
   sprite: {fileID: 21300000, guid: 7fc10cd8948f4ec439b40de3e2d0fa0c, type: 3}

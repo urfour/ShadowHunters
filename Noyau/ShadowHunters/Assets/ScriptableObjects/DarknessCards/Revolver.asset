@@ -9,14 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd00cdcff8bd8c14d8e47b2f452ac2d1, type: 3}
+  m_Script: {fileID: 11500000, guid: c8fef972bcc0f4748920d6ea96f9dd86, type: 3}
   m_Name: Revolver
   m_EditorClassIdentifier: 
-  cardName: "Revolver des T\xE9n\xE8bres"
-  cardType: 4
+  cardName: "Revolver des t\xE9n\xE8bres"
+  cardType: 3
   isEquipement: 1
-  effect: "Vous pouvez attaquer un joueur pr\xE9sent sur l'un des 4 lieux hors de
-    votre secteur, mais vous ne pouvez plus attaquer un joueur situ\xE9 dans le m\xEAme
-    secteur que vous."
+  description: "Vous pouvez attaquer un joueur pr\xE9sent sur l'un des 4 lieux hors
+    de votre secteur, mais vous ne pouvez plus attaquer un joueur situ\xE9 dans le
+    m\xEAme secteur que vous."
   sprite: {fileID: 21300000, guid: c74c51ed15fbf8f4189815a9101a3a5e, type: 3}
-  isHidden: 0
+  isHidden: 1
+  darknessEffect: 7
