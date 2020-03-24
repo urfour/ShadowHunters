@@ -97,7 +97,7 @@ public class GameLogic : MonoBehaviour
     /// <summary>
     /// Carte vision donné au métamorphe
     /// </summary>
-    private VisionCard pickedVisionCard;
+    private VisionCard m_pickedVisionCard;
     /// <summary>
     /// Id du joueur dont c'est le tour
     /// </summary>
@@ -114,6 +114,10 @@ public class GameLogic : MonoBehaviour
         get => m_playerAttackedId;
         private set => m_playerAttackedId = value;
     }
+     /// <summary>
+    /// Dégats pris par le joueur attaqué par Bob
+    /// </summary>    
+    private int m_damageBob = -1;
     /// <summary>
     /// Propriété d'accès à l'id du joueur dont c'est le tour
     /// </summary>
@@ -704,7 +708,7 @@ public class GameLogic : MonoBehaviour
         {
             usePowerButton.gameObject.SetActive(true);
             dontUsePowerButton.gameObject.SetActive(true);
-            pickedVisionCard = pickedCard;
+            m_pickedVisionCard = pickedCard;
         }
         // Cartes applicables en fonction des équipes ?
         else if ((team == CharacterTeam.Shadow && !pickedCard.visionEffect.effectOnShadow)
@@ -1394,6 +1398,7 @@ public class GameLogic : MonoBehaviour
             }
             else
             {
+                // Si le joueur a la gatling, il attaque tous les joueurs qui ne sont pas dans sa zone
                 if (m_players[playerAttackingId].HasGatling)
                 {
                     foreach (Player player in players)
@@ -1404,14 +1409,21 @@ public class GameLogic : MonoBehaviour
                         {
                             m_players[player.Id].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack);
                             
+                            // On vérifie si le joueur attaqué est mort
                             CheckPlayerDeath(player.Id);
                             
-                            if(m_players[player.Id].Character.characterType == CharacterType.LoupGarou)
-                                PlayerCardPower(m_players[player.Id]);
+                            // Le Loup-garou peut contre attaquer
+                            if(m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
+                                && m_players[playerAttackingId].Revealed)
+                            {
+                                usePowerButton.gameObject.SetActive(true);
+                            }
                             
+                            // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
                             if(m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
+                                && m_players[playerAttackingId].Revealed
                                 && lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack > 0)
-                                PlayerCardPower(m_players[playerAttackedId]); 
+                                PlayerCardPower(m_players[playerAttackingId]); 
                         }    
                     }
                 }
@@ -1425,24 +1437,43 @@ public class GameLogic : MonoBehaviour
 
                     Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[playerAttackedId].Name + ".");
 
-                    if(m_players[playerAttackingId].Character.characterType == CharacterType.Bob && lancerTotal >= 2 )
-                        PlayerCardPower(m_players[playerAttackingId]);
+                    // Si Bob est révélé et inflige 2 dégats ou plus, il peut voler une arme 
+                    if(m_players[playerAttackingId].Character.characterType == CharacterType.Bob
+                        && m_players[playerAttackingId].Revealed
+                        && lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack >= 2)
+                    {
+                        m_damageBob = lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack;
+                        usePowerButton.gameObject.SetActive(true);
+                        dontUsePowerButton.gameObject.SetActive(true);
+                    }
                     else
                     {
+                        // Le joueur attaqué se prend des dégats
                         m_players[playerAttackedId].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack);
                         
-                        if(m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou)
-                            PlayerCardPower(m_players[playerAttackedId]);
-
+                        // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
                         if(m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
+                            && m_players[playerAttackingId].Revealed
                             && lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack > 0)
-                            PlayerCardPower(m_players[playerAttackedId]);  
+                            PlayerCardPower(m_players[playerAttackingId]);
 
+                        // On vérifie si le joueur attaqué est mort
                         CheckPlayerDeath(playerAttackedId);
-                    }    
+
+                        // Charles peut attaquer de nouveau
+                        // Le Loup-garou peut contre attaquer
+                        if((m_players[playerAttackingId].Character.characterType == CharacterType.Charles
+                            && m_players[playerAttackingId].Revealed)
+                            || (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
+                            && m_players[playerAttackedId].Revealed))
+                        {
+                            usePowerButton.gameObject.SetActive(true);
+                        }
+                    }
                 }
             }
         }
+
         endTurn.gameObject.SetActive(true);
     }
 
@@ -1482,12 +1513,18 @@ public class GameLogic : MonoBehaviour
                             
                             CheckPlayerDeath(targetId);
                             
-                            if(m_players[targetId].Character.characterType == CharacterType.LoupGarou)
-                                PlayerCardPower(m_players[targetId]);
+                            // Le Loup-garou peut contre attaquer
+                            if(m_players[targetId].Character.characterType == CharacterType.LoupGarou
+                                && m_players[targetId].Revealed)
+                            {
+                                usePowerButton.gameObject.SetActive(true);
+                            }
                             
+                            // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
                             if(m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
+                                && m_players[playerAttackingId].Revealed
                                 && lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack > 0)
-                                PlayerCardPower(m_players[targetId]); 
+                                PlayerCardPower(m_players[playerAttackingId]);
                         }    
                 }
                 else
@@ -1501,12 +1538,18 @@ public class GameLogic : MonoBehaviour
                     {
                         m_players[targetId].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack);
                         
-                        if(m_players[targetId].Character.characterType == CharacterType.LoupGarou)
-                            PlayerCardPower(m_players[targetId]);
+                        // Le Loup-garou peut contre attaquer
+                        if(m_players[targetId].Character.characterType == CharacterType.LoupGarou
+                            && m_players[targetId].Revealed)
+                        {
+                            usePowerButton.gameObject.SetActive(true);
+                        }
 
+                        // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
                         if(m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
+                            && m_players[playerAttackingId].Revealed
                             && lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack > 0)
-                            PlayerCardPower(m_players[targetId]);  
+                            PlayerCardPower(m_players[playerAttackingId]);
 
                         CheckPlayerDeath(targetId);
                     }    
@@ -1821,9 +1864,9 @@ public class GameLogic : MonoBehaviour
         switch(p.Character.characterType)
         {
             case CharacterType.Metamorphe:
-                if (!pickedVisionCard.visionEffect.effectOnShadow)
+                if (!m_pickedVisionCard.visionEffect.effectOnShadow)
                 {
-                    if (pickedVisionCard.visionEffect.effectSupremeVision)
+                    if (m_pickedVisionCard.visionEffect.effectSupremeVision)
                         //TODO montrer la carte personnage
                         Debug.Log("C'est une carte Vision Suprême !");
                     else
@@ -1832,25 +1875,25 @@ public class GameLogic : MonoBehaviour
                 else
                 {
                     // Cas des cartes applicables en fonction des points de vie
-                    if (pickedVisionCard.visionEffect.effectOnLowHP && CheckLowHPCharacters(p.Character.characterName))
+                    if (m_pickedVisionCard.visionEffect.effectOnLowHP && CheckLowHPCharacters(p.Character.characterName))
                     {
                         p.Wounded(1);
                         CheckPlayerDeath(p.Id);
                     }
-                    else if (pickedVisionCard.visionEffect.effectOnHighHP && CheckHighHPCharacters(p.Character.characterName))
+                    else if (m_pickedVisionCard.visionEffect.effectOnHighHP && CheckHighHPCharacters(p.Character.characterName))
                     {
                         p.Wounded(2);
                         CheckPlayerDeath(p.Id);
                     }
 
                     // Cas des cartes infligeant des Blessures
-                    else if (pickedVisionCard.visionEffect.effectTakeWounds)
+                    else if (m_pickedVisionCard.visionEffect.effectTakeWounds)
                     {
-                        p.Wounded(pickedVisionCard.visionEffect.nbWounds);
+                        p.Wounded(m_pickedVisionCard.visionEffect.nbWounds);
                         CheckPlayerDeath(p.Id);
                     }
                     // Cas des cartes soignant des Blessures
-                    else if (pickedVisionCard.visionEffect.effectHealingOneWound)
+                    else if (m_pickedVisionCard.visionEffect.effectHealingOneWound)
                     {
                         if (p.Wound == 0)
                         {
@@ -1864,7 +1907,7 @@ public class GameLogic : MonoBehaviour
                         }
                     }
                     // Cas des cartes volant une carte équipement ou infligeant des Blessures
-                    else if (pickedVisionCard.visionEffect.effectGivingEquipementCard)
+                    else if (m_pickedVisionCard.visionEffect.effectGivingEquipementCard)
                     {
                         if (p.ListCard.Count == 0)
                         {
@@ -1879,6 +1922,17 @@ public class GameLogic : MonoBehaviour
                     }
                     else
                         Debug.Log("Rien ne se passe.");
+                }
+                break;
+            case CharacterType.Bob:
+                m_players[m_playerAttackedId].Wounded(m_damageBob);
+
+                CheckPlayerDeath(m_playerAttackedId);
+
+                if(m_players[m_playerAttackedId].Character.characterType == CharacterType.LoupGarou
+                    && m_players[m_playerAttackedId].Revealed)
+                {
+                    usePowerButton.gameObject.SetActive(true);
                 }
                 break;
         }
@@ -1971,9 +2025,9 @@ public class GameLogic : MonoBehaviour
                 
                 break;
             case CharacterType.Metamorphe:
-                if (pickedVisionCard.visionEffect.effectOnShadow)
+                if (m_pickedVisionCard.visionEffect.effectOnShadow)
                 {
-                    if (pickedVisionCard.visionEffect.effectSupremeVision)
+                    if (m_pickedVisionCard.visionEffect.effectSupremeVision)
                         //TODO montrer la carte personnage
                         Debug.Log("C'est une carte Vision Suprême !");
                     else
@@ -1982,25 +2036,25 @@ public class GameLogic : MonoBehaviour
                 else
                 {
                     // Cas des cartes applicables en fonction des points de vie
-                    if (pickedVisionCard.visionEffect.effectOnLowHP && CheckLowHPCharacters(player.Character.characterName))
+                    if (m_pickedVisionCard.visionEffect.effectOnLowHP && CheckLowHPCharacters(player.Character.characterName))
                     {
                         player.Wounded(1);
                         CheckPlayerDeath(player.Id);
                     }
-                    else if (pickedVisionCard.visionEffect.effectOnHighHP && CheckHighHPCharacters(player.Character.characterName))
+                    else if (m_pickedVisionCard.visionEffect.effectOnHighHP && CheckHighHPCharacters(player.Character.characterName))
                     {
                         player.Wounded(2);
                         CheckPlayerDeath(player.Id);
                     }
 
                     // Cas des cartes infligeant des Blessures
-                    else if (pickedVisionCard.visionEffect.effectTakeWounds)
+                    else if (m_pickedVisionCard.visionEffect.effectTakeWounds)
                     {
-                        player.Wounded(pickedVisionCard.visionEffect.nbWounds);
+                        player.Wounded(m_pickedVisionCard.visionEffect.nbWounds);
                         CheckPlayerDeath(player.Id);
                     }
                     // Cas des cartes soignant des Blessures
-                    else if (pickedVisionCard.visionEffect.effectHealingOneWound)
+                    else if (m_pickedVisionCard.visionEffect.effectHealingOneWound)
                     {
                         if (player.Wound == 0)
                         {
@@ -2014,7 +2068,7 @@ public class GameLogic : MonoBehaviour
                         }
                     }
                     // Cas des cartes volant une carte équipement ou infligeant des Blessures
-                    else if (pickedVisionCard.visionEffect.effectGivingEquipementCard)
+                    else if (m_pickedVisionCard.visionEffect.effectGivingEquipementCard)
                     {
                         if (player.ListCard.Count == 0)
                         {
