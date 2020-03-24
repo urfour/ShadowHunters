@@ -105,7 +105,7 @@ namespace ShadowHunter_Server.Rooms
                 if (!Rooms[kre.RoomData.Code].Data.Players.Contains(kre.Kicked.Login))
                 {
                     kre.GetSender().Send(new RoomFailureEvent()
-                    { Msg = "room.kicked_player_not_in_room" });
+                        { Msg = "room.kicked_player_not_in_room" });
 
                 }
 
@@ -158,9 +158,35 @@ namespace ShadowHunter_Server.Rooms
                 lre.GetSender().Room.Data.CurrentNbPlayer--;
             }
 
-            if (e is ModifyRoomEvent)
+            if (e is ModifyRoomEvent mre)
             {
+                // seul l'hôte peut modifier les données de la salle
+                if (GAccount.Accounts[mre.GetSender()].Login !=
+                    Rooms[mre.RoomData.Code].Data.Host)
+                {
+                    mre.GetSender().Send(new RoomFailureEvent()
+                        { Msg = "room.kicked_player_not_in_room" });
+                }
 
+                else
+                {
+                    Rooms[mre.RoomData.Code].Data.Name = mre.RoomData.Name;
+                    Rooms[mre.RoomData.Code].Data.HasPassword = mre.RoomData.HasPassword;
+                    Rooms[mre.RoomData.Code].Data.Password = mre.RoomData.Password;
+
+                    // on ne peut pas réduire le nombre maximum de joueurs en
+                    // dessous du nombre de joueurs actuel
+                    if (Rooms[mre.RoomData.Code].Data.CurrentNbPlayer <= mre.RoomData.MaxNbPlayer)
+                    {
+                        Rooms[mre.RoomData.Code].Data.MaxNbPlayer =
+                            mre.RoomData.MaxNbPlayer;
+                    }
+                    else
+                    {
+                        mre.GetSender().Send(new RoomFailureEvent()
+                            { Msg = "room.more_players_than_limit" });
+                    }
+                }
             }
         }
         public static void Init()
