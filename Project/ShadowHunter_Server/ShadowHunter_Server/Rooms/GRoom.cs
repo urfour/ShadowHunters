@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ShadowHunter_Server.Accounts;
+using Network.model;
 
 namespace ShadowHunter_Server.Rooms
 {
@@ -70,8 +71,7 @@ namespace ShadowHunter_Server.Rooms
                         // on ajoute le joueur à la salle et on actualise les infos de la salle
                         jre.GetSender().JoinRoom(Rooms[jre.code]);
                         Rooms[jre.code].Data.CurrentNbPlayer++;
-                        Rooms[jre.code].Data.Players[Rooms[jre.code].Data.CurrentNbPlayer] =
-                            GAccount.Accounts[jre.GetSender()].Login;
+                        Rooms[jre.code].Data.Players.ToList().Add(GAccount.Accounts[jre.GetSender()].Login);
                         // prévenir le joueur qu'il a été ajouté à la salle
                         jre.GetSender().Send(new RoomJoinedEvent() 
                             { RoomData = Rooms[jre.code].Data });
@@ -100,36 +100,62 @@ namespace ShadowHunter_Server.Rooms
 
             if (e is KickRoomEvent kre)
             {
-                if (Rooms[kre.RoomData.Code].Data.Players.Contains(kre.Kicked.Login))
+                // on ne peut pas expulser un joueur qui n'est pas dans la salle
+                // précisée
+                if (!Rooms[kre.RoomData.Code].Data.Players.Contains(kre.Kicked.Login))
                 {
-                    // un joueur ne peut pas s'expulser lui-même
-                    if (GAccount.Accounts[kre.GetSender()] == kre.Kicked)
-                    {
-                        kre.GetSender().Send(new RoomFailureEvent()
-                            { Msg = "room.cant_kick_yourself" });
-                    }
+                    kre.GetSender().Send(new RoomFailureEvent()
+                    { Msg = "room.kicked_player_not_in_room" });
 
-                    else
-                    {
-                        // on cherche grâce à son compte le client à expulser,
-                        // puis on l'expulse
-                        // (la requête LINQ est le seul moyen pour faire une
-                        // recherche inversée dans un dictionnaire)
-                        GAccount.Accounts.First(x => x.Value == kre.Kicked).Key.LeaveRoom();
-                        Rooms[kre.RoomData.Code].Data.CurrentNbPlayer--;
-                    }
+                }
+
+                // seul l'hôte de la salle peut kick un autre joueur
+                else if (Rooms[kre.RoomData.Code].Data.Host != GAccount.Accounts[kre.GetSender()].Login)
+                {
+                    kre.GetSender().Send(new RoomFailureEvent()
+                        { Msg = "room.can_only_kick_if_host" });
+
+                }
+
+                // un joueur ne peut pas s'expulser lui-même
+                else if (GAccount.Accounts[kre.GetSender()] == kre.Kicked)
+                {
+                    kre.GetSender().Send(new RoomFailureEvent()
+                        { Msg = "room.cant_kick_yourself" });
+                }
+
+                // un joueur ne peut qu'expulser des membres de sa
+                // propre salle 
+                else if(!Rooms[kre.RoomData.Code].Data.Players.ToList().
+                    Contains(GAccount.Accounts[kre.GetSender()].Login))
+                {
+                    kre.GetSender().Send(new RoomFailureEvent()
+                    { Msg = "room.can_only_kick_in_own_room" });
                 }
 
                 else
                 {
-                    kre.GetSender().Send(new RoomFailureEvent()
-                        { Msg = "room.kicked_player_not_in_room" });
+                    // on cherche grâce à son compte le client à expulser,
+                    // puis on l'expulse
+                    // (la requête LINQ est le seul moyen pour faire une
+                    // recherche inversée dans un dictionnaire)
+                    Client kick = GAccount.Accounts.First(x => x.Value == kre.Kicked).Key;
+                    kick.LeaveRoom();
+                    Rooms[kre.RoomData.Code].Data.Players.ToList().Remove(kre.Kicked.Login);
+                    Rooms[kre.RoomData.Code].Data.CurrentNbPlayer--;
+
+                    // broadcast des nouvelles infos de la salle
+                    EventView.Manager.Emit(new RoomDataEvent()
+                        { RoomData = Rooms[kre.RoomData.Code].Data });
                 }
             }
 
-            if (e is LeaveRoomEvent)
+            if (e is LeaveRoomEvent lre)
             {
-
+                lre.GetSender().LeaveRoom();
+                lre.GetSender().Room.Data.Players.ToList().Remove(
+                    GAccount.Accounts[lre.GetSender()].Login);
+                lre.GetSender().Room.Data.CurrentNbPlayer--;
             }
 
             if (e is ModifyRoomEvent)
