@@ -25,7 +25,7 @@ namespace Lang
                 Notifier.TryNotify();
             }
         }
-
+        
         public static void Init()
         {
             Notifier = new ListenableObject();
@@ -34,7 +34,7 @@ namespace Lang
 
             SettingManager.Settings.UI_Lang.AddListener((sender) => { Instance = new Language(SettingManager.Settings.UI_Lang.Value); });
         }
-
+        
         private static ListenableObject Notifier { get; set; } = new ListenableObject();
 
         public static string Translate(string label, params string[] args)

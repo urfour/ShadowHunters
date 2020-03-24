@@ -7,7 +7,6 @@ namespace Kernel.Settings
 {
     public partial class SettingManager
     {
-        //public Dictionary<string, Setting<Color>> Display_ColorTheme_Advance { get; set; } = new Dictionary<string, Setting<Color>>();
         public Setting<Color> UI_TitleColor { get; set; } = new Setting<Color>(new Color(229f/255, 161f/255, 86f/255));
         public Setting<Color> UI_TitleTextColor { get; set; } = new Setting<Color>(Color.black);
         public Setting<double> UI_TitleTextEmMult { get; set; } = new Setting<double>(1);
@@ -61,5 +60,7 @@ namespace Kernel.Settings
                 "advanced;settings.display/settings.display.corps_em_multiplier;UI_Corps_TextEmMult;Prefabs/UI/Settings/SliderDouble;max=3&min=0,5&nb_displayed_decimals=2",
             }
         );
+
+        public Setting<string> Lang { get; set; } = new Setting<string>("FR-fr");
     }
 }

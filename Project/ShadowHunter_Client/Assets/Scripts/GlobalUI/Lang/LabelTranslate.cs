@@ -7,9 +7,9 @@ using EventSystem;
 public class LabelTranslate : MonoBehaviour
 {
     public string label;
-
+    
     private OnNotification listener = null;
-
+    
     // Use this for initialization
     void Start()
     {

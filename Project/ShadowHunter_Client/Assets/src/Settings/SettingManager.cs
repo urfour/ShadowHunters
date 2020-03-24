@@ -10,18 +10,12 @@ using System.IO;
 
 namespace Kernel.Settings
 {
-    /// <summary>
-    /// Conventions de nommage des settings : 
-    ///     {CatégorieName}_{SettingName}_{accéssibilité : Any/Dev/Advance/User}
-    ///     exemple : General_Lang_User
-    /// </summary>
+
     [Serializable]
     public partial class SettingManager
     {
         public static SettingManager Settings { get; private set; }
-
-
-
+        
         public static void Load(string path = "Settings.XML")
         {
             path = IOSystem.GetFullPath(path);
@@ -38,7 +32,7 @@ namespace Kernel.Settings
                 Settings = new SettingManager();
             }
         }
-
+        
         public static void Save(string path = "Settings.XML")
         {
             path = IOSystem.GetFullPath(path);
