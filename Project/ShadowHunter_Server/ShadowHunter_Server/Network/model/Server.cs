@@ -18,13 +18,13 @@ namespace Network.model
         private TcpListener Listener { get; set; }
         private Thread AcceptThread { get; set; }
         private GClient GClient { get; set; }
-        private GRoom GRoom { get; set; }
         private Room Global { get; set; } = new Room();
 
         public Server()
         {
             GClient = new GClient();
             GRoom.Init();
+
             Listener = new TcpListener(IPAddress.Parse("127.0.0.1"), SettingManager.Settings.Port.Value);
 
 

@@ -14,7 +14,7 @@ using Network.model;
 
 namespace ShadowHunter_Server.Rooms
 {
-     class GRoom : IListener<RoomEvent>
+     public class GRoom : IListener<RoomEvent>
     {
         public static GRoom Instance { get; private set; } = null;
 
@@ -199,7 +199,7 @@ namespace ShadowHunter_Server.Rooms
         }
 
 
-        private GRoom()
+        public GRoom()
         {
             if (Instance != null) Logger.Warning("GRoom replaced");
             Instance = this;
