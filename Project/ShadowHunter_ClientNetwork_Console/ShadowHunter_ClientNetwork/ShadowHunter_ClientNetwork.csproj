@@ -62,6 +62,7 @@
     <Compile Include="Settings\Setting.cs" />
     <Compile Include="Settings\SettingItem.cs" />
     <Compile Include="Settings\SettingManager.cs" />
+    <Compile Include="Tests.cs" />
     <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\AuthEvents\AuthEvent.cs">
       <Link>ServerInterface\AuthEvents\AuthEvent.cs</Link>
     </Compile>
@@ -116,7 +117,6 @@
     <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\RoomEvents\event_in\RoomFailureEvent.cs">
       <Link>ServerInterface\RoomEvents\event_in\RoomFailureEvent.cs</Link>
     </Compile>
-    <Compile Include="Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Network\controller\" />

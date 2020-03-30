@@ -19,7 +19,7 @@ namespace Network.events
 
         public void SetSender(Client c)
         {
-            if (sender != null) Logger.Error(new InvalidOperationException("Cannot set a sender if Client.sender != null"));
+            //if (sender != null) Logger.Error(new InvalidOperationException("Cannot set a sender if Client.sender != null"));
             this.sender = c;
         }
 

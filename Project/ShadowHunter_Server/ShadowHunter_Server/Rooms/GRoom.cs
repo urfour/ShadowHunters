@@ -27,6 +27,7 @@ namespace ShadowHunter_Server.Rooms
 
         public void OnEvent(RoomEvent e, string[] tags = null)
         {
+            Console.Write("Evènement de gestion de salle reçu.");
 
             // créé et configure une nouvelle salle, puis y ajoute le joueur
             if (e is CreateRoomEvent cre)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ServerInterface.RoomEvents.event_out
 {
-    class JoinRoomEvent : RoomEvent
+    public class JoinRoomEvent : RoomEvent
     {
         public string password;
         //envoi du code de la salle

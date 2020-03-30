@@ -35,5 +35,9 @@ namespace ServerInterface.RoomEvents
         public bool HasPassword { get; set; }
         public string Password { get; set; }
 
+        public RoomData()
+        {
+
+        }
     }
 }

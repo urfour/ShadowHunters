@@ -24,11 +24,12 @@ namespace ShadowHunter_Server.Accounts
         //          - Liste des tags
         public void OnEvent(AuthEvent e, string[] tags = null)
         {
+            Console.Write("Evènement d'authentification reçu.");
             //throw new NotImplementedException();
 
             if (e is LogInEvent logIn)
             {
-                Console.Write("Login");
+                Console.Write("Demande de connexion.");
                 byte loginStatus = Authentify(logIn.Account.Login, 
                     logIn.Password);
                 switch (loginStatus)
@@ -75,6 +76,7 @@ namespace ShadowHunter_Server.Accounts
             // connecte l'utilisateur
             else if (e is SignInEvent sie)
             {
+                Console.Write("Demande de création d'un compte.");
                 // on vérifie que l'évènement contient bien les informations nécessaires 
                 if (sie.Login == null || sie.Password == null)
                 {
@@ -95,6 +97,7 @@ namespace ShadowHunter_Server.Accounts
                         IsLogged = true
                     };
                     Accounts.Add(sie.GetSender(), a);
+                    Console.Write("Création du compte...");
                     if (CreateAccount(sie) == false)
                     {
                         sie.GetSender().Send(new AuthInvalidEvent() { Msg = "auth.account_creation_error;" });
@@ -123,7 +126,8 @@ namespace ShadowHunter_Server.Accounts
         private bool CreateAccount(SignInEvent sie)
         {
             // TODO: créer un compte dans la BDD
-            return false;
+            Console.Write("Compte créé");
+            return true;
         }
 
 
@@ -143,7 +147,6 @@ namespace ShadowHunter_Server.Accounts
         public static void Init()
         {
             new GAccount();
-            Console.Write("GAccount OK");
             EventView.Manager.AddListener(Instance, true);
         }
 

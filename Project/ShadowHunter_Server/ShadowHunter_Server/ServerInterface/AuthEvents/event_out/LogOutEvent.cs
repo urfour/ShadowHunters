@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ServerInterface.AuthEvents.event_out
 {
-    class LogOutEvent : AuthEvent
+    public class LogOutEvent : AuthEvent
     {
 
     }
