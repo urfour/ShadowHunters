@@ -62,6 +62,61 @@
     <Compile Include="Settings\Setting.cs" />
     <Compile Include="Settings\SettingItem.cs" />
     <Compile Include="Settings\SettingManager.cs" />
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\AuthEvents\AuthEvent.cs">
+      <Link>ServerInterface\AuthEvents\AuthEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\AuthEvents\Account.cs">
+      <Link>ServerInterface\AuthEvents\Account.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\AuthEvents\event_out\LogOutEvent.cs">
+      <Link>ServerInterface\AuthEvents\event_out\LogOutEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\AuthEvents\event_out\LogInEvent.cs">
+      <Link>ServerInterface\AuthEvents\event_out\LogInEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\AuthEvents\event_out\SignInEvent.cs">
+      <Link>ServerInterface\AuthEvents\event_out\SignInEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\AuthEvents\event_in\AccountDataEvent.cs">
+      <Link>ServerInterface\AuthEvents\event_in\AccountDataEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\AuthEvents\event_in\AuthInvalidEvent.cs">
+      <Link>ServerInterface\AuthEvents\event_in\AuthInvalidEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\AuthEvents\event_in\AssingAccountEvent.cs">
+      <Link>ServerInterface\AuthEvents\event_in\AssingAccountEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\RoomEvents\RoomEvent.cs">
+      <Link>ServerInterface\RoomEvents\RoomEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\RoomEvents\RoomData.cs">
+      <Link>ServerInterface\RoomEvents\RoomData.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\RoomEvents\event_out\CreateRoomEvent.cs">
+      <Link>ServerInterface\RoomEvents\event_out\CreateRoomEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\RoomEvents\event_out\KickRoomEvent.cs">
+      <Link>ServerInterface\RoomEvents\event_out\KickRoomEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\RoomEvents\event_out\ModifyRoomEvent.cs">
+      <Link>ServerInterface\RoomEvents\event_out\ModifyRoomEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\RoomEvents\event_out\JoinRoomEvent.cs">
+      <Link>ServerInterface\RoomEvents\event_out\JoinRoomEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\RoomEvents\event_out\LeaveRoomEvent.cs">
+      <Link>ServerInterface\RoomEvents\event_out\LeaveRoomEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\RoomEvents\event_in\RoomJoinedEvent.cs">
+      <Link>ServerInterface\RoomEvents\event_in\RoomJoinedEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\RoomEvents\event_in\RoomDataEvent.cs">
+      <Link>ServerInterface\RoomEvents\event_in\RoomDataEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\RoomEvents\event_in\RoomFailureEvent.cs">
+      <Link>ServerInterface\RoomEvents\event_in\RoomFailureEvent.cs</Link>
+    </Compile>
+    <Compile Include="Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Network\controller\" />
