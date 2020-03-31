@@ -1751,13 +1751,26 @@ public class GameLogic : MonoBehaviour
         else
         {
             m_players[thiefId].AddCard(m_players[playerId].ListCard[indexCard]);
-            if (m_players[playerId].ListCard[indexCard].cardType == CardType.Darkness
-                && m_players[playerId].ListCard[indexCard].isEquipement)
-                yield return StartCoroutine(DarknessCardPower(m_players[thiefId].ListCard[m_players[thiefId].ListCard.Count - 1] as DarknessCard));
-            else if (m_players[playerId].ListCard[indexCard].cardType == CardType.Light
-                && m_players[playerId].ListCard[indexCard].isEquipement)
-                LightCardPower(m_players[playerId].ListCard[indexCard] as LightCard);
-                
+
+            if (m_players[playerId].ListCard[indexCard].isEquipement)
+            {
+                if (m_players[playerId].ListCard[indexCard].cardType == CardType.Darkness)
+                {
+                    yield return StartCoroutine(DarknessCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as DarknessCard));
+                    yield return StartCoroutine(LooseEquipmentCard(playerId, indexCard, 0));
+                }
+                else if (m_players[playerId].ListCard[indexCard].cardType == CardType.Light)
+                {
+                    yield return StartCoroutine(LightCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as LightCard));
+                    yield return StartCoroutine(LooseEquipmentCard(playerId, indexCard, 1));
+                }
+            }
+            else
+            {
+                Debug.LogError("Erreur : la carte choisie n'est pas un équipement et ne devrait pas être là.");
+                yield return -1;
+            }
+
             m_players[playerId].RemoveCard(indexCard);
             Debug.Log("La carte " + stealedCard + " a été volée au joueur " 
                 + m_players[playerId].Name + " par le joueur " + m_players[thiefId].Name + " !");
@@ -1821,19 +1834,116 @@ public class GameLogic : MonoBehaviour
             {
                 m_players[playerId].AddCard(m_players[giverPlayerId].ListCard[indexCard]);
 
-                if (m_players[giverPlayerId].ListCard[indexCard].cardType == CardType.Darkness
-                    && m_players[giverPlayerId].ListCard[indexCard].isEquipement)
-                    yield return StartCoroutine(DarknessCardPower(m_players[giverPlayerId].ListCard[m_players[giverPlayerId].ListCard.Count - 1] as DarknessCard));
-                else if (m_players[giverPlayerId].ListCard[indexCard].cardType == CardType.Light
-                    && m_players[giverPlayerId].ListCard[indexCard].isEquipement)
-                    LightCardPower(m_players[giverPlayerId].ListCard[indexCard] as LightCard);
-                    
-                m_players[giverPlayerId].RemoveCard(indexCard);
+                if (m_players[giverPlayerId].ListCard[indexCard].isEquipement)
+                {
+                    if (m_players[giverPlayerId].ListCard[indexCard].cardType == CardType.Darkness)
+                    {
+                        yield return StartCoroutine(DarknessCardPower(m_players[giverPlayerId].ListCard[m_players[giverPlayerId].ListCard.Count - 1] as DarknessCard));
+                        yield return StartCoroutine(LooseEquipmentCard(giverPlayerId, indexCard, 0));
+                    }
+                    else if (m_players[giverPlayerId].ListCard[indexCard].cardType == CardType.Light)
+                    {
+                        yield return StartCoroutine(LightCardPower(m_players[giverPlayerId].ListCard[m_players[giverPlayerId].ListCard.Count - 1] as LightCard));
+                        yield return StartCoroutine(LooseEquipmentCard(giverPlayerId, indexCard, 1));
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Erreur : la carte choisie n'est pas un équipement et ne devrait pas être là.");
+                    yield return -1;
+                }
+
                 Debug.Log("La carte " + givenCard + " a été donnée au joueur " 
                     + m_players[playerId].Name + " par le joueur " + m_players[giverPlayerId].Name + " !");
             }
             yield return null;
         }
+    }
+
+
+    /// <summary>
+    /// Perte d'une carte équipement pour un joueur
+    /// </summary>
+    /// <param name="PlayerId">Id du joueur</param>
+    /// <param name="CardId">Id de la carte</param>
+    /// <param name="type">Type de la carte, 0=Dark 1=Light</param>
+    /// <returns></returns>
+    IEnumerator LooseEquipmentCard(int PlayerId, int CardId, int type)
+    {
+        CharacterTeam team = m_players[PlayerId].Team;
+        string character = m_players[PlayerId].Character.characterName;
+        bool revealed = m_players[PlayerId].Revealed;
+
+        if (type == 0)
+        {
+            DarknessCard card = m_players[PlayerId].ListCard[CardId] as DarknessCard;
+            DarknessEffect effect = card.darknessEffect;
+            
+            switch (effect)
+            {
+                case DarknessEffect.Mitrailleuse:
+                    m_players[PlayerId].HasGatling = false;
+                    break;
+
+                case DarknessEffect.Sabre:
+                    m_players[PlayerId].HasSaber = false;
+                    break;
+
+                case DarknessEffect.Hache:
+                    m_players[PlayerId].BonusAttack--;
+                    break;
+
+                case DarknessEffect.Revolver:
+                    m_players[PlayerId].HasRevolver = false;
+                    break;
+            }
+        }
+        else if (type == 1)
+        {
+            LightCard card = m_players[PlayerId].ListCard[CardId] as LightCard;
+            LightEffect effect = card.lightEffect;
+
+            switch (effect)
+            {
+                case LightEffect.Lance:
+                    m_players[PlayerId].HasSpear = false;
+                    if (team == CharacterTeam.Hunter && revealed)
+                    {
+                        m_players[PlayerId].BonusAttack -= 2;
+                    }
+                    break;
+
+                case LightEffect.Boussole:
+                    m_players[PlayerId].HasCompass = false;
+                    break;
+
+                case LightEffect.Broche:
+                    m_players[PlayerId].HasBroche = false;
+                    break;
+
+                case LightEffect.Toge:
+                    m_players[PlayerId].HasToge = false;
+                    m_players[PlayerId].MalusAttack--;
+                    m_players[PlayerId].ReductionWounds = 0;
+                    break;
+
+                case LightEffect.Crucifix:
+                    m_players[PlayerId].HasCrucifix = false;
+                    break;
+
+                case LightEffect.Amulette:
+                    m_players[PlayerId].HasAmulet = false;
+                    break;
+            }
+        }
+        else
+        {
+            Debug.LogError("Erreur : type en paramètre invalide.");
+            yield return -1;
+        }
+        
+        m_players[PlayerId].RemoveCard(CardId);
+        yield return null;
     }
 
     /// <summary>
