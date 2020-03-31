@@ -1707,14 +1707,26 @@ public class GameLogic : MonoBehaviour
             else
             {
                 m_players[thiefId].AddCard(m_players[playerId].ListCard[indexCard]);
-                if (m_players[playerId].ListCard[indexCard].cardType == CardType.Darkness
-                    && m_players[playerId].ListCard[indexCard].isEquipement)
-                    yield return StartCoroutine(DarknessCardPower(m_players[thiefId].ListCard[m_players[thiefId].ListCard.Count - 1] as DarknessCard));
-                else if (m_players[playerId].ListCard[indexCard].cardType == CardType.Light
-                    && m_players[playerId].ListCard[indexCard].isEquipement)
-                    LightCardPower(m_players[playerId].ListCard[indexCard] as LightCard);
-                    
-                m_players[playerId].RemoveCard(indexCard);
+
+                if (m_players[playerId].ListCard[indexCard].isEquipement)
+                {
+                    if (m_players[playerId].ListCard[indexCard].cardType == CardType.Darkness)
+                    {
+                        yield return StartCoroutine(DarknessCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as DarknessCard));
+                        yield return StartCoroutine(LooseEquipmentCard(playerId, indexCard, 0));
+                    }
+                    else if (m_players[playerId].ListCard[indexCard].cardType == CardType.Light)
+                    {
+                        yield return StartCoroutine(LightCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as LightCard));
+                        yield return StartCoroutine(LooseEquipmentCard(playerId, indexCard, 1));
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Erreur : la carte choisie n'est pas un équipement et ne devrait pas être là.");
+                    yield return -1;
+                }
+
                 Debug.Log("La carte " + stealedCard + " a été volée au joueur "
                     + m_players[playerId].Name + " par le joueur " + m_players[thiefId].Name + " !");
             }
@@ -1770,8 +1782,7 @@ public class GameLogic : MonoBehaviour
                 Debug.LogError("Erreur : la carte choisie n'est pas un équipement et ne devrait pas être là.");
                 yield return -1;
             }
-
-            m_players[playerId].RemoveCard(indexCard);
+            
             Debug.Log("La carte " + stealedCard + " a été volée au joueur " 
                 + m_players[playerId].Name + " par le joueur " + m_players[thiefId].Name + " !");
         }
