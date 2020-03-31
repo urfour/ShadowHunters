@@ -2209,7 +2209,7 @@ public class GameLogic : MonoBehaviour
                         string playerAttacked = choiceDropdown.captionText.text;
                         choiceDropdown.ClearOptions();
 
-                        int lancer = UnityEngine.Random.Range(1, 6);
+                        int lancer = UnityEngine.Random.Range(1, 4);
                         int lancerTotal = (m_players[playerAttackingId].HasSaber==true)? lancer;
                         if (lancerTotal == 0)
                         {
