@@ -1943,7 +1943,7 @@ public class GameLogic : MonoBehaviour
     /// </summary>
     /// <param name="player">Joueur utilisant l'effet de sa carte 
     /// Personnage</param>
-    void PlayerCardPower(Player player)
+    IEnumerator PlayerCardPower(Player player)
     {
         switch(player.Character.characterType)
         {
@@ -2090,7 +2090,7 @@ public class GameLogic : MonoBehaviour
                 if(player.Revealed)
                 {
                     // Choix : voler une carte équipement ou infliger les blessures
-                    choiceDropdown.gameObject.SetActive(false);
+                    choiceDropdown.gameObject.SetActive(true);
                     //validateChoosenPlayerButton.gameObject.SetActive(false);
                     string playerChoice = choiceDropdown.captionText.text;
                     choiceDropdown.ClearOptions();
@@ -2106,7 +2106,7 @@ public class GameLogic : MonoBehaviour
                 if(player.Revealed && !player.UsedPower)
                 {
                     choiceDropdown.gameObject.SetActive(true);
-                    List<Player> players = GetPlayersSameSector(playerAttackingId, m_players[playerAttackingId].HasRevolver);
+                    List<Player> players = GetPlayersSameSector(player.Id, m_players[player.Id].HasRevolver);
                     if (players.Count == 0)
                     {
                         Debug.Log("Vous ne pouvez attaquer aucun joueur.");
@@ -2115,12 +2115,12 @@ public class GameLogic : MonoBehaviour
                     else
                     {
                         List<string> playerNames = new List<string>();
-                        foreach (Player player in players)
-                            playerNames.Add(player.Name);
+                        foreach (Player playerSector in players)
+                            playerNames.Add(playerSector.Name);
 
                         choiceDropdown.AddOptions(playerNames);
                         validateButton.gameObject.SetActive(true);
-                        yield return WaitUntilEvent(validateButton.onClick); 
+                        yield return WaitUntilEvent(validateButton.onClick);
                         int playerAttackedId = -1;
                         choiceDropdown.gameObject.SetActive(false);
                         validateButton.gameObject.SetActive(false);
@@ -2128,7 +2128,7 @@ public class GameLogic : MonoBehaviour
                         choiceDropdown.ClearOptions();
 
                         int lancer = UnityEngine.Random.Range(1, 6);
-                        int lancerTotal = (m_players[playerAttackingId].HasSaber==true)? lancer;
+                        int lancerTotal = lancer;
                         if (lancerTotal == 0)
                         {
                             Debug.Log("Le lancer vaut 0, vous n'attaquez pas.");
@@ -2136,18 +2136,18 @@ public class GameLogic : MonoBehaviour
                         else
                         {
                             // Si le joueur a la gatling, il attaque tous les joueurs qui ne sont pas dans sa zone
-                            if (m_players[playerAttackingId].HasGatling)
+                            if (m_players[player.Id].HasGatling)
                             {
-                                foreach (Player player in players)
+                                foreach (Player playerSector in players)
                                 {
-                                    m_players[player.Id].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack);
+                                    m_players[playerSector.Id].Wounded(lancerTotal + m_players[player.Id].BonusAttack - m_players[player.Id].MalusAttack);
                                     
                                     // On vérifie si le joueur attaqué est mort
-                                    CheckPlayerDeath(player.Id);
+                                    CheckPlayerDeath(playerSector.Id);
                                     
                                     // Le Loup-garou peut contre attaquer
                                     if(m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
-                                        && m_players[playerAttackingId].Revealed)
+                                        && m_players[player.Id].Revealed)
                                     {
                                         usePowerButton.gameObject.SetActive(true);
                                     }
@@ -2164,15 +2164,15 @@ public class GameLogic : MonoBehaviour
                                 Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[playerAttackedId].Name + ".");
 
                                 // Le joueur attaqué se prend des dégats
-                                m_players[playerAttackedId].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack);
+                                m_players[playerAttackedId].Wounded(lancerTotal + m_players[player.Id].BonusAttack - m_players[player.Id].MalusAttack);
 
                                 // On vérifie si le joueur attaqué est mort
                                 CheckPlayerDeath(playerAttackedId);
 
                                 // Charles peut attaquer de nouveau
                                 // Le Loup-garou peut contre attaquer
-                                if((m_players[playerAttackingId].Character.characterType == CharacterType.Charles
-                                    && m_players[playerAttackingId].Revealed)
+                                if((m_players[player.Id].Character.characterType == CharacterType.Charles
+                                    && m_players[player.Id].Revealed)
                                     || (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
                                     && m_players[playerAttackedId].Revealed))
                                 {
@@ -2188,7 +2188,7 @@ public class GameLogic : MonoBehaviour
                 if(player.Revealed && !player.UsedPower)
                 {
                     choiceDropdown.gameObject.SetActive(true);
-                    List<Player> players = GetPlayersSameSector(playerAttackingId, m_players[playerAttackingId].HasRevolver);
+                    List<Player> players = GetPlayersSameSector(player.Id, m_players[player.Id].HasRevolver);
                     if (players.Count == 0)
                     {
                         Debug.Log("Vous ne pouvez attaquer aucun joueur.");
@@ -2197,8 +2197,8 @@ public class GameLogic : MonoBehaviour
                     else
                     {
                         List<string> playerNames = new List<string>();
-                        foreach (Player player in players)
-                            playerNames.Add(player.Name);
+                        foreach (Player playerSector in players)
+                            playerNames.Add(playerSector.Name);
 
                         choiceDropdown.AddOptions(playerNames);
                         validateButton.gameObject.SetActive(true);
@@ -2210,7 +2210,7 @@ public class GameLogic : MonoBehaviour
                         choiceDropdown.ClearOptions();
 
                         int lancer = UnityEngine.Random.Range(1, 4);
-                        int lancerTotal = (m_players[playerAttackingId].HasSaber==true)? lancer;
+                        int lancerTotal = lancer;
                         if (lancerTotal == 0)
                         {
                             Debug.Log("Le lancer vaut 0, vous n'attaquez pas.");
@@ -2218,18 +2218,18 @@ public class GameLogic : MonoBehaviour
                         else
                         {
                             // Si le joueur a la gatling, il attaque tous les joueurs qui ne sont pas dans sa zone
-                            if (m_players[playerAttackingId].HasGatling)
+                            if (m_players[player.Id].HasGatling)
                             {
-                                foreach (Player player in players)
+                                foreach (Player playerSector in players)
                                 {
-                                    m_players[player.Id].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack);
+                                    m_players[playerSector.Id].Wounded(lancerTotal + m_players[player.Id].BonusAttack - m_players[player.Id].MalusAttack);
                                     
                                     // On vérifie si le joueur attaqué est mort
-                                    CheckPlayerDeath(player.Id);
+                                    CheckPlayerDeath(playerSector.Id);
                                     
                                     // Le Loup-garou peut contre attaquer
                                     if(m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
-                                        && m_players[playerAttackingId].Revealed)
+                                        && m_players[player.Id].Revealed)
                                     {
                                         usePowerButton.gameObject.SetActive(true);
                                     }
@@ -2246,15 +2246,15 @@ public class GameLogic : MonoBehaviour
                                 Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[playerAttackedId].Name + ".");
 
                                 // Le joueur attaqué se prend des dégats
-                                m_players[playerAttackedId].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack - m_players[playerAttackingId].MalusAttack);
+                                m_players[playerAttackedId].Wounded(lancerTotal + m_players[player.Id].BonusAttack - m_players[player.Id].MalusAttack);
 
                                 // On vérifie si le joueur attaqué est mort
                                 CheckPlayerDeath(playerAttackedId);
 
                                 // Charles peut attaquer de nouveau
                                 // Le Loup-garou peut contre attaquer
-                                if((m_players[playerAttackingId].Character.characterType == CharacterType.Charles
-                                    && m_players[playerAttackingId].Revealed)
+                                if((m_players[player.Id].Character.characterType == CharacterType.Charles
+                                    && m_players[player.Id].Revealed)
                                     || (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
                                     && m_players[playerAttackedId].Revealed))
                                 {
