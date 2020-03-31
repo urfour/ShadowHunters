@@ -1635,14 +1635,26 @@ public class GameLogic : MonoBehaviour
                     for (int i = 0; i < m_players[playerId].ListCard.Count; i++)
                     {
                         m_players[attackerId].AddCard(m_players[playerId].ListCard[i]);
-                        if (m_players[playerId].ListCard[i].cardType == CardType.Darkness
-                            && m_players[playerId].ListCard[i].isEquipement)
-                            yield return StartCoroutine(DarknessCardPower(m_players[attackerId].ListCard[m_players[attackerId].ListCard.Count - 1] as DarknessCard));
-                        else if (m_players[playerId].ListCard[i].cardType == CardType.Light
-                            && m_players[playerId].ListCard[i].isEquipement)
-                            yield return StartCoroutine(LightCardPower(m_players[attackerId].ListCard[m_players[attackerId].ListCard.Count - 1] as LightCard));
 
-                        m_players[playerId].RemoveCard(i);
+                        if (m_players[playerId].ListCard[i].isEquipement)
+                        {
+                            if (m_players[playerId].ListCard[i].cardType == CardType.Darkness)
+                            {
+                                yield return StartCoroutine(DarknessCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as DarknessCard));
+                                yield return StartCoroutine(LooseEquipmentCard(playerId, i, 0));
+                            }
+                            else if (m_players[playerId].ListCard[i].cardType == CardType.Light)
+                            {
+                                yield return StartCoroutine(LightCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as LightCard));
+                                yield return StartCoroutine(LooseEquipmentCard(playerId, i, 1));
+                            }
+                        }
+                        else
+                        {
+                            Debug.LogError("Erreur : la carte choisie n'est pas un équipement et ne devrait pas être là.");
+                            yield return -1;
+                        }
+                        
                         Debug.Log("La carte " + m_players[attackerId].ListCard[m_players[attackerId].ListCard.Count - 1] + " a été volée au joueur "
                             + m_players[playerId].Name + " par le joueur " + m_players[attackerId].Name + " !");
                     }
