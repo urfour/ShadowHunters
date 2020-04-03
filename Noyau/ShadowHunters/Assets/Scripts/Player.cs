@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Kernel.Settings;
 using UnityEngine;
 
 public enum PlayerNames
@@ -19,226 +20,121 @@ public enum PlayerNames
 /// </summary>
 public class Player
 {
-    private int id;                  // ordre du jeu d'un joueur
-    private string playerName;       // nom du joueur
-    private CharacterTeam team;      // shadow/hunter/neutre
-    private int life;                // nombre de points de vie
-    private int wound;               // nombre de blessure
-    private bool revealed;           // carte révélée à tous ou cachée
-    private bool dead;               // vivant ou mort
-    private bool usedPower;          // pouvoir déjà utilisé ou non
-    private int bonusAttack;         // bonus d'attaque (par défaut = 0)
-    private int malusAttack;         // malus d'attaque (par défaut = 0)
-    private int reductionWounds;     // réduction du nombre de Blessures subites (par défaut = 0)
-    private bool hasGatling;         // le joueur possède-t-il la mitrailleuse ?
-    private bool hasRevolver;        // le joueur possède-t-il le revolver ?
-    private bool hasSaber;           // le joueur possède-t-il le sabre ?
-    private bool hasAmulet;          // le joueur possède-t-il l'amulette ?
-    private bool hasCompass;         // le joueur possède-t-il la boussole ?
-    private bool hasBroche;          // le joueur possède-t-il la broche ?
-    private bool hasCrucifix;        // le joueur possède-t-il le crucifix ?
-    private bool hasSpear;           // le joueur possède-t-il la lance ?
-    private bool hasToge;            // le joueur possède-t-il la toge ?
-    private bool hasGuardian;        // le joueur est-il sous l'effet de l'ange gardien ?
-    private bool hasAncestral;       // le joueur est-il sous l'effet du savoir ancestral ?
-    private bool isTurn;             // est-ce le tour du joueur ?
-    private bool hasWon;             // le joueur a-t-il gagné ?
-    private Position position;       // position du joueur
-    private Character character;     // personnage du joueur
-    private List<Card> listCard;     // liste des cartes possédées par le joueur
+    //private int id;                  // ordre du jeu d'un joueur
+    //private string playerName;       // nom du joueur
+    //private CharacterTeam team;      // shadow/hunter/neutre
+    //private int life;                // nombre de points de vie
+    //private int wound;               // nombre de blessure
+    //private bool revealed;           // carte révélée à tous ou cachée
+    //private bool dead;               // vivant ou mort
+    //private bool usedPower;          // pouvoir déjà utilisé ou non
+    //private int bonusAttack;         // bonus d'attaque (par défaut = 0)
+    //private int malusAttack;         // malus d'attaque (par défaut = 0)
+    //private int reductionWounds;     // réduction du nombre de Blessures subites (par défaut = 0)
+    //private bool hasGatling;         // le joueur possède-t-il la mitrailleuse ?
+    //private bool hasRevolver;        // le joueur possède-t-il le revolver ?
+    //private bool hasSaber;           // le joueur possède-t-il le sabre ?
+    //private bool hasAmulet;          // le joueur possède-t-il l'amulette ?
+    //private bool hasCompass;         // le joueur possède-t-il la boussole ?
+    //private bool hasBroche;          // le joueur possède-t-il la broche ?
+    //private bool hasCrucifix;        // le joueur possède-t-il le crucifix ?
+    //private bool hasSpear;           // le joueur possède-t-il la lance ?
+    //private bool hasToge;            // le joueur possède-t-il la toge ?
+    //private bool hasGuardian;        // le joueur est-il sous l'effet de l'ange gardien ?
+    //private bool hasAncestral;       // le joueur est-il sous l'effet du savoir ancestral ?
+    //private bool isTurn;             // est-ce le tour du joueur ?
+    //private bool hasWon;             // le joueur a-t-il gagné ?
+    //private Position position;       // position du joueur
+    //private Character character;     // personnage du joueur
+    //private List<Card> listCard;     // liste des cartes possédées par le joueur
+
+    // ordre du jeu d'un joueur
+    public int Id { get; private set; }
+    // nom du joueur
+    public string Name { get; private set; }
+    // shadow/hunter/neutre
+    public CharacterTeam Team { get; private set; }
+    // nombre de points de vie
+    public int Life { get; private set; }
+    // nombre de blessure
+    public Setting<int> Wound { get; private set; } = new Setting<int>(0);
+    // carte révélée à tous ou cachée
+    public Setting<bool> Revealed { get; private set; } = new Setting<bool>(false);
+    // vivant ou mort
+    public Setting<bool> Dead { get; private set; } = new Setting<bool>(false);
+    // pouvoir déjà utilisé ou non
+    public Setting<bool> UsedPower { get; private set; } = new Setting<bool>(false);
+    // bonus d'attaque (par défaut = 0)
+    public Setting<int> BonusAttack { get; private set; } = new Setting<int>(0);
+    // malus d'attaque (par défaut = 0)
+    public Setting<int> MalusAttack { get; private set; } = new Setting<int>(0);
+    // réduction du nombre de Blessures subites (par défaut = 0)
+    public Setting<int> ReductionWounds { get; private set; } = new Setting<int>(0);
+    // le joueur possède-t-il la mitrailleuse ?
+    public Setting<bool> HasGatling { get; private set; } = new Setting<bool>(false);
+    // le joueur possède-t-il le revolver ?
+    public Setting<bool> HasRevolver { get; private set; } = new Setting<bool>(false);
+    // le joueur possède-t-il le sabre ?
+    public Setting<bool> HasSaber { get; private set; } = new Setting<bool>(false);
+    // le joueur possède-t-il l'amulette ?
+    public Setting<bool> HasAmulet { get; private set; } = new Setting<bool>(false);
+    // le joueur possède-t-il la broche ?
+    public Setting<bool> HasBroche { get; private set; } = new Setting<bool>(false);
+    // le joueur possède-t-il la boussole ?
+    public Setting<bool> HasCompass { get; private set; } = new Setting<bool>(false);
+    // le joueur possède-t-il le crucifix ?
+    public Setting<bool> HasCrucifix { get; private set; } = new Setting<bool>(false);
+    // le joueur possède-t-il la lance ?
+    public Setting<bool> HasSpear { get; private set; } = new Setting<bool>(false);
+    // le joueur possède-t-il la toge ?
+    public Setting<bool> HasToge { get; private set; } = new Setting<bool>(false);
+    // le joueur est-il sous l'effet de l'ange gardien ?
+    public Setting<bool> HasGuardian { get; private set; } = new Setting<bool>(false);
+    // le joueur est-il sous l'effet du savoir ancestral ?
+    public Setting<bool> HasAncestral { get; private set; } = new Setting<bool>(false);
+    // le joueur a-t-il gagné ?
+    public Setting<bool> HasWon { get; private set; } = new Setting<bool>(false);
+    // position du joueur
+    public Position Position { get; set; }
+    // est-ce le tour du joueur ?
+    public Setting<bool> IsTurn { get; private set; } = new Setting<bool>(false);
+    // personnage du joueur
+    public Character Character { get; private set; }
+    // liste des cartes possédées par le joueur
+    public List<Card> ListCard { get; private set; }
+
 
     public Player(int id)
     {
-        this.id = id;
-        this.playerName = ((PlayerNames)id).ToString();
-        this.life = 0;
-        this.wound = 0;
-        this.revealed = false;
-        this.dead = false;
-        this.usedPower = false;
-        this.bonusAttack = 0;
-        this.malusAttack = 0;
-        this.reductionWounds = 0;
-        this.hasGatling = false;
-        this.hasRevolver = false;
-        this.hasSaber = false;
-        this.hasAmulet = false;
-        this.hasBroche = false;
-        this.hasCompass = false;
-        this.hasCrucifix = false;
-        this.hasSpear = false;
-        this.hasToge = false;
-        this.hasGuardian = false;
-        this.hasAncestral = false;
-        this.isTurn = false;
-        this.hasWon = false;
-        this.position = Position.None;
-        this.listCard = new List<Card>();
-    }
-
-    public int Id
-    {
-        get { return id; }
-        set { id = value; }
-    }
-
-    public string Name
-    {
-        get { return playerName; }
-        set { playerName = value; }
-    }
-
-    public CharacterTeam Team
-    {
-        get { return team; }
-        set { team = value; }
-    }
-
-    public int Life
-    {
-        get { return life; }
-        set { life = value; }
-    }
-
-    public int Wound
-    {
-        get { return wound; }
-    }
-    public bool Revealed
-    {
-        get { return revealed; }
-        set { revealed = value; }
-    }
-
-    public bool Dead
-    {
-        get { return dead; }
-        set { dead = value; }
-    }
-
-    public bool UsedPower
-    {
-        get { return usedPower; }
-        set { usedPower = value; }
-    }
-
-    public int BonusAttack
-    {
-        get { return bonusAttack; }
-        set { bonusAttack = value; }
-    }
-
-    public int MalusAttack
-    {
-        get { return malusAttack; }
-        set { malusAttack = value; }
-    }
-    
-    public int ReductionWounds
-    {
-        get { return reductionWounds; }
-        set { reductionWounds = value; }
-    }
-
-    public Position Position
-    {
-        get { return position; }
-        set { position = value; }
-    }
-
-    public bool IsTurn
-    {
-        get { return isTurn; }
-        set { isTurn = value; }
-    }
-
-    public bool HasGatling
-    {
-        get { return hasGatling; }
-        set { hasGatling = value; }
-    }
-
-    public bool HasRevolver
-    {
-        get { return hasRevolver; }
-        set { hasRevolver = value; }
-    }
-
-    public bool HasSaber
-    {
-        get { return hasSaber; }
-        set { hasSaber = value; }
-    }
-
-    public bool HasAmulet
-    {
-        get{return hasAmulet;}
-        set{hasAmulet=value;}
-    }
-    public bool HasBroche
-    {
-        get{return hasBroche;}
-        set{hasBroche=value;}
-    }
-    public bool HasCompass
-    {
-        get{return hasCompass;}
-        set{hasCompass=value;}
-    }
-    public bool HasCrucifix
-    {
-        get{return hasCrucifix;}
-        set{hasCrucifix=value;}
-    }
-    public bool HasSpear
-    {
-        get{return hasSpear;}
-        set{hasSpear=value;}
-    }
-    public bool HasToge
-    {
-        get{return hasToge;}
-        set{hasToge=value;}
-    }
-    public bool HasGuardian
-    {
-        get { return hasGuardian; }
-        set { hasGuardian = value; }
-    }
-    public bool HasAncestral
-    {
-        get { return hasAncestral; }
-        set { hasAncestral = value; }
-    }
-
-    public bool HasWon
-    {
-        get { return hasWon; }
-        set { hasWon = value; }
+        this.Id = id;
+        this.Name = ((PlayerNames)id).ToString();
+        this.Life = 0;
+        this.Position = Position.None;
+        this.ListCard = new List<Card>();
     }
 
     public void Wounded(int damage)
     {
-        if (damage > 0 && !HasGuardian)
+        if (damage > 0 && !HasGuardian.Value)
         {
             string blessure = " Blessure";
             
-            if (reductionWounds > 0)
-                damage = (damage - reductionWounds < 0) ? 0 : damage - reductionWounds;
+            if (ReductionWounds.Value > 0)
+                damage = (damage - ReductionWounds.Value < 0) ? 0 : damage - ReductionWounds.Value;
 
-            this.wound += damage;
+            this.Wound.Value += damage;
             if (damage > 1)
                 blessure += "s";
-            Debug.Log("Le joueur " + id + " subit " + damage + blessure + " !");
+            Debug.Log("Le joueur " + Id + " subit " + damage + blessure + " !");
         }
 
-        if (HasGuardian)
+        if (HasGuardian.Value)
         {
-            Debug.Log("Le joueur " + id + " est protégé par l'Ange Gardien !");
+            Debug.Log("Le joueur " + Id + " est protégé par l'Ange Gardien !");
         }
 
         if (this.IsDead())
-            this.Dead = true;
+            this.Dead.Value = true;
     }
 
     public void Healed(int heal)
@@ -249,14 +145,14 @@ public class Player
         if (heal > 0)
         {
             string blessure = " Blessure";
-            this.wound -= heal;
+            this.Wound.Value -= heal;
             if (heal > 1)
                 blessure += "s";
-            Debug.Log("Le joueur " + id + " est soigné de " + heal + blessure + " !");
+            Debug.Log("Le joueur " + Id + " est soigné de " + heal + blessure + " !");
         }
 
-        if (this.wound < 0)
-            this.wound = 0;
+        if (this.Wound.Value < 0)
+            this.Wound.Value = 0;
     }
     
     public void SetWound (int wound)
@@ -270,29 +166,24 @@ public class Player
             if (wound > 1)
 				blessure += "s";
 				
-			this.wound = wound;
-			Debug.Log("Le joueur " + id + " a maintenant " + wound + blessure + " !");
+			this.Wound.Value = wound;
+			Debug.Log("Le joueur " + Id + " a maintenant " + wound + blessure + " !");
 		}
 
 	}
 
     public bool IsDead()
     {
-        if (this.wound >= this.Life)
+        if (this.Wound.Value >= this.Life)
             return true;
 
         return false;
     }
 
-    public List<Card> ListCard
-    {
-        get { return listCard; }
-    }
-
     public void PrintCards()
     {
-        Debug.Log("Joueur " + playerName + " : ");
-        foreach (Card c in listCard)
+        Debug.Log("Joueur " + Name + " : ");
+        foreach (Card c in ListCard)
         {
             Debug.Log("Carte : " + c.cardName);
             if (c.isEquipement)
@@ -303,32 +194,27 @@ public class Player
     }
 
     public void AddCard(Card card)
-    { 
-        listCard.Add(card);
+    {
+        ListCard.Add(card);
     }
 
     public void RemoveCard(int index)
     {
-        listCard.RemoveAt(index);
+        ListCard.RemoveAt(index);
     }
 
     public void SetCharacter(Character character)
     {
-        this.team = character.team;
-        this.life = character.characterHP;
-        this.character = character;
-    }
-
-    public Character Character
-    {
-        get { return character; }
+        this.Team = character.team;
+        this.Life = character.characterHP;
+        this.Character = character;
     }
 
     public int HasCard(string cardName)
     {
-        for (int i = 0 ; i < listCard.Count ; i++)
+        for (int i = 0 ; i < ListCard.Count ; i++)
         {
-            if (listCard[i].cardName.Equals(cardName))
+            if (ListCard[i].cardName.Equals(cardName))
                 return i;
         }
         return -1;
