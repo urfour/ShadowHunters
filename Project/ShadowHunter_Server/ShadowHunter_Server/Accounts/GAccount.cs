@@ -115,7 +115,7 @@ namespace ShadowHunter_Server.Accounts
         //          1 si le mot de passe est invalide,
         //          2 si l'utilisateur
         //              n'existe pas
-        private static byte Authentify(string login, string password)
+        private byte Authentify(string login, string password)
         {
             string connectionString = @"DataSource=..\..\database.db; Version=3;";
             int myUserId = -1;
@@ -163,7 +163,7 @@ namespace ShadowHunter_Server.Accounts
         // Demande à la BDD de créer un compte
         // Entrée : un SignInEvent contenant un login et un mot de passe
         // Sortie : true si le compte a été créé, false sinon
-        private static bool CreateAccount(SignInEvent sie)
+        private bool CreateAccount(SignInEvent sie)
         {
             string connectionString = @"DataSource=..\..\database.db; Version=3;";
             string login = sie.Login;
