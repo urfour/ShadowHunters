@@ -4,6 +4,7 @@ using Assets.Scripts.MainMenuUI.SearchGame;
 using UnityEngine.UI;
 using EventSystem;
 using System.Collections.Generic;
+using ServerInterface.RoomEvents;
 
 public class RoomBarComponent : MonoBehaviour
 {
@@ -64,5 +65,11 @@ public class RoomBarComponent : MonoBehaviour
     public void JoinButtonClick()
     {
         print("joinbuttonclick : " + displayed.Name.Value);
+        EventView.Manager.Emit(new JoinRoomEvent() { RoomData = displayed.RawData });
+    }
+
+    private void OnDestroy()
+    {
+        StopListen();
     }
 }

@@ -9,6 +9,7 @@ public class LabelTranslate : MonoBehaviour
     public string label;
     
     private OnNotification listener = null;
+    private bool isListening = false;
     
     // Use this for initialization
     void Start()
@@ -35,12 +36,21 @@ public class LabelTranslate : MonoBehaviour
     private void OnDisable()
     {
         Lang.Language.RemoveListener(listener);
+        isListening = false;
     }
 
     private void OnEnable()
     {
         if (listener != null)
+        {
             Lang.Language.AddListener(listener);
+            isListening = true;
+        }
         Refresh();
+    }
+
+    private void OnDestroy()
+    {
+        OnDisable();
     }
 }

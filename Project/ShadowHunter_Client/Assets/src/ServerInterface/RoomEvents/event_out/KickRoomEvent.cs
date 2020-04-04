@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ServerInterface.RoomEvents
 {
-    class KickRoomEvent : RoomEvent
+    public class KickRoomEvent : RoomEvent
     {
         public Account Kicked { get; set; }
 

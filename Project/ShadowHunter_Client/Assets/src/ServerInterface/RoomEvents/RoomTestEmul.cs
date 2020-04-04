@@ -35,6 +35,21 @@ namespace ServerInterface.RoomEvents
                 EventView.Manager.Emit(new RoomDataEvent() { RoomData = r });
                 EventView.Manager.Emit(new RoomJoinedEvent() { RoomData = r });
             }
+            else if (e is JoinRoomEvent jre)
+            {
+                RoomData r = Rooms[jre.RoomData.Code];
+                if (r.CurrentNbPlayer < r.MaxNbPlayer)
+                {
+                    r.Players[r.CurrentNbPlayer] = GAccount.Instance.LoggedAccount.Login;
+                    r.CurrentNbPlayer++;
+                    EventView.Manager.Emit(new RoomDataEvent() { RoomData = r });
+                    EventView.Manager.Emit(new RoomJoinedEvent() { RoomData = r });
+                }
+                else
+                {
+                    // unsuccess
+                }
+            }
         }
     }
 }

@@ -24,7 +24,7 @@ class RoomComponent : MonoBehaviour, IListener<RoomEvent>
     public void JoinRoom()
     {
         createRoom.gameObject.SetActive(false);
-        searchRoom.gameObject.SetActive(false);
+        searchRoom.gameObject.SetActive(true);
         waitingRoom.gameObject.SetActive(true);
         waitingRoom.manager.SetSelected(waitingRoom);
     }
@@ -35,6 +35,13 @@ class RoomComponent : MonoBehaviour, IListener<RoomEvent>
         {
             RefreshSearchRoom();
         });
+        waitingRoom.gameObject.SetActive(false);
+        EventView.Manager.AddListener(this, true);
+    }
+
+    private void OnDestroy()
+    {
+        EventView.Manager.RemoveListener(this);
     }
 
     public void OnEvent(RoomEvent e, string[] tags = null)

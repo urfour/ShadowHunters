@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ServerInterface.RoomEvents
 {
-    class RoomJoinedEvent : RoomEvent
+    public class RoomJoinedEvent : RoomEvent
     {
     }
 }

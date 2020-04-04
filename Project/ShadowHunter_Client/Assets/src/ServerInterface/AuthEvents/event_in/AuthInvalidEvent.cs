@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ServerInterface.AuthEvents
 {
-    class AuthInvalidEvent : AuthEvent
+    public class AuthInvalidEvent : AuthEvent
     {
 
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ServerInterface.RoomEvents
 {
-    class RoomDataEvent : RoomEvent
+    public class RoomDataEvent : RoomEvent
     {
 
     }

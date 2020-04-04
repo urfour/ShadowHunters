@@ -36,12 +36,30 @@ namespace Assets.Scripts.MainMenuUI.Accounts
             EventView.Manager.AddListener(Instance, true);
         }
 
+        public Account GetAccount(string login)
+        {
+            if (!Accounts.ContainsKey(login))
+            {
+                Accounts.Add(login, new Account() { Login = login });
+                EventView.Manager.Emit(new AskAccountEvent() { Login = login });
+            }
+            return Accounts[login];
+        }
+
         public void OnEvent(AuthEvent e, string[] tags = null)
         {
             UnityEngine.Debug.Log("GAccount : " + e);
             if (e is AssingAccountEvent aae)
             {
                 this.LoggedAccount = aae.Account;
+                if (Accounts.ContainsKey(aae.Account.Login))
+                {
+                    Accounts[aae.Account.Login] = aae.Account;
+                }
+                else
+                {
+                    Accounts.Add(aae.Account.Login, aae.Account);
+                }
                 AssignChange.Notify();
             }
             else if (e is AccountDataEvent ade)

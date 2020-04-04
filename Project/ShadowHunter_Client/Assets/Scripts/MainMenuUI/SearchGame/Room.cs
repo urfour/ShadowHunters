@@ -9,15 +9,18 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.MainMenuUI.SearchGame
 {
-    public class Room
+    public class Room : ListenableObject
     {
         public Setting<int> Code = new Setting<int>(0);
         public Setting<string> Name = new Setting<string>("");
         public Setting<int> CurrentNbPlayer = new Setting<int>(0);
         public Setting<int> MaxNbPlayer = new Setting<int>(0);
         public Setting<bool> HasPassword = new Setting<bool>(false);
+        public Setting<string[]> Players = new Setting<string[]>(null);
 
         public Setting<bool> IsActive = new Setting<bool>(false);
+
+        public RoomData RawData { get; private set; } = null;
 
         public Room(RoomData data)
         {
@@ -37,6 +40,9 @@ namespace Assets.Scripts.MainMenuUI.SearchGame
             CurrentNbPlayer.Value = data.CurrentNbPlayer;
             HasPassword.Value = data.HasPassword;
             IsActive.Value = true;
+            Players.Value = data.Players;
+            RawData = data;
+            Notify();
         }
     }
 }

@@ -15,6 +15,7 @@ namespace Assets.Scripts
     class GameManager : MonoBehaviour
     {
         static bool emulServer = true;
+        static bool EventLogger = true;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void OnBeforeSceneLoadRuntimeMethod()
@@ -24,6 +25,10 @@ namespace Assets.Scripts
             Language.Init();
             GAccount.Init();
             GRoom.Init();
+            if (EventLogger)
+            {
+                EventView.Manager.AddListener(new EventLogger());
+            }
             if (emulServer)
             {
                 ServerInterface.ServerTestEmul.Init();
@@ -38,6 +43,14 @@ namespace Assets.Scripts
         private void Update()
         {
             EventView.Manager.ExecMainThreaded();
+        }
+    }
+
+    class EventLogger : IListener<EventSystem.Event>
+    {
+        public void OnEvent(EventSystem.Event e, string[] tags = null)
+        {
+            Debug.Log(e.GetType().FullName + "\n\n" + e.Serialize());
         }
     }
 }
