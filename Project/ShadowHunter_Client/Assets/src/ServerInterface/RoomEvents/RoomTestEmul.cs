@@ -19,18 +19,18 @@ namespace ServerInterface.RoomEvents
             if (e is CreateRoomEvent cre)
             {
                 RoomData r = cre.RoomData;
-                int code = rand.Next(0, 100000);
+                int code = rand.Next(10000, 100000);
                 int whilesafe = 100000;
                 while (Rooms.ContainsKey(code) && whilesafe > 0)
                 {
-                    code = rand.Next(0, 100000);
+                    code = rand.Next(10000, 100000);
                     whilesafe--;
                 }
                 r.Code = code;
                 r.CurrentNbPlayer = 1;
                 r.Players = new string[r.MaxNbPlayer];
                 r.Players[0] = GAccount.Instance.LoggedAccount.Login;
-                r.Host = GAccount.Instance.LoggedAccount.Login;
+                //r.Host = GAccount.Instance.LoggedAccount.Login;
                 Rooms.Add(code, r);
                 EventView.Manager.Emit(new RoomDataEvent() { RoomData = r });
                 EventView.Manager.Emit(new RoomJoinedEvent() { RoomData = r });
@@ -49,6 +49,36 @@ namespace ServerInterface.RoomEvents
                 {
                     // unsuccess
                 }
+            }
+            else if (e is LeaveRoomEvent lre)
+            {
+                RoomData r = Rooms[lre.RoomData.Code];
+                bool found = false;
+                r.CurrentNbPlayer--;
+                if (r.CurrentNbPlayer == 0)
+                {
+                    r.IsSuppressed = true;
+                }
+                else
+                {
+                    for (int i = 0; i < r.CurrentNbPlayer; i++)
+                    {
+                        if (found)
+                        {
+                            r.Players[i] = r.Players[i + 1];
+                        }
+                        else
+                        {
+                            if (r.Players[i] == GAccount.Instance.LoggedAccount.Login)
+                            {
+                                found = true;
+                                r.Players[i] = r.Players[i + 1];
+                            }
+                        }
+                    }
+                }
+                EventView.Manager.Emit(new RoomDataEvent() { RoomData = r });
+                EventView.Manager.Emit(new RoomLeavedEvent() { RoomData = r });
             }
         }
     }

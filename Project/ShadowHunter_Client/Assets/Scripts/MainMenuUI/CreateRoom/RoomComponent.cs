@@ -14,6 +14,8 @@ class RoomComponent : MonoBehaviour, IListener<RoomEvent>
     //public MenuSelection[] interactableOnInRoomOnly;
     //public MenuSelection[] activeOnInRoomOnly;
 
+    private OnNotification gRoomNotification;
+
     public MenuSelection createRoom;
     public MenuSelection searchRoom;
     public MenuSelection waitingRoom;
@@ -29,6 +31,14 @@ class RoomComponent : MonoBehaviour, IListener<RoomEvent>
         waitingRoom.manager.SetSelected(waitingRoom);
     }
 
+    public void LeaveRoom()
+    {
+        createRoom.gameObject.SetActive(true);
+        searchRoom.gameObject.SetActive(true);
+        waitingRoom.gameObject.SetActive(false);
+        waitingRoom.manager.SetSelected(searchRoom);
+    }
+
     private void Start()
     {
         searchRoom.OnClicked.AddListener((sender) =>
@@ -37,6 +47,11 @@ class RoomComponent : MonoBehaviour, IListener<RoomEvent>
         });
         waitingRoom.gameObject.SetActive(false);
         EventView.Manager.AddListener(this, true);
+        gRoomNotification = (sender) =>
+        {
+            RefreshSearchRoom();
+        };
+        GRoom.Instance.AddListener(gRoomNotification);
     }
 
     private void OnDestroy()
@@ -50,6 +65,10 @@ class RoomComponent : MonoBehaviour, IListener<RoomEvent>
         {
             JoinRoom();
         }
+        else if (e is RoomLeavedEvent rle)
+        {
+            LeaveRoom();
+        }
     }
 
     public void RefreshSearchRoom()
@@ -58,7 +77,7 @@ class RoomComponent : MonoBehaviour, IListener<RoomEvent>
         {
             Destroy(WaitingRoomListContent.transform.GetChild(i).gameObject);
         }
-
+        
         foreach (var pair in GRoom.Instance.Rooms)
         {
             GameObject o = GameObject.Instantiate(RoomPrefab, WaitingRoomListContent.transform);

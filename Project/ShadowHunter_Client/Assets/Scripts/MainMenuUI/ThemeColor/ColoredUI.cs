@@ -203,4 +203,15 @@ class ColoredUI : MonoBehaviour
         }
         Apply();
     }
+
+    private void OnDestroy()
+    {
+        if (gameObject.activeInHierarchy)
+        {
+            foreach (KeyValuePair<ListenableObject, OnNotification> pair in observed)
+            {
+                pair.Key.RemoveListener(pair.Value);
+            }
+        }
+    }
 }

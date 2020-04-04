@@ -15,7 +15,8 @@ namespace EventSystem
 
         public virtual void AddListener(OnNotification listener)
         {
-            observers.Add(listener);
+            if (listener == null) Debug.LogWarning("Adding null listener");
+            else observers.Add(listener);
         }
         public virtual void RemoveListener(OnNotification listener)
         {

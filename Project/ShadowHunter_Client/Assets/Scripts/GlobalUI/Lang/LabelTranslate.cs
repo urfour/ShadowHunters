@@ -35,8 +35,11 @@ public class LabelTranslate : MonoBehaviour
 
     private void OnDisable()
     {
-        Lang.Language.RemoveListener(listener);
-        isListening = false;
+        if (listener != null)
+        {
+            Lang.Language.RemoveListener(listener);
+            isListening = false;
+        }
     }
 
     private void OnEnable()

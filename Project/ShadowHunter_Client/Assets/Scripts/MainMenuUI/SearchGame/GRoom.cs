@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.MainMenuUI.SearchGame
 {
-    class GRoom : IListener<RoomEvent>
+    class GRoom : ListenableObject, IListener<RoomEvent>
     {
         public static GRoom Instance { get; private set; } = null;
 
@@ -22,19 +22,22 @@ namespace Assets.Scripts.MainMenuUI.SearchGame
             {
                 if (rde.RoomData.IsSuppressed)
                 {
-                    // todo
+                    if (Rooms.ContainsKey(rde.RoomData.Code)) Rooms.Remove(rde.RoomData.Code);
+                }
+                else
+                {
+                    if (Rooms.ContainsKey(rde.RoomData.Code))
+                    {
+                        Rooms[rde.RoomData.Code].ModifData(rde.RoomData);
+                    }
+                    else
+                    {
+                        Rooms.Add(rde.RoomData.Code, new Room(rde.RoomData));
+                    }
                 }
                 if (JoinedRoom.Code.Value == rde.RoomData.Code)
                 {
                     JoinedRoom.ModifData(rde.RoomData);
-                }
-                if (Rooms.ContainsKey(rde.RoomData.Code))
-                {
-                    Rooms[rde.RoomData.Code].ModifData(rde.RoomData);
-                }
-                else
-                {
-                    Rooms.Add(rde.RoomData.Code, new Room(rde.RoomData));
                 }
             }
             else if (e is RoomJoinedEvent rje)
@@ -51,6 +54,12 @@ namespace Assets.Scripts.MainMenuUI.SearchGame
                     Rooms.Add(r.Code, new Room(r));
                 }
             }
+            else if (e is RoomLeavedEvent rle)
+            {
+                JoinedRoom.ModifData(new RoomData() { Code=0 });
+            }
+
+            Notify();
         }
 
         public static void Init()

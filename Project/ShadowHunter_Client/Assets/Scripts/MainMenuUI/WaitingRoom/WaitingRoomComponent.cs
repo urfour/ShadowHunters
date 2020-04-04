@@ -2,25 +2,32 @@
 using Assets.Scripts.MainMenuUI.SearchGame;
 using EventSystem;
 using ServerInterface.AuthEvents;
+using ServerInterface.RoomEvents;
 using UnityEngine;
+using UnityEngine.UI;
 
 class WaitingRoomComponent : MonoBehaviour
 {
     public RectTransform playersContent;
     public PlayerDisplayComponent playerPrefab;
+    public Text roomCode;
 
     private OnNotification notification;
 
     public void Start()
     {
-        notification = (sender) =>
-        {
-            this.Refresh();
-        };
+
     }
 
     public void OnEnable()
     {
+        if (notification == null)
+        {
+            notification = (sender) =>
+            {
+                this.Refresh();
+            };
+        }
         Refresh();
         GRoom.Instance.JoinedRoom.AddListener(notification);
     }
@@ -43,6 +50,7 @@ class WaitingRoomComponent : MonoBehaviour
             }
             if (r.Players.Value != null)
             {
+                roomCode.text = "#" + r.Code.Value;
                 foreach (string p in r.Players.Value)
                 {
                     if (p == null)
@@ -60,5 +68,11 @@ class WaitingRoomComponent : MonoBehaviour
         {
             Debug.LogError("GRoom.Instance.JoinedRoom is null");
         }
+    }
+
+    public void ExitRoomButtonClick()
+    {
+        Debug.Log("Exit " + GRoom.Instance.JoinedRoom.Name);
+        EventView.Manager.Emit(new LeaveRoomEvent() { RoomData = GRoom.Instance.JoinedRoom.RawData });
     }
 }

@@ -65,7 +65,7 @@ public class LanguageDropDown : SettingPrefab
     public void OnSelect(Int32 index)
     {
         if (selfChanged) return;
-        Debug.Log(dp.value + " : " + dp.options[dp.value].text);
+        //Debug.Log(dp.value + " : " + dp.options[dp.value].text);
         //new Language.Language(languages[dp.options[dp.value].text]);
         //Language.Instance = languages[dp.options[dp.value].text];
         selfChanged = true;

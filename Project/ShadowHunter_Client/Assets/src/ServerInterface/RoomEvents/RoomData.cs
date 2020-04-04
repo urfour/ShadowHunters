@@ -31,7 +31,6 @@ namespace ServerInterface.RoomEvents
         public bool IsSuppressed { get; set; } = false;
         public bool IsLaunched { get; set; } = false;
         public string[] Players { get; set; } = null;
-        public string Host { get; set; } = null;
 
         // defined by host
         public string Name { get; set; } = "";
