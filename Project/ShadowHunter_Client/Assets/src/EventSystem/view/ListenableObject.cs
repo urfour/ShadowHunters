@@ -29,7 +29,14 @@ namespace EventSystem
         {
             foreach (OnNotification o in observers)
             {
-                o(this);
+                if (o != null)
+                {
+                    o(this);
+                }
+                else
+                {
+                    Debug.LogWarning("null observator");
+                }
             }
         }
 

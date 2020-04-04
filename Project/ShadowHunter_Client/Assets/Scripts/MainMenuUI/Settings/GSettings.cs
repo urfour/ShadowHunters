@@ -40,15 +40,18 @@ namespace Assets.Scripts.MainMenuUI.Settings
                 Destroy(gameObject.transform.GetChild(i).gameObject);
             }
 
-            string[] settings = SettingManager.Settings.UI_Settings.Value;
+            string[] settings = SettingManager.UI_Settings.Value;
             RectTransform tr = this.transform as RectTransform;
             container.sizeDelta -= new Vector2(0, tr.sizeDelta.y);
             tr.sizeDelta -= new Vector2(0, tr.sizeDelta.y);
             for (int i = 0; i < settings.Length; i++)
             {
+                Debug.Log(settings[i]);
                 string[] args = settings[i].Split(';');
                 // split (';') : "accessibility" ; "category path" ; "setting parametre" ; "prefab path" ; "send to prefab"
-                if (access.Contains(args[0]) && access.IndexOf(args[0]) <= accessLevel){
+                if (access.Contains(args[0]) && access.IndexOf(args[0]) <= accessLevel)
+                {
+                    Debug.Log("\t access granted" + settings[i]);
                     string[] path = args[1].Split('/');
                     if (!categories.ContainsKey(path[0]))
                     {

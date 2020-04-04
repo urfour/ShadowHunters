@@ -19,7 +19,7 @@ public class LabelTranslate : MonoBehaviour
             t.text = Lang.Language.Translate(label);
             listener = (sender) => { t.text = Lang.Language.Translate(label); };
             //Lang.Language.AddListener(listener);
-            if (isActiveAndEnabled)
+            if (gameObject.activeInHierarchy)
             {
                 OnEnable();
             }

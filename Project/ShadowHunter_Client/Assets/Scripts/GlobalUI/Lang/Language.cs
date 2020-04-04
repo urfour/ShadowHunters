@@ -22,7 +22,7 @@ namespace Lang
             set
             {
                 _instance = value;
-                Notifier.TryNotify();
+                Notifier.Notify();
             }
         }
         
@@ -40,12 +40,7 @@ namespace Lang
         public static string Translate(string label, params string[] args)
         {
             if (Instance == null) return label;
-            if (!Instance.Translations.ContainsKey(label))
-            {
-                Instance.Translations.Add(label, label);
-                Instance.Save();
-            }
-            return Instance.Translations[label];
+            return Instance.GetText(label);
         }
 
         public static void AddListener(OnNotification listener)
@@ -56,6 +51,17 @@ namespace Lang
         public static void RemoveListener(OnNotification listener)
         {
             Notifier.AddListener(listener);
+        }
+
+        public static (Language,string)[] GetAllLanguages(string path = "Lang")
+        {
+            string[] files = IOSystem.GetAllFileNames(path);
+            (Language, string)[] languages = new (Language, string)[files.Length];
+            for (int i = 0; i < files.Length; i++)
+            {
+                languages[i] = (new Language(files[i]), files[i]);
+            }
+            return languages;
         }
         #endregion
 
@@ -71,6 +77,16 @@ namespace Lang
         {
             this.Lang = lang;
             this.Load();
+        }
+
+        public string GetText(string label)
+        {
+            if (!Translations.ContainsKey(label))
+            {
+                Translations.Add(label, label);
+                Save();
+            }
+            return Translations[label];
         }
 
         public void Load()

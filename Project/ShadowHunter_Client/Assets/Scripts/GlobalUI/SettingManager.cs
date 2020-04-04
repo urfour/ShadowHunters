@@ -29,12 +29,14 @@ namespace Kernel.Settings
         public Setting<double> UI_MusicVolume { get; set; } = new Setting<double>(0.5);
         public Setting<double> UI_EffectVolume { get; set; } = new Setting<double>(0.5);
 
-        public Setting<string[]> UI_Settings { get; set; } = new Setting<string[]>(
+        public static Setting<string[]> UI_Settings { get; set; } = new Setting<string[]>(
             new string[]
             {
                 // split (';') : "accessibility" ; "category path" ; "setting parametre" ; "prefab path" ; "send to prefab"
                 //"normal;settings.display/settings.language;UI_Lang;select_language;null",
                 //"advanced;settings.display/settings.title.color;UI_TitleColor;select_color;null",
+                "normal;settings.general/settings.general.language;UI_Lang;Prefabs/UI/Settings/LangSelector;",
+
                 "normal;settings.audio/settings.audio.music;UI_MusicVolume;Prefabs/UI/Settings/SliderDouble;max=1&min=0&displayed_multiplier=100&nb_displayed_decimals=3&displayed_cast=int",
                 "normal;settings.audio/settings.audio.music;UI_MusicVolume;Prefabs/UI/Settings/SliderDouble;max=1&min=0&displayed_multiplier=100&nb_displayed_decimals=3&displayed_cast=int",
                 "normal;settings.audio/settings.audio.effect;UI_EffectVolume;Prefabs/UI/Settings/SliderDouble;max=1&min=0&displayed_multiplier=100&nb_displayed_decimals=3&displayed_cast=int",
