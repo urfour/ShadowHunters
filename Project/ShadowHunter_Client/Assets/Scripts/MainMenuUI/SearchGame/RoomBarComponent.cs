@@ -27,6 +27,7 @@ public class RoomBarComponent : MonoBehaviour
         StopListen();
         notifications.Clear();
         displayed = r;
+        /*
         notifications.Add(displayed.Name, (sender) =>
         {
             roomName.text = displayed.Name.Value;
@@ -41,6 +42,9 @@ public class RoomBarComponent : MonoBehaviour
         {
             nbPlayers.text = displayed.CurrentNbPlayer.Value + " / " + displayed.MaxNbPlayer.Value;
         });
+        */
+        roomName.text = displayed.Name.Value;
+        nbPlayers.text = displayed.CurrentNbPlayer.Value + " / " + displayed.MaxNbPlayer.Value;
 
         StartListen();
     }
@@ -68,7 +72,17 @@ public class RoomBarComponent : MonoBehaviour
         EventView.Manager.Emit(new JoinRoomEvent() { RoomData = displayed.RawData });
     }
 
+    private void OnEnable()
+    {
+        StartListen();
+    }
+
     private void OnDestroy()
+    {
+        StopListen();
+    }
+    
+    private void OnDisable()
     {
         StopListen();
     }

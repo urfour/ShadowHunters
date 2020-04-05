@@ -10,6 +10,7 @@ class WaitingRoomComponent : MonoBehaviour
 {
     public RectTransform playersContent;
     public PlayerDisplayComponent playerPrefab;
+    public Button startGame;
     public Text roomCode;
 
     private OnNotification notification;
@@ -51,17 +52,29 @@ class WaitingRoomComponent : MonoBehaviour
             if (r.Players.Value != null)
             {
                 roomCode.text = "#" + r.Code.Value;
-                foreach (string p in r.Players.Value)
+                for (int i = 0; i < r.CurrentNbPlayer.Value; i++)
                 {
-                    if (p == null)
-                    {
-                        //Debug.LogError("null login");
-                        continue;
-                    }
-                    Account a = GAccount.Instance.GetAccount(p);
+                    Account a = GAccount.Instance.GetAccount(r.Players.Value[i]);
                     GameObject o = Instantiate(playerPrefab.gameObject, playersContent);
-                    o.GetComponent<PlayerDisplayComponent>().DisplayPlayer(a);
+                    o.GetComponent<PlayerDisplayComponent>().DisplayPlayer(a, i);
                 }
+            }
+            if (r.Players.Value[0] == GAccount.Instance.LoggedAccount.Login)
+            {
+                bool ready = true;
+                for (int i = 0; i < r.MaxNbPlayer.Value; i++)
+                {
+                    if (!r.RawData.ReadyPlayers[i])
+                    {
+                        ready = false;
+                        break;
+                    }
+                }
+                startGame.interactable = ready;
+            }
+            else
+            {
+                startGame.interactable = false;
             }
         }
         else
@@ -74,5 +87,10 @@ class WaitingRoomComponent : MonoBehaviour
     {
         Debug.Log("Exit " + GRoom.Instance.JoinedRoom.Name);
         EventView.Manager.Emit(new LeaveRoomEvent() { RoomData = GRoom.Instance.JoinedRoom.RawData });
+    }
+
+    public void StartGameButtonClick()
+    {
+        EventView.Manager.Emit(new StartGameEvent() { RoomData = GRoom.Instance.JoinedRoom.RawData });
     }
 }

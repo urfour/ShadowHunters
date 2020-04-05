@@ -328,8 +328,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e984706f0d06b3a4a907cb9689323db7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  elemClass: 3
-  elemType: 2
+  elemClass: 1
+  elemType: 4
   emMultiplier: 1
 --- !u!1 &5286036421199843927
 GameObject:

@@ -3,6 +3,9 @@ using System.Collections;
 using ServerInterface.AuthEvents;
 using UnityEngine.UI;
 using Assets.Scripts.MainMenuUI.Accounts;
+using EventSystem;
+using ServerInterface.RoomEvents;
+using Assets.Scripts.MainMenuUI.SearchGame;
 
 public class PlayerDisplayComponent : MonoBehaviour
 {
@@ -13,7 +16,7 @@ public class PlayerDisplayComponent : MonoBehaviour
     public string readyText;
 
     private Account assigned;
-    private bool ready = false;
+    //private bool ready = false;
 
     // Use this for initialization
     void Start()
@@ -27,7 +30,7 @@ public class PlayerDisplayComponent : MonoBehaviour
 
     }
 
-    public void DisplayPlayer(Account account)
+    public void DisplayPlayer(Account account, int index)
     {
         assigned = account;
         pseudoDisplay.text = account.Login;
@@ -39,7 +42,7 @@ public class PlayerDisplayComponent : MonoBehaviour
         {
             readyButton.interactable = false;
         }
-        if (ready)
+        if (GRoom.Instance.JoinedRoom.RawData.ReadyPlayers[index])
         {
             ReadyDisplay.text = readyText;
         }
@@ -51,8 +54,8 @@ public class PlayerDisplayComponent : MonoBehaviour
 
     public void ReadyButtonClick()
     {
-        ready = !ready;
-        DisplayPlayer(assigned);
-        // todo emit event
+        //ready = !ready;
+        EventView.Manager.Emit(new ReadyEvent() { RoomData = GRoom.Instance.JoinedRoom.RawData });
+        //DisplayPlayer(assigned);
     }
 }

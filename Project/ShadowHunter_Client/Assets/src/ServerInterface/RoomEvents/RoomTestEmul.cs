@@ -29,6 +29,7 @@ namespace ServerInterface.RoomEvents
                 r.Code = code;
                 r.CurrentNbPlayer = 1;
                 r.Players = new string[r.MaxNbPlayer];
+                r.ReadyPlayers = new bool[r.MaxNbPlayer];
                 r.Players[0] = GAccount.Instance.LoggedAccount.Login;
                 //r.Host = GAccount.Instance.LoggedAccount.Login;
                 Rooms.Add(code, r);
@@ -66,6 +67,7 @@ namespace ServerInterface.RoomEvents
                         if (found)
                         {
                             r.Players[i] = r.Players[i + 1];
+                            r.ReadyPlayers[i] = r.ReadyPlayers[i + 1];
                         }
                         else
                         {
@@ -73,12 +75,46 @@ namespace ServerInterface.RoomEvents
                             {
                                 found = true;
                                 r.Players[i] = r.Players[i + 1];
+                                r.ReadyPlayers[i] = r.ReadyPlayers[i + 1];
                             }
                         }
                     }
+                    r.ReadyPlayers[r.CurrentNbPlayer] = false;
+                    r.Players[r.CurrentNbPlayer] = null;
                 }
                 EventView.Manager.Emit(new RoomDataEvent() { RoomData = r });
                 EventView.Manager.Emit(new RoomLeavedEvent() { RoomData = r });
+            }
+            else if (e is ReadyEvent re)
+            {
+                RoomData r = re.RoomData;
+                for (int i = 0; i < r.CurrentNbPlayer; i++)
+                {
+                    if (r.Players[i] == GAccount.Instance.LoggedAccount.Login)
+                    {
+                        r.ReadyPlayers[i] = !r.ReadyPlayers[i];
+                        break;
+                    }
+                }
+                EventView.Manager.Emit(new RoomDataEvent() { RoomData = r });
+            }
+            else if (e is StartGameEvent sge)
+            {
+                RoomData r = sge.RoomData;
+                bool ready = true;
+                for (int i = 0; i < r.MaxNbPlayer; i++)
+                {
+                    if (!r.ReadyPlayers[i])
+                    {
+                        ready = false;
+                        break;
+                    }
+                }
+                if (ready)
+                {
+                    r.IsLaunched = true;
+                    EventView.Manager.Emit(new RoomDataEvent() { RoomData = r });
+                }
             }
         }
     }
