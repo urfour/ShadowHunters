@@ -121,10 +121,19 @@ public class GameBoard
 
 	public void PrintLog()
     {
-		Debug.Log("Ténèbre : " + m_darknessDeck.Count);
-		Debug.Log("Vision : " + m_visionDeck.Count);
-		Debug.Log("Lumière : " + m_lightDeck.Count);
-    }
+		Debug.Log("################## CARTES ##################");
+		Debug.Log("--------------------------------------------");
+		Debug.Log("Cartes Ténèbre : " + m_darknessDeck.Count);
+		for (int i = 0; i < m_darknessDeck.Count; i++)
+			Debug.Log("Carte n°" + i + " : " + m_darknessDeck[i].cardName);
+		Debug.Log("--------------------------------------------");
+		Debug.Log("Cartes Vision : " + m_visionDeck.Count);
+		for (int i = 0; i < m_visionDeck.Count; i++)
+			Debug.Log("Carte n°" + i + " : " + m_visionDeck[i].cardName);
+		Debug.Log("Cartes Lumière : " + m_lightDeck.Count);
+		for (int i = 0; i < m_lightDeck.Count; i++)
+			Debug.Log("Carte n°" + i + " : " + m_lightDeck[i].cardName);
+	}
 
 	public Card DrawCard(CardType cardType)
 	{
@@ -143,8 +152,9 @@ public class GameBoard
 						m_visionDeck.Add(card);
 						m_hermit.RemoveAt(0);
 					}
+					m_visionDeck.Shuffle<VisionCard>();
+					Debug.Log("Redistribution du deck Vision");
 				}
-				m_visionDeck.Shuffle<VisionCard>();
 				break;
 			case CardType.Darkness:
 				pickedCard = m_darknessDeck[0];
@@ -158,8 +168,9 @@ public class GameBoard
 						m_darknessDeck.Add(card);
 						m_black.RemoveAt(0);
 					}
+					m_darknessDeck.Shuffle<DarknessCard>();
+					Debug.Log("Redistribution du deck Ténèbre");
 				}
-				m_darknessDeck.Shuffle<DarknessCard>();
 				break;
 			case CardType.Light:
 				pickedCard = m_lightDeck[0];
@@ -173,8 +184,9 @@ public class GameBoard
 						m_lightDeck.Add(card);
 						m_white.RemoveAt(0);
 					}
+					m_lightDeck.Shuffle<LightCard>();
+					Debug.Log("Redistribution du deck Lumière");
 				}
-				m_lightDeck.Shuffle<LightCard>();
 				break;
 		}
 		if (cardType != CardType.Vision)

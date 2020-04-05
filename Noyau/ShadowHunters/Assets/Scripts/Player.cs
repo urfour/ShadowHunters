@@ -142,7 +142,10 @@ public class Player
         if (this.IsDead())
             return;
 
-        if (heal > 0)
+        else if (Wound.Value == 0)
+            Debug.Log("Le joueur n'a pas de Blessures, il n'est donc pas soigné.");
+
+        else if (heal > 0)
         {
             string blessure = " Blessure";
             this.Wound.Value -= heal;

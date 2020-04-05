@@ -195,6 +195,8 @@ public class GameLogic : MonoBehaviour
     public Toggle healForestToggle;
     public Button usePowerButton;
     public Button dontUsePowerButton;
+    public GameObject namesInterface;
+    public GameObject woundsInterface;
 
 
     /// <summary>
@@ -216,7 +218,52 @@ public class GameLogic : MonoBehaviour
         dontUsePowerButton.gameObject.SetActive(false);
         woundsForestToggle.gameObject.gameObject.SetActive(false);
         healForestToggle.gameObject.gameObject.SetActive(false);
+        InitInterface();
         ChooseNextPlayer();
+    }
+
+    void Update()
+    {
+        for (int i = 0; i < m_nbPlayers; i++)
+        {
+            GameObject gameObject = GameObject.Find("WoundsPlayer" + i);
+            gameObject.GetComponent<Text>().text = "" + m_players[i].Wound.Value;
+        }
+    }
+
+    void InitInterface()
+    {
+        Color nameColor = Color.white;
+        for (int i = 0; i < m_nbPlayers; i++)
+        {
+            GameObject wounds = new GameObject("WoundsPlayer" + i);
+            wounds.AddComponent<SpriteRenderer>();
+            wounds.transform.SetParent(woundsInterface.transform);
+            wounds.transform.localScale = new Vector2(1, 1);
+
+            wounds.AddComponent<Text>().text = "0";
+            wounds.GetComponent<Text>().font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
+
+            GameObject name = new GameObject("Player" + i + "Name");
+            name.AddComponent<SpriteRenderer>();
+            name.transform.SetParent(namesInterface.transform);
+            name.transform.localScale = new Vector2(1, 1);
+            name.AddComponent<Text>().text = m_players[i].Name + "\n(" + m_players[i].Character.characterName + ")";
+            name.GetComponent<Text>().font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
+            switch (m_players[i].Character.team)
+            {
+                case CharacterTeam.Hunter:
+                    nameColor = Color.blue;
+                    break;
+                case CharacterTeam.Shadow:
+                    nameColor = Color.red;
+                    break;
+                case CharacterTeam.Neutral:
+                    nameColor = Color.yellow;
+                    break;
+            }
+            name.GetComponent<Text>().color = nameColor;
+        }
     }
 
     /// <summary>
@@ -710,33 +757,14 @@ public class GameLogic : MonoBehaviour
             dontUsePowerButton.gameObject.SetActive(true);
             m_pickedVisionCard = pickedCard;
         }
-        // Cartes applicables en fonction des équipes ?
-        else if ((team == CharacterTeam.Shadow && !pickedCard.visionEffect.effectOnShadow)
-            || (team == CharacterTeam.Hunter && !pickedCard.visionEffect.effectOnHunter)
-            || (team == CharacterTeam.Neutral && !pickedCard.visionEffect.effectOnNeutral))
-        {
-            if (pickedCard.visionEffect.effectSupremeVision)
-                //TODO montrer la carte personnage
-                Debug.Log("C'est une carte Vision Suprême !");
-            else
-                Debug.Log("Rien ne se passe.");
-        }
-        else
-        {
-            // Cas des cartes applicables en fonction des points de vie
-            if (pickedCard.visionEffect.effectOnLowHP && CheckLowHPCharacters(m_players[playerId].Character.characterName))
-            {
-                m_players[playerId].Wounded(1);
-                CheckPlayerDeath(playerId);
-            }
-            else if (pickedCard.visionEffect.effectOnHighHP && CheckHighHPCharacters(m_players[playerId].Character.characterName))
-            {
-                m_players[playerId].Wounded(2);
-                CheckPlayerDeath(playerId);
-            }
 
-            // Cas des cartes infligeant des Blessures
-            else if (pickedCard.visionEffect.effectTakeWounds)
+        // Cartes applicables en fonction des équipes ?
+        else if ((team == CharacterTeam.Shadow && pickedCard.visionEffect.effectOnShadow)
+            || (team == CharacterTeam.Hunter && pickedCard.visionEffect.effectOnHunter)
+            || (team == CharacterTeam.Neutral && pickedCard.visionEffect.effectOnNeutral))
+        {
+             // Cas des cartes infligeant des Blessures
+            if (pickedCard.visionEffect.effectTakeWounds)
             {
                 m_players[playerId].Wounded(pickedCard.visionEffect.nbWounds);
                 CheckPlayerDeath(playerId);
@@ -769,9 +797,26 @@ public class GameLogic : MonoBehaviour
                     GiveEquipmentCard(playerId);
                 }
             }
-            else
-                Debug.Log("Rien ne se passe.");
         }
+        // Cas des cartes applicables en fonction des points de vie
+        else if (pickedCard.visionEffect.effectOnLowHP && CheckLowHPCharacters(m_players[playerId].Character.characterName))
+        {
+            m_players[playerId].Wounded(1);
+            CheckPlayerDeath(playerId);
+        }
+        else if (pickedCard.visionEffect.effectOnHighHP && CheckHighHPCharacters(m_players[playerId].Character.characterName))
+        {
+            m_players[playerId].Wounded(2);
+            CheckPlayerDeath(playerId);
+        }
+
+        // Cas de la carte Vision Suprême
+        else if (pickedCard.visionEffect.effectSupremeVision)
+            //TODO montrer la carte personnage
+            Debug.Log("C'est une carte Vision Suprême !");
+
+        else
+            Debug.Log("Rien ne se passe.");
     }
 
     /// <summary>
@@ -2453,6 +2498,11 @@ public class GameLogic : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    public void PrintLogs()
+    {
+        gameBoard.PrintLog();
     }
 
     /// <summary>
