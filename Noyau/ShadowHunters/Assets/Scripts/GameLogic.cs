@@ -195,6 +195,8 @@ public class GameLogic : MonoBehaviour
     public Toggle healForestToggle;
     public Button usePowerButton;
     public Button dontUsePowerButton;
+    public Toggle giveEquipmentToggle;
+    public Toggle takingWoundsToggle;
     public GameObject namesInterface;
     public GameObject woundsInterface;
 
@@ -216,8 +218,10 @@ public class GameLogic : MonoBehaviour
         validateButton.gameObject.SetActive(false);
         usePowerButton.gameObject.SetActive(false);
         dontUsePowerButton.gameObject.SetActive(false);
-        woundsForestToggle.gameObject.gameObject.SetActive(false);
-        healForestToggle.gameObject.gameObject.SetActive(false);
+        woundsForestToggle.gameObject.SetActive(false);
+        healForestToggle.gameObject.SetActive(false);
+        giveEquipmentToggle.gameObject.SetActive(false);
+        takingWoundsToggle.gameObject.SetActive(false);
         InitInterface();
         ChooseNextPlayer();
     }
@@ -226,8 +230,14 @@ public class GameLogic : MonoBehaviour
     {
         for (int i = 0; i < m_nbPlayers; i++)
         {
-            GameObject gameObject = GameObject.Find("WoundsPlayer" + i);
-            gameObject.GetComponent<Text>().text = "" + m_players[i].Wound.Value;
+            GameObject wounds = GameObject.Find("WoundsPlayer" + i);
+            wounds.GetComponent<Text>().text = "" + m_players[i].Wound.Value + " Blessure(s)";
+
+            GameObject name = GameObject.Find("Player" + i + "Name");
+            if (i == m_playerTurn)
+                name.GetComponent<Text>().fontStyle = FontStyle.Bold;
+            else
+                name.GetComponent<Text>().fontStyle = FontStyle.Normal;
         }
     }
 
@@ -791,10 +801,28 @@ public class GameLogic : MonoBehaviour
                     Debug.Log("Vous ne possédez pas de carte équipement.");
                     m_players[playerId].Wounded(1);
                 }
-                else
-                // TODO don d'une carte équipement
+                else 
                 {
-                    GiveEquipmentCard(playerId);
+                    Debug.Log("Voulez-vous donner une carte équipement ou subir une Blessure ?");
+                    giveEquipmentToggle.gameObject.SetActive(true);
+                    takingWoundsToggle.gameObject.SetActive(true);
+                    validateButton.gameObject.SetActive(true);
+                    yield return WaitUntilEvent(validateButton.onClick);
+
+                    giveEquipmentToggle.gameObject.SetActive(false);
+                    takingWoundsToggle.gameObject.SetActive(false);
+                    validateButton.gameObject.SetActive(false);
+
+                    if (giveEquipmentToggle.isOn)
+                    {
+                        Debug.Log("Vous choisissez de donner une carte équipement.");
+                        yield return StartCoroutine(GiveEquipmentCard(playerId));
+                    }
+                    else
+                    {
+                        Debug.Log("Vous choisissez de subir 1 Blessure.");
+                        m_players[playerId].Wounded(1);
+                    }
                 }
             }
         }
@@ -1894,6 +1922,7 @@ public class GameLogic : MonoBehaviour
 
             Debug.Log("Quelle carte équipement souhaitez-vous donner ?");
             choiceDropdown.AddOptions(choices);
+            validateButton.gameObject.SetActive(true);
             yield return StartCoroutine(WaitUntilEvent(validateButton.onClick));
 
             string givenCard = choiceDropdown.captionText.text;
