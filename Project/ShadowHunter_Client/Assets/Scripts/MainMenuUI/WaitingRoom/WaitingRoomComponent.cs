@@ -85,7 +85,7 @@ class WaitingRoomComponent : MonoBehaviour
 
     public void ExitRoomButtonClick()
     {
-        Debug.Log("Exit " + GRoom.Instance.JoinedRoom.Name);
+        //Debug.Log("Exit " + GRoom.Instance.JoinedRoom.Name);
         EventView.Manager.Emit(new LeaveRoomEvent() { RoomData = GRoom.Instance.JoinedRoom.RawData });
     }
 

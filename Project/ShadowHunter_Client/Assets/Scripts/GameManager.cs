@@ -35,6 +35,16 @@ namespace Assets.Scripts
             }
         }
 
+        public List<GameObject> forceStartCall;
+
+        private void Start()
+        {
+            foreach(GameObject o in forceStartCall)
+            {
+                o.SetActive(true);
+            }
+        }
+
         private void OnApplicationQuit()
         {
             SettingManager.Save();
