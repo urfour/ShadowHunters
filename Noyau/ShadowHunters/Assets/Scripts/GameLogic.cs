@@ -114,7 +114,7 @@ public class GameLogic : MonoBehaviour
         get => m_playerAttackedId;
         private set => m_playerAttackedId = value;
     }
-     /// <summary>
+    /// <summary>
     /// Dégats pris par le joueur attaqué par Bob
     /// </summary>    
     private int m_damageBob = -1;
@@ -182,7 +182,7 @@ public class GameLogic : MonoBehaviour
     public List<Character> m_neutralCharacters;
 
     // Boutons d'interaction
-    public Dropdown choiceDropdown; 
+    public Dropdown choiceDropdown;
     public Button rollDicesButton;
     public Button visionCardsButton;
     public Button darknessCardsButton;
@@ -195,7 +195,7 @@ public class GameLogic : MonoBehaviour
     public Toggle healForestToggle;
     public Button usePowerButton;
     public Button dontUsePowerButton;
-    
+
 
     /// <summary>
     /// Fonction appelée dès l'instanciation du GameObject auquel est lié le script,
@@ -254,8 +254,8 @@ public class GameLogic : MonoBehaviour
     {
         m_players = new List<Player>();
         Player p;
-        gameBoard = new GameBoard(m_locationCards.PrepareDecks<LocationCard>(), 
-            m_visionCards.PrepareDecks<VisionCard>(), m_darknessCards.PrepareDecks<DarknessCard>(), 
+        gameBoard = new GameBoard(m_locationCards.PrepareDecks<LocationCard>(),
+            m_visionCards.PrepareDecks<VisionCard>(), m_darknessCards.PrepareDecks<DarknessCard>(),
             m_lightCards.PrepareDecks<LightCard>(), nbPlayers);
         List<Character> characters;
         for (int i = 0; i < nbPlayers; i++)
@@ -454,7 +454,7 @@ public class GameLogic : MonoBehaviour
             else
                 position = Position.None;
         }
-        Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " se rend sur la carte " + 
+        Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " se rend sur la carte " +
             gameBoard.GetAreaNameByPosition(m_players[m_playerTurn].Position) + ".");
 
     }
@@ -512,8 +512,8 @@ public class GameLogic : MonoBehaviour
                 {
                     if (!player.IsDead())
                     {
-                        if(isWoundsForestEffect)
-                            if(!player.HasBroche.Value)
+                        if (isWoundsForestEffect)
+                            if (!player.HasBroche.Value)
                                 players.Add(player.Name);
                             else
                                 continue;
@@ -531,7 +531,7 @@ public class GameLogic : MonoBehaviour
                 choiceDropdown.gameObject.SetActive(false);
                 validateButton.gameObject.SetActive(false);
                 int playerAttackedId = -1;
-                for (int i = 0 ; i < m_nbPlayers ; i++)
+                for (int i = 0; i < m_nbPlayers; i++)
                     if (m_players[i].Name.Equals(playerAttacked))
                         playerAttackedId = i;
 
@@ -544,17 +544,17 @@ public class GameLogic : MonoBehaviour
                     m_players[playerAttackedId].Healed(1);
                 break;
             case Position.Sanctuaire:
-            // Possibilité de voler une carte équipement
+                // Possibilité de voler une carte équipement
                 yield return StartCoroutine(StealEquipmentCard(m_playerTurn));
                 break;
         }
         attackPlayer.gameObject.SetActive(true);
-        if(m_players[m_playerTurn].HasSaber.Value == true)   
+        if (m_players[m_playerTurn].HasSaber.Value == true)
             endTurn.gameObject.SetActive(false);
         else
             endTurn.gameObject.SetActive(true);
     }
-    
+
     /// <summary>
     /// Fonction appelée par le bouton de pioche d'une carte Vision
     /// </summary>
@@ -581,12 +581,12 @@ public class GameLogic : MonoBehaviour
         yield return StartCoroutine(VisionCardPower(visionCard));
         gameBoard.AddDiscard(visionCard, CardType.Vision);
         attackPlayer.gameObject.SetActive(true);
-        if(m_players[m_playerTurn].HasSaber.Value == true)
+        if (m_players[m_playerTurn].HasSaber.Value == true)
             endTurn.gameObject.SetActive(false);
         else
             endTurn.gameObject.SetActive(true);
     }
-    
+
     /// <summary>
     /// Fonction appelée par le bouton de pioche d'une carte Ténèbre
     /// </summary>
@@ -612,14 +612,14 @@ public class GameLogic : MonoBehaviour
         if (darknessCard.isEquipement)
         {
             m_players[m_playerTurn].AddCard(darknessCard);
-            Debug.Log("La carte " + darknessCard.cardName + " a été ajoutée à la main du joueur " 
+            Debug.Log("La carte " + darknessCard.cardName + " a été ajoutée à la main du joueur "
                 + m_players[m_playerTurn].Name + ".");
         }
         yield return StartCoroutine(DarknessCardPower(darknessCard));
         if (!darknessCard.isEquipement)
             gameBoard.AddDiscard(darknessCard, CardType.Darkness);
         attackPlayer.gameObject.SetActive(true);
-        if(m_players[m_playerTurn].HasSaber.Value == true)
+        if (m_players[m_playerTurn].HasSaber.Value == true)
             endTurn.gameObject.SetActive(false);
         else
             endTurn.gameObject.SetActive(true);
@@ -650,14 +650,14 @@ public class GameLogic : MonoBehaviour
         if (lightCard.isEquipement)
         {
             m_players[m_playerTurn].AddCard(lightCard);
-            Debug.Log("La carte " + lightCard.cardName + " a été ajoutée à la main du joueur " 
+            Debug.Log("La carte " + lightCard.cardName + " a été ajoutée à la main du joueur "
                 + m_players[m_playerTurn].Name + ".");
         }
         yield return StartCoroutine(LightCardPower(lightCard));
         if (!lightCard.isEquipement)
             gameBoard.AddDiscard(lightCard, CardType.Light);
         attackPlayer.gameObject.SetActive(true);
-        if(m_players[m_playerTurn].HasSaber.Value == true)
+        if (m_players[m_playerTurn].HasSaber.Value == true)
             endTurn.gameObject.SetActive(false);
         else
             endTurn.gameObject.SetActive(true);
@@ -685,9 +685,9 @@ public class GameLogic : MonoBehaviour
         choiceDropdown.gameObject.SetActive(true);
         validateButton.gameObject.SetActive(true);
         List<string> players = new List<string>();
-        for (int i = 0 ; i < m_nbPlayers ; i++)
+        for (int i = 0; i < m_nbPlayers; i++)
             if (!m_players[i].IsDead() && i != m_playerTurn)
-                players.Add(m_players[i].Name);            
+                players.Add(m_players[i].Name);
         choiceDropdown.AddOptions(players);
         Debug.Log("A qui voulez-vous donner cette carte vision ?");
         yield return WaitUntilEvent(validateButton.onClick);
@@ -697,14 +697,14 @@ public class GameLogic : MonoBehaviour
         string choosenPlayer = choiceDropdown.captionText.text;
         choiceDropdown.ClearOptions();
         choiceDropdown.gameObject.SetActive(false);
-        for (int i = 0 ; i < m_nbPlayers ; i++)
+        for (int i = 0; i < m_nbPlayers; i++)
             if (m_players[i].Name.Equals(choosenPlayer))
                 playerId = i;
 
         Debug.Log("La carte Vision a été donnée au joueur " + choosenPlayer + ".");
         CharacterTeam team = m_players[playerId].Team;
 
-        if(m_players[playerId].Character.characterType == CharacterType.Metamorphe)
+        if (m_players[playerId].Character.characterType == CharacterType.Metamorphe)
         {
             usePowerButton.gameObject.SetActive(true);
             dontUsePowerButton.gameObject.SetActive(true);
@@ -795,40 +795,40 @@ public class GameLogic : MonoBehaviour
             case DarknessEffect.Dynamite:
                 int lancer1 = UnityEngine.Random.Range(1, 6);
                 int lancer2 = UnityEngine.Random.Range(1, 4);
-                int lancerTotal=lancer1+lancer2;
-                Position area=Position.None;
+                int lancerTotal = lancer1 + lancer2;
+                Position area = Position.None;
 
-                switch(lancerTotal)
+                switch (lancerTotal)
                 {
                     case 2:
                     case 3:
-                        area=Position.Antre;
+                        area = Position.Antre;
                         break;
                     case 4:
                     case 5:
-                        area=Position.Porte;
+                        area = Position.Porte;
                         break;
                     case 6:
-                        area=Position.Monastere;
+                        area = Position.Monastere;
                         break;
                     case 7:
                         Debug.Log("Rien ne se passe");
                         break;
                     case 8:
-                        area=Position.Cimetiere;
+                        area = Position.Cimetiere;
                         break;
                     case 9:
-                        area=Position.Foret;
+                        area = Position.Foret;
                         break;
                     case 10:
-                        area=Position.Sanctuaire;
+                        area = Position.Sanctuaire;
                         break;
                 }
-                if(lancerTotal!=7)
+                if (lancerTotal != 7)
                 {
                     foreach (Player p in m_players)
                     {
-                        if(p.Position==area && !p.HasAmulet.Value)
+                        if (p.Position == area && !p.HasAmulet.Value)
                             p.Wounded(3);
                     }
                 }
@@ -851,7 +851,7 @@ public class GameLogic : MonoBehaviour
                 if (m_players[m_playerTurn].Revealed.Value && m_players[m_playerTurn].Team == CharacterTeam.Shadow)
                 {
                     m_players[m_playerTurn].Healed(m_players[m_playerTurn].Wound.Value);
-                    Debug.Log("Le joueur "+ m_players[m_playerTurn].Name + " se soigne complètement");
+                    Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " se soigne complètement");
                 }
                 else
                 {
@@ -884,11 +884,11 @@ public class GameLogic : MonoBehaviour
         {
             if (!player.IsDead() && player.Id != m_playerTurn)
             {
-                if(isPuppet)
+                if (isPuppet)
                     players.Add(player.Name);
                 else
                 {
-                    if(!player.HasAmulet.Value)
+                    if (!player.HasAmulet.Value)
                         players.Add(player.Name);
                 }
             }
@@ -905,12 +905,12 @@ public class GameLogic : MonoBehaviour
         foreach (Player player in m_players)
             if (player.Name.Equals(playerChoosen))
                 playerChoosenId = player.Id;
-        
-        if(isPuppet)
+
+        if (isPuppet)
         {
             int lancer = UnityEngine.Random.Range(1, 6);
             Debug.Log("Le lancer donne " + lancer + ".");
-            if(lancer<=4)
+            if (lancer <= 4)
             {
                 m_players[playerChoosenId].Wounded(nbWoundsTaken);
                 CheckPlayerDeath(playerChoosenId);
@@ -948,22 +948,22 @@ public class GameLogic : MonoBehaviour
         Debug.Log(pickedCard.lightEffect);
         switch (pickedCard.lightEffect)
         {
-			case LightEffect.Amulette:
+            case LightEffect.Amulette:
                 m_players[m_playerTurn].HasAmulet.Value = true;
                 break;
-				
-			case LightEffect.AngeGardien:
+
+            case LightEffect.AngeGardien:
 
                 m_players[m_playerTurn].HasGuardian.Value = true;
                 break;
-				
-			case LightEffect.Supreme:
+
+            case LightEffect.Supreme:
                 Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
                 yield return new WaitForSeconds(6f);
-                if (revealed && m_players[m_playerTurn].Team== CharacterTeam.Hunter)
+                if (revealed && m_players[m_playerTurn].Team == CharacterTeam.Hunter)
                 {
                     m_players[m_playerTurn].Healed(m_players[m_playerTurn].Wound.Value);
-                    Debug.Log("Le joueur "+ m_players[m_playerTurn].Name + " se soigne complètement");
+                    Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " se soigne complètement");
                 }
                 else
                 {
@@ -971,21 +971,21 @@ public class GameLogic : MonoBehaviour
                 }
                 break;
 
-			case LightEffect.Chocolat:
+            case LightEffect.Chocolat:
                 Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
                 yield return new WaitForSeconds(6f);
                 if (revealed && (character == "Allie" || character == "Emi" || character == "Metamorphe"))
                 {
                     m_players[m_playerTurn].Healed(m_players[m_playerTurn].Wound.Value);
-                    Debug.Log("Le joueur "+ m_players[m_playerTurn].Name + " se soigne complètement");
+                    Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " se soigne complètement");
                 }
                 else
                 {
                     Debug.Log("Rien ne se passe.");
                 }
                 break;
-			
-			case LightEffect.Benediction:
+
+            case LightEffect.Benediction:
 
                 choiceDropdown.gameObject.SetActive(true);
                 validateButton.gameObject.SetActive(true);
@@ -1011,57 +1011,57 @@ public class GameLogic : MonoBehaviour
                         playerChoosenId = player.Id;
 
                 Debug.Log("Vous choisissez de soigner le joueur " + m_players[playerChoosenId].Name + ".");
-                
+
                 int heal = UnityEngine.Random.Range(1, 6);
-                
+
                 m_players[playerChoosenId].Healed(heal);
-                
-				break;
-			
-			case LightEffect.Boussole:
-				m_players[m_playerTurn].HasCompass.Value = true;
-				break;
-			
-			case LightEffect.Broche:
+
+                break;
+
+            case LightEffect.Boussole:
+                m_players[m_playerTurn].HasCompass.Value = true;
+                break;
+
+            case LightEffect.Broche:
                 m_players[m_playerTurn].HasBroche.Value = true;
                 break;
-				
-			case LightEffect.Crucifix:
+
+            case LightEffect.Crucifix:
                 m_players[m_playerTurn].HasCrucifix.Value = true;
-				break;
-				
-			case LightEffect.EauBenite:
-				
-				m_players[m_playerTurn].Healed(2);
-				break;
-				
-			case LightEffect.Eclair:
-			
-				foreach (Player p in m_players)
-				{
-					if (p.Id != m_playerTurn)
-						p.Wounded(2);
-				}
-				break;
-			
-			case LightEffect.Lance:
-				m_players[m_playerTurn].HasSpear.Value = true;
-				if(team== CharacterTeam.Hunter && revealed)
+                break;
+
+            case LightEffect.EauBenite:
+
+                m_players[m_playerTurn].Healed(2);
+                break;
+
+            case LightEffect.Eclair:
+
+                foreach (Player p in m_players)
+                {
+                    if (p.Id != m_playerTurn)
+                        p.Wounded(2);
+                }
+                break;
+
+            case LightEffect.Lance:
+                m_players[m_playerTurn].HasSpear.Value = true;
+                if (team == CharacterTeam.Hunter && revealed)
                 {
                     m_players[m_playerTurn].BonusAttack.Value += 2;
                 }
-				break;
-				
-			case LightEffect.Miroir:
-				
-				if (team == CharacterTeam.Shadow && character != "Metamorphe")
-				{
-					m_players[m_playerTurn].Revealed.Value = true;
-					Debug.Log("Vous révélez votre rôle à tous, vous êtes : " + character);
-				}
-				break;
-				
-			case LightEffect.PremiersSecours:
+                break;
+
+            case LightEffect.Miroir:
+
+                if (team == CharacterTeam.Shadow && character != "Metamorphe")
+                {
+                    m_players[m_playerTurn].Revealed.Value = true;
+                    Debug.Log("Vous révélez votre rôle à tous, vous êtes : " + character);
+                }
+                break;
+
+            case LightEffect.PremiersSecours:
 
                 choiceDropdown.gameObject.SetActive(true);
                 validateButton.gameObject.SetActive(true);
@@ -1087,20 +1087,20 @@ public class GameLogic : MonoBehaviour
                         playerChoosenId2 = player.Id;
 
                 m_players[playerChoosenId2].SetWound(7);
-				break;
-				
-			case LightEffect.Savoir:
+                break;
+
+            case LightEffect.Savoir:
 
                 m_players[m_playerTurn].HasAncestral.Value = true;
                 break;
 
             case LightEffect.Toge:
 
-				m_players[m_playerTurn].HasToge.Value = true;
-				m_players[m_playerTurn].MalusAttack.Value++;
-				m_players[m_playerTurn].ReductionWounds.Value = 1;
-				break;
-		}
+                m_players[m_playerTurn].HasToge.Value = true;
+                m_players[m_playerTurn].MalusAttack.Value++;
+                m_players[m_playerTurn].ReductionWounds.Value = 1;
+                break;
+        }
     }
 
     /// <summary>
@@ -1133,17 +1133,17 @@ public class GameLogic : MonoBehaviour
     public void RevealCard()
     {
         m_players[m_playerTurn].Revealed.Value = true;
-        Debug.Log("Le joueur "+ m_players[m_playerTurn].Name + " s'est révélé, il s'agissait de : " 
-            + m_players[m_playerTurn].Character.characterName + " ! Il est dans l'équipe des " 
+        Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " s'est révélé, il s'agissait de : "
+            + m_players[m_playerTurn].Character.characterName + " ! Il est dans l'équipe des "
             + m_players[m_playerTurn].Character.team + ".");
         revealCardButton.gameObject.SetActive(false);
 
         // Si le joueur est Allie, il peut utiliser son pouvoir à tout moment
         // Si le joueur est Emi, Franklin ou Georges et qu'il est au début de son tour, il peut utiliser son pouvoir
-        if(m_players[m_playerTurn].Character.characterType == CharacterType.Allie 
-            || (rollDicesButton.gameObject.activeInHierarchy 
+        if (m_players[m_playerTurn].Character.characterType == CharacterType.Allie
+            || (rollDicesButton.gameObject.activeInHierarchy
                 && (m_players[m_playerTurn].Character.characterType == CharacterType.Emi
-                    || m_players[m_playerTurn].Character.characterType == CharacterType.Franklin 
+                    || m_players[m_playerTurn].Character.characterType == CharacterType.Franklin
                     || m_players[m_playerTurn].Character.characterType == CharacterType.Georges)))
         {
             usePowerButton.gameObject.SetActive(true);
@@ -1194,11 +1194,11 @@ public class GameLogic : MonoBehaviour
         }
 
         rollDicesButton.gameObject.SetActive(true);
-        if(m_players[m_playerTurn].Revealed.Value == false)
+        if (m_players[m_playerTurn].Revealed.Value == false)
         {
             revealCardButton.gameObject.SetActive(true);
         }
-        else if(m_players[m_playerTurn].Character.characterType == CharacterType.Emi
+        else if (m_players[m_playerTurn].Character.characterType == CharacterType.Emi
                 || m_players[m_playerTurn].Character.characterType == CharacterType.Franklin
                 || m_players[m_playerTurn].Character.characterType == CharacterType.Georges)
         {
@@ -1211,7 +1211,7 @@ public class GameLogic : MonoBehaviour
     /// </summary>
     public void RollTheDices()
     {
-        if(m_players[m_playerTurn].Character.characterType == CharacterType.Emi
+        if (m_players[m_playerTurn].Character.characterType == CharacterType.Emi
             || m_players[m_playerTurn].Character.characterType == CharacterType.Franklin
             || m_players[m_playerTurn].Character.characterType == CharacterType.Georges)
         {
@@ -1275,7 +1275,7 @@ public class GameLogic : MonoBehaviour
                     nbCardsOwned++;
                 if (m_players[playerId].HasToge.Value)
                     nbCardsOwned++;
-                
+
                 if (nbCardsOwned >= 3)
                 {
                     m_players[playerId].HasWon.Value = true;
@@ -1287,7 +1287,7 @@ public class GameLogic : MonoBehaviour
                 {
                     m_players[playerId].HasWon.Value = true;
                     m_isGameOver = true;
-                } 
+                }
                 break;
             case WinningCondition.ShadowCondition:
                 if (m_nbHuntersDead == m_nbHunters || m_nbNeutralsDeads == 3)
@@ -1351,12 +1351,12 @@ public class GameLogic : MonoBehaviour
                     || (positionIndex % 2 == 1 && (positionOtherPlayer == positionIndex || positionOtherPlayer == positionIndex - 1)))
                     if (!hasRevolver)
                         players.Add(player);
-                else if (hasRevolver)
-                    players.Add(player);
+                    else if (hasRevolver)
+                        players.Add(player);
             }
         }
 
-        return players; 
+        return players;
 
     }
 
@@ -1382,7 +1382,7 @@ public class GameLogic : MonoBehaviour
 
             choiceDropdown.AddOptions(playerNames);
             validateButton.gameObject.SetActive(true);
-            yield return WaitUntilEvent(validateButton.onClick); 
+            yield return WaitUntilEvent(validateButton.onClick);
             int playerAttackedId = -1;
             choiceDropdown.gameObject.SetActive(false);
             validateButton.gameObject.SetActive(false);
@@ -1391,7 +1391,7 @@ public class GameLogic : MonoBehaviour
 
             int lancer1 = UnityEngine.Random.Range(1, 6);
             int lancer2 = UnityEngine.Random.Range(1, 4);
-            int lancerTotal = (m_players[playerAttackingId].HasSaber.Value == true)? lancer2 : Mathf.Abs(lancer1 - lancer2);
+            int lancerTotal = (m_players[playerAttackingId].HasSaber.Value == true) ? lancer2 : Mathf.Abs(lancer1 - lancer2);
             if (lancerTotal == 0)
             {
                 Debug.Log("Le lancer vaut 0, vous n'attaquez pas.");
@@ -1403,42 +1403,42 @@ public class GameLogic : MonoBehaviour
                 {
                     foreach (Player player in players)
                     {
-                        if((m_players[playerAttackingId].Character.characterType == CharacterType.Bob) && lancerTotal >= 2 )
+                        if ((m_players[playerAttackingId].Character.characterType == CharacterType.Bob) && lancerTotal >= 2)
                             PlayerCardPower(m_players[playerAttackingId]);
                         else
                         {
                             m_players[player.Id].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value);
-                            
+
                             // On vérifie si le joueur attaqué est mort
                             CheckPlayerDeath(player.Id);
-                            
+
                             // Le Loup-garou peut contre attaquer
-                            if(m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
+                            if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
                                 && m_players[playerAttackingId].Revealed.Value)
                             {
                                 usePowerButton.gameObject.SetActive(true);
                             }
-                            
+
                             // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
-                            if(m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
+                            if (m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
                                 && m_players[playerAttackingId].Revealed.Value
                                 && lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value > 0)
-                                PlayerCardPower(m_players[playerAttackingId]); 
-                        }    
+                                PlayerCardPower(m_players[playerAttackingId]);
+                        }
                     }
                 }
                 else
                 {
-                    for (int i = 0 ; i < m_nbPlayers ; i++)
+                    for (int i = 0; i < m_nbPlayers; i++)
                         if (m_players[i].Name.Equals(playerAttacked))
                             playerAttackedId = i;
-                    
+
                     m_playerAttackedId = playerAttackedId;
 
                     Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[playerAttackedId].Name + ".");
 
                     // Si Bob est révélé et inflige 2 dégats ou plus, il peut voler une arme 
-                    if(m_players[playerAttackingId].Character.characterType == CharacterType.Bob
+                    if (m_players[playerAttackingId].Character.characterType == CharacterType.Bob
                         && m_players[playerAttackingId].Revealed.Value
                         && lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value >= 2)
                     {
@@ -1450,9 +1450,9 @@ public class GameLogic : MonoBehaviour
                     {
                         // Le joueur attaqué se prend des dégats
                         m_players[playerAttackedId].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value);
-                        
+
                         // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
-                        if(m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
+                        if (m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
                             && m_players[playerAttackingId].Revealed.Value
                             && lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value > 0)
                             PlayerCardPower(m_players[playerAttackingId]);
@@ -1462,7 +1462,7 @@ public class GameLogic : MonoBehaviour
 
                         // Charles peut attaquer de nouveau
                         // Le Loup-garou peut contre attaquer
-                        if((m_players[playerAttackingId].Character.characterType == CharacterType.Charles
+                        if ((m_players[playerAttackingId].Character.characterType == CharacterType.Charles
                             && m_players[playerAttackingId].Revealed.Value)
                             || (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
                             && m_players[playerAttackedId].Revealed.Value))
@@ -1482,77 +1482,85 @@ public class GameLogic : MonoBehaviour
     /// </summary>
     /// <param name="playerAttackingId">Id du joueur attaquant</param>
     /// <param name="targetId">Id du joueur attaqué</param>
+	/// <param name="damage"> Dommage précedemment occasioné</param>
     /// <returns>Iteration terminée</returns>
-    IEnumerator AttackCorrespondingPlayer(int playerAttackingId, int targetId)
+    IEnumerator AttackCorrespondingPlayer(int playerAttackingId, int targetId, int damage)
     {
-        List<Player> players = GetPlayersSameSector(playerAttackingId, m_players[playerAttackingId].HasRevolver.Value);
-        if (players.Count == 0)
+        if (damage > 0)
         {
-            Debug.Log("Vous ne pouvez attaquer aucun joueur.");
+            m_players[targetId].Wounded(damage);
+            CheckPlayerDeath(targetId);
+            if (m_players[targetId].Character.characterType == CharacterType.LoupGarou
+                            && m_players[targetId].Revealed.Value)
+            {
+                usePowerButton.gameObject.SetActive(true);
+            }
         }
         else
         {
-            m_playerAttackedId = targetId;
-
-            int lancer1 = UnityEngine.Random.Range(1, 6);
-            int lancer2 = UnityEngine.Random.Range(1, 4);
-            int lancerTotal = (m_players[playerAttackingId].HasSaber.Value == true)? lancer2 : Mathf.Abs(lancer1 - lancer2);
-            if (lancerTotal == 0)
+            List<Player> players = GetPlayersSameSector(playerAttackingId, m_players[playerAttackingId].HasRevolver.Value);
+            if (players.Count == 0)
             {
-                Debug.Log("Le lancer vaut 0, vous n'attaquez pas.");
+                Debug.Log("Vous ne pouvez attaquer aucun joueur.");
             }
             else
             {
-                if (m_players[playerAttackingId].HasGatling.Value)
+                m_playerAttackedId = targetId;
+
+                int lancer1 = UnityEngine.Random.Range(1, 6);
+                int lancer2 = UnityEngine.Random.Range(1, 4);
+                int lancerTotal = (m_players[playerAttackingId].HasSaber.Value == true) ? lancer2 : Mathf.Abs(lancer1 - lancer2);
+                if (lancerTotal == 0)
                 {
-                        if((m_players[playerAttackingId].Character.characterType == CharacterType.Bob) && lancerTotal >= 2 )
-                            PlayerCardPower(m_players[playerAttackingId]);
-                        else
-                        {
-                            m_players[targetId].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value);
-                            
-                            CheckPlayerDeath(targetId);
-                            
-                            // Le Loup-garou peut contre attaquer
-                            if(m_players[targetId].Character.characterType == CharacterType.LoupGarou
-                                && m_players[targetId].Revealed.Value)
-                            {
-                                usePowerButton.gameObject.SetActive(true);
-                            }
-                            
-                            // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
-                            if(m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
-                                && m_players[playerAttackingId].Revealed.Value
-                                && lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value > 0)
-                                PlayerCardPower(m_players[playerAttackingId]);
-                        }    
+                    Debug.Log("Le lancer vaut 0, vous n'attaquez pas.");
                 }
                 else
                 {
+                    if (m_players[playerAttackingId].HasGatling.Value)
+                    {
+                        foreach (Player player in players)
+                        {
+                            m_players[player.Id].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value);
 
-                    Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[targetId].Name + ".");
+                            // On vérifie si le joueur attaqué est mort
+                            CheckPlayerDeath(player.Id);
 
-                    if(m_players[playerAttackingId].Character.characterType == CharacterType.Bob && lancerTotal >= 2 )
-                        PlayerCardPower(m_players[playerAttackingId]);
+                            // Le Loup-garou peut contre attaquer
+                            if (m_players[targetId].Character.characterType == CharacterType.LoupGarou
+                                && m_players[playerAttackingId].Revealed.Value)
+                            {
+                                usePowerButton.gameObject.SetActive(true);
+                            }
+
+                            // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
+                            if (m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
+                                && m_players[playerAttackingId].Revealed.Value
+                                && lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value > 0)
+                                PlayerCardPower(m_players[playerAttackingId]);
+                        }
+                    }
                     else
                     {
+
+                        Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[targetId].Name + ".");
+
                         m_players[targetId].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value);
-                        
+
                         // Le Loup-garou peut contre attaquer
-                        if(m_players[targetId].Character.characterType == CharacterType.LoupGarou
+                        if (m_players[targetId].Character.characterType == CharacterType.LoupGarou
                             && m_players[targetId].Revealed.Value)
                         {
                             usePowerButton.gameObject.SetActive(true);
                         }
 
                         // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
-                        if(m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
+                        if (m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
                             && m_players[playerAttackingId].Revealed.Value
                             && lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value > 0)
                             PlayerCardPower(m_players[playerAttackingId]);
 
                         CheckPlayerDeath(targetId);
-                    }    
+                    }
                 }
             }
         }
@@ -1570,11 +1578,11 @@ public class GameLogic : MonoBehaviour
         {
             Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " est mort !");
 
-            if(m_nbHuntersDead == 0 && m_nbShadowsDeads == 0 && m_nbNeutralsDeads == 0)
+            if (m_nbHuntersDead == 0 && m_nbShadowsDeads == 0 && m_nbNeutralsDeads == 0)
             {
-                foreach(Player player in m_players)
+                foreach (Player player in m_players)
                 {
-                    if(player.Character.characterType == CharacterType.Daniel)
+                    if (player.Character.characterType == CharacterType.Daniel)
                     {
                         PlayerCardPower(player);
                     }
@@ -1606,11 +1614,11 @@ public class GameLogic : MonoBehaviour
         if (m_players[playerId].IsDead())
         {
             Debug.Log("Le joueur " + m_players[attackerId].Name + " a tué le joueur " + m_players[playerId].Name + " !");
-            if(m_nbHuntersDead == 0 && m_nbShadowsDeads == 0 && m_nbNeutralsDeads == 0)
+            if (m_nbHuntersDead == 0 && m_nbShadowsDeads == 0 && m_nbNeutralsDeads == 0)
             {
-                foreach(Player player in m_players)
+                foreach (Player player in m_players)
                 {
-                    if(player.Character.characterType == CharacterType.Daniel)
+                    if (player.Character.characterType == CharacterType.Daniel)
                     {
                         PlayerCardPower(player);
                     }
@@ -1654,7 +1662,7 @@ public class GameLogic : MonoBehaviour
                             Debug.LogError("Erreur : la carte choisie n'est pas un équipement et ne devrait pas être là.");
                             yield return -1;
                         }
-                        
+
                         Debug.Log("La carte " + m_players[attackerId].ListCard[m_players[attackerId].ListCard.Count - 1] + " a été volée au joueur "
                             + m_players[playerId].Name + " par le joueur " + m_players[attackerId].Name + " !");
                     }
@@ -1699,7 +1707,7 @@ public class GameLogic : MonoBehaviour
                     playerId = p.Id;
 
             choices.Clear();
-            for (int i = 0 ; i < m_players[playerId].ListCard.Count ; i++)
+            for (int i = 0; i < m_players[playerId].ListCard.Count; i++)
                 choices.Add(m_players[playerId].ListCard[i].cardName);
 
             Debug.Log("Quelle carte équipement voulez-vous voler ?");
@@ -1755,7 +1763,7 @@ public class GameLogic : MonoBehaviour
     {
         validateButton.gameObject.SetActive(true);
         List<string> choices = new List<string>();
-        for (int i = 0 ; i < m_players[playerId].ListCard.Count ; i++)
+        for (int i = 0; i < m_players[playerId].ListCard.Count; i++)
             choices.Add(m_players[playerId].ListCard[i].cardName);
 
         Debug.Log("Quelle carte équipement voulez-vous voler ?");
@@ -1794,8 +1802,8 @@ public class GameLogic : MonoBehaviour
                 Debug.LogError("Erreur : la carte choisie n'est pas un équipement et ne devrait pas être là.");
                 yield return -1;
             }
-            
-            Debug.Log("La carte " + stealedCard + " a été volée au joueur " 
+
+            Debug.Log("La carte " + stealedCard + " a été volée au joueur "
                 + m_players[playerId].Name + " par le joueur " + m_players[thiefId].Name + " !");
         }
     }
@@ -1805,7 +1813,7 @@ public class GameLogic : MonoBehaviour
     /// </summary>
     /// <param name="giverPlayerId">Id du joueur donneur</param>
     /// <returns>Itération terminée</returns>
-    IEnumerator GiveEquipmentCard (int giverPlayerId)
+    IEnumerator GiveEquipmentCard(int giverPlayerId)
     {
         if (m_players[giverPlayerId].ListCard.Count == 0)
         {
@@ -1876,7 +1884,7 @@ public class GameLogic : MonoBehaviour
                     yield return -1;
                 }
 
-                Debug.Log("La carte " + givenCard + " a été donnée au joueur " 
+                Debug.Log("La carte " + givenCard + " a été donnée au joueur "
                     + m_players[playerId].Name + " par le joueur " + m_players[giverPlayerId].Name + " !");
             }
             yield return null;
@@ -1901,7 +1909,7 @@ public class GameLogic : MonoBehaviour
         {
             DarknessCard card = m_players[PlayerId].ListCard[CardId] as DarknessCard;
             DarknessEffect effect = card.darknessEffect;
-            
+
             switch (effect)
             {
                 case DarknessEffect.Mitrailleuse:
@@ -1964,7 +1972,7 @@ public class GameLogic : MonoBehaviour
             Debug.LogError("Erreur : type en paramètre invalide.");
             yield return -1;
         }
-        
+
         m_players[PlayerId].RemoveCard(CardId);
         yield return null;
     }
@@ -1994,7 +2002,7 @@ public class GameLogic : MonoBehaviour
         Player p = m_players[m_playerTurn];
 
         Debug.Log("Player : " + p.Id + " n'effectue pas son pouvoir");
-        switch(p.Character.characterType)
+        switch (p.Character.characterType)
         {
             case CharacterType.Metamorphe:
                 if (!m_pickedVisionCard.visionEffect.effectOnShadow)
@@ -2062,7 +2070,7 @@ public class GameLogic : MonoBehaviour
 
                 CheckPlayerDeath(m_playerAttackedId);
 
-                if(m_players[m_playerAttackedId].Character.characterType == CharacterType.LoupGarou
+                if (m_players[m_playerAttackedId].Character.characterType == CharacterType.LoupGarou
                     && m_players[m_playerAttackedId].Revealed.Value)
                 {
                     usePowerButton.gameObject.SetActive(true);
@@ -2078,11 +2086,11 @@ public class GameLogic : MonoBehaviour
     /// Personnage</param>
     IEnumerator PlayerCardPower(Player player)
     {
-        switch(player.Character.characterType)
+        switch (player.Character.characterType)
         {
             case CharacterType.Allie:
                 // Il faut que le joueur se soit révélé et qu'il n'ait pas encore utilisé son pouvoir
-                if(player.Revealed.Value && !player.UsedPower.Value)
+                if (player.Revealed.Value && !player.UsedPower.Value)
                 {
                     // Le joueur se soigne de toutes ses blessures
                     player.Healed(player.Wound.Value);
@@ -2090,14 +2098,14 @@ public class GameLogic : MonoBehaviour
                 break;
             /*
              *  PERSONNAGE EXTENSION
-             */ 
+             */
             // case CharacterType.Bryan:
             //     // Révèle son identité à tous
             //     RevealCard();
             //     break;
             /*
              *  PERSONNAGE EXTENSION
-             */ 
+             */
             // case CharacterType.David:
             //     // Il faut que le joueur se soit révélé et qu'il n'ait pas encore utilisé son pouvoir
             //     if(player.Revealed && !player.UsedPower)
@@ -2108,12 +2116,12 @@ public class GameLogic : MonoBehaviour
             //         // On ajoute à cardList les cartes équipements de la défausse de cartes ténèbres
             //         foreach (DarknessCard c in gameBoard.Black)
             //             if(c.isEquipement)
-			// 	            cardList.Add(c);
+            // 	            cardList.Add(c);
 
             //         // On ajoute à cardList les cartes équipements de la défausse de cartes lumières
             //         foreach (LightCard c in gameBoard.White)
             //             if(c.isEquipement)
-			// 	            cardList.Add(c);
+            // 	            cardList.Add(c);
 
             //         // TODO choisir la carte
             //         int choosenCardIndex = UnityEngine.Random.Range(0, cardList.Count - 1);
@@ -2132,7 +2140,7 @@ public class GameLogic : MonoBehaviour
                 // On cherche l'index de la carte Lieu dans la liste des lieux
                 int indexEmi = gameBoard.GetIndexOfPosition(player.Position);
 
-                if(indexEmi == -1)
+                if (indexEmi == -1)
                 {
                     StartCoroutine(MoveCharacter());
                     StartCoroutine(ActivateLocationPower());
@@ -2140,7 +2148,7 @@ public class GameLogic : MonoBehaviour
                 else
                 {
                     // Le déplacement se fait vers le lieu adjacent
-                    if(indexEmi % 2 == 0)
+                    if (indexEmi % 2 == 0)
                         indexEmi++;
                     else
                         indexEmi--;
@@ -2155,7 +2163,7 @@ public class GameLogic : MonoBehaviour
                     // Activation du pouvoir du lieu
                     StartCoroutine(ActivateLocationPower());
                 }
-                
+
                 break;
             case CharacterType.Metamorphe:
                 if (m_pickedVisionCard.visionEffect.effectOnShadow)
@@ -2220,23 +2228,41 @@ public class GameLogic : MonoBehaviour
                 break;
             case CharacterType.Bob:
                 // Il faut que le joueur se soit révélé et qu'il n'ait pas encore utilisé son pouvoir
-                if(player.Revealed.Value)
+                if (player.Revealed.Value)
                 {
                     // Choix : voler une carte équipement ou infliger les blessures
                     choiceDropdown.gameObject.SetActive(true);
-                    //validateChoosenPlayerButton.gameObject.SetActive(false);
+                    List<string> bobChoices = new List<string>();
+                    bobChoices.Add("Voler");
+                    bobChoices.Add("Infliger les dégats");
+
+                    choiceDropdown.AddOptions(bobChoices);
+
+                    if (m_players[m_playerAttackedId].ListCard.Count != 0)
+                    {
+                        choiceDropdown.options.RemoveAt(0);
+                        Debug.Log("Le joueur ciblé ne détient pas de carte équipement.");
+                    }
+
+                    validateButton.gameObject.SetActive(true);
+                    yield return WaitUntilEvent(validateButton.onClick);
+                    choiceDropdown.gameObject.SetActive(false);
+                    validateButton.gameObject.SetActive(false);
                     string playerChoice = choiceDropdown.captionText.text;
                     choiceDropdown.ClearOptions();
 
-                    //if(playerChoice == "steal")
-                        // Vole une carte équipement du joueur correspondant
-                        //StealEquipmentCard();
-                        // TODO Inflige les dégats précédemment calculer dans AttackCorrespondingPlayer
-                        // avec le joueur correspondant
+                    if (playerChoice.Equals(bobChoices[0]))
+                    {
+                        StartCoroutine(StealEquipmentCard(player.Id, m_playerAttackedId));
+                    }
+                    else
+                    {
+                        StartCoroutine(AttackCorrespondingPlayer(player.Id, m_playerAttackedId, m_damageBob));
+                    }
                 }
                 break;
             case CharacterType.Franklin:
-                if(player.Revealed.Value && !player.UsedPower.Value)
+                if (player.Revealed.Value && !player.UsedPower.Value)
                 {
                     choiceDropdown.gameObject.SetActive(true);
                     List<Player> players = GetPlayersSameSector(player.Id, m_players[player.Id].HasRevolver.Value);
@@ -2274,12 +2300,12 @@ public class GameLogic : MonoBehaviour
                                 foreach (Player playerSector in players)
                                 {
                                     m_players[playerSector.Id].Wounded(lancerTotal + m_players[player.Id].BonusAttack.Value - m_players[player.Id].MalusAttack.Value);
-                                    
+
                                     // On vérifie si le joueur attaqué est mort
                                     CheckPlayerDeath(playerSector.Id);
-                                    
+
                                     // Le Loup-garou peut contre attaquer
-                                    if(m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
+                                    if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
                                         && m_players[player.Id].Revealed.Value)
                                     {
                                         usePowerButton.gameObject.SetActive(true);
@@ -2288,10 +2314,10 @@ public class GameLogic : MonoBehaviour
                             }
                             else
                             {
-                                for (int i = 0 ; i < m_nbPlayers ; i++)
+                                for (int i = 0; i < m_nbPlayers; i++)
                                     if (m_players[i].Name.Equals(playerAttacked))
                                         playerAttackedId = i;
-                                
+
                                 m_playerAttackedId = playerAttackedId;
 
                                 Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[playerAttackedId].Name + ".");
@@ -2304,7 +2330,7 @@ public class GameLogic : MonoBehaviour
 
                                 // Charles peut attaquer de nouveau
                                 // Le Loup-garou peut contre attaquer
-                                if((m_players[player.Id].Character.characterType == CharacterType.Charles
+                                if ((m_players[player.Id].Character.characterType == CharacterType.Charles
                                     && m_players[player.Id].Revealed.Value)
                                     || (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
                                     && m_players[playerAttackedId].Revealed.Value))
@@ -2318,7 +2344,7 @@ public class GameLogic : MonoBehaviour
                 }
                 break;
             case CharacterType.Georges:
-                if(player.Revealed.Value && !player.UsedPower.Value)
+                if (player.Revealed.Value && !player.UsedPower.Value)
                 {
                     choiceDropdown.gameObject.SetActive(true);
                     List<Player> players = GetPlayersSameSector(player.Id, m_players[player.Id].HasRevolver.Value);
@@ -2335,7 +2361,7 @@ public class GameLogic : MonoBehaviour
 
                         choiceDropdown.AddOptions(playerNames);
                         validateButton.gameObject.SetActive(true);
-                        yield return WaitUntilEvent(validateButton.onClick); 
+                        yield return WaitUntilEvent(validateButton.onClick);
                         int playerAttackedId = -1;
                         choiceDropdown.gameObject.SetActive(false);
                         validateButton.gameObject.SetActive(false);
@@ -2356,12 +2382,12 @@ public class GameLogic : MonoBehaviour
                                 foreach (Player playerSector in players)
                                 {
                                     m_players[playerSector.Id].Wounded(lancerTotal + m_players[player.Id].BonusAttack.Value - m_players[player.Id].MalusAttack.Value);
-                                    
+
                                     // On vérifie si le joueur attaqué est mort
                                     CheckPlayerDeath(playerSector.Id);
-                                    
+
                                     // Le Loup-garou peut contre attaquer
-                                    if(m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
+                                    if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
                                         && m_players[player.Id].Revealed.Value)
                                     {
                                         usePowerButton.gameObject.SetActive(true);
@@ -2370,10 +2396,10 @@ public class GameLogic : MonoBehaviour
                             }
                             else
                             {
-                                for (int i = 0 ; i < m_nbPlayers ; i++)
+                                for (int i = 0; i < m_nbPlayers; i++)
                                     if (m_players[i].Name.Equals(playerAttacked))
                                         playerAttackedId = i;
-                                
+
                                 m_playerAttackedId = playerAttackedId;
 
                                 Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[playerAttackedId].Name + ".");
@@ -2386,7 +2412,7 @@ public class GameLogic : MonoBehaviour
 
                                 // Charles peut attaquer de nouveau
                                 // Le Loup-garou peut contre attaquer
-                                if((m_players[player.Id].Character.characterType == CharacterType.Charles
+                                if ((m_players[player.Id].Character.characterType == CharacterType.Charles
                                     && m_players[player.Id].Revealed.Value)
                                     || (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
                                     && m_players[playerAttackedId].Revealed.Value))
@@ -2400,27 +2426,27 @@ public class GameLogic : MonoBehaviour
                 }
                 break;
             case CharacterType.LoupGarou:
-                if(player.Revealed.Value)
+                if (player.Revealed.Value)
                 {
-                    StartCoroutine(AttackCorrespondingPlayer(player.Id, m_playerTurn));
+                    StartCoroutine(AttackCorrespondingPlayer(player.Id, m_playerTurn, 0));
                 }
                 break;
             case CharacterType.Vampire:
-                if(player.Revealed.Value)
+                if (player.Revealed.Value)
                 {
                     player.Healed(2);
                 }
                 break;
             case CharacterType.Charles:
-                if(player.Revealed.Value)
+                if (player.Revealed.Value)
                 {
                     player.Wounded(2);
-                    StartCoroutine(AttackCorrespondingPlayer(player.Id, m_playerAttackedId));
+                    StartCoroutine(AttackCorrespondingPlayer(player.Id, m_playerAttackedId, 0));
                 }
                 break;
             case CharacterType.Daniel:
                 // Il faut que le joueur se soit révélé et qu'il n'ait pas encore utilisé son pouvoir
-                if(!player.Revealed.Value)
+                if (!player.Revealed.Value)
                 {
                     // Révèle le personnage
                     RevealCard();
@@ -2434,12 +2460,12 @@ public class GameLogic : MonoBehaviour
     /// </summary>
     /// <param name="unityEvent">Événement Unity à attendre</param>
     /// <returns>Itération terminée</returns>
-    IEnumerator WaitUntilEvent(UnityEvent unityEvent) 
+    IEnumerator WaitUntilEvent(UnityEvent unityEvent)
     {
         var trigger = false;
         Action action = () => trigger = true;
         unityEvent.AddListener(action.Invoke);
-        yield return new WaitUntil(()=>trigger);
+        yield return new WaitUntil(() => trigger);
         unityEvent.RemoveListener(action.Invoke);
     }
 }
