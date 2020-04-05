@@ -41,14 +41,21 @@ namespace ServerInterface.RoomEvents
                 RoomData r = Rooms[jre.RoomData.Code];
                 if (r.CurrentNbPlayer < r.MaxNbPlayer)
                 {
-                    r.Players[r.CurrentNbPlayer] = GAccount.Instance.LoggedAccount.Login;
-                    r.CurrentNbPlayer++;
-                    EventView.Manager.Emit(new RoomDataEvent() { RoomData = r });
-                    EventView.Manager.Emit(new RoomJoinedEvent() { RoomData = r });
+                    if (r.Players.Contains(GAccount.Instance.LoggedAccount.Login))
+                    {
+                        EventView.Manager.Emit(new RoomFailureEvent() { Msg = "message.room.invalid.join.you_are_already_in_this_room" });
+                    }
+                    else
+                    {
+                        r.Players[r.CurrentNbPlayer] = GAccount.Instance.LoggedAccount.Login;
+                        r.CurrentNbPlayer++;
+                        EventView.Manager.Emit(new RoomDataEvent() { RoomData = r });
+                        EventView.Manager.Emit(new RoomJoinedEvent() { RoomData = r });
+                    }
                 }
                 else
                 {
-                    // unsuccess
+                    EventView.Manager.Emit(new RoomFailureEvent() { Msg = "message.room.invalid.join.room_is_full" });
                 }
             }
             else if (e is LeaveRoomEvent lre)
@@ -114,6 +121,10 @@ namespace ServerInterface.RoomEvents
                 {
                     r.IsLaunched = true;
                     EventView.Manager.Emit(new RoomDataEvent() { RoomData = r });
+                }
+                else
+                {
+                    EventView.Manager.Emit(new RoomFailureEvent() { Msg = "message.room.invalid.start.recquire_all_players_ready" });
                 }
             }
         }

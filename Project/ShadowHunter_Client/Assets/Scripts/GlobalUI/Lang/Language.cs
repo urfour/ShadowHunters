@@ -81,10 +81,23 @@ namespace Lang
 
         public string GetText(string label)
         {
-            if (!Translations.ContainsKey(label))
+            string[] args = label.Split('&');
+            if (args.Length > 1)
             {
-                Translations.Add(label, label);
-                Save();
+                label = args[0] + "&" + (args.Length - 1);
+                if (!Translations.ContainsKey(label))
+                {
+                    Translations.Add(label, label);
+                    Save();
+                }
+            }
+            else
+            {
+                if (!Translations.ContainsKey(args[0]))
+                {
+                    Translations.Add(label, label);
+                    Save();
+                }
             }
             return Translations[label];
         }

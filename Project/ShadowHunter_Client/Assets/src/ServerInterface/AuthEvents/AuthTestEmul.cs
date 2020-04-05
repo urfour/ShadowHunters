@@ -33,12 +33,12 @@ namespace ServerInterface.AuthEvents
                     }
                     else
                     {
-                        EventView.Manager.Emit(new AuthInvalidEvent() { Msg = "auth.password_invalid" });
+                        EventView.Manager.Emit(new AuthInvalidEvent() { Msg = "message.auth.invalid.login.password_invalid" });
                     }
                 }
                 else
                 {
-                    EventView.Manager.Emit(new AuthInvalidEvent() { Msg = "auth.login_invalid" });
+                    EventView.Manager.Emit(new AuthInvalidEvent() { Msg = "message.auth.invalid.login.login_invalid" });
                 }
             }
             else if (e is LogOutEvent loe)
@@ -50,7 +50,7 @@ namespace ServerInterface.AuthEvents
             {
                 if (accounts.ContainsKey(sie.Login))
                 {
-                    EventView.Manager.Emit(new AuthInvalidEvent() { Msg = "auth.login_unavailable;" + sie.Login });
+                    EventView.Manager.Emit(new AuthInvalidEvent() { Msg = "message.auth.invalid.signin.login_unavailable&" + sie.Login });
                 }
                 else
                 {

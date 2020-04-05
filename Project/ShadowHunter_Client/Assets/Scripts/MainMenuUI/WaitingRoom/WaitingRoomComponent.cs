@@ -58,24 +58,29 @@ class WaitingRoomComponent : MonoBehaviour
                     GameObject o = Instantiate(playerPrefab.gameObject, playersContent);
                     o.GetComponent<PlayerDisplayComponent>().DisplayPlayer(a, i);
                 }
-            }
-            if (r.Players.Value[0] == GAccount.Instance.LoggedAccount.Login)
-            {
-                bool ready = true;
-                for (int i = 0; i < r.MaxNbPlayer.Value; i++)
+                if (r.Players.Value[0] == GAccount.Instance.LoggedAccount.Login)
                 {
-                    if (!r.RawData.ReadyPlayers[i])
+                    bool ready = true;
+                    for (int i = 0; i < r.MaxNbPlayer.Value; i++)
                     {
-                        ready = false;
-                        break;
+                        if (!r.RawData.ReadyPlayers[i])
+                        {
+                            ready = false;
+                            break;
+                        }
                     }
+                    startGame.interactable = ready;
                 }
-                startGame.interactable = ready;
+                else
+                {
+                    startGame.interactable = false;
+                }
             }
             else
             {
                 startGame.interactable = false;
             }
+
         }
         else
         {

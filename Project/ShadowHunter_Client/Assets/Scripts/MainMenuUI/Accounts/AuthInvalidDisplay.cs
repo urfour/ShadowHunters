@@ -1,4 +1,5 @@
 ﻿using EventSystem;
+using Lang;
 using ServerInterface.AuthEvents;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ class AuthInvalidDisplay : MonoBehaviour, IListener<AuthInvalidEvent>
 
     private void Start()
     {
-        print("AuthInvalidDisplay");
+        print("AuthInvalidDisplay loaded");
         EventView.Manager.AddListener(this, true);
         gameObject.SetActive(false);
     }
@@ -28,7 +29,7 @@ class AuthInvalidDisplay : MonoBehaviour, IListener<AuthInvalidEvent>
     {
         if (e.Msg != null)
         {
-            messageBox.text = e.Msg.Replace("\\n", "\n");
+            messageBox.text = Language.Translate(e.Msg).Replace("\\n", "\n");
             gameObject.SetActive(true);
         }
         else
