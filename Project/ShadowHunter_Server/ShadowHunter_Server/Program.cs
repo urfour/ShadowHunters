@@ -1,6 +1,8 @@
 ﻿using EventSystem;
 using Kernel.Settings;
 using Network.model;
+using ShadowHunter_Server.Accounts;
+using ShadowHunter_Server.Rooms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +21,8 @@ namespace ShadowHunter_Client
             EventView.Load();
             SettingManager.Load();
             Server = new Server();
+            GRoom.Init();
+            GAccount.Init();
 
             Console.ReadLine();
             Server.Stop();

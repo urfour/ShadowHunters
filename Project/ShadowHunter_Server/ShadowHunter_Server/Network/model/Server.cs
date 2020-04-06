@@ -23,7 +23,6 @@ namespace Network.model
         public Server()
         {
             GClient = new GClient();
-            GRoom.Init();
 
             Listener = new TcpListener(IPAddress.Parse("127.0.0.1"), SettingManager.Settings.Port.Value);
 
@@ -32,6 +31,7 @@ namespace Network.model
 
             AcceptThread = new Thread(new ThreadStart(this.AcceptClients));
             AcceptThread.Start();
+
         }
 
         public void Stop()

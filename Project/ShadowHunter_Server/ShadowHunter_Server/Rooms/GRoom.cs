@@ -23,15 +23,17 @@ namespace ShadowHunter_Server.Rooms
         public Random rand = new Random();
 
         // on instancie ici le gestionnaire de comptes pour y avoir accès
-        GAccount GAccount { get; set; }
+        //GAccount GAccount { get; set; }
 
         public void OnEvent(RoomEvent e, string[] tags = null)
         {
-            Console.Write("Evènement de gestion de salle reçu.");
+            Console.WriteLine("Evènement de gestion de salle reçu.");
 
             // créé et configure une nouvelle salle, puis y ajoute le joueur
             if (e is CreateRoomEvent cre)
             {
+                Console.WriteLine("Création de salle");
+                Logger.Info("salle créée");
                 Room newRoom = new Room(cre.RoomData);
                 int code = rand.Next(0, 100000);
                 int whilesafe = 100000;
@@ -49,8 +51,8 @@ namespace ShadowHunter_Server.Rooms
                 newRoom.Data.IsSuppressed = false;
                 newRoom.Data.Players = new string[newRoom.Data.MaxNbPlayer];
                 newRoom.Data.Players[0] = 
-                    GAccount.Accounts[cre.GetSender()].Login;
-                newRoom.Data.Host= GAccount.Accounts[cre.GetSender()].Login;
+                    GAccount.Instance.Accounts[cre.GetSender()].Login;
+                newRoom.Data.Host= GAccount.Instance.Accounts[cre.GetSender()].Login;
                 // prévenir le joueur qu'il a été ajouté à la salle
                 cre.GetSender().Send(new RoomJoinedEvent() { RoomData = newRoom.Data });
                 // broadcast de RoomDataEvent
@@ -72,7 +74,7 @@ namespace ShadowHunter_Server.Rooms
                         // on ajoute le joueur à la salle et on actualise les infos de la salle
                         jre.GetSender().JoinRoom(Rooms[jre.code]);
                         Rooms[jre.code].Data.CurrentNbPlayer++;
-                        Rooms[jre.code].Data.Players.ToList().Add(GAccount.Accounts[jre.GetSender()].Login);
+                        Rooms[jre.code].Data.Players.ToList().Add(GAccount.Instance.Accounts[jre.GetSender()].Login);
                         // prévenir le joueur qu'il a été ajouté à la salle
                         jre.GetSender().Send(new RoomJoinedEvent() 
                             { RoomData = Rooms[jre.code].Data });
@@ -111,7 +113,7 @@ namespace ShadowHunter_Server.Rooms
                 }
 
                 // seul l'hôte de la salle peut kick un autre joueur
-                else if (Rooms[kre.RoomData.Code].Data.Host != GAccount.Accounts[kre.GetSender()].Login)
+                else if (Rooms[kre.RoomData.Code].Data.Host != GAccount.Instance.Accounts[kre.GetSender()].Login)
                 {
                     kre.GetSender().Send(new RoomFailureEvent()
                         { Msg = "room.can_only_kick_if_host" });
@@ -119,7 +121,7 @@ namespace ShadowHunter_Server.Rooms
                 }
 
                 // un joueur ne peut pas s'expulser lui-même
-                else if (GAccount.Accounts[kre.GetSender()] == kre.Kicked)
+                else if (GAccount.Instance.Accounts[kre.GetSender()] == kre.Kicked)
                 {
                     kre.GetSender().Send(new RoomFailureEvent()
                         { Msg = "room.cant_kick_yourself" });
@@ -128,7 +130,7 @@ namespace ShadowHunter_Server.Rooms
                 // un joueur ne peut qu'expulser des membres de sa
                 // propre salle 
                 else if(!Rooms[kre.RoomData.Code].Data.Players.ToList().
-                    Contains(GAccount.Accounts[kre.GetSender()].Login))
+                    Contains(GAccount.Instance.Accounts[kre.GetSender()].Login))
                 {
                     kre.GetSender().Send(new RoomFailureEvent()
                     { Msg = "room.can_only_kick_in_own_room" });
@@ -140,7 +142,7 @@ namespace ShadowHunter_Server.Rooms
                     // puis on l'expulse
                     // (la requête LINQ est le seul moyen pour faire une
                     // recherche inversée dans un dictionnaire)
-                    Client kick = GAccount.Accounts.First(x => x.Value == kre.Kicked).Key;
+                    Client kick = GAccount.Instance.Accounts.First(x => x.Value == kre.Kicked).Key;
                     kick.LeaveRoom();
                     Rooms[kre.RoomData.Code].Data.Players.ToList().Remove(kre.Kicked.Login);
                     Rooms[kre.RoomData.Code].Data.CurrentNbPlayer--;
@@ -155,14 +157,14 @@ namespace ShadowHunter_Server.Rooms
             {
                 lre.GetSender().LeaveRoom();
                 lre.GetSender().Room.Data.Players.ToList().Remove(
-                    GAccount.Accounts[lre.GetSender()].Login);
+                    GAccount.Instance.Accounts[lre.GetSender()].Login);
                 lre.GetSender().Room.Data.CurrentNbPlayer--;
             }
 
             if (e is ModifyRoomEvent mre)
             {
                 // seul l'hôte peut modifier les données de la salle
-                if (GAccount.Accounts[mre.GetSender()].Login !=
+                if (GAccount.Instance.Accounts[mre.GetSender()].Login !=
                     Rooms[mre.RoomData.Code].Data.Host)
                 {
                     mre.GetSender().Send(new RoomFailureEvent()
@@ -193,9 +195,8 @@ namespace ShadowHunter_Server.Rooms
         public static void Init()
         {
             new GRoom();
-            Console.Write("GRoom OK");
+            Console.WriteLine("GRoom OK");
             EventView.Manager.AddListener(Instance, true);
-            GAccount.Init();
         }
 
 
