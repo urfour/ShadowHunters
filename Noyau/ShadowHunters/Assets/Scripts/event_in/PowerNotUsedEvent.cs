@@ -1,13 +1,13 @@
-﻿using EventExemple.Kernel.Players;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Scripts.event_in
+namespace EventExemple.Kernel.Players.event_out
 {
-    class PowerNotUsedEvent : PlayerEvent
+    // Evenement qui se déclenche quand un joueur clique sur le bouton de refus d'activation de pouvoir
+    public class PowerNotUsedEvent : PlayerEvent
     {
     }
 }

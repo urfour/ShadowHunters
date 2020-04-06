@@ -102,6 +102,10 @@ public class Player
     public Character Character { get; private set; }
     // liste des cartes possédées par le joueur
     public List<Card> ListCard { get; private set; }
+    // le joueur peut-il utiliser son pouvoir ?
+    public Setting<bool> CanUsePower { get; private set; } = new Setting<bool>(false);
+    // le joueur peut-il ne pas utiliser son pouvoir ?
+    public Setting<bool> CanNotUsePower { get; private set; } = new Setting<bool>(false);
 
 
     public Player(int id)

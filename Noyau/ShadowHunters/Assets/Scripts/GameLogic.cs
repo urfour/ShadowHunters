@@ -7,8 +7,7 @@ using UnityEngine.Events;
 using EventSystem;
 using EventExemple.Kernel.Players;
 using EventExemple.Kernel.Players.event_out;
-using Assets.Scripts.event_out;
-using Assets.Scripts.event_in;
+using Kernel.Settings;
 
 /// <summary>
 /// Classe représentant la logique du jeu, à savoir la gestion des règles et des interactions 
@@ -106,7 +105,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// <summary>
     /// Id du joueur dont c'est le tour
     /// </summary>
-    private int m_playerTurn = -1;
+    //private int m_playerTurn = -1;
     /// <summary>
     /// Id du joueur récemment attaqué
     /// </summary>    
@@ -126,11 +125,12 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// <summary>
     /// Propriété d'accès à l'id du joueur dont c'est le tour
     /// </summary>
-    public int PlayerTurn
+    /*public int PlayerTurn
     {
         get => m_playerTurn;
         private set => m_playerTurn = value;
-    }
+    }*/
+    public Setting<int> PlayerTurn { get; private set; } = new Setting<int>(-1);
     /// <summary>
     /// Booléen représentant l'état actuel du jeu (terminé ou non)
     /// </summary>
@@ -217,7 +217,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// </summary>
     void Start()
     {
-        EventView.Manager.AddListener(this);
+        EventView.Manager.AddListener(this, true);
         const int NB_PLAYERS = 5;
         PrepareGame(NB_PLAYERS);
         visionCardsButton.gameObject.SetActive(false);
@@ -228,17 +228,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         choiceDropdown.gameObject.SetActive(false);
         validateButton.gameObject.SetActive(false);
         usePowerButton.gameObject.SetActive(false);
-        EventView.Manager.Emit(new EnablePowerEvent()
-        {
-            playerId = m_playerTurn,
-            enabled = false
-        });
         dontUsePowerButton.gameObject.SetActive(false);
-        EventView.Manager.Emit(new EnableNoPowerEvent()
-        {
-            playerId = m_playerTurn,
-            enabled = false
-        });
         woundsForestToggle.gameObject.SetActive(false);
         healForestToggle.gameObject.SetActive(false);
         giveEquipmentToggle.gameObject.SetActive(false);
@@ -249,13 +239,14 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 
     void Update()
     {
+        EventView.Manager.ExecMainThreaded();
         for (int i = 0; i < m_nbPlayers; i++)
         {
             GameObject wounds = GameObject.Find("WoundsPlayer" + i);
             wounds.GetComponent<Text>().text = "" + m_players[i].Wound.Value + " Blessure(s)";
 
             GameObject name = GameObject.Find("Player" + i + "Name");
-            if (i == m_playerTurn)
+            if (i == PlayerTurn.Value)
                 name.GetComponent<Text>().fontStyle = FontStyle.Bold;
             else
                 name.GetComponent<Text>().fontStyle = FontStyle.Normal;
@@ -438,18 +429,18 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         Position position = Position.None;
 
         /* POUVOIR EMI SANS BOUTON 
-        if(m_players[m_playerTurn].Character.characterType == CharacterType.Emi && m_players[m_playerTurn].Revealed)
+        if(m_players[PlayerTurn.Value].Character.characterType == CharacterType.Emi && m_players[PlayerTurn.Value].Revealed)
         {
             int usePowerEmi = UnityEngine.Random.Range(0, 1);
 
             if(usePowerEmi == 1)
-                PlayerCardPower(m_players[m_playerTurn]);
+                PlayerCardPower(m_players[PlayerTurn.Value]);
         }
         */
 
         while (position == Position.None)
         {
-            if (m_players[m_playerTurn].HasCompass.Value)
+            if (m_players[PlayerTurn.Value].HasCompass.Value)
             {
                 int lancer01 = UnityEngine.Random.Range(1, 6);
                 int lancer02 = UnityEngine.Random.Range(1, 4);
@@ -524,16 +515,16 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                     position = Position.Foret;
                     break;
             }
-            if (m_players[m_playerTurn].Position != position)
+            if (m_players[PlayerTurn.Value].Position != position)
             {
-                m_players[m_playerTurn].Position = position;
-                gameBoard.setPositionOfAt(m_playerTurn, position);
+                m_players[PlayerTurn.Value].Position = position;
+                gameBoard.setPositionOfAt(PlayerTurn.Value, position);
             }
             else
                 position = Position.None;
         }
-        Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " se rend sur la carte " +
-            gameBoard.GetAreaNameByPosition(m_players[m_playerTurn].Position) + ".");
+        Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " se rend sur la carte " +
+            gameBoard.GetAreaNameByPosition(m_players[PlayerTurn.Value].Position) + ".");
 
     }
 
@@ -543,7 +534,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// <returns>Itération terminée</returns>
     IEnumerator ActivateLocationPower()
     {
-        switch (m_players[m_playerTurn].Position)
+        switch (m_players[PlayerTurn.Value].Position)
         {
             // Possibilité de piocher une carte vision
             case Position.Antre:
@@ -623,11 +614,11 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 break;
             case Position.Sanctuaire:
                 // Possibilité de voler une carte équipement
-                yield return StartCoroutine(StealEquipmentCard(m_playerTurn));
+                yield return StartCoroutine(StealEquipmentCard(PlayerTurn.Value));
                 break;
         }
         attackPlayer.gameObject.SetActive(true);
-        if (m_players[m_playerTurn].HasSaber.Value == true)
+        if (m_players[PlayerTurn.Value].HasSaber.Value == true)
             endTurn.gameObject.SetActive(false);
         else
             endTurn.gameObject.SetActive(true);
@@ -653,13 +644,13 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         attackPlayer.gameObject.SetActive(false);
         endTurn.gameObject.SetActive(false);
 
-        int choosenPlayerId = m_playerTurn;
-        Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " choisit de piocher une carte Vision.");
+        int choosenPlayerId = PlayerTurn.Value;
+        Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " choisit de piocher une carte Vision.");
         VisionCard visionCard = gameBoard.DrawCard(CardType.Vision) as VisionCard;
         yield return StartCoroutine(VisionCardPower(visionCard));
         gameBoard.AddDiscard(visionCard, CardType.Vision);
         attackPlayer.gameObject.SetActive(true);
-        if (m_players[m_playerTurn].HasSaber.Value == true)
+        if (m_players[PlayerTurn.Value].HasSaber.Value == true)
             endTurn.gameObject.SetActive(false);
         else
             endTurn.gameObject.SetActive(true);
@@ -685,19 +676,19 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         attackPlayer.gameObject.SetActive(false);
         endTurn.gameObject.SetActive(false);
 
-        Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " choisit de piocher une carte Ténèbres.");
+        Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " choisit de piocher une carte Ténèbres.");
         DarknessCard darknessCard = gameBoard.DrawCard(CardType.Darkness) as DarknessCard;
         if (darknessCard.isEquipement)
         {
-            m_players[m_playerTurn].AddCard(darknessCard);
+            m_players[PlayerTurn.Value].AddCard(darknessCard);
             Debug.Log("La carte " + darknessCard.cardName + " a été ajoutée à la main du joueur "
-                + m_players[m_playerTurn].Name + ".");
+                + m_players[PlayerTurn.Value].Name + ".");
         }
         yield return StartCoroutine(DarknessCardPower(darknessCard));
         if (!darknessCard.isEquipement)
             gameBoard.AddDiscard(darknessCard, CardType.Darkness);
         attackPlayer.gameObject.SetActive(true);
-        if (m_players[m_playerTurn].HasSaber.Value == true)
+        if (m_players[PlayerTurn.Value].HasSaber.Value == true)
             endTurn.gameObject.SetActive(false);
         else
             endTurn.gameObject.SetActive(true);
@@ -723,19 +714,19 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         attackPlayer.gameObject.SetActive(false);
         endTurn.gameObject.SetActive(false);
 
-        Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " pioche une carte Lumière.");
+        Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " pioche une carte Lumière.");
         LightCard lightCard = gameBoard.DrawCard(CardType.Light) as LightCard;
         if (lightCard.isEquipement)
         {
-            m_players[m_playerTurn].AddCard(lightCard);
+            m_players[PlayerTurn.Value].AddCard(lightCard);
             Debug.Log("La carte " + lightCard.cardName + " a été ajoutée à la main du joueur "
-                + m_players[m_playerTurn].Name + ".");
+                + m_players[PlayerTurn.Value].Name + ".");
         }
         yield return StartCoroutine(LightCardPower(lightCard));
         if (!lightCard.isEquipement)
             gameBoard.AddDiscard(lightCard, CardType.Light);
         attackPlayer.gameObject.SetActive(true);
-        if (m_players[m_playerTurn].HasSaber.Value == true)
+        if (m_players[PlayerTurn.Value].HasSaber.Value == true)
             endTurn.gameObject.SetActive(false);
         else
             endTurn.gameObject.SetActive(true);
@@ -757,14 +748,14 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// <returns>Itération terminée</returns>
     IEnumerator VisionCardPower(VisionCard pickedCard)
     {
-        Debug.Log("Message au joueur " + m_players[m_playerTurn].Name + " : ");
+        Debug.Log("Message au joueur " + m_players[PlayerTurn.Value].Name + " : ");
         Debug.Log("Carte Vision piochée : " + pickedCard.cardName);
         Debug.Log(pickedCard.description);
         choiceDropdown.gameObject.SetActive(true);
         validateButton.gameObject.SetActive(true);
         List<string> players = new List<string>();
         for (int i = 0; i < m_nbPlayers; i++)
-            if (!m_players[i].IsDead() && i != m_playerTurn)
+            if (!m_players[i].IsDead() && i != PlayerTurn.Value)
                 players.Add(m_players[i].Name);
         choiceDropdown.AddOptions(players);
         Debug.Log("A qui voulez-vous donner cette carte vision ?");
@@ -784,18 +775,13 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 
         if (m_players[playerId].Character.characterType == CharacterType.Metamorphe)
         {
+            // A enlever plus tard
             usePowerButton.gameObject.SetActive(true);
-            EventView.Manager.Emit(new EnablePowerEvent()
-            {
-                playerId = playerId,
-                enabled = true
-            });
             dontUsePowerButton.gameObject.SetActive(true);
-            EventView.Manager.Emit(new EnableNoPowerEvent()
-            {
-                playerId = playerId,
-                enabled = true
-            });
+
+            m_players[playerId].CanUsePower.Value = true;
+            m_players[playerId].CanNotUsePower.Value = true;
+
             m_pickedVisionCard = pickedCard;
         }
 
@@ -891,7 +877,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 yield return StartCoroutine(TakingWoundsEffect(false, 2, -2));
                 break;
             case DarknessEffect.Banane:
-                yield return StartCoroutine(GiveEquipmentCard(m_playerTurn));
+                yield return StartCoroutine(GiveEquipmentCard(PlayerTurn.Value));
                 break;
             case DarknessEffect.ChauveSouris:
                 yield return StartCoroutine(TakingWoundsEffect(false, 2, 1));
@@ -938,24 +924,24 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 }
                 break;
             case DarknessEffect.Hache:
-                m_players[m_playerTurn].BonusAttack.Value++;
+                m_players[PlayerTurn.Value].BonusAttack.Value++;
                 break;
             case DarknessEffect.Mitrailleuse:
-                m_players[m_playerTurn].HasGatling.Value = true;
+                m_players[PlayerTurn.Value].HasGatling.Value = true;
                 break;
             case DarknessEffect.Poupee:
                 yield return StartCoroutine(TakingWoundsEffect(true, 3, 0));
                 break;
             case DarknessEffect.Revolver:
-                m_players[m_playerTurn].HasRevolver.Value = true;
+                m_players[PlayerTurn.Value].HasRevolver.Value = true;
                 break;
             case DarknessEffect.Rituel:
                 Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
                 yield return new WaitForSeconds(6f);
-                if (m_players[m_playerTurn].Revealed.Value && m_players[m_playerTurn].Team == CharacterTeam.Shadow)
+                if (m_players[PlayerTurn.Value].Revealed.Value && m_players[PlayerTurn.Value].Team == CharacterTeam.Shadow)
                 {
-                    m_players[m_playerTurn].Healed(m_players[m_playerTurn].Wound.Value);
-                    Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " se soigne complètement");
+                    m_players[PlayerTurn.Value].Healed(m_players[PlayerTurn.Value].Wound.Value);
+                    Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " se soigne complètement");
                 }
                 else
                 {
@@ -963,10 +949,10 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 }
                 break;
             case DarknessEffect.Sabre:
-                m_players[m_playerTurn].HasSaber.Value = true;
+                m_players[PlayerTurn.Value].HasSaber.Value = true;
                 break;
             case DarknessEffect.Succube:
-                yield return StartCoroutine(StealEquipmentCard(m_playerTurn));
+                yield return StartCoroutine(StealEquipmentCard(PlayerTurn.Value));
                 break;
         }
     }
@@ -986,7 +972,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         List<string> players = new List<string>();
         foreach (Player player in m_players)
         {
-            if (!player.IsDead() && player.Id != m_playerTurn)
+            if (!player.IsDead() && player.Id != PlayerTurn.Value)
             {
                 if (isPuppet)
                     players.Add(player.Name);
@@ -1021,8 +1007,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             }
             else
             {
-                m_players[m_playerTurn].Wounded(nbWoundsTaken);
-                CheckPlayerDeath(m_playerTurn);
+                m_players[PlayerTurn.Value].Wounded(nbWoundsTaken);
+                CheckPlayerDeath(PlayerTurn.Value);
             }
         }
         else
@@ -1031,11 +1017,11 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             CheckPlayerDeath(playerChoosenId);
             if (nbWoundsSelfHealed < 0)
             {
-                m_players[m_playerTurn].Wounded(-nbWoundsSelfHealed);
-                CheckPlayerDeath(m_playerTurn);
+                m_players[PlayerTurn.Value].Wounded(-nbWoundsSelfHealed);
+                CheckPlayerDeath(PlayerTurn.Value);
             }
             else
-                m_players[m_playerTurn].Healed(nbWoundsSelfHealed);
+                m_players[PlayerTurn.Value].Healed(nbWoundsSelfHealed);
         }
     }
 
@@ -1046,28 +1032,28 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// <returns>Itération terminée</returns>
     IEnumerator LightCardPower(LightCard pickedCard)
     {
-        CharacterTeam team = m_players[m_playerTurn].Team;
-        string character = m_players[m_playerTurn].Character.characterName;
-        bool revealed = m_players[m_playerTurn].Revealed.Value;
+        CharacterTeam team = m_players[PlayerTurn.Value].Team;
+        string character = m_players[PlayerTurn.Value].Character.characterName;
+        bool revealed = m_players[PlayerTurn.Value].Revealed.Value;
         Debug.Log(pickedCard.lightEffect);
         switch (pickedCard.lightEffect)
         {
             case LightEffect.Amulette:
-                m_players[m_playerTurn].HasAmulet.Value = true;
+                m_players[PlayerTurn.Value].HasAmulet.Value = true;
                 break;
 
             case LightEffect.AngeGardien:
 
-                m_players[m_playerTurn].HasGuardian.Value = true;
+                m_players[PlayerTurn.Value].HasGuardian.Value = true;
                 break;
 
             case LightEffect.Supreme:
                 Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
                 yield return new WaitForSeconds(6f);
-                if (revealed && m_players[m_playerTurn].Team == CharacterTeam.Hunter)
+                if (revealed && m_players[PlayerTurn.Value].Team == CharacterTeam.Hunter)
                 {
-                    m_players[m_playerTurn].Healed(m_players[m_playerTurn].Wound.Value);
-                    Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " se soigne complètement");
+                    m_players[PlayerTurn.Value].Healed(m_players[PlayerTurn.Value].Wound.Value);
+                    Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " se soigne complètement");
                 }
                 else
                 {
@@ -1080,8 +1066,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 yield return new WaitForSeconds(6f);
                 if (revealed && (character == "Allie" || character == "Emi" || character == "Metamorphe"))
                 {
-                    m_players[m_playerTurn].Healed(m_players[m_playerTurn].Wound.Value);
-                    Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " se soigne complètement");
+                    m_players[PlayerTurn.Value].Healed(m_players[PlayerTurn.Value].Wound.Value);
+                    Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " se soigne complètement");
                 }
                 else
                 {
@@ -1096,7 +1082,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 List<string> players = new List<string>();
                 foreach (Player player in m_players)
                 {
-                    if (!player.IsDead() && player.Id != m_playerTurn)
+                    if (!player.IsDead() && player.Id != PlayerTurn.Value)
                     {
                         players.Add(player.Name);
                     }
@@ -1123,36 +1109,36 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 break;
 
             case LightEffect.Boussole:
-                m_players[m_playerTurn].HasCompass.Value = true;
+                m_players[PlayerTurn.Value].HasCompass.Value = true;
                 break;
 
             case LightEffect.Broche:
-                m_players[m_playerTurn].HasBroche.Value = true;
+                m_players[PlayerTurn.Value].HasBroche.Value = true;
                 break;
 
             case LightEffect.Crucifix:
-                m_players[m_playerTurn].HasCrucifix.Value = true;
+                m_players[PlayerTurn.Value].HasCrucifix.Value = true;
                 break;
 
             case LightEffect.EauBenite:
 
-                m_players[m_playerTurn].Healed(2);
+                m_players[PlayerTurn.Value].Healed(2);
                 break;
 
             case LightEffect.Eclair:
 
                 foreach (Player p in m_players)
                 {
-                    if (p.Id != m_playerTurn)
+                    if (p.Id != PlayerTurn.Value)
                         p.Wounded(2);
                 }
                 break;
 
             case LightEffect.Lance:
-                m_players[m_playerTurn].HasSpear.Value = true;
+                m_players[PlayerTurn.Value].HasSpear.Value = true;
                 if (team == CharacterTeam.Hunter && revealed)
                 {
-                    m_players[m_playerTurn].BonusAttack.Value += 2;
+                    m_players[PlayerTurn.Value].BonusAttack.Value += 2;
                 }
                 break;
 
@@ -1160,7 +1146,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 
                 if (team == CharacterTeam.Shadow && character != "Metamorphe")
                 {
-                    m_players[m_playerTurn].Revealed.Value = true;
+                    m_players[PlayerTurn.Value].Revealed.Value = true;
                     Debug.Log("Vous révélez votre rôle à tous, vous êtes : " + character);
                 }
                 break;
@@ -1195,14 +1181,14 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 
             case LightEffect.Savoir:
 
-                m_players[m_playerTurn].HasAncestral.Value = true;
+                m_players[PlayerTurn.Value].HasAncestral.Value = true;
                 break;
 
             case LightEffect.Toge:
 
-                m_players[m_playerTurn].HasToge.Value = true;
-                m_players[m_playerTurn].MalusAttack.Value++;
-                m_players[m_playerTurn].ReductionWounds.Value = 1;
+                m_players[PlayerTurn.Value].HasToge.Value = true;
+                m_players[PlayerTurn.Value].MalusAttack.Value++;
+                m_players[PlayerTurn.Value].ReductionWounds.Value = 1;
                 break;
         }
     }
@@ -1236,26 +1222,23 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// </summary>
     public void RevealCard()
     {
-        m_players[m_playerTurn].Revealed.Value = true;
-        Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " s'est révélé, il s'agissait de : "
-            + m_players[m_playerTurn].Character.characterName + " ! Il est dans l'équipe des "
-            + m_players[m_playerTurn].Character.team + ".");
+        m_players[PlayerTurn.Value].Revealed.Value = true;
+        Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " s'est révélé, il s'agissait de : "
+            + m_players[PlayerTurn.Value].Character.characterName + " ! Il est dans l'équipe des "
+            + m_players[PlayerTurn.Value].Character.team + ".");
         revealCardButton.gameObject.SetActive(false);
 
         // Si le joueur est Allie, il peut utiliser son pouvoir à tout moment
         // Si le joueur est Emi, Franklin ou Georges et qu'il est au début de son tour, il peut utiliser son pouvoir
-        if (m_players[m_playerTurn].Character.characterType == CharacterType.Allie
+        if (m_players[PlayerTurn.Value].Character.characterType == CharacterType.Allie
             || (rollDicesButton.gameObject.activeInHierarchy
-                && (m_players[m_playerTurn].Character.characterType == CharacterType.Emi
-                    || m_players[m_playerTurn].Character.characterType == CharacterType.Franklin
-                    || m_players[m_playerTurn].Character.characterType == CharacterType.Georges)))
+                && (m_players[PlayerTurn.Value].Character.characterType == CharacterType.Emi
+                    || m_players[PlayerTurn.Value].Character.characterType == CharacterType.Franklin
+                    || m_players[PlayerTurn.Value].Character.characterType == CharacterType.Georges)))
         {
             usePowerButton.gameObject.SetActive(true);
-            EventView.Manager.Emit(new EnablePowerEvent()
-            {
-                playerId = m_playerTurn,
-                enabled = true
-            });
+
+            m_players[PlayerTurn.Value].CanUsePower.Value = true;
         }
     }
 
@@ -1271,7 +1254,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         lightCardsButton.gameObject.SetActive(false);
 
         Debug.Log("Quel joueur souhaitez-vous attaquer ?");
-        StartCoroutine(AttackCorrespondingPlayer(m_playerTurn));
+        StartCoroutine(AttackCorrespondingPlayer(PlayerTurn.Value));
     }
 
     /// <summary>
@@ -1285,38 +1268,34 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         attackPlayer.gameObject.SetActive(false);
         endTurn.gameObject.SetActive(false);
 
-        if (m_playerTurn == -1)
-            m_playerTurn = UnityEngine.Random.Range(0, m_nbPlayers - 1);
-        else if (m_players[m_playerTurn].HasAncestral.Value) // si le joueur a utilisé le savoir ancestral, le joueur suivant reste lui
+        if (PlayerTurn.Value == -1)
+            PlayerTurn.Value = UnityEngine.Random.Range(0, m_nbPlayers - 1);
+        else if (m_players[PlayerTurn.Value].HasAncestral.Value) // si le joueur a utilisé le savoir ancestral, le joueur suivant reste lui
         {
-            Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " rejoue grâce au Savoir Ancestral !");
-            m_players[m_playerTurn].HasAncestral.Value = false;
+            Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " rejoue grâce au Savoir Ancestral !");
+            m_players[PlayerTurn.Value].HasAncestral.Value = false;
         }
         else
-            m_playerTurn = (m_playerTurn + 1) % m_nbPlayers;
-        Debug.Log("C'est au joueur " + m_players[m_playerTurn].Name + " de jouer.");
+            PlayerTurn.Value = (PlayerTurn.Value + 1) % m_nbPlayers;
+        Debug.Log("C'est au joueur " + m_players[PlayerTurn.Value].Name + " de jouer.");
 
-        if (m_players[m_playerTurn].HasGuardian.Value)
+        if (m_players[PlayerTurn.Value].HasGuardian.Value)
         {
-            m_players[m_playerTurn].HasGuardian.Value = false;
-            Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " n'est plus affecté par l'Ange Gardien !");
+            m_players[PlayerTurn.Value].HasGuardian.Value = false;
+            Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " n'est plus affecté par l'Ange Gardien !");
         }
 
         rollDicesButton.gameObject.SetActive(true);
-        if (m_players[m_playerTurn].Revealed.Value == false)
+        if (m_players[PlayerTurn.Value].Revealed.Value == false)
         {
             revealCardButton.gameObject.SetActive(true);
         }
-        else if (m_players[m_playerTurn].Character.characterType == CharacterType.Emi
-                || m_players[m_playerTurn].Character.characterType == CharacterType.Franklin
-                || m_players[m_playerTurn].Character.characterType == CharacterType.Georges)
+        else if (m_players[PlayerTurn.Value].Character.characterType == CharacterType.Emi
+                || m_players[PlayerTurn.Value].Character.characterType == CharacterType.Franklin
+                || m_players[PlayerTurn.Value].Character.characterType == CharacterType.Georges)
         {
             usePowerButton.gameObject.SetActive(true);
-            EventView.Manager.Emit(new EnablePowerEvent()
-            {
-                playerId = m_playerTurn,
-                enabled = true
-            });
+            m_players[PlayerTurn.Value].CanUsePower.Value = true;
         }
     }
 
@@ -1325,16 +1304,13 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// </summary>
     public void RollTheDices()
     {
-        if (m_players[m_playerTurn].Character.characterType == CharacterType.Emi
-            || m_players[m_playerTurn].Character.characterType == CharacterType.Franklin
-            || m_players[m_playerTurn].Character.characterType == CharacterType.Georges)
+        if (m_players[PlayerTurn.Value].Character.characterType == CharacterType.Emi
+            || m_players[PlayerTurn.Value].Character.characterType == CharacterType.Franklin
+            || m_players[PlayerTurn.Value].Character.characterType == CharacterType.Georges)
         {
             usePowerButton.gameObject.SetActive(false);
-            EventView.Manager.Emit(new EnablePowerEvent()
-            {
-                playerId = m_playerTurn,
-                enabled = false
-            });
+            
+            m_players[PlayerTurn.Value].CanUsePower.Value = false;
         }
         StartCoroutine(PlayTurn());
     }
@@ -1349,10 +1325,10 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 
         /* POUVOIR FRANKLIN ET GEORGES SANS BOUTON
 
-        if(m_players[m_playerTurn].Character.characterType == CharacterType.Franklin)
-            PlayerCardPower(m_players[m_playerTurn]);    
-        if(m_players[m_playerTurn].Character.characterType == CharacterType.Georges)
-            PlayerCardPower(m_players[m_playerTurn]);
+        if(m_players[PlayerTurn.Value].Character.characterType == CharacterType.Franklin)
+            PlayerCardPower(m_players[PlayerTurn.Value]);    
+        if(m_players[PlayerTurn.Value].Character.characterType == CharacterType.Georges)
+            PlayerCardPower(m_players[PlayerTurn.Value]);
 
         */
 
@@ -1429,7 +1405,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         validateButton.gameObject.SetActive(true);
         List<string> locationNames = new List<string>();
         foreach (LocationCard location in gameBoard.Areas)
-            if (location.area != m_players[m_playerTurn].Position)
+            if (location.area != m_players[PlayerTurn.Value].Position)
                 locationNames.Add(location.cardName);
 
         choiceDropdown.AddOptions(locationNames);
@@ -1440,9 +1416,9 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         foreach (LocationCard location in gameBoard.Areas)
             if (location.cardName.Equals(selectedLocation))
             {
-                m_players[m_playerTurn].Position = location.area;
-                gameBoard.setPositionOfAt(m_playerTurn, location.area);
-                Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " se rend sur la carte " + location.cardName + ".");
+                m_players[PlayerTurn.Value].Position = location.area;
+                gameBoard.setPositionOfAt(PlayerTurn.Value, location.area);
+                Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " se rend sur la carte " + location.cardName + ".");
             }
         choiceDropdown.gameObject.SetActive(false);
         validateButton.gameObject.SetActive(false);
@@ -1508,6 +1484,30 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             string playerAttacked = choiceDropdown.captionText.text;
             choiceDropdown.ClearOptions();
 
+            /*
+            List<Player> players = GetPlayersSameSector(playerAttackingId, m_players[playerAttackingId].HasRevolver.Value);
+
+            if(player.Count != 0)
+            {
+                if (!m_players[playerAttackingId].HasGatling.Value)
+                {
+                    List<string> playerNames = new List<string>();
+                    foreach (Player player in players)
+                        playerNames.Add(player.Name);
+
+                    EventView.Manager.Emit(new SelectAttackTarget()
+                    {
+                        AttackerId = playerAttackingId,
+                        PossibleTargetId = playerNames.ToArray(),
+                    });
+                }
+                else
+                {
+                    ...
+                }
+            }
+            */
+
             int lancer1 = UnityEngine.Random.Range(1, 6);
             int lancer2 = UnityEngine.Random.Range(1, 4);
             int lancerTotal = (m_players[playerAttackingId].HasSaber.Value == true) ? lancer2 : Mathf.Abs(lancer1 - lancer2);
@@ -1536,11 +1536,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                                 && m_players[playerAttackedId].Revealed.Value)
                             {
                                 usePowerButton.gameObject.SetActive(true);
-                                EventView.Manager.Emit(new EnablePowerEvent()
-                                {
-                                    playerId = playerAttackedId,
-                                    enabled = true
-                                });
+
+                                m_players[playerAttackedId].CanUsePower.Value = true;
                             }
 
                             // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
@@ -1568,17 +1565,10 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                     {
                         m_damageBob = lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value;
                         usePowerButton.gameObject.SetActive(true);
-                        EventView.Manager.Emit(new EnablePowerEvent()
-                        {
-                            playerId = playerAttackingId,
-                            enabled = true
-                        });
                         dontUsePowerButton.gameObject.SetActive(true);
-                        EventView.Manager.Emit(new EnableNoPowerEvent()
-                        {
-                            playerId = playerAttackingId,
-                            enabled = true
-                        });
+
+                        m_players[playerAttackingId].CanUsePower.Value = true;
+                        m_players[playerAttackingId].CanNotUsePower.Value = true;
                     }
                     else
                     {
@@ -1599,11 +1589,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                             && m_players[playerAttackedId].Revealed.Value)
                         {
                             usePowerButton.gameObject.SetActive(true);
-                            EventView.Manager.Emit(new EnablePowerEvent()
-                            {
-                                playerId = playerAttackedId,
-                                enabled = true
-                            });
+
+                            m_players[playerAttackedId].CanUsePower.Value = true;
                         }
 
                         // Charles peut attaquer de nouveau
@@ -1611,11 +1598,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                             && m_players[playerAttackingId].Revealed.Value)
                         {
                             usePowerButton.gameObject.SetActive(true);
-                            EventView.Manager.Emit(new EnablePowerEvent()
-                            {
-                                playerId = playerAttackingId,
-                                enabled = true
-                            });
+
+                            m_players[playerAttackingId].CanUsePower.Value = true;
                         }
                     }
                 }
@@ -1642,11 +1626,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                             && m_players[targetId].Revealed.Value)
             {
                 usePowerButton.gameObject.SetActive(true);
-                EventView.Manager.Emit(new EnablePowerEvent()
-                {
-                    playerId = targetId,
-                    enabled = true
-                });
+
+                m_players[targetId].CanUsePower.Value = true;
             }
         }
         else
@@ -1683,11 +1664,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                                 && m_players[targetId].Revealed.Value)
                             {
                                 usePowerButton.gameObject.SetActive(true);
-                                EventView.Manager.Emit(new EnablePowerEvent()
-                                {
-                                    playerId = targetId,
-                                    enabled = true
-                                });
+
+                                m_players[targetId].CanUsePower.Value = true;
                             }
 
                             // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
@@ -1709,11 +1687,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                             && m_players[targetId].Revealed.Value)
                         {
                             usePowerButton.gameObject.SetActive(true);
-                            EventView.Manager.Emit(new EnablePowerEvent()
-                            {
-                                playerId = targetId,
-                                enabled = true
-                            });
+
+                            m_players[targetId].CanUsePower.Value = true;
                         }
 
                         // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
@@ -1739,7 +1714,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     {
         if (m_players[playerId].IsDead())
         {
-            Debug.Log("Le joueur " + m_players[m_playerTurn].Name + " est mort !");
+            Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " est mort !");
 
             if (m_nbHuntersDead == 0 && m_nbShadowsDeads == 0 && m_nbNeutralsDeads == 0)
             {
@@ -1759,9 +1734,9 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             else
                 m_nbNeutralsDeads++;
 
-            // if(m_players[m_playerTurn].Character.characterType == CharacterType.Bryan && m_players[playerId].Life <= 12 && !m_players[m_playerTurn].Revealed)
+            // if(m_players[PlayerTurn.Value].Character.characterType == CharacterType.Bryan && m_players[playerId].Life <= 12 && !m_players[PlayerTurn.Value].Revealed)
             // {
-            //     PlayerCardPower(m_players[m_playerTurn]);
+            //     PlayerCardPower(m_players[PlayerTurn.Value]);
             // }
         }
     }
@@ -1795,9 +1770,9 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             else
                 m_nbNeutralsDeads++;
 
-            // if(m_players[m_playerTurn].Character.characterType == CharacterType.Bryan && m_players[playerId].Life <= 12 && !m_players[m_playerTurn].Revealed)
+            // if(m_players[PlayerTurn.Value].Character.characterType == CharacterType.Bryan && m_players[playerId].Life <= 12 && !m_players[PlayerTurn.Value].Revealed)
             // {
-            //     PlayerCardPower(m_players[m_playerTurn]);
+            //     PlayerCardPower(m_players[PlayerTurn.Value]);
             // }
             if (m_players[playerId].ListCard.Count != 0)
             {
@@ -2147,22 +2122,15 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     public void UsePower()
     {
         usePowerButton.gameObject.SetActive(false);
-        EventView.Manager.Emit(new EnablePowerEvent()
-        {
-            playerId = m_playerTurn,
-            enabled = false
-        });
         dontUsePowerButton.gameObject.SetActive(false);
-        EventView.Manager.Emit(new EnableNoPowerEvent()
-        {
-            playerId = m_playerTurn,
-            enabled = false
-        });
 
-        Debug.Log("Player : " + m_players[m_playerTurn].Id + " effectue son pouvoir");
+        m_players[PlayerTurn.Value].CanUsePower.Value = false;
+        m_players[PlayerTurn.Value].CanNotUsePower.Value = false;
+
+        Debug.Log("Player : " + m_players[PlayerTurn.Value].Id + " effectue son pouvoir");
 
         // A changer avec le personnage du joueur quand le réseau sera fait
-        PlayerCardPower(m_players[m_playerTurn]);
+        PlayerCardPower(m_players[PlayerTurn.Value]);
     }
 
 
@@ -2175,17 +2143,10 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     IEnumerator PlayerCardPower(Player player)
     {
         usePowerButton.gameObject.SetActive(false);
-        EventView.Manager.Emit(new EnablePowerEvent()
-        {
-            playerId = player.Id,
-            enabled = false
-        });
         dontUsePowerButton.gameObject.SetActive(false);
-        EventView.Manager.Emit(new EnableNoPowerEvent()
-        {
-            playerId = player.Id,
-            enabled = false
-        });
+
+        m_players[player.Id].CanUsePower.Value = false;
+        m_players[player.Id].CanNotUsePower.Value = false;
 
         switch (player.Character.characterType)
         {
@@ -2288,7 +2249,6 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                         player.Wounded(2);
                         CheckPlayerDeath(player.Id);
                     }
-
                     // Cas des cartes infligeant des Blessures
                     else if (m_pickedVisionCard.visionEffect.effectTakeWounds)
                     {
@@ -2318,10 +2278,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                             player.Wounded(1);
                         }
                         else
-                        // TODO don d'une carte équipement
-                        {
                             GiveEquipmentCard(player.Id);
-                        }
                     }
                     else
                         Debug.Log("Rien ne se passe.");
@@ -2410,11 +2367,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                                         && m_players[playerAttackedId].Revealed.Value)
                                     {
                                         usePowerButton.gameObject.SetActive(true);
-                                        EventView.Manager.Emit(new EnablePowerEvent()
-                                        {
-                                            playerId = playerAttackedId,
-                                            enabled = true
-                                        });
+
+                                        m_players[playerAttackedId].CanUsePower.Value = true;
                                     }
                                 }
                             }
@@ -2439,11 +2393,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                                     && m_players[playerAttackedId].Revealed.Value)
                                 {
                                     usePowerButton.gameObject.SetActive(true);
-                                    EventView.Manager.Emit(new EnablePowerEvent()
-                                    {
-                                        playerId = playerAttackedId,
-                                        enabled = true
-                                    });
+
+                                    m_players[playerAttackedId].CanUsePower.Value = true;
                                 }
 
                                 // Charles peut attaquer de nouveau
@@ -2451,11 +2402,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                                     && m_players[player.Id].Revealed.Value)
                                 {
                                     usePowerButton.gameObject.SetActive(true);
-                                    EventView.Manager.Emit(new EnablePowerEvent()
-                                    {
-                                        playerId = player.Id,
-                                        enabled = true
-                                    });
+
+                                    m_players[player.Id].CanUsePower.Value = true;
                                 }
                             }
                         }
@@ -2511,11 +2459,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                                         && m_players[playerAttackedId].Revealed.Value)
                                     {
                                         usePowerButton.gameObject.SetActive(true);
-                                        EventView.Manager.Emit(new EnablePowerEvent()
-                                        {
-                                            playerId = playerAttackedId,
-                                            enabled = true
-                                        });
+
+                                        m_players[playerAttackedId].CanUsePower.Value = true;
                                     }
                                 }
                             }
@@ -2540,11 +2485,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                                     && m_players[playerAttackedId].Revealed.Value)
                                 {
                                     usePowerButton.gameObject.SetActive(true);
-                                    EventView.Manager.Emit(new EnablePowerEvent()
-                                    {
-                                        playerId = playerAttackedId,
-                                        enabled = true
-                                    });
+
+                                    m_players[playerAttackedId].CanUsePower.Value = true;
                                 }
 
                                 // Charles peut attaquer de nouveau
@@ -2552,11 +2494,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                                     && m_players[player.Id].Revealed.Value)
                                 {
                                     usePowerButton.gameObject.SetActive(true);
-                                    EventView.Manager.Emit(new EnablePowerEvent()
-                                    {
-                                        playerId = player.Id,
-                                        enabled = true
-                                    });
+
+                                    m_players[player.Id].CanUsePower.Value = true;
                                 }
                             }
                         }
@@ -2567,7 +2506,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             case CharacterType.LoupGarou:
                 if (player.Revealed.Value)
                 {
-                    StartCoroutine(AttackCorrespondingPlayer(player.Id, m_playerTurn, 0));
+                    StartCoroutine(AttackCorrespondingPlayer(player.Id, PlayerTurn.Value, 0));
                 }
                 break;
             case CharacterType.Vampire:
@@ -2600,19 +2539,12 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     public void DontUsePower(Player player)
     {
         usePowerButton.gameObject.SetActive(false);
-        EventView.Manager.Emit(new EnablePowerEvent()
-        {
-            playerId = m_playerTurn,
-            enabled = false
-        });
         dontUsePowerButton.gameObject.SetActive(false);
-        EventView.Manager.Emit(new EnableNoPowerEvent()
-        {
-            playerId = m_playerTurn,
-            enabled = false
-        });
 
-        //Player p = m_players[m_playerTurn];
+        m_players[PlayerTurn.Value].CanUsePower.Value = false;
+        m_players[PlayerTurn.Value].CanNotUsePower.Value = false;
+
+        //Player p = m_players[PlayerTurn.Value];
 
         Debug.Log("Player : " + player.Id + " n'effectue pas son pouvoir");
         switch (player.Character.characterType)
@@ -2687,11 +2619,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                     && m_players[m_playerAttackedId].Revealed.Value)
                 {
                     usePowerButton.gameObject.SetActive(true);
-                    EventView.Manager.Emit(new EnablePowerEvent()
-                    {
-                        playerId = m_playerAttackedId,
-                        enabled = true
-                    });
+
+                    m_players[m_playerAttackedId].CanUsePower.Value = true;
                 }
                 break;
         }
@@ -2726,6 +2655,70 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         else if (e is PowerNotUsedEvent powerNotUsed)
         {
             DontUsePower(m_players[powerNotUsed.playerId]);
+        }
+        else if (e is AttackPlayerEvent attackPlayer)
+        {
+            Player playerAttacking = m_players[attackPlayer.playerAttackingId];
+            Player playerAttacked = m_players[attackPlayer.playerAttackedId];
+
+            int lancer1 = UnityEngine.Random.Range(1, 6);
+            int lancer2 = UnityEngine.Random.Range(1, 4);
+            int lancerTotal = (playerAttacking.HasSaber.Value == true) ? lancer2 : Mathf.Abs(lancer1 - lancer2);
+            
+            if (lancerTotal == 0)
+                Debug.Log("Le lancer vaut 0, vous n'attaquez pas.");
+            else
+            {
+                Debug.Log("Vous choisissez d'attaquer le joueur " + playerAttacked.Name + ".");
+
+                int dommageTotal = lancerTotal + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value;
+
+                // Si Bob est révélé et inflige 2 dégats ou plus, il peut voler une arme 
+                if (playerAttacking.Character.characterType == CharacterType.Bob
+                    && playerAttacking.Revealed.Value
+                    && dommageTotal >= 2)
+                {
+                    m_damageBob = dommageTotal;
+
+                    usePowerButton.gameObject.SetActive(true);
+                    dontUsePowerButton.gameObject.SetActive(true);
+
+                    playerAttacking.CanUsePower.Value = true;
+                    playerAttacking.CanNotUsePower.Value = true;
+                }
+                else
+                {
+                    // Le joueur attaqué se prend des dégats
+                    playerAttacked.Wounded(dommageTotal);
+
+                    // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
+                    if (playerAttacking.Character.characterType == CharacterType.Vampire
+                        && playerAttacking.Revealed.Value
+                        && dommageTotal > 0)
+                        PlayerCardPower(playerAttacking);
+
+                    // On vérifie si le joueur attaqué est mort
+                    CheckPlayerDeath(playerAttacked.Id);
+
+                    // Le Loup-garou peut contre attaquer
+                    if (playerAttacked.Character.characterType == CharacterType.LoupGarou
+                        && playerAttacked.Revealed.Value)
+                    {
+                        usePowerButton.gameObject.SetActive(true);
+
+                        playerAttacked.CanUsePower.Value = true;
+                    }
+
+                    // Charles peut attaquer de nouveau
+                    if (playerAttacking.Character.characterType == CharacterType.Charles
+                        && playerAttacking.Revealed.Value)
+                    {
+                        usePowerButton.gameObject.SetActive(true);
+
+                        playerAttacking.CanUsePower.Value = true;
+                    }
+                }
+            }
         }
     }
 }
