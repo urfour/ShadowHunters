@@ -2326,7 +2326,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                     List<Player> Splayers = GetPlayersSameSector(player.Id, m_players[player.Id].HasRevolver.Value);
                     List<string> allPlayersName = new List<string>();
                     foreach (Player aPlayer in m_players)
-                        if (aPlayer.Id != player.Id)
+                        if (aPlayer.Id != player.Id && !aPlayer.IsDead() )
                             allPlayersName.Add(aPlayer.Name);
 
                     choiceDropdown.AddOptions(allPlayersName);
@@ -2408,8 +2408,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                     choiceDropdown.gameObject.SetActive(true);
                     List<Player> Splayers = GetPlayersSameSector(player.Id, m_players[player.Id].HasRevolver.Value);
                     List<string> allPlayersName = new List<string>();
-                    foreach (Player aPlayer in m_players)
-                        if(aPlayer.Id != player.Id)
+                    foreach (Player aPlayer in m_players && !aPlayer.IsDead())
+                        if (aPlayer.Id != player.Id)
                         allPlayersName.Add(aPlayer.Name);
 
                     choiceDropdown.AddOptions(allPlayersName);
