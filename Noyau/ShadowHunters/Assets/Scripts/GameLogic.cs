@@ -205,6 +205,11 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     public GameObject namesInterface;
     public GameObject woundsInterface;
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    public static void OnBeforeSceneLoadRuntimeMethod()
+    {
+        EventView.Load();
+    }
 
     /// <summary>
     /// Fonction appelée dès l'instanciation du GameObject auquel est lié le script,
@@ -212,6 +217,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// </summary>
     void Start()
     {
+        EventView.Manager.AddListener(this);
         const int NB_PLAYERS = 5;
         PrepareGame(NB_PLAYERS);
         visionCardsButton.gameObject.SetActive(false);
@@ -221,13 +227,13 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         endTurn.gameObject.SetActive(false);
         choiceDropdown.gameObject.SetActive(false);
         validateButton.gameObject.SetActive(false);
-        //usePowerButton.gameObject.SetActive(false);
+        usePowerButton.gameObject.SetActive(false);
         EventView.Manager.Emit(new EnablePowerEvent()
         {
             playerId = m_playerTurn,
             enabled = false
         });
-        //dontUsePowerButton.gameObject.SetActive(false);
+        dontUsePowerButton.gameObject.SetActive(false);
         EventView.Manager.Emit(new EnableNoPowerEvent()
         {
             playerId = m_playerTurn,
@@ -778,13 +784,13 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 
         if (m_players[playerId].Character.characterType == CharacterType.Metamorphe)
         {
-            //usePowerButton.gameObject.SetActive(true);
+            usePowerButton.gameObject.SetActive(true);
             EventView.Manager.Emit(new EnablePowerEvent()
             {
                 playerId = playerId,
                 enabled = true
             });
-            //dontUsePowerButton.gameObject.SetActive(true);
+            dontUsePowerButton.gameObject.SetActive(true);
             EventView.Manager.Emit(new EnableNoPowerEvent()
             {
                 playerId = playerId,
@@ -1244,7 +1250,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                     || m_players[m_playerTurn].Character.characterType == CharacterType.Franklin
                     || m_players[m_playerTurn].Character.characterType == CharacterType.Georges)))
         {
-            //usePowerButton.gameObject.SetActive(true);
+            usePowerButton.gameObject.SetActive(true);
             EventView.Manager.Emit(new EnablePowerEvent()
             {
                 playerId = m_playerTurn,
@@ -1305,7 +1311,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 || m_players[m_playerTurn].Character.characterType == CharacterType.Franklin
                 || m_players[m_playerTurn].Character.characterType == CharacterType.Georges)
         {
-            //usePowerButton.gameObject.SetActive(true);
+            usePowerButton.gameObject.SetActive(true);
             EventView.Manager.Emit(new EnablePowerEvent()
             {
                 playerId = m_playerTurn,
@@ -1323,7 +1329,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             || m_players[m_playerTurn].Character.characterType == CharacterType.Franklin
             || m_players[m_playerTurn].Character.characterType == CharacterType.Georges)
         {
-            //usePowerButton.gameObject.SetActive(false);
+            usePowerButton.gameObject.SetActive(false);
             EventView.Manager.Emit(new EnablePowerEvent()
             {
                 playerId = m_playerTurn,
@@ -1529,7 +1535,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                             if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
                                 && m_players[playerAttackedId].Revealed.Value)
                             {
-                                //usePowerButton.gameObject.SetActive(true);
+                                usePowerButton.gameObject.SetActive(true);
                                 EventView.Manager.Emit(new EnablePowerEvent()
                                 {
                                     playerId = playerAttackedId,
@@ -1561,13 +1567,13 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                         && lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value >= 2)
                     {
                         m_damageBob = lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value;
-                        //usePowerButton.gameObject.SetActive(true);
+                        usePowerButton.gameObject.SetActive(true);
                         EventView.Manager.Emit(new EnablePowerEvent()
                         {
                             playerId = playerAttackingId,
                             enabled = true
                         });
-                        //dontUsePowerButton.gameObject.SetActive(true);
+                        dontUsePowerButton.gameObject.SetActive(true);
                         EventView.Manager.Emit(new EnableNoPowerEvent()
                         {
                             playerId = playerAttackingId,
@@ -1592,7 +1598,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                         if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
                             && m_players[playerAttackedId].Revealed.Value)
                         {
-                            //usePowerButton.gameObject.SetActive(true);
+                            usePowerButton.gameObject.SetActive(true);
                             EventView.Manager.Emit(new EnablePowerEvent()
                             {
                                 playerId = playerAttackedId,
@@ -1604,7 +1610,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                         if (m_players[playerAttackingId].Character.characterType == CharacterType.Charles
                             && m_players[playerAttackingId].Revealed.Value)
                         {
-                            //usePowerButton.gameObject.SetActive(true);
+                            usePowerButton.gameObject.SetActive(true);
                             EventView.Manager.Emit(new EnablePowerEvent()
                             {
                                 playerId = playerAttackingId,
@@ -1635,7 +1641,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             if (m_players[targetId].Character.characterType == CharacterType.LoupGarou
                             && m_players[targetId].Revealed.Value)
             {
-                //usePowerButton.gameObject.SetActive(true);
+                usePowerButton.gameObject.SetActive(true);
                 EventView.Manager.Emit(new EnablePowerEvent()
                 {
                     playerId = targetId,
@@ -1676,7 +1682,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                             if (m_players[targetId].Character.characterType == CharacterType.LoupGarou
                                 && m_players[targetId].Revealed.Value)
                             {
-                                //usePowerButton.gameObject.SetActive(true);
+                                usePowerButton.gameObject.SetActive(true);
                                 EventView.Manager.Emit(new EnablePowerEvent()
                                 {
                                     playerId = targetId,
@@ -1702,7 +1708,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                         if (m_players[targetId].Character.characterType == CharacterType.LoupGarou
                             && m_players[targetId].Revealed.Value)
                         {
-                            //usePowerButton.gameObject.SetActive(true);
+                            usePowerButton.gameObject.SetActive(true);
                             EventView.Manager.Emit(new EnablePowerEvent()
                             {
                                 playerId = targetId,
@@ -2140,13 +2146,13 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// </summary>
     public void UsePower()
     {
-        //usePowerButton.gameObject.SetActive(false);
+        usePowerButton.gameObject.SetActive(false);
         EventView.Manager.Emit(new EnablePowerEvent()
         {
             playerId = m_playerTurn,
             enabled = false
         });
-        //dontUsePowerButton.gameObject.SetActive(false);
+        dontUsePowerButton.gameObject.SetActive(false);
         EventView.Manager.Emit(new EnableNoPowerEvent()
         {
             playerId = m_playerTurn,
@@ -2168,13 +2174,13 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// Personnage</param>
     IEnumerator PlayerCardPower(Player player)
     {
-        //usePowerButton.gameObject.SetActive(false);
+        usePowerButton.gameObject.SetActive(false);
         EventView.Manager.Emit(new EnablePowerEvent()
         {
             playerId = player.Id,
             enabled = false
         });
-        //dontUsePowerButton.gameObject.SetActive(false);
+        dontUsePowerButton.gameObject.SetActive(false);
         EventView.Manager.Emit(new EnableNoPowerEvent()
         {
             playerId = player.Id,
@@ -2403,7 +2409,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                                     if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
                                         && m_players[playerAttackedId].Revealed.Value)
                                     {
-                                        //usePowerButton.gameObject.SetActive(true);
+                                        usePowerButton.gameObject.SetActive(true);
                                         EventView.Manager.Emit(new EnablePowerEvent()
                                         {
                                             playerId = playerAttackedId,
@@ -2432,7 +2438,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                                 if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
                                     && m_players[playerAttackedId].Revealed.Value)
                                 {
-                                    //usePowerButton.gameObject.SetActive(true);
+                                    usePowerButton.gameObject.SetActive(true);
                                     EventView.Manager.Emit(new EnablePowerEvent()
                                     {
                                         playerId = playerAttackedId,
@@ -2444,7 +2450,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                                 if (m_players[player.Id].Character.characterType == CharacterType.Charles
                                     && m_players[player.Id].Revealed.Value)
                                 {
-                                    //usePowerButton.gameObject.SetActive(true);
+                                    usePowerButton.gameObject.SetActive(true);
                                     EventView.Manager.Emit(new EnablePowerEvent()
                                     {
                                         playerId = player.Id,
@@ -2504,7 +2510,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                                     if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
                                         && m_players[playerAttackedId].Revealed.Value)
                                     {
-                                        //usePowerButton.gameObject.SetActive(true);
+                                        usePowerButton.gameObject.SetActive(true);
                                         EventView.Manager.Emit(new EnablePowerEvent()
                                         {
                                             playerId = playerAttackedId,
@@ -2533,7 +2539,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                                 if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
                                     && m_players[playerAttackedId].Revealed.Value)
                                 {
-                                    //usePowerButton.gameObject.SetActive(true);
+                                    usePowerButton.gameObject.SetActive(true);
                                     EventView.Manager.Emit(new EnablePowerEvent()
                                     {
                                         playerId = playerAttackedId,
@@ -2545,7 +2551,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                                 if (m_players[player.Id].Character.characterType == CharacterType.Charles
                                     && m_players[player.Id].Revealed.Value)
                                 {
-                                    //usePowerButton.gameObject.SetActive(true);
+                                    usePowerButton.gameObject.SetActive(true);
                                     EventView.Manager.Emit(new EnablePowerEvent()
                                     {
                                         playerId = player.Id,
@@ -2593,13 +2599,13 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// </summary>
     public void DontUsePower(Player player)
     {
-        //usePowerButton.gameObject.SetActive(false);
+        usePowerButton.gameObject.SetActive(false);
         EventView.Manager.Emit(new EnablePowerEvent()
         {
             playerId = m_playerTurn,
             enabled = false
         });
-        //dontUsePowerButton.gameObject.SetActive(false);
+        dontUsePowerButton.gameObject.SetActive(false);
         EventView.Manager.Emit(new EnableNoPowerEvent()
         {
             playerId = m_playerTurn,
@@ -2680,7 +2686,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 if (m_players[m_playerAttackedId].Character.characterType == CharacterType.LoupGarou
                     && m_players[m_playerAttackedId].Revealed.Value)
                 {
-                    //usePowerButton.gameObject.SetActive(true);
+                    usePowerButton.gameObject.SetActive(true);
                     EventView.Manager.Emit(new EnablePowerEvent()
                     {
                         playerId = m_playerAttackedId,
