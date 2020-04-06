@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class hp_windows : MonoBehaviour {
+public class hp_window : MonoBehaviour {
 
 	public GameObject hp;
 	private int count = 0;
