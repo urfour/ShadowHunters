@@ -804,7 +804,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             || (team == CharacterTeam.Hunter && pickedCard.visionEffect.effectOnHunter)
             || (team == CharacterTeam.Neutral && pickedCard.visionEffect.effectOnNeutral))
         {
-             // Cas des cartes infligeant des Blessures
+            // Cas des cartes infligeant des Blessures
             if (pickedCard.visionEffect.effectTakeWounds)
             {
                 m_players[playerId].Wounded(pickedCard.visionEffect.nbWounds);
@@ -832,7 +832,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                     Debug.Log("Vous ne possédez pas de carte équipement.");
                     m_players[playerId].Wounded(1);
                 }
-                else 
+                else
                 {
                     Debug.Log("Voulez-vous donner une carte équipement ou subir une Blessure ?");
                     giveEquipmentToggle.gameObject.SetActive(true);
@@ -2162,7 +2162,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         Debug.Log("Player : " + m_players[m_playerTurn].Id + " effectue son pouvoir");
 
         // A changer avec le personnage du joueur quand le réseau sera fait
-        PlayerCardPower(m_players[m_playerTurn]);
+        StartCoroutine(PlayerCardPower(m_players[m_playerTurn]));
     }
 
 
@@ -2366,73 +2366,38 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 if (player.Revealed.Value && !player.UsedPower.Value)
                 {
                     choiceDropdown.gameObject.SetActive(true);
-                    List<Player> players = GetPlayersSameSector(player.Id, m_players[player.Id].HasRevolver.Value);
-                    if (players.Count == 0)
+                    List<Player> Splayers = GetPlayersSameSector(player.Id, m_players[player.Id].HasRevolver.Value);
+                    List<string> allPlayersName = new List<string>();
+                    foreach (Player aPlayer in m_players)
+                        if (aPlayer.Id != player.Id)
+                            allPlayersName.Add(aPlayer.Name);
+
+                    choiceDropdown.AddOptions(allPlayersName);
+                    validateButton.gameObject.SetActive(true);
+                    yield return WaitUntilEvent(validateButton.onClick);
+                    int playerAttackedId = -1;
+                    choiceDropdown.gameObject.SetActive(false);
+                    validateButton.gameObject.SetActive(false);
+                    string playerAttacked = choiceDropdown.captionText.text;
+                    choiceDropdown.ClearOptions();
+
+                    int lancer = UnityEngine.Random.Range(1, 6);
+                    int lancerTotal = lancer;
+                    if (lancerTotal == 0)
                     {
-                        Debug.Log("Vous ne pouvez attaquer aucun joueur.");
-                        choiceDropdown.gameObject.SetActive(false);
+                        Debug.Log("Le lancer vaut 0, vous n'attaquez pas.");
                     }
                     else
                     {
-                        List<string> playerNames = new List<string>();
-                        foreach (Player playerSector in players)
-                            playerNames.Add(playerSector.Name);
-
-                        choiceDropdown.AddOptions(playerNames);
-                        validateButton.gameObject.SetActive(true);
-                        yield return WaitUntilEvent(validateButton.onClick);
-                        int playerAttackedId = -1;
-                        choiceDropdown.gameObject.SetActive(false);
-                        validateButton.gameObject.SetActive(false);
-                        string playerAttacked = choiceDropdown.captionText.text;
-                        choiceDropdown.ClearOptions();
-
-                        int lancer = UnityEngine.Random.Range(1, 6);
-                        int lancerTotal = lancer;
-                        if (lancerTotal == 0)
+                        // Si le joueur a la gatling, il attaque tous les joueurs qui ne sont pas dans sa zone
+                        if (m_players[player.Id].HasGatling.Value)
                         {
-                            Debug.Log("Le lancer vaut 0, vous n'attaquez pas.");
-                        }
-                        else
-                        {
-                            // Si le joueur a la gatling, il attaque tous les joueurs qui ne sont pas dans sa zone
-                            if (m_players[player.Id].HasGatling.Value)
+                            foreach (Player playerSector in Splayers)
                             {
-                                foreach (Player playerSector in players)
-                                {
-                                    m_players[playerSector.Id].Wounded(lancerTotal + m_players[player.Id].BonusAttack.Value - m_players[player.Id].MalusAttack.Value);
-
-                                    // On vérifie si le joueur attaqué est mort
-                                    CheckPlayerDeath(playerSector.Id);
-
-                                    // Le Loup-garou peut contre attaquer
-                                    if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
-                                        && m_players[playerAttackedId].Revealed.Value)
-                                    {
-                                        usePowerButton.gameObject.SetActive(true);
-                                        EventView.Manager.Emit(new EnablePowerEvent()
-                                        {
-                                            playerId = playerAttackedId,
-                                            enabled = true
-                                        });
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                for (int i = 0; i < m_nbPlayers; i++)
-                                    if (m_players[i].Name.Equals(playerAttacked))
-                                        playerAttackedId = i;
-
-                                m_playerAttackedId = playerAttackedId;
-
-                                Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[playerAttackedId].Name + ".");
-
-                                // Le joueur attaqué se prend des dégats
-                                m_players[playerAttackedId].Wounded(lancerTotal + m_players[player.Id].BonusAttack.Value - m_players[player.Id].MalusAttack.Value);
+                                m_players[playerSector.Id].Wounded(lancerTotal + m_players[player.Id].BonusAttack.Value - m_players[player.Id].MalusAttack.Value);
 
                                 // On vérifie si le joueur attaqué est mort
-                                CheckPlayerDeath(playerAttackedId);
+                                CheckPlayerDeath(playerSector.Id);
 
                                 // Le Loup-garou peut contre attaquer
                                 if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
@@ -2445,18 +2410,46 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                                         enabled = true
                                     });
                                 }
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < m_nbPlayers; i++)
+                                if (m_players[i].Name.Equals(playerAttacked))
+                                    playerAttackedId = i;
 
-                                // Charles peut attaquer de nouveau
-                                if (m_players[player.Id].Character.characterType == CharacterType.Charles
-                                    && m_players[player.Id].Revealed.Value)
+                            m_playerAttackedId = playerAttackedId;
+
+                            Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[playerAttackedId].Name + ".");
+
+                            // Le joueur attaqué se prend des dégats
+                            m_players[playerAttackedId].Wounded(lancerTotal + m_players[player.Id].BonusAttack.Value - m_players[player.Id].MalusAttack.Value);
+
+                            // On vérifie si le joueur attaqué est mort
+                            CheckPlayerDeath(playerAttackedId);
+
+                            // Le Loup-garou peut contre attaquer
+                            if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
+                                && m_players[playerAttackedId].Revealed.Value)
+                            {
+                                usePowerButton.gameObject.SetActive(true);
+                                EventView.Manager.Emit(new EnablePowerEvent()
                                 {
-                                    usePowerButton.gameObject.SetActive(true);
-                                    EventView.Manager.Emit(new EnablePowerEvent()
-                                    {
-                                        playerId = player.Id,
-                                        enabled = true
-                                    });
-                                }
+                                    playerId = playerAttackedId,
+                                    enabled = true
+                                });
+                            }
+
+                            // Charles peut attaquer de nouveau
+                            if (m_players[player.Id].Character.characterType == CharacterType.Charles
+                                && m_players[player.Id].Revealed.Value)
+                            {
+                                usePowerButton.gameObject.SetActive(true);
+                                EventView.Manager.Emit(new EnablePowerEvent()
+                                {
+                                    playerId = player.Id,
+                                    enabled = true
+                                });
                             }
                         }
                     }
@@ -2467,73 +2460,38 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 if (player.Revealed.Value && !player.UsedPower.Value)
                 {
                     choiceDropdown.gameObject.SetActive(true);
-                    List<Player> players = GetPlayersSameSector(player.Id, m_players[player.Id].HasRevolver.Value);
-                    if (players.Count == 0)
+                    List<Player> Splayers = GetPlayersSameSector(player.Id, m_players[player.Id].HasRevolver.Value);
+                    List<string> allPlayersName = new List<string>();
+                    foreach (Player aPlayer in m_players)
+                        if(aPlayer.Id != player.Id)
+                        allPlayersName.Add(aPlayer.Name);
+
+                    choiceDropdown.AddOptions(allPlayersName);
+                    validateButton.gameObject.SetActive(true);
+                    yield return WaitUntilEvent(validateButton.onClick);
+                    int playerAttackedId = -1;
+                    choiceDropdown.gameObject.SetActive(false);
+                    validateButton.gameObject.SetActive(false);
+                    string playerAttacked = choiceDropdown.captionText.text;
+                    choiceDropdown.ClearOptions();
+
+                    int lancer = UnityEngine.Random.Range(1, 4);
+                    int lancerTotal = lancer;
+                    if (lancerTotal == 0)
                     {
-                        Debug.Log("Vous ne pouvez attaquer aucun joueur.");
-                        choiceDropdown.gameObject.SetActive(false);
+                        Debug.Log("Le lancer vaut 0, vous n'attaquez pas.");
                     }
                     else
                     {
-                        List<string> playerNames = new List<string>();
-                        foreach (Player playerSector in players)
-                            playerNames.Add(playerSector.Name);
-
-                        choiceDropdown.AddOptions(playerNames);
-                        validateButton.gameObject.SetActive(true);
-                        yield return WaitUntilEvent(validateButton.onClick);
-                        int playerAttackedId = -1;
-                        choiceDropdown.gameObject.SetActive(false);
-                        validateButton.gameObject.SetActive(false);
-                        string playerAttacked = choiceDropdown.captionText.text;
-                        choiceDropdown.ClearOptions();
-
-                        int lancer = UnityEngine.Random.Range(1, 4);
-                        int lancerTotal = lancer;
-                        if (lancerTotal == 0)
+                        // Si le joueur a la gatling, il attaque tous les joueurs qui ne sont pas dans sa zone
+                        if (m_players[player.Id].HasGatling.Value)
                         {
-                            Debug.Log("Le lancer vaut 0, vous n'attaquez pas.");
-                        }
-                        else
-                        {
-                            // Si le joueur a la gatling, il attaque tous les joueurs qui ne sont pas dans sa zone
-                            if (m_players[player.Id].HasGatling.Value)
+                            foreach (Player playerSector in Splayers)
                             {
-                                foreach (Player playerSector in players)
-                                {
-                                    m_players[playerSector.Id].Wounded(lancerTotal + m_players[player.Id].BonusAttack.Value - m_players[player.Id].MalusAttack.Value);
-
-                                    // On vérifie si le joueur attaqué est mort
-                                    CheckPlayerDeath(playerSector.Id);
-
-                                    // Le Loup-garou peut contre attaquer
-                                    if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
-                                        && m_players[playerAttackedId].Revealed.Value)
-                                    {
-                                        usePowerButton.gameObject.SetActive(true);
-                                        EventView.Manager.Emit(new EnablePowerEvent()
-                                        {
-                                            playerId = playerAttackedId,
-                                            enabled = true
-                                        });
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                for (int i = 0; i < m_nbPlayers; i++)
-                                    if (m_players[i].Name.Equals(playerAttacked))
-                                        playerAttackedId = i;
-
-                                m_playerAttackedId = playerAttackedId;
-
-                                Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[playerAttackedId].Name + ".");
-
-                                // Le joueur attaqué se prend des dégats
-                                m_players[playerAttackedId].Wounded(lancerTotal + m_players[player.Id].BonusAttack.Value - m_players[player.Id].MalusAttack.Value);
+                                m_players[playerSector.Id].Wounded(lancerTotal + m_players[player.Id].BonusAttack.Value - m_players[player.Id].MalusAttack.Value);
 
                                 // On vérifie si le joueur attaqué est mort
-                                CheckPlayerDeath(playerAttackedId);
+                                CheckPlayerDeath(playerSector.Id);
 
                                 // Le Loup-garou peut contre attaquer
                                 if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
@@ -2546,18 +2504,46 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                                         enabled = true
                                     });
                                 }
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 0; i < m_nbPlayers; i++)
+                                if (m_players[i].Name.Equals(playerAttacked))
+                                    playerAttackedId = i;
 
-                                // Charles peut attaquer de nouveau
-                                if (m_players[player.Id].Character.characterType == CharacterType.Charles
-                                    && m_players[player.Id].Revealed.Value)
+                            m_playerAttackedId = playerAttackedId;
+
+                            Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[playerAttackedId].Name + ".");
+
+                            // Le joueur attaqué se prend des dégats
+                            m_players[playerAttackedId].Wounded(lancerTotal + m_players[player.Id].BonusAttack.Value - m_players[player.Id].MalusAttack.Value);
+
+                            // On vérifie si le joueur attaqué est mort
+                            CheckPlayerDeath(playerAttackedId);
+
+                            // Le Loup-garou peut contre attaquer
+                            if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
+                                && m_players[playerAttackedId].Revealed.Value)
+                            {
+                                usePowerButton.gameObject.SetActive(true);
+                                EventView.Manager.Emit(new EnablePowerEvent()
                                 {
-                                    usePowerButton.gameObject.SetActive(true);
-                                    EventView.Manager.Emit(new EnablePowerEvent()
-                                    {
-                                        playerId = player.Id,
-                                        enabled = true
-                                    });
-                                }
+                                    playerId = playerAttackedId,
+                                    enabled = true
+                                });
+                            }
+
+                            // Charles peut attaquer de nouveau
+                            if (m_players[player.Id].Character.characterType == CharacterType.Charles
+                                && m_players[player.Id].Revealed.Value)
+                            {
+                                usePowerButton.gameObject.SetActive(true);
+                                EventView.Manager.Emit(new EnablePowerEvent()
+                                {
+                                    playerId = player.Id,
+                                    enabled = true
+                                });
                             }
                         }
                     }
