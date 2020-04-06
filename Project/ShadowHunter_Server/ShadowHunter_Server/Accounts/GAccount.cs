@@ -6,6 +6,7 @@ using ServerInterface.AuthEvents.event_in;
 using ServerInterface.AuthEvents.event_out;
 using System.Collections.Generic;
 using Network.model;
+//using System.Data.SQLite;
 
 namespace ShadowHunter_Server.Accounts
 {
@@ -98,7 +99,7 @@ namespace ShadowHunter_Server.Accounts
                     };
                     Accounts.Add(sie.GetSender(), a);
                     Console.WriteLine("Création du compte...");
-                    if (CreateAccount(sie.Login, sie.Password) == false)
+                    if (CreateAccount(sie) == false)
                     {
                         sie.GetSender().Send(new AuthInvalidEvent() { Msg = "auth.account_creation_error;" });
                     }
@@ -115,20 +116,79 @@ namespace ShadowHunter_Server.Accounts
         //              n'existe pas
         private byte Authentify(string login, string password)
         {
-            /* TODO : vérifier les identifiants dans la BDD */
-            return 2;
+            /*string connectionString = @"DataSource=..\..\database.db; Version=3;";
+            int myUserId = -1;
+
+            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            using (SQLiteCommand command = new SQLiteCommand(conn))
+            {
+                conn.Open();
+                command.CommandText = "select id from joueur where login_id = '" + login + "'";
+                SQLiteDataReader lecteur = command.ExecuteReader();
+                if (!lecteur.HasRows)
+                {
+                    lecteur.Close();
+                    conn.Close();
+                    return 2;
+                }
+                while (lecteur.Read())
+                    myUserId = lecteur.GetInt32(0);
+                lecteur.Close();
+                
+
+                command.CommandText = "select id from joueur where pwd = '" + password + "'";
+                lecteur = command.ExecuteReader();
+                if (!lecteur.HasRows)
+                {
+                    lecteur.Close();
+                    conn.Close();
+                    return 1;
+                }
+                while (lecteur.Read())
+                {
+                    if (myUserId == lecteur.GetInt32(0))
+                    {
+                        conn.Close();
+                        return 0;
+                    }
+                }
+
+                lecteur.Close();
+                conn.Close();*/
+                return 1;
+           /* }*/
         }
 
         // Demande à la BDD de créer un compte
         // Entrée : un login et un mot de passe
         // Sortie : true si le compte a été créé, false sinon
-        private bool CreateAccount(string login, string password)
+        private bool CreateAccount(SignInEvent sie)
         {
-            // TODO: créer un compte dans la BDD
-            Console.WriteLine("Compte créé");
-            return true;
-        }
+            /*string connectionString = @"DataSource=..\..\database.db; Version=3;";
+            string login = sie.Login;
+            string password = sie.Password;
 
+            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            using (SQLiteCommand command = new SQLiteCommand(conn))
+            {
+                conn.Open();
+                command.CommandText = "insert into joueur (login_id, pwd) values ('" + login + "','" + password + "')";
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                catch (SQLiteException except)
+                {
+                    conn.Close();
+                    Console.WriteLine("Erreur: " + except.Message);
+                    return false;
+                }
+
+                Console.WriteLine("Compte crée");
+                conn.Close();*/
+                return true;
+           /*}*/
+        }
 
 
         private GAccount()
