@@ -4,11 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using EventSystem;
+using EventExemple.Kernel.Players;
+using EventExemple.Kernel.Players.event_out;
+using Assets.Scripts.event_out;
+using Assets.Scripts.event_in;
 
 /// <summary>
 /// Classe représentant la logique du jeu, à savoir la gestion des règles et des interactions 
 /// </summary>
-public class GameLogic : MonoBehaviour
+public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 {
     /// <summary>
     /// Nombre de joueurs de la partie courante
@@ -216,8 +221,18 @@ public class GameLogic : MonoBehaviour
         endTurn.gameObject.SetActive(false);
         choiceDropdown.gameObject.SetActive(false);
         validateButton.gameObject.SetActive(false);
-        usePowerButton.gameObject.SetActive(false);
-        dontUsePowerButton.gameObject.SetActive(false);
+        //usePowerButton.gameObject.SetActive(false);
+        EventView.Manager.Emit(new EnablePowerEvent()
+        {
+            playerId = m_playerTurn,
+            enabled = false
+        });
+        //dontUsePowerButton.gameObject.SetActive(false);
+        EventView.Manager.Emit(new EnableNoPowerEvent()
+        {
+            playerId = m_playerTurn,
+            enabled = false
+        });
         woundsForestToggle.gameObject.SetActive(false);
         healForestToggle.gameObject.SetActive(false);
         giveEquipmentToggle.gameObject.SetActive(false);
@@ -763,8 +778,18 @@ public class GameLogic : MonoBehaviour
 
         if (m_players[playerId].Character.characterType == CharacterType.Metamorphe)
         {
-            usePowerButton.gameObject.SetActive(true);
-            dontUsePowerButton.gameObject.SetActive(true);
+            //usePowerButton.gameObject.SetActive(true);
+            EventView.Manager.Emit(new EnablePowerEvent()
+            {
+                playerId = playerId,
+                enabled = true
+            });
+            //dontUsePowerButton.gameObject.SetActive(true);
+            EventView.Manager.Emit(new EnableNoPowerEvent()
+            {
+                playerId = playerId,
+                enabled = true
+            });
             m_pickedVisionCard = pickedCard;
         }
 
@@ -1219,7 +1244,12 @@ public class GameLogic : MonoBehaviour
                     || m_players[m_playerTurn].Character.characterType == CharacterType.Franklin
                     || m_players[m_playerTurn].Character.characterType == CharacterType.Georges)))
         {
-            usePowerButton.gameObject.SetActive(true);
+            //usePowerButton.gameObject.SetActive(true);
+            EventView.Manager.Emit(new EnablePowerEvent()
+            {
+                playerId = m_playerTurn,
+                enabled = true
+            });
         }
     }
 
@@ -1275,7 +1305,12 @@ public class GameLogic : MonoBehaviour
                 || m_players[m_playerTurn].Character.characterType == CharacterType.Franklin
                 || m_players[m_playerTurn].Character.characterType == CharacterType.Georges)
         {
-            usePowerButton.gameObject.SetActive(true);
+            //usePowerButton.gameObject.SetActive(true);
+            EventView.Manager.Emit(new EnablePowerEvent()
+            {
+                playerId = m_playerTurn,
+                enabled = true
+            });
         }
     }
 
@@ -1288,7 +1323,12 @@ public class GameLogic : MonoBehaviour
             || m_players[m_playerTurn].Character.characterType == CharacterType.Franklin
             || m_players[m_playerTurn].Character.characterType == CharacterType.Georges)
         {
-            usePowerButton.gameObject.SetActive(false);
+            //usePowerButton.gameObject.SetActive(false);
+            EventView.Manager.Emit(new EnablePowerEvent()
+            {
+                playerId = m_playerTurn,
+                enabled = false
+            });
         }
         StartCoroutine(PlayTurn());
     }
@@ -1487,9 +1527,14 @@ public class GameLogic : MonoBehaviour
 
                             // Le Loup-garou peut contre attaquer
                             if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
-                                && m_players[playerAttackingId].Revealed.Value)
+                                && m_players[playerAttackedId].Revealed.Value)
                             {
-                                usePowerButton.gameObject.SetActive(true);
+                                //usePowerButton.gameObject.SetActive(true);
+                                EventView.Manager.Emit(new EnablePowerEvent()
+                                {
+                                    playerId = playerAttackedId,
+                                    enabled = true
+                                });
                             }
 
                             // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
@@ -1516,8 +1561,18 @@ public class GameLogic : MonoBehaviour
                         && lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value >= 2)
                     {
                         m_damageBob = lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value;
-                        usePowerButton.gameObject.SetActive(true);
-                        dontUsePowerButton.gameObject.SetActive(true);
+                        //usePowerButton.gameObject.SetActive(true);
+                        EventView.Manager.Emit(new EnablePowerEvent()
+                        {
+                            playerId = playerAttackingId,
+                            enabled = true
+                        });
+                        //dontUsePowerButton.gameObject.SetActive(true);
+                        EventView.Manager.Emit(new EnableNoPowerEvent()
+                        {
+                            playerId = playerAttackingId,
+                            enabled = true
+                        });
                     }
                     else
                     {
@@ -1533,14 +1588,28 @@ public class GameLogic : MonoBehaviour
                         // On vérifie si le joueur attaqué est mort
                         CheckPlayerDeath(playerAttackedId);
 
-                        // Charles peut attaquer de nouveau
                         // Le Loup-garou peut contre attaquer
-                        if ((m_players[playerAttackingId].Character.characterType == CharacterType.Charles
-                            && m_players[playerAttackingId].Revealed.Value)
-                            || (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
-                            && m_players[playerAttackedId].Revealed.Value))
+                        if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
+                            && m_players[playerAttackedId].Revealed.Value)
                         {
-                            usePowerButton.gameObject.SetActive(true);
+                            //usePowerButton.gameObject.SetActive(true);
+                            EventView.Manager.Emit(new EnablePowerEvent()
+                            {
+                                playerId = playerAttackedId,
+                                enabled = true
+                            });
+                        }
+
+                        // Charles peut attaquer de nouveau
+                        if (m_players[playerAttackingId].Character.characterType == CharacterType.Charles
+                            && m_players[playerAttackingId].Revealed.Value)
+                        {
+                            //usePowerButton.gameObject.SetActive(true);
+                            EventView.Manager.Emit(new EnablePowerEvent()
+                            {
+                                playerId = playerAttackingId,
+                                enabled = true
+                            });
                         }
                     }
                 }
@@ -1566,7 +1635,12 @@ public class GameLogic : MonoBehaviour
             if (m_players[targetId].Character.characterType == CharacterType.LoupGarou
                             && m_players[targetId].Revealed.Value)
             {
-                usePowerButton.gameObject.SetActive(true);
+                //usePowerButton.gameObject.SetActive(true);
+                EventView.Manager.Emit(new EnablePowerEvent()
+                {
+                    playerId = targetId,
+                    enabled = true
+                });
             }
         }
         else
@@ -1600,9 +1674,14 @@ public class GameLogic : MonoBehaviour
 
                             // Le Loup-garou peut contre attaquer
                             if (m_players[targetId].Character.characterType == CharacterType.LoupGarou
-                                && m_players[playerAttackingId].Revealed.Value)
+                                && m_players[targetId].Revealed.Value)
                             {
-                                usePowerButton.gameObject.SetActive(true);
+                                //usePowerButton.gameObject.SetActive(true);
+                                EventView.Manager.Emit(new EnablePowerEvent()
+                                {
+                                    playerId = targetId,
+                                    enabled = true
+                                });
                             }
 
                             // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
@@ -1623,7 +1702,12 @@ public class GameLogic : MonoBehaviour
                         if (m_players[targetId].Character.characterType == CharacterType.LoupGarou
                             && m_players[targetId].Revealed.Value)
                         {
-                            usePowerButton.gameObject.SetActive(true);
+                            //usePowerButton.gameObject.SetActive(true);
+                            EventView.Manager.Emit(new EnablePowerEvent()
+                            {
+                                playerId = targetId,
+                                enabled = true
+                            });
                         }
 
                         // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
@@ -2056,8 +2140,18 @@ public class GameLogic : MonoBehaviour
     /// </summary>
     public void UsePower()
     {
-        usePowerButton.gameObject.SetActive(false);
-        dontUsePowerButton.gameObject.SetActive(false);
+        //usePowerButton.gameObject.SetActive(false);
+        EventView.Manager.Emit(new EnablePowerEvent()
+        {
+            playerId = m_playerTurn,
+            enabled = false
+        });
+        //dontUsePowerButton.gameObject.SetActive(false);
+        EventView.Manager.Emit(new EnableNoPowerEvent()
+        {
+            playerId = m_playerTurn,
+            enabled = false
+        });
 
         Debug.Log("Player : " + m_players[m_playerTurn].Id + " effectue son pouvoir");
 
@@ -2065,93 +2159,7 @@ public class GameLogic : MonoBehaviour
         PlayerCardPower(m_players[m_playerTurn]);
     }
 
-    /// <summary>
-    /// Non utilisation du pouvoir d'un personnage
-    /// </summary>
-    public void DontUsePower()
-    {
-        usePowerButton.gameObject.SetActive(false);
-        dontUsePowerButton.gameObject.SetActive(false);
 
-        Player p = m_players[m_playerTurn];
-
-        Debug.Log("Player : " + p.Id + " n'effectue pas son pouvoir");
-        switch (p.Character.characterType)
-        {
-            case CharacterType.Metamorphe:
-                if (!m_pickedVisionCard.visionEffect.effectOnShadow)
-                {
-                    if (m_pickedVisionCard.visionEffect.effectSupremeVision)
-                        //TODO montrer la carte personnage
-                        Debug.Log("C'est une carte Vision Suprême !");
-                    else
-                        Debug.Log("Rien ne se passe.");
-                }
-                else
-                {
-                    // Cas des cartes applicables en fonction des points de vie
-                    if (m_pickedVisionCard.visionEffect.effectOnLowHP && CheckLowHPCharacters(p.Character.characterName))
-                    {
-                        p.Wounded(1);
-                        CheckPlayerDeath(p.Id);
-                    }
-                    else if (m_pickedVisionCard.visionEffect.effectOnHighHP && CheckHighHPCharacters(p.Character.characterName))
-                    {
-                        p.Wounded(2);
-                        CheckPlayerDeath(p.Id);
-                    }
-
-                    // Cas des cartes infligeant des Blessures
-                    else if (m_pickedVisionCard.visionEffect.effectTakeWounds)
-                    {
-                        p.Wounded(m_pickedVisionCard.visionEffect.nbWounds);
-                        CheckPlayerDeath(p.Id);
-                    }
-                    // Cas des cartes soignant des Blessures
-                    else if (m_pickedVisionCard.visionEffect.effectHealingOneWound)
-                    {
-                        if (p.Wound.Value == 0)
-                        {
-                            p.Wounded(1);
-                            CheckPlayerDeath(p.Id);
-                        }
-                        else
-                        {
-                            p.Healed(1);
-                            CheckPlayerDeath(p.Id);
-                        }
-                    }
-                    // Cas des cartes volant une carte équipement ou infligeant des Blessures
-                    else if (m_pickedVisionCard.visionEffect.effectGivingEquipementCard)
-                    {
-                        if (p.ListCard.Count == 0)
-                        {
-                            Debug.Log("Vous ne possédez pas de carte équipement.");
-                            p.Wounded(1);
-                        }
-                        else
-                        // TODO don d'une carte équipement
-                        {
-                            GiveEquipmentCard(p.Id);
-                        }
-                    }
-                    else
-                        Debug.Log("Rien ne se passe.");
-                }
-                break;
-            case CharacterType.Bob:
-                m_players[m_playerAttackedId].Wounded(m_damageBob);
-
-                CheckPlayerDeath(m_playerAttackedId);
-
-                if (m_players[m_playerAttackedId].Character.characterType == CharacterType.LoupGarou
-                    && m_players[m_playerAttackedId].Revealed.Value)
-                {
-                    usePowerButton.gameObject.SetActive(true);
-                }
-                break;
-        }
-    }
 
     /// <summary>
     /// Activation de l'effet d'une carte Personnage
@@ -2160,6 +2168,19 @@ public class GameLogic : MonoBehaviour
     /// Personnage</param>
     IEnumerator PlayerCardPower(Player player)
     {
+        //usePowerButton.gameObject.SetActive(false);
+        EventView.Manager.Emit(new EnablePowerEvent()
+        {
+            playerId = player.Id,
+            enabled = false
+        });
+        //dontUsePowerButton.gameObject.SetActive(false);
+        EventView.Manager.Emit(new EnableNoPowerEvent()
+        {
+            playerId = player.Id,
+            enabled = false
+        });
+
         switch (player.Character.characterType)
         {
             case CharacterType.Allie:
@@ -2380,9 +2401,14 @@ public class GameLogic : MonoBehaviour
 
                                     // Le Loup-garou peut contre attaquer
                                     if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
-                                        && m_players[player.Id].Revealed.Value)
+                                        && m_players[playerAttackedId].Revealed.Value)
                                     {
-                                        usePowerButton.gameObject.SetActive(true);
+                                        //usePowerButton.gameObject.SetActive(true);
+                                        EventView.Manager.Emit(new EnablePowerEvent()
+                                        {
+                                            playerId = playerAttackedId,
+                                            enabled = true
+                                        });
                                     }
                                 }
                             }
@@ -2402,14 +2428,28 @@ public class GameLogic : MonoBehaviour
                                 // On vérifie si le joueur attaqué est mort
                                 CheckPlayerDeath(playerAttackedId);
 
-                                // Charles peut attaquer de nouveau
                                 // Le Loup-garou peut contre attaquer
-                                if ((m_players[player.Id].Character.characterType == CharacterType.Charles
-                                    && m_players[player.Id].Revealed.Value)
-                                    || (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
-                                    && m_players[playerAttackedId].Revealed.Value))
+                                if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
+                                    && m_players[playerAttackedId].Revealed.Value)
                                 {
-                                    usePowerButton.gameObject.SetActive(true);
+                                    //usePowerButton.gameObject.SetActive(true);
+                                    EventView.Manager.Emit(new EnablePowerEvent()
+                                    {
+                                        playerId = playerAttackedId,
+                                        enabled = true
+                                    });
+                                }
+
+                                // Charles peut attaquer de nouveau
+                                if (m_players[player.Id].Character.characterType == CharacterType.Charles
+                                    && m_players[player.Id].Revealed.Value)
+                                {
+                                    //usePowerButton.gameObject.SetActive(true);
+                                    EventView.Manager.Emit(new EnablePowerEvent()
+                                    {
+                                        playerId = player.Id,
+                                        enabled = true
+                                    });
                                 }
                             }
                         }
@@ -2462,9 +2502,14 @@ public class GameLogic : MonoBehaviour
 
                                     // Le Loup-garou peut contre attaquer
                                     if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
-                                        && m_players[player.Id].Revealed.Value)
+                                        && m_players[playerAttackedId].Revealed.Value)
                                     {
-                                        usePowerButton.gameObject.SetActive(true);
+                                        //usePowerButton.gameObject.SetActive(true);
+                                        EventView.Manager.Emit(new EnablePowerEvent()
+                                        {
+                                            playerId = playerAttackedId,
+                                            enabled = true
+                                        });
                                     }
                                 }
                             }
@@ -2484,14 +2529,28 @@ public class GameLogic : MonoBehaviour
                                 // On vérifie si le joueur attaqué est mort
                                 CheckPlayerDeath(playerAttackedId);
 
-                                // Charles peut attaquer de nouveau
                                 // Le Loup-garou peut contre attaquer
-                                if ((m_players[player.Id].Character.characterType == CharacterType.Charles
-                                    && m_players[player.Id].Revealed.Value)
-                                    || (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
-                                    && m_players[playerAttackedId].Revealed.Value))
+                                if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
+                                    && m_players[playerAttackedId].Revealed.Value)
                                 {
-                                    usePowerButton.gameObject.SetActive(true);
+                                    //usePowerButton.gameObject.SetActive(true);
+                                    EventView.Manager.Emit(new EnablePowerEvent()
+                                    {
+                                        playerId = playerAttackedId,
+                                        enabled = true
+                                    });
+                                }
+
+                                // Charles peut attaquer de nouveau
+                                if (m_players[player.Id].Character.characterType == CharacterType.Charles
+                                    && m_players[player.Id].Revealed.Value)
+                                {
+                                    //usePowerButton.gameObject.SetActive(true);
+                                    EventView.Manager.Emit(new EnablePowerEvent()
+                                    {
+                                        playerId = player.Id,
+                                        enabled = true
+                                    });
                                 }
                             }
                         }
@@ -2529,6 +2588,109 @@ public class GameLogic : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Non utilisation du pouvoir d'un personnage
+    /// </summary>
+    public void DontUsePower(Player player)
+    {
+        //usePowerButton.gameObject.SetActive(false);
+        EventView.Manager.Emit(new EnablePowerEvent()
+        {
+            playerId = m_playerTurn,
+            enabled = false
+        });
+        //dontUsePowerButton.gameObject.SetActive(false);
+        EventView.Manager.Emit(new EnableNoPowerEvent()
+        {
+            playerId = m_playerTurn,
+            enabled = false
+        });
+
+        //Player p = m_players[m_playerTurn];
+
+        Debug.Log("Player : " + player.Id + " n'effectue pas son pouvoir");
+        switch (player.Character.characterType)
+        {
+            case CharacterType.Metamorphe:
+                if (!m_pickedVisionCard.visionEffect.effectOnShadow)
+                {
+                    if (m_pickedVisionCard.visionEffect.effectSupremeVision)
+                        //TODO montrer la carte personnage
+                        Debug.Log("C'est une carte Vision Suprême !");
+                    else
+                        Debug.Log("Rien ne se passe.");
+                }
+                else
+                {
+                    // Cas des cartes applicables en fonction des points de vie
+                    if (m_pickedVisionCard.visionEffect.effectOnLowHP && CheckLowHPCharacters(player.Character.characterName))
+                    {
+                        player.Wounded(1);
+                        CheckPlayerDeath(player.Id);
+                    }
+                    else if (m_pickedVisionCard.visionEffect.effectOnHighHP && CheckHighHPCharacters(player.Character.characterName))
+                    {
+                        player.Wounded(2);
+                        CheckPlayerDeath(player.Id);
+                    }
+
+                    // Cas des cartes infligeant des Blessures
+                    else if (m_pickedVisionCard.visionEffect.effectTakeWounds)
+                    {
+                        player.Wounded(m_pickedVisionCard.visionEffect.nbWounds);
+                        CheckPlayerDeath(player.Id);
+                    }
+                    // Cas des cartes soignant des Blessures
+                    else if (m_pickedVisionCard.visionEffect.effectHealingOneWound)
+                    {
+                        if (player.Wound.Value == 0)
+                        {
+                            player.Wounded(1);
+                            CheckPlayerDeath(player.Id);
+                        }
+                        else
+                        {
+                            player.Healed(1);
+                            CheckPlayerDeath(player.Id);
+                        }
+                    }
+                    // Cas des cartes volant une carte équipement ou infligeant des Blessures
+                    else if (m_pickedVisionCard.visionEffect.effectGivingEquipementCard)
+                    {
+                        if (player.ListCard.Count == 0)
+                        {
+                            Debug.Log("Vous ne possédez pas de carte équipement.");
+                            player.Wounded(1);
+                        }
+                        else
+                        // TODO don d'une carte équipement
+                        {
+                            GiveEquipmentCard(player.Id);
+                        }
+                    }
+                    else
+                        Debug.Log("Rien ne se passe.");
+                }
+                break;
+            case CharacterType.Bob:
+                m_players[m_playerAttackedId].Wounded(m_damageBob);
+
+                CheckPlayerDeath(m_playerAttackedId);
+
+                if (m_players[m_playerAttackedId].Character.characterType == CharacterType.LoupGarou
+                    && m_players[m_playerAttackedId].Revealed.Value)
+                {
+                    //usePowerButton.gameObject.SetActive(true);
+                    EventView.Manager.Emit(new EnablePowerEvent()
+                    {
+                        playerId = m_playerAttackedId,
+                        enabled = true
+                    });
+                }
+                break;
+        }
+    }
+
     public void PrintLogs()
     {
         gameBoard.PrintLog();
@@ -2546,5 +2708,18 @@ public class GameLogic : MonoBehaviour
         unityEvent.AddListener(action.Invoke);
         yield return new WaitUntil(() => trigger);
         unityEvent.RemoveListener(action.Invoke);
+    }
+
+
+    public void OnEvent(PlayerEvent e, string[] tags = null)
+    {
+        if (e is PowerUsedEvent powerUsed)
+        {
+            PlayerCardPower(m_players[powerUsed.playerId]);
+        }
+        else if (e is PowerNotUsedEvent powerNotUsed)
+        {
+            DontUsePower(m_players[powerNotUsed.playerId]);
+        }
     }
 }
