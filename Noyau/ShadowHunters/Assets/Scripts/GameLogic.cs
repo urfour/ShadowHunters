@@ -1495,7 +1495,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                     foreach (Player player in players)
                         playerNames.Add(player.Name);
 
-                    EventView.Manager.Emit(new SelectAttackTarget()
+                    EventView.Manager.Emit(new SelectAttackTargetEvent()
                     {
                         AttackerId = playerAttackingId,
                         PossibleTargetId = playerNames.ToArray(),
@@ -1824,6 +1824,22 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         foreach (Player player in m_players)
             if (!player.IsDead() && player.Id != thiefId && player.Id != thiefId && player.ListCard.Count > 0)
                 choices.Add(player.Name);
+
+        /*
+        List<string> choices = new List<string>();
+        foreach (Player player in m_players)
+            if (!player.IsDead() && player.Id != thiefId && player.Id != thiefId && player.ListCard.Count > 0)
+                choices.Add(player.Id);
+
+        if(choices.Count != 0)
+        {
+            EventView.Manager.Emit(new SelectStealCardEvent()
+            {
+                ThiefId = thiefId,
+                PossiblePlayerTargetId = choices.ToArray(),
+            });
+        }
+        */
 
         if (choices.Count == 0)
         {
@@ -2640,7 +2656,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         }
         else if (e is AttackPlayerEvent attackPlayer)
         {
-            Player playerAttacking = m_players[attackPlayer.playerAttackingId];
+            Player playerAttacking = m_players[attackPlayer.playerId];
             Player playerAttacked = m_players[attackPlayer.playerAttackedId];
 
             int lancer1 = UnityEngine.Random.Range(1, 6);
@@ -2701,6 +2717,36 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                     }
                 }
             }
+        }
+        else if (e is StealCardEvent stealTarget)
+        {
+            Player playerStealing = m_players[stealTarget.playerId];
+            Player playerStealed = m_players[stealTarget.playerStealedId];
+            string stealedCard = stealTarget.cardStealedName;
+            
+            int indexCard = playerStealed.HasCard(stealedCard);
+            playerStealing.AddCard(playerStealed.ListCard[indexCard]);
+
+            if (playerStealed.ListCard[indexCard].isEquipement)
+            {
+                if (playerStealed.ListCard[indexCard].cardType == CardType.Darkness)
+                {
+                    StartCoroutine(DarknessCardPower(playerStealed.ListCard[playerStealed.ListCard.Count - 1] as DarknessCard));
+                    StartCoroutine(LooseEquipmentCard(playerStealed.Id, indexCard, 0));
+                }
+                else if (playerStealed.ListCard[indexCard].cardType == CardType.Light)
+                {
+                    StartCoroutine(LightCardPower(playerStealed.ListCard[playerStealed.ListCard.Count - 1] as LightCard));
+                    StartCoroutine(LooseEquipmentCard(playerStealed.Id, indexCard, 1));
+                }
+            }
+            else
+            {
+                Debug.LogError("Erreur : la carte choisie n'est pas un équipement et ne devrait pas être là.");
+            }
+
+            Debug.Log("La carte " + stealedCard + " a été volée au joueur "
+                + playerStealed.Name + " par le joueur " + playerStealing.Name + " !");
         }
     }
 }

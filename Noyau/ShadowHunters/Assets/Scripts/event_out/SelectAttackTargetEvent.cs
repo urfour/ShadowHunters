@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 namespace EventExemple.Kernel.Players.event_out
 {
     // Evenement qui permet de choisir un joueur parmis une liste de joueur
-    public class SelectAttackTarget : PlayerEvent
+    public class SelectAttackTargetEvent : PlayerEvent
     {
-        public int AttackerId { get; set; }
         public int[] PossibleTargetId { get; set; } 
     }
 }

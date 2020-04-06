@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace EventExemple.Kernel.Players.event_out
 {
-    // Evenement qui renvoie un joueur parmi une liste de joueur
+    // Retour de l'evenement SelectAttackTargetEvent
+    // Renvoie l'id du joueur attaquant et l'id du joueur attaqué
     public class AttackPlayerEvent : PlayerEvent
     {
-        public int playerAttackingId { get; set; }
         public int playerAttackedId { get; set; }
     }
 }
