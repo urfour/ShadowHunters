@@ -96,6 +96,12 @@ public class Player
     public Setting<bool> HasWon { get; private set; } = new Setting<bool>(false);
     // position du joueur
     public Position Position { get; set; }
+    //bouton piocher carte lumière
+    public Setting<bool> DrawLightCard { get; private set; } = new Setting<bool>(false);
+    //bouton piocher carte ténèbres
+    public Setting<bool> DrawDarknessCard { get; private set; } = new Setting<bool>(false);
+    //bouton piocher carte vision
+    public Setting<bool> DrawVisionCard { get; private set; } = new Setting<bool>(false);
     // est-ce le tour du joueur ?
     public Setting<bool> IsTurn { get; private set; } = new Setting<bool>(false);
     // personnage du joueur
@@ -106,7 +112,10 @@ public class Player
     public Setting<bool> CanUsePower { get; private set; } = new Setting<bool>(false);
     // le joueur peut-il ne pas utiliser son pouvoir ?
     public Setting<bool> CanNotUsePower { get; private set; } = new Setting<bool>(false);
-
+    //bouton attaque un joueur
+    public Setting<bool> AttackPlayer { get; private set; } = new Setting<bool>(false);
+    //bouton fin de tour
+    public Setting<bool> EndTurn { get; private set; } = new Setting<bool>(false);
 
     public Player(int id)
     {

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_out
 {
-    class SelectMovement : PlayerEvent
+    // event qui va donner le(s) lieu(x) et les résultats des lancers
+    public class SelectMovement : PlayerEvent
     {
         public int[] LocationAvailable;
         public int D6Dice { get; set; }
