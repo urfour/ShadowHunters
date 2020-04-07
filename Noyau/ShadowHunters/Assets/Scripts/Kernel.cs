@@ -357,26 +357,26 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
         if (e is EndTurnEvent ete)
         {
             Console.WriteLine("Endturn of : " + ete.PlayerId);
-            
+            Player current = Player.GetPlayer(ete.PlayerId);
             if (PlayerTurn.Value == -1)
                 PlayerTurn.Value = UnityEngine.Random.Range(0, m_nbPlayers - 1);
-            else if (m_players[PlayerTurn.Value].HasAncestral.Value) // si le joueur a utilisé le savoir ancestral, le joueur suivant reste lui
+            else if (m_players[current.Value].HasAncestral.Value) // si le joueur a utilisé le savoir ancestral, le joueur suivant reste lui
             {
-                Console.WriteLine("Le joueur " + m_players[PlayerTurn.Value].Name + " rejoue grâce au Savoir Ancestral !");
-                m_players[PlayerTurn.Value].HasAncestral.Value = false;
+                Console.WriteLine("Le joueur " + m_players[current.Value].Name + " rejoue grâce au Savoir Ancestral !");
+                m_players[current.Value].HasAncestral.Value = false;
             }
             else
-                PlayerTurn.Value = (PlayerTurn.Value + 1) % m_nbPlayers;
-            Console.WriteLine("C'est au joueur " + m_players[PlayerTurn.Value].Name + " de jouer.");
+                current.Value = (current.Value + 1) % m_nbPlayers;
+            Console.WriteLine("C'est au joueur " + m_players[current.Value].Name + " de jouer.");
 
-            if (m_players[PlayerTurn.Value].HasGuardian.Value)
+            if (m_players[current.Value].HasGuardian.Value)
             {
-                m_players[PlayerTurn.Value].HasGuardian.Value = false;
-                Console.WriteLine("Le joueur " + m_players[PlayerTurn.Value].Name + " n'est plus affecté par l'Ange Gardien !");
+                m_players[current.Value].HasGuardian.Value = false;
+                Console.WriteLine("Le joueur " + m_players[current.Value].Name + " n'est plus affecté par l'Ange Gardien !");
             }
             EventView.Manager.Emit(new SelectedNextPlayer()
             {
-                PlayerId = PlayerTurn.Value
+                PlayerId = current.Value
             });
         }
         else if(e is NewTurnEvent nte)
