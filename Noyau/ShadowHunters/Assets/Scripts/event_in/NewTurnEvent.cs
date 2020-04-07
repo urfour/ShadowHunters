@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_out
 {
-    class NewTurn : PlayerEvent
+    // event du bouton lancer les dés
+    public class NewTurnEvent : PlayerEvent
     {
     }
 }

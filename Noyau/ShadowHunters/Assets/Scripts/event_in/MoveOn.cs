@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_in
 {
-    class MoveOn : PlayerEvent
+    // déplace le joueur sur le lieu
+    public class MoveOn : PlayerEvent
     {
         public int Location { get; set; }
     }

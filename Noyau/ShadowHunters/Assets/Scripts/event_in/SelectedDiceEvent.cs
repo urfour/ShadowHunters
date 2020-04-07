@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_in
 {
-    class SelectedDiceEvent : PlayerEvent
+    // Event retour pour SelectDiceThrow
+    public class SelectedDiceEvent : PlayerEvent
     {
         public int D6Dice { get; set; }
         public int D4Dice { get; set; }
