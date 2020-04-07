@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Scripts.event_out
+namespace Scripts.event_in
 {
-    class SelectedNextPlayer : PlayerEvent
+    class MoveOn : PlayerEvent
     {
+        public int Location { get; set; }
     }
 }

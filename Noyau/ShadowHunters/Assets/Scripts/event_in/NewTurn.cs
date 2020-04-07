@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_out
 {
-    class SelectedNextPlayer : PlayerEvent
+    class NewTurn : PlayerEvent
     {
     }
 }
