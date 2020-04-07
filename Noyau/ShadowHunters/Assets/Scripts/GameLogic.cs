@@ -1043,7 +1043,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     IEnumerator LightCardPower(LightCard pickedCard)
     {
         CharacterTeam team = m_players[PlayerTurn.Value].Team;
-        string character = m_players[PlayerTurn.Value].Character.characterName;
+        CharacterType character = m_players[PlayerTurn.Value].Character.characterType;
         bool revealed = m_players[PlayerTurn.Value].Revealed.Value;
         Debug.Log(pickedCard.lightEffect);
         switch (pickedCard.lightEffect)
@@ -1074,7 +1074,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             case LightEffect.Chocolat:
                 Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
                 yield return new WaitForSeconds(6f);
-                if (revealed && (character == "Allie" || character == "Emi" || character == "Metamorphe"))
+                if (revealed && (character == CharacterType.Allie || character == CharacterType.Emi || character == CharacterType.Metamorphe))
                 {
                     m_players[PlayerTurn.Value].Healed(m_players[PlayerTurn.Value].Wound.Value);
                     Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " se soigne complètement");
@@ -1154,9 +1154,9 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 
             case LightEffect.Miroir:
 
-                if (team == CharacterTeam.Shadow && character != "Metamorphe")
+                if (!revealed && team == CharacterTeam.Shadow && character != CharacterType.Metamorphe)
                 {
-                    m_players[PlayerTurn.Value].Revealed.Value = true;
+                    RevealCard();
                     Debug.Log("Vous révélez votre rôle à tous, vous êtes : " + character);
                 }
                 break;
