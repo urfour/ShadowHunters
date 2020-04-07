@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Kernel.Settings;
+using Scripts.Settings;
 using UnityEngine;
 
 public enum PlayerNames

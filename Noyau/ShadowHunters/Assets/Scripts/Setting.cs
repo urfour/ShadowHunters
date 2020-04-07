@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kernel.Settings
+namespace Scripts.Settings
 {
     [Serializable]
     public class Setting<T> : SettingItem
