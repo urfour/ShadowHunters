@@ -125,11 +125,6 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// <summary>
     /// Propriété d'accès à l'id du joueur dont c'est le tour
     /// </summary>
-    /*public int PlayerTurn
-    {
-        get => m_playerTurn;
-        private set => m_playerTurn = value;
-    }*/
     public Setting<int> PlayerTurn { get; private set; } = new Setting<int>(-1);
     /// <summary>
     /// Booléen représentant l'état actuel du jeu (terminé ou non)
@@ -457,10 +452,4 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 + playerStealed.Name + " par le joueur " + playerStealing.Name + " !");
         }
     }
-
-
-
-
-
-
 }

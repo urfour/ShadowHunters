@@ -1470,7 +1470,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         {
             if (!m_players[playerAttackingId].HasGatling.Value)
             {
-                List<string> playersId = new List<string>();
+                List<int> playersId = new List<int>();
                 foreach (Player player in players)
                     playersId.Add(player.Id);
 
@@ -1828,7 +1828,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 choices.Add(player.Name);
 
         /*
-        List<string> choices = new List<string>();
+        List<int> choices = new List<int>();
         foreach (Player player in m_players)
             if (!player.IsDead() && player.Id != thiefId && player.ListCard.Count > 0)
                 choices.Add(player.Id);
@@ -1979,6 +1979,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// <returns>Itération terminée</returns>
     IEnumerator GiveEquipmentCard(int giverPlayerId)
     {
+        
         if (m_players[giverPlayerId].ListCard.Count == 0)
         {
             choiceDropdown.gameObject.SetActive(false);
@@ -1988,6 +1989,18 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         }
         else
         {
+            /*
+            List<int> choices = new List<string>();
+            foreach (Player player in m_players)
+                if (!player.IsDead() && player.Id != thiefId && player.ListCard.Count > 0)
+                    choices.Add(player.Id);
+
+            EventView.Manager.Emit(new SelectGiveCardEvent()
+            {
+                PlayerId = giverPlayerId,
+                PossiblePlayerTargetId = choices.ToArray()
+            });
+            */
             int playerId = -1;
             choiceDropdown.gameObject.SetActive(true);
             validateButton.gameObject.SetActive(true);
@@ -2728,11 +2741,11 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 }
             }
         }
-        else if (e is StealCardEvent stealTarget)
+        else if (e is StealCardEvent stealCard)
         {
-            Player playerStealing = m_players[stealTarget.PlayerId];
-            Player playerStealed = m_players[stealTarget.PlayerStealedId];
-            string stealedCard = stealTarget.CardStealedName;
+            Player playerStealing = m_players[stealCard.PlayerId];
+            Player playerStealed = m_players[stealCard.PlayerStealedId];
+            string stealedCard = stealCard.CardStealedName;
             
             int indexCard = playerStealed.HasCard(stealedCard);
             playerStealing.AddCard(playerStealed.ListCard[indexCard]);
@@ -2757,6 +2770,34 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 
             Debug.Log("La carte " + stealedCard + " a été volée au joueur "
                 + playerStealed.Name + " par le joueur " + playerStealing.Name + " !");
+        }
+        else if (e is GiveCardEvent giveCard)
+        {
+            Player playerGiving = m_players[giveCard.PlayerId];
+            Player playerGived = m_players[giveCard.PlayerGivedId];
+            string givedCard = giveCard.CardGivedName;
+
+            int indexCard = playerGiving.HasCard(givedCard);
+            playerGived.AddCard(playerGiving.ListCard[indexCard]);
+
+            if (playerGiving.ListCard[indexCard].isEquipement)
+            {
+                if (playerGiving.ListCard[indexCard].cardType == CardType.Darkness)
+                {
+                    StartCoroutine(DarknessCardPower(playerGiving.ListCard[playerGiving.ListCard.Count - 1] as DarknessCard));
+                    StartCoroutine(LooseEquipmentCard(playerGiving.Id, indexCard, 0));
+                }
+                else if (playerGiving.ListCard[indexCard].cardType == CardType.Light)
+                {
+                    StartCoroutine(LightCardPower(playerGiving.ListCard[playerGiving.ListCard.Count - 1] as LightCard));
+                    StartCoroutine(LooseEquipmentCard(playerGiving.Id, indexCard, 1));
+                }
+            }
+            else
+                Debug.LogError("Erreur : la carte choisie n'est pas un équipement et ne devrait pas être là.");
+
+            Debug.Log("La carte " + givedCard + " a été donnée au joueur "
+                + playerGived.Name + " par le joueur " + playerGiving.Name + " !");
         }
     }
 }
