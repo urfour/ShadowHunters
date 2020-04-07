@@ -9,6 +9,6 @@ namespace EventExemple.Kernel.Players
 {
     public class PlayerEvent : Event
     {
-        public int playerId { get ; set; }
+        public int PlayerId { get ; set; }
     }
 }

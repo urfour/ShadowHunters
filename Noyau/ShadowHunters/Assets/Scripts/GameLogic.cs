@@ -1462,6 +1462,31 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// <returns>Iteration terminée</returns>
     IEnumerator AttackCorrespondingPlayer(int playerAttackingId)
     {
+
+        /*
+        List<Player> players = GetPlayersSameSector(playerAttackingId, m_players[playerAttackingId].HasRevolver.Value);
+
+        if(players.Count != 0)
+        {
+            if (!m_players[playerAttackingId].HasGatling.Value)
+            {
+                List<string> playersId = new List<string>();
+                foreach (Player player in players)
+                    playersId.Add(player.Id);
+
+                EventView.Manager.Emit(new SelectAttackTargetEvent()
+                {
+                    PlayerId = playerAttackingId,
+                    PossibleTargetId = playersId.ToArray(),
+                });
+            }
+            else
+            {
+                ...
+            }
+        }
+        */
+
         choiceDropdown.gameObject.SetActive(true);
         List<Player> players = GetPlayersSameSector(playerAttackingId, m_players[playerAttackingId].HasRevolver.Value);
         if (players.Count == 0)
@@ -1484,29 +1509,6 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             string playerAttacked = choiceDropdown.captionText.text;
             choiceDropdown.ClearOptions();
 
-            /*
-            List<Player> players = GetPlayersSameSector(playerAttackingId, m_players[playerAttackingId].HasRevolver.Value);
-
-            if(player.Count != 0)
-            {
-                if (!m_players[playerAttackingId].HasGatling.Value)
-                {
-                    List<string> playerNames = new List<string>();
-                    foreach (Player player in players)
-                        playerNames.Add(player.Name);
-
-                    EventView.Manager.Emit(new SelectAttackTargetEvent()
-                    {
-                        AttackerId = playerAttackingId,
-                        PossibleTargetId = playerNames.ToArray(),
-                    });
-                }
-                else
-                {
-                    ...
-                }
-            }
-            */
 
             int lancer1 = UnityEngine.Random.Range(1, 6);
             int lancer2 = UnityEngine.Random.Range(1, 4);
@@ -1828,15 +1830,15 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         /*
         List<string> choices = new List<string>();
         foreach (Player player in m_players)
-            if (!player.IsDead() && player.Id != thiefId && player.Id != thiefId && player.ListCard.Count > 0)
+            if (!player.IsDead() && player.Id != thiefId && player.ListCard.Count > 0)
                 choices.Add(player.Id);
 
         if(choices.Count != 0)
         {
             EventView.Manager.Emit(new SelectStealCardEvent()
             {
-                ThiefId = thiefId,
-                PossiblePlayerTargetId = choices.ToArray(),
+                PlayerId = thiefId,
+                PossiblePlayerTargetId = choices.ToArray()
             });
         }
         */
@@ -1919,6 +1921,14 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         List<string> choices = new List<string>();
         for (int i = 0; i < m_players[playerId].ListCard.Count; i++)
             choices.Add(m_players[playerId].ListCard[i].cardName);
+
+        /*
+        EventView.Manager.Emit(new SelectStealCardFromPlayerEvent()
+        {
+            PlayerId = thiefId,
+            PlayerStealedId = playerId
+        });
+        */
 
         Debug.Log("Quelle carte équipement voulez-vous voler ?");
         choiceDropdown.AddOptions(choices);
@@ -2648,16 +2658,16 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     {
         if (e is PowerUsedEvent powerUsed)
         {
-            PlayerCardPower(m_players[powerUsed.playerId]);
+            PlayerCardPower(m_players[powerUsed.PlayerId]);
         }
         else if (e is PowerNotUsedEvent powerNotUsed)
         {
-            DontUsePower(m_players[powerNotUsed.playerId]);
+            DontUsePower(m_players[powerNotUsed.PlayerId]);
         }
         else if (e is AttackPlayerEvent attackPlayer)
         {
-            Player playerAttacking = m_players[attackPlayer.playerId];
-            Player playerAttacked = m_players[attackPlayer.playerAttackedId];
+            Player playerAttacking = m_players[attackPlayer.PlayerId];
+            Player playerAttacked = m_players[attackPlayer.PlayerAttackedId];
 
             int lancer1 = UnityEngine.Random.Range(1, 6);
             int lancer2 = UnityEngine.Random.Range(1, 4);
@@ -2720,9 +2730,9 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         }
         else if (e is StealCardEvent stealTarget)
         {
-            Player playerStealing = m_players[stealTarget.playerId];
-            Player playerStealed = m_players[stealTarget.playerStealedId];
-            string stealedCard = stealTarget.cardStealedName;
+            Player playerStealing = m_players[stealTarget.PlayerId];
+            Player playerStealed = m_players[stealTarget.PlayerStealedId];
+            string stealedCard = stealTarget.CardStealedName;
             
             int indexCard = playerStealed.HasCard(stealedCard);
             playerStealing.AddCard(playerStealed.ListCard[indexCard]);

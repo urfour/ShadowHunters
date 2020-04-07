@@ -10,6 +10,6 @@ namespace EventExemple.Kernel.Players.event_out
     // Renvoie l'id du joueur attaquant et l'id du joueur attaqué
     public class AttackPlayerEvent : PlayerEvent
     {
-        public int playerAttackedId { get; set; }
+        public int PlayerAttackedId { get; set; }
     }
 }
