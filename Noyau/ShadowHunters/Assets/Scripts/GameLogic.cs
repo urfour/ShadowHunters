@@ -447,19 +447,9 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 int lancer02 = UnityEngine.Random.Range(1, 4);
                 int lancerTotal0 = lancer01 + lancer02;
 
-                if(lancerTotal0 == 2 || lancerTotal0 == 4)
-                {
-                    continue;
-                }
-
                 int lancer11 = UnityEngine.Random.Range(1, 6);
                 int lancer12 = UnityEngine.Random.Range(1, 4);
                 int lancerTotal1 = lancer11 + lancer12;
-
-                if (lancerTotal1 == 2 || lancerTotal1 == 4)
-                {
-                    continue;
-                }
 
                 choiceDropdown.gameObject.SetActive(true);
                 validateButton.gameObject.SetActive(true);
@@ -695,7 +685,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             Debug.Log("La carte " + darknessCard.cardName + " a été ajoutée à la main du joueur "
                 + m_players[PlayerTurn.Value].Name + ".");
         }
-        yield return StartCoroutine(DarknessCardPower(darknessCard));
+        yield return StartCoroutine(DarknessCardPower(darknessCard, PlayerTurn.Value));
         if (!darknessCard.isEquipement)
             gameBoard.AddDiscard(darknessCard, CardType.Darkness);
         attackPlayer.gameObject.SetActive(true);
@@ -733,7 +723,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             Debug.Log("La carte " + lightCard.cardName + " a été ajoutée à la main du joueur "
                 + m_players[PlayerTurn.Value].Name + ".");
         }
-        yield return StartCoroutine(LightCardPower(lightCard));
+        yield return StartCoroutine(LightCardPower(lightCard, PlayerTurn.Value));
         if (!lightCard.isEquipement)
             gameBoard.AddDiscard(lightCard, CardType.Light);
         attackPlayer.gameObject.SetActive(true);
@@ -879,8 +869,9 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// Activation de l'effet d'une carte Ténèbre piochée
     /// </summary>
     /// <param name="pickedCard">Carte Ténèbre piochée</param>
+    /// <param name="idPlayer">Joueur qui bénéficie de l'effet</param>
     /// <returns>Itération terminée</returns>
-    IEnumerator DarknessCardPower(DarknessCard pickedCard)
+    IEnumerator DarknessCardPower(DarknessCard pickedCard, int idPlayer)
     {
         switch (pickedCard.darknessEffect)
         {
@@ -888,7 +879,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 yield return StartCoroutine(TakingWoundsEffect(false, 2, -2));
                 break;
             case DarknessEffect.Banane:
-                yield return StartCoroutine(GiveEquipmentCard(PlayerTurn.Value));
+                yield return StartCoroutine(GiveEquipmentCard(idPlayer));
                 break;
             case DarknessEffect.ChauveSouris:
                 yield return StartCoroutine(TakingWoundsEffect(false, 2, 1));
@@ -935,24 +926,24 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 }
                 break;
             case DarknessEffect.Hache:
-                m_players[PlayerTurn.Value].BonusAttack.Value++;
+                m_players[idPlayer].BonusAttack.Value++;
                 break;
             case DarknessEffect.Mitrailleuse:
-                m_players[PlayerTurn.Value].HasGatling.Value = true;
+                m_players[idPlayer].HasGatling.Value = true;
                 break;
             case DarknessEffect.Poupee:
                 yield return StartCoroutine(TakingWoundsEffect(true, 3, 0));
                 break;
             case DarknessEffect.Revolver:
-                m_players[PlayerTurn.Value].HasRevolver.Value = true;
+                m_players[idPlayer].HasRevolver.Value = true;
                 break;
             case DarknessEffect.Rituel:
                 Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
                 yield return new WaitForSeconds(6f);
-                if (m_players[PlayerTurn.Value].Revealed.Value && m_players[PlayerTurn.Value].Team == CharacterTeam.Shadow)
+                if (m_players[idPlayer].Revealed.Value && m_players[idPlayer].Team == CharacterTeam.Shadow)
                 {
-                    m_players[PlayerTurn.Value].Healed(m_players[PlayerTurn.Value].Wound.Value);
-                    Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " se soigne complètement");
+                    m_players[idPlayer].Healed(m_players[idPlayer].Wound.Value);
+                    Debug.Log("Le joueur " + m_players[idPlayer].Name + " se soigne complètement");
                 }
                 else
                 {
@@ -960,10 +951,10 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 }
                 break;
             case DarknessEffect.Sabre:
-                m_players[PlayerTurn.Value].HasSaber.Value = true;
+                m_players[idPlayer].HasSaber.Value = true;
                 break;
             case DarknessEffect.Succube:
-                yield return StartCoroutine(StealEquipmentCard(PlayerTurn.Value));
+                yield return StartCoroutine(StealEquipmentCard(idPlayer));
                 break;
         }
     }
@@ -1040,31 +1031,32 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// Activation de l'effet d'une carte Lumière piochée
     /// </summary>
     /// <param name="pickedCard">Carte Lumière piochée</param>
+    /// <param name="idPlayer">Joueur qui bénéficie de l'effet</param>
     /// <returns>Itération terminée</returns>
-    IEnumerator LightCardPower(LightCard pickedCard)
+    IEnumerator LightCardPower(LightCard pickedCard, int idPlayer)
     {
-        CharacterTeam team = m_players[PlayerTurn.Value].Team;
-        CharacterType character = m_players[PlayerTurn.Value].Character.characterType;
-        bool revealed = m_players[PlayerTurn.Value].Revealed.Value;
+        CharacterTeam team = m_players[idPlayer].Team;
+        CharacterType character = m_players[idPlayer].Character.characterType;
+        bool revealed = m_players[idPlayer].Revealed.Value;
         Debug.Log(pickedCard.lightEffect);
         switch (pickedCard.lightEffect)
         {
             case LightEffect.Amulette:
-                m_players[PlayerTurn.Value].HasAmulet.Value = true;
+                m_players[idPlayer].HasAmulet.Value = true;
                 break;
 
             case LightEffect.AngeGardien:
 
-                m_players[PlayerTurn.Value].HasGuardian.Value = true;
+                m_players[idPlayer].HasGuardian.Value = true;
                 break;
 
             case LightEffect.Supreme:
                 Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
                 yield return new WaitForSeconds(6f);
-                if (revealed && m_players[PlayerTurn.Value].Team == CharacterTeam.Hunter)
+                if (revealed && m_players[idPlayer].Team == CharacterTeam.Hunter)
                 {
-                    m_players[PlayerTurn.Value].Healed(m_players[PlayerTurn.Value].Wound.Value);
-                    Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " se soigne complètement");
+                    m_players[idPlayer].Healed(m_players[idPlayer].Wound.Value);
+                    Debug.Log("Le joueur " + m_players[idPlayer].Name + " se soigne complètement");
                 }
                 else
                 {
@@ -1077,8 +1069,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 yield return new WaitForSeconds(6f);
                 if (revealed && (character == CharacterType.Allie || character == CharacterType.Emi || character == CharacterType.Metamorphe))
                 {
-                    m_players[PlayerTurn.Value].Healed(m_players[PlayerTurn.Value].Wound.Value);
-                    Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " se soigne complètement");
+                    m_players[idPlayer].Healed(m_players[idPlayer].Wound.Value);
+                    Debug.Log("Le joueur " + m_players[idPlayer].Name + " se soigne complètement");
                 }
                 else
                 {
@@ -1093,7 +1085,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 List<string> players = new List<string>();
                 foreach (Player player in m_players)
                 {
-                    if (!player.IsDead() && player.Id != PlayerTurn.Value)
+                    if (!player.IsDead() && player.Id != idPlayer)
                     {
                         players.Add(player.Name);
                     }
@@ -1120,36 +1112,36 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 break;
 
             case LightEffect.Boussole:
-                m_players[PlayerTurn.Value].HasCompass.Value = true;
+                m_players[idPlayer].HasCompass.Value = true;
                 break;
 
             case LightEffect.Broche:
-                m_players[PlayerTurn.Value].HasBroche.Value = true;
+                m_players[idPlayer].HasBroche.Value = true;
                 break;
 
             case LightEffect.Crucifix:
-                m_players[PlayerTurn.Value].HasCrucifix.Value = true;
+                m_players[idPlayer].HasCrucifix.Value = true;
                 break;
 
             case LightEffect.EauBenite:
 
-                m_players[PlayerTurn.Value].Healed(2);
+                m_players[idPlayer].Healed(2);
                 break;
 
             case LightEffect.Eclair:
 
                 foreach (Player p in m_players)
                 {
-                    if (p.Id != PlayerTurn.Value)
+                    if (p.Id != idPlayer)
                         p.Wounded(2);
                 }
                 break;
 
             case LightEffect.Lance:
-                m_players[PlayerTurn.Value].HasSpear.Value = true;
+                m_players[idPlayer].HasSpear.Value = true;
                 if (team == CharacterTeam.Hunter && revealed)
                 {
-                    m_players[PlayerTurn.Value].BonusAttack.Value += 2;
+                    m_players[idPlayer].BonusAttack.Value += 2;
                 }
                 break;
 
@@ -1192,14 +1184,14 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 
             case LightEffect.Savoir:
 
-                m_players[PlayerTurn.Value].HasAncestral.Value = true;
+                m_players[idPlayer].HasAncestral.Value = true;
                 break;
 
             case LightEffect.Toge:
 
-                m_players[PlayerTurn.Value].HasToge.Value = true;
-                m_players[PlayerTurn.Value].MalusAttack.Value++;
-                m_players[PlayerTurn.Value].ReductionWounds.Value = 1;
+                m_players[idPlayer].HasToge.Value = true;
+                m_players[idPlayer].MalusAttack.Value++;
+                m_players[idPlayer].ReductionWounds.Value = 1;
                 break;
         }
     }
@@ -1805,12 +1797,12 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                         {
                             if (m_players[playerId].ListCard[i].cardType == CardType.Darkness)
                             {
-                                yield return StartCoroutine(DarknessCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as DarknessCard));
+                                yield return StartCoroutine(DarknessCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as DarknessCard, attackerId));
                                 yield return StartCoroutine(LooseEquipmentCard(playerId, i, 0));
                             }
                             else if (m_players[playerId].ListCard[i].cardType == CardType.Light)
                             {
-                                yield return StartCoroutine(LightCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as LightCard));
+                                yield return StartCoroutine(LightCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as LightCard, attackerId));
                                 yield return StartCoroutine(LooseEquipmentCard(playerId, i, 1));
                             }
                         }
@@ -1905,12 +1897,12 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 {
                     if (m_players[playerId].ListCard[indexCard].cardType == CardType.Darkness)
                     {
-                        yield return StartCoroutine(DarknessCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as DarknessCard));
+                        yield return StartCoroutine(DarknessCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as DarknessCard, thiefId));
                         yield return StartCoroutine(LooseEquipmentCard(playerId, indexCard, 0));
                     }
                     else if (m_players[playerId].ListCard[indexCard].cardType == CardType.Light)
                     {
-                        yield return StartCoroutine(LightCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as LightCard));
+                        yield return StartCoroutine(LightCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as LightCard, thiefId));
                         yield return StartCoroutine(LooseEquipmentCard(playerId, indexCard, 1));
                     }
                 }
@@ -1969,12 +1961,12 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             {
                 if (m_players[playerId].ListCard[indexCard].cardType == CardType.Darkness)
                 {
-                    yield return StartCoroutine(DarknessCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as DarknessCard));
+                    yield return StartCoroutine(DarknessCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as DarknessCard, thiefId));
                     yield return StartCoroutine(LooseEquipmentCard(playerId, indexCard, 0));
                 }
                 else if (m_players[playerId].ListCard[indexCard].cardType == CardType.Light)
                 {
-                    yield return StartCoroutine(LightCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as LightCard));
+                    yield return StartCoroutine(LightCardPower(m_players[playerId].ListCard[m_players[playerId].ListCard.Count - 1] as LightCard, thiefId));
                     yield return StartCoroutine(LooseEquipmentCard(playerId, indexCard, 1));
                 }
             }
@@ -2064,12 +2056,12 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 {
                     if (m_players[giverPlayerId].ListCard[indexCard].cardType == CardType.Darkness)
                     {
-                        yield return StartCoroutine(DarknessCardPower(m_players[giverPlayerId].ListCard[m_players[giverPlayerId].ListCard.Count - 1] as DarknessCard));
+                        yield return StartCoroutine(DarknessCardPower(m_players[giverPlayerId].ListCard[m_players[giverPlayerId].ListCard.Count - 1] as DarknessCard, playerId));
                         yield return StartCoroutine(LooseEquipmentCard(giverPlayerId, indexCard, 0));
                     }
                     else if (m_players[giverPlayerId].ListCard[indexCard].cardType == CardType.Light)
                     {
-                        yield return StartCoroutine(LightCardPower(m_players[giverPlayerId].ListCard[m_players[giverPlayerId].ListCard.Count - 1] as LightCard));
+                        yield return StartCoroutine(LightCardPower(m_players[giverPlayerId].ListCard[m_players[giverPlayerId].ListCard.Count - 1] as LightCard, playerId));
                         yield return StartCoroutine(LooseEquipmentCard(giverPlayerId, indexCard, 1));
                     }
                 }
@@ -2771,12 +2763,12 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             {
                 if (playerStealed.ListCard[indexCard].cardType == CardType.Darkness)
                 {
-                    StartCoroutine(DarknessCardPower(playerStealed.ListCard[playerStealed.ListCard.Count - 1] as DarknessCard));
+                    StartCoroutine(DarknessCardPower(playerStealed.ListCard[playerStealed.ListCard.Count - 1] as DarknessCard, stealTarget.playerId));
                     StartCoroutine(LooseEquipmentCard(playerStealed.Id, indexCard, 0));
                 }
                 else if (playerStealed.ListCard[indexCard].cardType == CardType.Light)
                 {
-                    StartCoroutine(LightCardPower(playerStealed.ListCard[playerStealed.ListCard.Count - 1] as LightCard));
+                    StartCoroutine(LightCardPower(playerStealed.ListCard[playerStealed.ListCard.Count - 1] as LightCard, stealTarget.playerId));
                     StartCoroutine(LooseEquipmentCard(playerStealed.Id, indexCard, 1));
                 }
             }
