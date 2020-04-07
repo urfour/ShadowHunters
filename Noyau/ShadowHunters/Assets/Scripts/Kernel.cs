@@ -124,6 +124,10 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
     /// </summary>    
     private int m_damageBob = -1;
     /// <summary>
+    /// Pouvoir de Emi/Franck/Georges possible
+    /// </summary>    
+    private bool powerEFG = false;
+    /// <summary>
     /// Propriété d'accès à l'id du joueur dont c'est le tour
     /// </summary>
     public Setting<int> PlayerTurn { get; private set; } = new Setting<int>(-1);
@@ -496,6 +500,295 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
 
         return players;
     }
+
+    /// <summary>
+    /// Activation de l'effet d'une carte Ténèbre piochée
+    /// </summary>
+    /// <param name="pickedCard">Carte Ténèbre piochée</param>
+    /// <param name="idPlayer">Joueur qui bénéficie de l'effet</param>
+    /// <returns>Itération terminée</returns>
+    void DarknessCardPower(DarknessCard pickedCard, int idPlayer)
+    {
+        switch (pickedCard.darknessEffect)
+        {
+            case DarknessEffect.Araignee:
+                TakingWoundsEffect(false, 2, -2);
+                break;
+            case DarknessEffect.Banane:
+                GiveEquipmentCard(idPlayer);
+                break;
+            case DarknessEffect.ChauveSouris:
+                TakingWoundsEffect(false, 2, 1);
+                break;
+            case DarknessEffect.Dynamite:
+                int lancer1 = UnityEngine.Random.Range(1, 6);
+                int lancer2 = UnityEngine.Random.Range(1, 4);
+                int lancerTotal = lancer1 + lancer2;
+                Position area = Position.None;
+
+                switch (lancerTotal)
+                {
+                    case 2:
+                    case 3:
+                        area = Position.Antre;
+                        break;
+                    case 4:
+                    case 5:
+                        area = Position.Porte;
+                        break;
+                    case 6:
+                        area = Position.Monastere;
+                        break;
+                    case 7:
+                        Debug.Log("Rien ne se passe");
+                        break;
+                    case 8:
+                        area = Position.Cimetiere;
+                        break;
+                    case 9:
+                        area = Position.Foret;
+                        break;
+                    case 10:
+                        area = Position.Sanctuaire;
+                        break;
+                }
+                if (lancerTotal != 7)
+                {
+                    foreach (Player p in m_players)
+                    {
+                        if (p.Position == area && !p.HasAmulet.Value)
+                            p.Wounded(3);
+                    }
+                }
+                break;
+            case DarknessEffect.Hache:
+                m_players[idPlayer].BonusAttack.Value++;
+                break;
+            case DarknessEffect.Mitrailleuse:
+                m_players[idPlayer].HasGatling.Value = true;
+                break;
+            case DarknessEffect.Poupee:
+                TakingWoundsEffect(true, 3, 0);
+                break;
+            case DarknessEffect.Revolver:
+                m_players[idPlayer].HasRevolver.Value = true;
+                break;
+            case DarknessEffect.Rituel:
+                Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
+
+                if (m_players[idPlayer].Revealed.Value && m_players[idPlayer].Team == CharacterTeam.Shadow)
+                {
+                    m_players[idPlayer].Healed(m_players[idPlayer].Wound.Value);
+                    Debug.Log("Le joueur " + m_players[idPlayer].Name + " se soigne complètement");
+                }
+                else
+                {
+                    EventView.Manager.Emit(new SelectRevealOrNotEvent()
+                    {
+                        PlayerId = idPlayer,
+                        EffectCard = pickedCard
+                    });
+                }
+                break;
+            case DarknessEffect.Sabre:
+                m_players[idPlayer].HasSaber.Value = true;
+                break;
+            case DarknessEffect.Succube:
+                StealEquipmentCard(idPlayer);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Activation de l'effet d'une carte Lumière piochée
+    /// </summary>
+    /// <param name="pickedCard">Carte Lumière piochée</param>
+    /// <param name="idPlayer">Joueur qui bénéficie de l'effet</param>
+    /// <returns>Itération terminée</returns>
+    void LightCardPower(LightCard pickedCard, int idPlayer)
+    {
+        CharacterTeam team = m_players[idPlayer].Team;
+        CharacterType character = m_players[idPlayer].Character.characterType;
+        bool revealed = m_players[idPlayer].Revealed.Value;
+        Debug.Log(pickedCard.lightEffect);
+        switch (pickedCard.lightEffect)
+        {
+            case LightEffect.Amulette:
+                m_players[idPlayer].HasAmulet.Value = true;
+                break;
+
+            case LightEffect.AngeGardien:
+
+                m_players[idPlayer].HasGuardian.Value = true;
+                break;
+
+            case LightEffect.Supreme:
+                Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
+                
+                if (m_players[idPlayer].Revealed.Value && m_players[idPlayer].Team == CharacterTeam.Hunter)
+                {
+                    m_players[idPlayer].Healed(m_players[idPlayer].Wound.Value);
+                    Debug.Log("Le joueur " + m_players[idPlayer].Name + " se soigne complètement");
+                }
+                else
+                {
+                    EventView.Manager.Emit(new SelectRevealOrNotEvent()
+                    {
+                        PlayerId = idPlayer,
+                        EffectCard = pickedCard
+                    });
+                }
+                break;
+
+            case LightEffect.Chocolat:
+                Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
+                
+                if (m_players[idPlayer].Revealed.Value
+                    && (character == CharacterType.Allie
+                        || character == CharacterType.Emi
+                        || character == CharacterType.Metamorphe))
+                {
+                    m_players[idPlayer].Healed(m_players[idPlayer].Wound.Value);
+                    Debug.Log("Le joueur " + m_players[idPlayer].Name + " se soigne complètement");
+                }
+                else
+                {
+                    EventView.Manager.Emit(new SelectRevealOrNotEvent()
+                    {
+                        PlayerId = idPlayer,
+                        EffectCard = pickedCard
+                    });
+                }
+                break;
+
+            case LightEffect.Benediction:
+
+                Debug.Log("Qui souhaitez-vous soigner ?");
+                List<int> players = new List<int>();
+                foreach (Player player in m_players)
+                {
+                    if (!player.IsDead() && player.Id != idPlayer)
+                    {
+                        players.Add(player.Id);
+                    }
+                }
+
+                EventView.Manager.Emit(new SelectLightCardTargetEvent()
+                {
+                    PlayerId = idPlayer,
+                    PossibleTargetId = players.ToArray(),
+                    LightCard = pickedCard
+                });
+
+                break;
+
+            case LightEffect.Boussole:
+                m_players[idPlayer].HasCompass.Value = true;
+                break;
+
+            case LightEffect.Broche:
+                m_players[idPlayer].HasBroche.Value = true;
+                break;
+
+            case LightEffect.Crucifix:
+                m_players[idPlayer].HasCrucifix.Value = true;
+                break;
+
+            case LightEffect.EauBenite:
+
+                m_players[idPlayer].Healed(2);
+                break;
+
+            case LightEffect.Eclair:
+
+                foreach (Player p in m_players)
+                {
+                    if (p.Id != idPlayer)
+                        p.Wounded(2);
+                }
+                break;
+
+            case LightEffect.Lance:
+                m_players[idPlayer].HasSpear.Value = true;
+                if (team == CharacterTeam.Hunter && revealed)
+                {
+                    m_players[idPlayer].BonusAttack.Value += 2;
+                }
+                break;
+
+            case LightEffect.Miroir:
+
+                if (!revealed && team == CharacterTeam.Shadow && character != CharacterType.Metamorphe)
+                {
+                    RevealCard();
+                    Debug.Log("Vous révélez votre rôle à tous, vous êtes : " + character);
+                }
+                break;
+
+            case LightEffect.PremiersSecours:
+
+                Debug.Log("Qui souhaitez-vous placer à exactement 7 Blessures ?");
+
+                List<int> players2 = new List<int>();
+                foreach (Player player in m_players)
+                {
+                    if (!player.IsDead())
+                    {
+                        players2.Add(player.Id);
+                    }
+                }
+
+                EventView.Manager.Emit(new SelectLightCardTargetEvent()
+                {
+                    PlayerId = idPlayer,
+                    PossibleTargetId = players2.ToArray(),
+                    LightCard = pickedCard
+                });
+
+                break;
+
+            case LightEffect.Savoir:
+
+                m_players[idPlayer].HasAncestral.Value = true;
+                break;
+
+            case LightEffect.Toge:
+
+                m_players[idPlayer].HasToge.Value = true;
+                m_players[idPlayer].MalusAttack.Value++;
+                m_players[idPlayer].ReductionWounds.Value = 1;
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Fonction permettant de révéler son identité
+    /// </summary>
+    public void RevealCard()
+    {
+        m_players[PlayerTurn.Value].Revealed.Value = true;
+        Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " s'est révélé, il s'agissait de : "
+            + m_players[PlayerTurn.Value].Character.characterName + " ! Il est dans l'équipe des "
+            + m_players[PlayerTurn.Value].Character.team + ".");
+
+        if (m_players[PlayerTurn.Value].HasSpear.Value == true && m_players[PlayerTurn.Value].Team == CharacterTeam.Hunter)
+        {
+            m_players[PlayerTurn.Value].BonusAttack.Value += 2;
+            Debug.Log("Le pouvoir de la lance s'active !");
+        }
+
+        // Si le joueur est Allie, il peut utiliser son pouvoir à tout moment
+        // Si le joueur est Emi, Franklin ou Georges et qu'il est au début de son tour, il peut utiliser son pouvoir
+        if (m_players[PlayerTurn.Value].Character.characterType == CharacterType.Allie
+            || (powerEFG
+                && (m_players[PlayerTurn.Value].Character.characterType == CharacterType.Emi
+                    || m_players[PlayerTurn.Value].Character.characterType == CharacterType.Franklin
+                    || m_players[PlayerTurn.Value].Character.characterType == CharacterType.Georges)))
+        {
+            m_players[PlayerTurn.Value].CanUsePower.Value = true;
+        }
+    }
+
 
     /// <summary>
     /// Fonction du choix d'un joueur à attaquer
@@ -1077,6 +1370,58 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                 }
                 else
                     playerAttacking.Healed(nbWoundsSelfHealed);
+            }
+        }
+        else if (e is RevealOrNotEvent revealOrNot)
+        {
+            Player player = m_players[revealOrNot.PlayerId];
+            bool hasRevealed = revealOrNot.HasRevealed;
+            Card effectCard = revealOrNot.EffectCard;
+
+            if (effectCard is DarknessCard
+                && hasRevealed
+                && player.Team == CharacterTeam.Shadow)
+            {
+                player.Healed(player.Wound.Value);
+                Debug.Log("Le joueur " + player.Name + " se soigne complètement");
+            }
+            else if (effectCard is LightCard effectLightCard)
+            {
+                if(effectLightCard.lightEffect == LightEffect.Supreme
+                    && hasRevealed
+                    && player.Team == CharacterTeam.Hunter)
+                {
+                    player.Healed(player.Wound.Value);
+                    Debug.Log("Le joueur " + player.Name + " se soigne complètement");
+                }
+                else if (effectLightCard.lightEffect == LightEffect.Chocolat
+                            && hasRevealed
+                            && (player.Character.characterType == CharacterType.Allie 
+                                || player.Character.characterType == CharacterType.Emi 
+                                || player.Character.characterType == CharacterType.Metamorphe))
+                {
+                    player.Healed(player.Wound.Value);
+                    Debug.Log("Le joueur " + player.Name + " se soigne complètement");
+                }
+            }
+            else
+                Debug.Log("Rien ne se passe.");
+        }
+        else if (e is LightCardEffectEvent lcEffect)
+        {
+            Player player = m_players[lcEffect.PlayerId];
+            Player playerChoosed = m_players[lcEffect.PlayerChoosenId];
+            LightCard lightCard = lcEffect.LightCard;
+
+            if (lightCard.lightEffect == LightEffect.Benediction)
+            {
+                Debug.Log("Vous choisissez de soigner le joueur " + playerChoosed.Name + ".");
+                playerChoosed.Healed(UnityEngine.Random.Range(1, 6));
+            }
+            else if (lightCard.lightEffect == LightEffect.Benediction)
+            {
+                Debug.Log("Vous choisissez d'infliger 7 blessures au joueur " + playerChoosed.Name + ".");
+                playerChoosed.SetWound(7);
             }
         }
     }
