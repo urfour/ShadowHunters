@@ -1461,7 +1461,6 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         }
 
         return players;
-
     }
 
     /// <summary>
@@ -1543,12 +1542,12 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                             CheckPlayerDeath(player.Id);
 
                             // Le Loup-garou peut contre attaquer
-                            if (m_players[playerAttackedId].Character.characterType == CharacterType.LoupGarou
-                                && m_players[playerAttackedId].Revealed.Value)
+                            if (m_players[player.Id].Character.characterType == CharacterType.LoupGarou
+                                && m_players[player.Id].Revealed.Value)
                             {
                                 usePowerButton.gameObject.SetActive(true);
 
-                                m_players[playerAttackedId].CanUsePower.Value = true;
+                                m_players[player.Id].CanUsePower.Value = true;
                             }
 
                             // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
