@@ -1,10 +1,11 @@
+using EventExemple.Kernel.Players;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventExemple.Kernel.Players.event_out
+namespace EventExemple.Scripts.Players.event_out
 {
     // Retour de l'evenement SelectGiveCardEvent
     // Renvoie l'id du joueur qui donne, l'id du joueur qui recoie et la carte donnée

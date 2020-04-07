@@ -8,6 +8,8 @@ using EventSystem;
 using EventExemple.Kernel.Players;
 using EventExemple.Kernel.Players.event_out;
 using Scripts.Settings;
+using EventExemple.Kernel.Players.event_in;
+using EventExemple.Scripts.Players.event_out;
 
 /// <summary>
 /// Classe représentant la logique du jeu, à savoir la gestion des règles et des interactions 
@@ -347,6 +349,42 @@ public class Kernell : MonoBehaviour, IListener<PlayerEvent>
     }
 
 
+    /// <summary>
+    /// Test de mort d'un joueur après avoir subi des Blessures
+    /// </summary>
+    /// <param name="playerId">Id du joueur à tester</param>
+    void CheckPlayerDeath(int playerId)
+    {
+        if (m_players[playerId].IsDead())
+        {
+            Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " est mort !");
+
+            if (m_nbHuntersDead == 0 && m_nbShadowsDeads == 0 && m_nbNeutralsDeads == 0)
+            {
+                foreach (Player player in m_players)
+                {
+                    if (player.Character.characterType == CharacterType.Daniel)
+                    {
+                        PlayerCardPower(player);
+                    }
+                }
+            }
+
+            if (m_players[playerId].Team == CharacterTeam.Hunter)
+                m_nbHuntersDead++;
+            else if (m_players[playerId].Team == CharacterTeam.Shadow)
+                m_nbShadowsDeads++;
+            else
+                m_nbNeutralsDeads++;
+
+            // if(m_players[PlayerTurn.Value].Character.characterType == CharacterType.Bryan && m_players[playerId].Life <= 12 && !m_players[PlayerTurn.Value].Revealed)
+            // {
+            //     PlayerCardPower(m_players[PlayerTurn.Value]);
+            // }
+        }
+    }
+
+
     public void OnEvent(PlayerEvent e, string[] tags = null)
     {
         if (e is EndTurnEvent ete)
@@ -542,9 +580,6 @@ public class Kernell : MonoBehaviour, IListener<PlayerEvent>
                 {
                     m_damageBob = dommageTotal;
 
-                    usePowerButton.gameObject.SetActive(true);
-                    dontUsePowerButton.gameObject.SetActive(true);
-
                     playerAttacking.CanUsePower.Value = true;
                     playerAttacking.CanNotUsePower.Value = true;
                 }
@@ -566,8 +601,6 @@ public class Kernell : MonoBehaviour, IListener<PlayerEvent>
                     if (playerAttacked.Character.characterType == CharacterType.LoupGarou
                         && playerAttacked.Revealed.Value)
                     {
-                        usePowerButton.gameObject.SetActive(true);
-
                         playerAttacked.CanUsePower.Value = true;
                     }
 
@@ -575,8 +608,6 @@ public class Kernell : MonoBehaviour, IListener<PlayerEvent>
                     if (playerAttacking.Character.characterType == CharacterType.Charles
                         && playerAttacking.Revealed.Value)
                     {
-                        usePowerButton.gameObject.SetActive(true);
-
                         playerAttacking.CanUsePower.Value = true;
                     }
                 }
@@ -595,13 +626,13 @@ public class Kernell : MonoBehaviour, IListener<PlayerEvent>
             {
                 if (playerStealed.ListCard[indexCard].cardType == CardType.Darkness)
                 {
-                    StartCoroutine(DarknessCardPower(playerStealed.ListCard[playerStealed.ListCard.Count - 1] as DarknessCard));
-                    StartCoroutine(LooseEquipmentCard(playerStealed.Id, indexCard, 0));
+                    DarknessCardPower(playerStealed.ListCard[playerStealed.ListCard.Count - 1] as DarknessCard);
+                    LooseEquipmentCard(playerStealed.Id, indexCard, 0);
                 }
                 else if (playerStealed.ListCard[indexCard].cardType == CardType.Light)
                 {
-                    StartCoroutine(LightCardPower(playerStealed.ListCard[playerStealed.ListCard.Count - 1] as LightCard));
-                    StartCoroutine(LooseEquipmentCard(playerStealed.Id, indexCard, 1));
+                    LightCardPower(playerStealed.ListCard[playerStealed.ListCard.Count - 1] as LightCard);
+                    LooseEquipmentCard(playerStealed.Id, indexCard, 1);
                 }
             }
             else
@@ -611,6 +642,34 @@ public class Kernell : MonoBehaviour, IListener<PlayerEvent>
 
             Debug.Log("La carte " + stealedCard + " a été volée au joueur "
                 + playerStealed.Name + " par le joueur " + playerStealing.Name + " !");
+        }
+        else if (e is GiveCardEvent giveCard)
+        {
+            Player playerGiving = m_players[giveCard.PlayerId];
+            Player playerGived = m_players[giveCard.PlayerGivedId];
+            string givedCard = giveCard.CardGivedName;
+
+            int indexCard = playerGiving.HasCard(givedCard);
+            playerGived.AddCard(playerGiving.ListCard[indexCard]);
+
+            if (playerGiving.ListCard[indexCard].isEquipement)
+            {
+                if (playerGiving.ListCard[indexCard].cardType == CardType.Darkness)
+                {
+                    DarknessCardPower(playerGiving.ListCard[playerGiving.ListCard.Count - 1] as DarknessCard);
+                    LooseEquipmentCard(playerGiving.Id, indexCard, 0);
+                }
+                else if (playerGiving.ListCard[indexCard].cardType == CardType.Light)
+                {
+                    LightCardPower(playerGiving.ListCard[playerGiving.ListCard.Count - 1] as LightCard);
+                    LooseEquipmentCard(playerGiving.Id, indexCard, 1);
+                }
+            }
+            else
+                Debug.LogError("Erreur : la carte choisie n'est pas un équipement et ne devrait pas être là.");
+
+            Debug.Log("La carte " + givedCard + " a été donnée au joueur "
+                + playerGived.Name + " par le joueur " + playerGiving.Name + " !");
         }
     }
 }

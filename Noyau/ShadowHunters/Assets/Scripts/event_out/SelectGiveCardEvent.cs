@@ -1,10 +1,11 @@
-﻿using System;
+﻿using EventExemple.Kernel.Players;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventExemple.Kernel.Players.event_out
+namespace EventExemple.Scripts.Players.event_out
 {
     // Evenement qui permet de choisir un joueur à qui donner une carte parmis une liste de joueur
     public class SelectGiveCardEvent : PlayerEvent
