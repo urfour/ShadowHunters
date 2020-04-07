@@ -446,19 +446,9 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 int lancer02 = UnityEngine.Random.Range(1, 4);
                 int lancerTotal0 = lancer01 + lancer02;
 
-                if(lancerTotal0 == 2 || lancerTotal0 == 4)
-                {
-                    continue;
-                }
-
                 int lancer11 = UnityEngine.Random.Range(1, 6);
                 int lancer12 = UnityEngine.Random.Range(1, 4);
                 int lancerTotal1 = lancer11 + lancer12;
-
-                if (lancerTotal1 == 2 || lancerTotal1 == 4)
-                {
-                    continue;
-                }
 
                 choiceDropdown.gameObject.SetActive(true);
                 validateButton.gameObject.SetActive(true);
