@@ -114,6 +114,8 @@ public class Player
     public Setting<bool> CanNotUsePower { get; private set; } = new Setting<bool>(false);
     //bouton attaque un joueur
     public Setting<bool> AttackPlayer { get; private set; } = new Setting<bool>(false);
+    //bouton début de tour
+    public Setting<bool> RollTheDices { get; private set; } = new Setting<bool>(false);
     //bouton fin de tour
     public Setting<bool> EndTurn { get; private set; } = new Setting<bool>(false);
 

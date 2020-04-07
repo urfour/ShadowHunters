@@ -389,7 +389,6 @@ public class Kernell : MonoBehaviour, IListener<PlayerEvent>
         if (e is EndTurnEvent ete)
         {
             Console.WriteLine("Endturn of : " + ete.PlayerId);
-            Player currentPlayer = m_players[ete.PlayerId];
             if (PlayerTurn.Value == -1)
                 PlayerTurn.Value = UnityEngine.Random.Range(0, m_nbPlayers - 1);
             else if (m_players[PlayerTurn.Value].HasAncestral.Value) // si le joueur a utilisé le savoir ancestral, le joueur suivant reste lui
@@ -401,11 +400,26 @@ public class Kernell : MonoBehaviour, IListener<PlayerEvent>
                 PlayerTurn.Value = (PlayerTurn.Value + 1) % m_nbPlayers;
             Console.WriteLine("C'est au joueur " + m_players[PlayerTurn.Value].Name + " de jouer.");
 
-            if (m_players[PlayerTurn.Value].HasGuardian.Value)
+            Player currentPlayer = m_players[PlayerTurn.Value];
+
+            currentPlayer.RollTheDices.Value=true;
+
+            if (currentPlayer.HasGuardian.Value)
             {
-                m_players[PlayerTurn.Value].HasGuardian.Value = false;
-                Console.WriteLine("Le joueur " + m_players[PlayerTurn.Value].Name + " n'est plus affecté par l'Ange Gardien !");
+                currentPlayer.HasGuardian.Value = false;
+                Console.WriteLine("Le joueur " + currentPlayer.Name + " n'est plus affecté par l'Ange Gardien !");
             }
+            
+            if(currentPlayer.Revealed.Value)
+            {
+                if (currentPlayer.Character.characterType == CharacterType.Emi
+                    || currentPlayer.Character.characterType == CharacterType.Franklin
+                    || currentPlayer.Character.characterType == CharacterType.Georges)
+                {
+                    currentPlayer.CanUsePower.Value=true;
+                }
+            }
+
             EventView.Manager.Emit(new SelectedNextPlayer()
             {
                 PlayerId = PlayerTurn.Value
@@ -414,9 +428,18 @@ public class Kernell : MonoBehaviour, IListener<PlayerEvent>
         else if(e is NewTurnEvent nte)
         {
             Player currentPlayer = m_players[nte.PlayerId];
+            currentPlayer.RollTheDices.Value=false;
+
+            if (currentPlayer.Character.characterType == CharacterType.Emi
+                || currentPlayer.Character.characterType == CharacterType.Franklin
+                || currentPlayer.Character.characterType == CharacterType.Georges)
+            {
+                currentPlayer.CanUsePower.Value=false;
+            }
+
             List<Position> position = new List<Position>();
 
-            if (m_players[currentPlayer.Id.Value].HasCompass.Value)
+            if (currentPlayer.HasCompass.Value)
             {   
                 int lancer01 = UnityEngine.Random.Range(1, 6);
                 int lancer02 = UnityEngine.Random.Range(1, 4);
@@ -425,7 +448,7 @@ public class Kernell : MonoBehaviour, IListener<PlayerEvent>
                 
                 EventView.Manager.Emit(new SelectDiceThrow()
                 {
-                    PlayerId = currentPlayer.Id.Value,
+                    PlayerId = currentPlayer.Id,
                     D6Dice1 = lancer01,
                     D4Dice1 = lancer02,
                     D6Dice2 = lancer11,
@@ -470,17 +493,17 @@ public class Kernell : MonoBehaviour, IListener<PlayerEvent>
                             position.Add(Position.Sanctuaire);
                             break;
                     }
-                    if (position.Contains(m_players[PlayerTurn.Value].Position))
+                    if (position.Contains(currentPlayer.Position))
                     {
-                        m_players[currentPlayer.Id.Value].Position = position.ToArray();
+                        currentPlayer.Position = position.ToArray();
                     }
                     else
-                        position.Remove(m_players[currentPlayer.Id.Value].Position);
+                        position.Remove(currentPlayer.Position);
 
                 }
                 EventView.Manager.Emit(new SelectMovement()
                 {
-                    PlayerId = currentPlayer.Id.Value,
+                    PlayerId = currentPlayer.Id,
                     D6Dice = lancer01,
                     D4Dice = lancer02,
                     LocationAvailable = position.ToArray()
@@ -526,17 +549,17 @@ public class Kernell : MonoBehaviour, IListener<PlayerEvent>
                         position.Add(Position.Sanctuaire);
                         break;
                 }
-                if (position.Contains(m_players[currentPlayer.Id.Value].Position))
+                if (position.Contains(currentPlayer.Position))
                 {
-                    m_players[currentPlayer.Id.Value].Position = position.ToArray();
+                    currentPlayer.Position = position.ToArray();
                 }
                 else
-                    position.Remove(m_players[currentPlayer.Id.Value].Position);
+                    position.Remove(currentPlayer.Position);
 
             }
             EventView.Manager.Emit(new SelectMovement()
             {
-                PlayerId = currentPlayer.Id.Value,
+                PlayerId = currentPlayer.Id,
                 D6Dice = lancer01,
                 D4Dice = lancer02,
                 LocationAvailable = position.ToArray()
@@ -545,7 +568,8 @@ public class Kernell : MonoBehaviour, IListener<PlayerEvent>
         else if (e is MoveOn mo)
         {
             Player currentPlayer = m_players[mo.PlayerId];
-            m_players[currentPlayer.Id.Value].Position = mo.Location;
+            currentPlayer.Position = mo.Location;
+            gameBoard.setPositionOfAt(currentPlayer.Id, position);
 
             currentPlayer.AttackPlayer.Value=true;
             if(currentPlayer.HasSaber.Value)
@@ -553,7 +577,7 @@ public class Kernell : MonoBehaviour, IListener<PlayerEvent>
             else
                 currentPlayer.EndTurn.Value=true;
 
-            switch(m_players[currentPlayer.Id.Value].Position)
+            switch(currentPlayer.Position)
             {
                 case Position.Antre:
                     currentPlayer.DrawLightCard.Value=true;
