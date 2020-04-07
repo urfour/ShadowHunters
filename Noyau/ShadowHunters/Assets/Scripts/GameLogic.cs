@@ -446,9 +446,19 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 int lancer02 = UnityEngine.Random.Range(1, 4);
                 int lancerTotal0 = lancer01 + lancer02;
 
+                if(lancerTotal0 == 2 || lancerTotal0 == 4)
+                {
+                    continue;
+                }
+
                 int lancer11 = UnityEngine.Random.Range(1, 6);
                 int lancer12 = UnityEngine.Random.Range(1, 4);
                 int lancerTotal1 = lancer11 + lancer12;
+
+                if (lancerTotal1 == 2 || lancerTotal1 == 4)
+                {
+                    continue;
+                }
 
                 choiceDropdown.gameObject.SetActive(true);
                 validateButton.gameObject.SetActive(true);
@@ -1033,7 +1043,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     IEnumerator LightCardPower(LightCard pickedCard)
     {
         CharacterTeam team = m_players[PlayerTurn.Value].Team;
-        string character = m_players[PlayerTurn.Value].Character.characterName;
+        CharacterType character = m_players[PlayerTurn.Value].Character.characterType;
         bool revealed = m_players[PlayerTurn.Value].Revealed.Value;
         Debug.Log(pickedCard.lightEffect);
         switch (pickedCard.lightEffect)
@@ -1064,7 +1074,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             case LightEffect.Chocolat:
                 Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
                 yield return new WaitForSeconds(6f);
-                if (revealed && (character == "Allie" || character == "Emi" || character == "Metamorphe"))
+                if (revealed && (character == CharacterType.Allie || character == CharacterType.Emi || character == CharacterType.Metamorphe))
                 {
                     m_players[PlayerTurn.Value].Healed(m_players[PlayerTurn.Value].Wound.Value);
                     Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " se soigne complètement");
@@ -1144,9 +1154,9 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 
             case LightEffect.Miroir:
 
-                if (team == CharacterTeam.Shadow && character != "Metamorphe")
+                if (!revealed && team == CharacterTeam.Shadow && character != CharacterType.Metamorphe)
                 {
-                    m_players[PlayerTurn.Value].Revealed.Value = true;
+                    RevealCard();
                     Debug.Log("Vous révélez votre rôle à tous, vous êtes : " + character);
                 }
                 break;
@@ -1227,6 +1237,12 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             + m_players[PlayerTurn.Value].Character.characterName + " ! Il est dans l'équipe des "
             + m_players[PlayerTurn.Value].Character.team + ".");
         revealCardButton.gameObject.SetActive(false);
+
+        if (m_players[PlayerTurn.Value].HasSpear.Value == true && m_players[PlayerTurn.Value].Team == CharacterTeam.Hunter)
+        {
+            m_players[PlayerTurn.Value].BonusAttack.Value += 2;
+            Debug.Log("Le pouvoir de la lance s'active !");
+        }
 
         // Si le joueur est Allie, il peut utiliser son pouvoir à tout moment
         // Si le joueur est Emi, Franklin ou Georges et qu'il est au début de son tour, il peut utiliser son pouvoir
