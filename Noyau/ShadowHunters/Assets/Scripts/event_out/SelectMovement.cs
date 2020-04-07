@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventExemple.Kernel.Players.event_out
+namespace Scripts.event_out
 {
     class SelectMovement : PlayerEvent
     {

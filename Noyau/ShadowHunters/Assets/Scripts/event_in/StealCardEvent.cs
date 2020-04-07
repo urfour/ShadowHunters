@@ -1,11 +1,10 @@
-using EventExemple.Kernel.Players;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventExemple.Scripts.Players.event_in
+namespace Scripts.event_in
 {
     // Retour des evenements SelectStealCardEvent et SelectStealCardFromPlayerEvent
     // Renvoie l'id du joueur qui vole, l'id du joueur volé et la carte volée

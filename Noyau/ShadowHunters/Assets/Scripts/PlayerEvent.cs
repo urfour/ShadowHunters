@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventExemple.Kernel.Players
+namespace Scripts
 {
     public class PlayerEvent : Event
     {

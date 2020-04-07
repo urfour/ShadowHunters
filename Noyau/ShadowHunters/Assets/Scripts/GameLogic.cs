@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using EventSystem;
-using EventExemple.Kernel.Players;
-using EventExemple.Kernel.Players.event_in;
-using EventExemple.Kernel.Players.event_out;
+using Scripts;
+using Scripts.event_in;
+using Scripts.event_out;
 using Scripts.Settings;
 
 /// <summary>
@@ -2763,12 +2763,12 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             {
                 if (playerStealed.ListCard[indexCard].cardType == CardType.Darkness)
                 {
-                    StartCoroutine(DarknessCardPower(playerStealed.ListCard[playerStealed.ListCard.Count - 1] as DarknessCard, stealTarget.playerId));
+                    StartCoroutine(DarknessCardPower(playerStealed.ListCard[playerStealed.ListCard.Count - 1] as DarknessCard, playerStealing.Id));
                     StartCoroutine(LooseEquipmentCard(playerStealed.Id, indexCard, 0));
                 }
                 else if (playerStealed.ListCard[indexCard].cardType == CardType.Light)
                 {
-                    StartCoroutine(LightCardPower(playerStealed.ListCard[playerStealed.ListCard.Count - 1] as LightCard, stealTarget.playerId));
+                    StartCoroutine(LightCardPower(playerStealed.ListCard[playerStealed.ListCard.Count - 1] as LightCard, playerStealing.Id));
                     StartCoroutine(LooseEquipmentCard(playerStealed.Id, indexCard, 1));
                 }
             }
@@ -2793,12 +2793,12 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             {
                 if (playerGiving.ListCard[indexCard].cardType == CardType.Darkness)
                 {
-                    StartCoroutine(DarknessCardPower(playerGiving.ListCard[playerGiving.ListCard.Count - 1] as DarknessCard));
+                    StartCoroutine(DarknessCardPower(playerGiving.ListCard[playerGiving.ListCard.Count - 1] as DarknessCard, playerGived.Id));
                     StartCoroutine(LooseEquipmentCard(playerGiving.Id, indexCard, 0));
                 }
                 else if (playerGiving.ListCard[indexCard].cardType == CardType.Light)
                 {
-                    StartCoroutine(LightCardPower(playerGiving.ListCard[playerGiving.ListCard.Count - 1] as LightCard));
+                    StartCoroutine(LightCardPower(playerGiving.ListCard[playerGiving.ListCard.Count - 1] as LightCard, playerGived.Id));
                     StartCoroutine(LooseEquipmentCard(playerGiving.Id, indexCard, 1));
                 }
             }

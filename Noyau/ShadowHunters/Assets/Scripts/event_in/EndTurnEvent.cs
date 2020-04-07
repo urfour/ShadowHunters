@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventExemple.Kernel.Players.event_in
+namespace Scripts.event_in
 {
     class EndTurnEvent : PlayerEvent
     {

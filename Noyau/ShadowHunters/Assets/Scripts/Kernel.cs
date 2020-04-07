@@ -5,11 +5,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using EventSystem;
-using EventExemple.Kernel.Players;
-using EventExemple.Kernel.Players.event_out;
+using Scripts;
 using Scripts.Settings;
-using EventExemple.Kernel.Players.event_in;
-using EventExemple.Scripts.Players.event_out;
+using Scripts.event_in;
+using Scripts.event_out;
 
 /// <summary>
 /// Classe représentant la logique du jeu, à savoir la gestion des règles et des interactions 
