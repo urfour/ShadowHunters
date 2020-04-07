@@ -512,7 +512,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                     position = Position.Foret;
                     break;
                 case 10:
-                    position = Position.Foret;
+                    position = Position.Sanctuaire;
                     break;
             }
             if (m_players[PlayerTurn.Value].Position != position)

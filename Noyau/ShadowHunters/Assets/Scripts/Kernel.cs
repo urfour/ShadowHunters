@@ -12,7 +12,7 @@ using Kernel.Settings;
 /// <summary>
 /// Classe représentant la logique du jeu, à savoir la gestion des règles et des interactions 
 /// </summary>
-public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
+public class Kernel : MonoBehaviour, IListener<PlayerEvent>
 {
     /// <summary>
     /// Nombre de joueurs de la partie courante
@@ -354,7 +354,168 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 
     public void OnEvent(PlayerEvent e, string[] tags = null)
     {
-        if (e is PowerUsedEvent powerUsed)
+        if (e is EndTurnEvent ete)
+        {
+            Console.WriteLine("Endturn of : " + ete.PlayerId);
+            
+            if (PlayerTurn.Value == -1)
+                PlayerTurn.Value = UnityEngine.Random.Range(0, m_nbPlayers - 1);
+            else if (m_players[PlayerTurn.Value].HasAncestral.Value) // si le joueur a utilisé le savoir ancestral, le joueur suivant reste lui
+            {
+                Console.WriteLine("Le joueur " + m_players[PlayerTurn.Value].Name + " rejoue grâce au Savoir Ancestral !");
+                m_players[PlayerTurn.Value].HasAncestral.Value = false;
+            }
+            else
+                PlayerTurn.Value = (PlayerTurn.Value + 1) % m_nbPlayers;
+            Console.WriteLine("C'est au joueur " + m_players[PlayerTurn.Value].Name + " de jouer.");
+
+            if (m_players[PlayerTurn.Value].HasGuardian.Value)
+            {
+                m_players[PlayerTurn.Value].HasGuardian.Value = false;
+                Console.WriteLine("Le joueur " + m_players[PlayerTurn.Value].Name + " n'est plus affecté par l'Ange Gardien !");
+            }
+            EventView.Manager.Emit(new SelectedNextPlayer()
+            {
+                PlayerId = PlayerTurn.Value
+            });
+        }
+        else if(e is NewTurnEvent nte)
+        {
+            Player current = Player.GetPlayer(nte.PlayerId);
+            List<Position> position = new List<Position>();
+
+            if (m_players[current].HasCompass.Value)
+            {   
+                int lancer01 = UnityEngine.Random.Range(1, 6);
+                int lancer02 = UnityEngine.Random.Range(1, 4);
+                int lancer11 = UnityEngine.Random.Range(1, 6);
+                int lancer12 = UnityEngine.Random.Range(1, 4);  
+                
+                EventView.Manager.Emit(new SelectDiceThrow()
+                {
+                    PlayerId = current.Value,
+                    D6Dice1 = lancer01,
+                    D4Dice1 = lancer02,
+                    D6Dice2 = lancer11,
+                    D4Dice2 = lancer12,
+                });
+            }
+            else
+            {
+                while (!position.Any())
+                {
+                    int lancer01 = UnityEngine.Random.Range(1, 6);
+                    int lancer02 = UnityEngine.Random.Range(1, 4);
+                    
+                    switch (lancer01+lancer02)
+                    {
+                        case 2:
+                        case 3:
+                            position.Add(Position.Antre);
+                            break;
+                        case 4:
+                        case 5:
+                            position.Add(Position.Porte);
+                            break;
+                        case 6:
+                            position.Add(Position.Monastere);
+                            break;
+                        case 7:
+                            position.Add(Position.Antre);
+                            position.Add(Position.Porte);
+                            position.Add(Position.Monastere);
+                            position.Add(Position.Cimetiere);
+                            position.Add(Position.Foret);
+                            position.Add(Position.Foret);
+                            break;
+                        case 8:
+                            position.Add(Position.Cimetiere);
+                            break;
+                        case 9:
+                            position.Add(Position.Foret);
+                            break;
+                        case 10:
+                            position.Add(Position.Sanctuaire);
+                            break;
+                    }
+                    if (position.Contains(m_players[PlayerTurn.Value].Position))
+                    {
+                        m_players[current.Value].Position = position.ToArray();
+                    }
+                    else
+                        position.Remove(m_players[current.Value].Position);
+
+                }
+                EventView.Manager.Emit(new SelectMovement()
+                {
+                    PlayerId = current.Value,
+                    D6Dice = lancer01,
+                    D4Dice = lancer02,
+                    LocationAvailable = position.ToArray()
+                });
+            }
+
+        }
+        else if(e is SelectedDiceEvent sde)
+        {
+            Player current=Player.GetPlayer(sde.PlayerId);
+            List<Position> position = new List<Position>();
+
+            while (!position.Any())
+            {
+                switch (sde.D4Dice+sde.D6Dice)
+                {
+                    case 2:
+                    case 3:
+                        position.Add(Position.Antre);
+                        break;
+                    case 4:
+                    case 5:
+                        position.Add(Position.Porte);
+                        break;
+                    case 6:
+                        position.Add(Position.Monastere);
+                        break;
+                    case 7:
+                        position.Add(Position.Antre);
+                        position.Add(Position.Porte);
+                        position.Add(Position.Monastere);
+                        position.Add(Position.Cimetiere);
+                        position.Add(Position.Foret);
+                        position.Add(Position.Sanctuaire);
+                        break;
+                    case 8:
+                        position.Add(Position.Cimetiere);
+                        break;
+                    case 9:
+                        position.Add(Position.Foret);
+                        break;
+                    case 10:
+                        position.Add(Position.Sanctuaire);
+                        break;
+                }
+                if (position.Contains(m_players[current.Value].Position))
+                {
+                    m_players[current.Value].Position = position.ToArray();
+                }
+                else
+                    position.Remove(m_players[current.Value].Position);
+
+            }
+            EventView.Manager.Emit(new SelectMovement()
+            {
+                PlayerId = current.Value,
+                D6Dice = lancer01,
+                D4Dice = lancer02,
+                LocationAvailable = position.ToArray()
+            });
+        }
+        else if (e is MoveOn mo)
+        {
+            Player current = Player.GetPlayer(mo.PlayerId);
+            m_players[current].Position = mo.Location;
+        }
+        else if (e is PowerUsedEvent powerUsed)
         {
             PlayerCardPower(m_players[powerUsed.playerId]);
         }

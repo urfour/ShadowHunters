@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventExemple.Kernel.Players.event_out
+namespace EventExemple.Kernel.Players.event_in
 {
     // Retour de l'evenement SelectStealCardEvent
-    // Renvoie l'id du joueur qui vole, l'id du joueur volé et la carte volée
+    // Renvoie l'id du joueur qui vole, l'id du joueur volï¿½ et la carte volï¿½e
     public class StealCardEvent : PlayerEvent
     {
         public int playerStealedId { get; set; }
