@@ -1123,10 +1123,13 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
             }
             else
             {
+                int lancer01 = UnityEngine.Random.Range(1, 6);
+                int lancer02 = UnityEngine.Random.Range(1, 4);
+
                 while (position.Count>=0)
                 {
-                    int lancer01 = UnityEngine.Random.Range(1, 6);
-                    int lancer02 = UnityEngine.Random.Range(1, 4);
+                    lancer01 = UnityEngine.Random.Range(1, 6);
+                    lancer02 = UnityEngine.Random.Range(1, 4);
                     
                     switch (lancer01+lancer02)
                     {
@@ -1161,7 +1164,7 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                     }
                     if (position.Contains(currentPlayer.Position))
                     {
-                        currentPlayer.Position = position.ToArray();
+                        currentPlayer.Position = position[0];
                     }
                     else
                         position.Remove(currentPlayer.Position);
@@ -1217,7 +1220,7 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                 }
                 if (position.Contains(currentPlayer.Position))
                 {
-                    currentPlayer.Position = position.ToArray();
+                    currentPlayer.Position = position[0];
                 }
                 else
                     position.Remove(currentPlayer.Position);
@@ -1226,8 +1229,8 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
             EventView.Manager.Emit(new SelectMovement()
             {
                 PlayerId = currentPlayer.Id,
-                D6Dice = lancer01,
-                D4Dice = lancer02,
+                D6Dice = sde.D6Dice,
+                D4Dice = sde.D4Dice,
                 LocationAvailable = position.ToArray()
             });
         }
@@ -1235,7 +1238,7 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
         {
             Player currentPlayer = m_players[mo.PlayerId];
             currentPlayer.Position = mo.Location;
-            gameBoard.setPositionOfAt(currentPlayer.Id, position);
+            gameBoard.setPositionOfAt(currentPlayer.Id, mo.Location);
 
             currentPlayer.AttackPlayer.Value=true;
             if(currentPlayer.HasSaber.Value)
@@ -1272,15 +1275,15 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                     });
                     break;
                 case Position.Sanctuaire:
-                    List<int> target=new List<int>();
+                    List<int> target2 =new List<int>();
                     foreach (Player p in m_players)
                         if(!p.IsDead() && p.Id != currentPlayer.Id && p.ListCard.Count>0)
-                            target.Add(p.Id);
+                            target2.Add(p.Id);
 
                     EventView.Manager.Emit(new SelectStealCardEvent()
                     {
                         PlayerId=currentPlayer.Id,
-                        PossiblePlayerTargetId=target.ToArray()
+                        PossiblePlayerTargetId= target2.ToArray()
                     });
                     break;   
             }    
@@ -1496,6 +1499,11 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                 playerChoosed.SetWound(7);
             }
         }
+    }
+
+    private void DontUsePower(Player player)
+    {
+        throw new NotImplementedException();
     }
 
     private void LightCardPower(LightCard lightCard)
