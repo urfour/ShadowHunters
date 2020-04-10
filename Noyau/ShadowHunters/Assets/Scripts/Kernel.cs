@@ -624,7 +624,7 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
 
             case LightEffect.Supreme:
                 Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
-                
+
                 if (m_players[idPlayer].Revealed.Value && m_players[idPlayer].Team == CharacterTeam.Hunter)
                 {
                     m_players[idPlayer].Healed(m_players[idPlayer].Wound.Value);
@@ -642,7 +642,7 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
 
             case LightEffect.Chocolat:
                 Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
-                
+
                 if (m_players[idPlayer].Revealed.Value
                     && (character == CharacterType.Allie
                         || character == CharacterType.Emi
@@ -760,6 +760,64 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                 break;
         }
     }
+
+    /// <summary>
+    /// Activation de l'effet d'une carte Vision piochée
+    /// </summary>
+    /// <remarks>
+    /// Le déroulement suit le procédé suivant : le jeu va afficher au joueur
+    /// la liste des joueurs à qui il peut donner la carte vision (donc tous
+    /// les joueurs vivants sauf lui-même) et va attendre que le joueur
+    /// choisisse la personne à qui la donner. Dès lors, l'effet va s'activer
+    /// (ou non) automatiquement en fonction du type de la carte Vision.
+    /// Metamorphe, quant à lui, aura la possibilité de choisir
+    /// s'il souhaite déclencher la carte ou non
+    /// </remarks>
+    /// <param name="pickedCard">Carte Vision piochée</param>
+    /// <returns>Itération terminée</returns>
+    void VisionCardPower(VisionCard pickedCard)
+    {
+        Debug.Log("Message au joueur " + m_players[PlayerTurn.Value].Name + " : ");
+        Debug.Log("Carte Vision piochée : " + pickedCard.cardName);
+        Debug.Log(pickedCard.description);
+
+        List<int> players = new List<int>();
+        for (int i = 0; i < m_nbPlayers; i++)
+            if (!m_players[i].IsDead() && i != PlayerTurn.Value)
+                players.Add(m_players[i].Id);
+
+        EventView.Manager.Emit(new SelectVisionPowerEvent()
+        {
+            PlayerId = PlayerTurn.Value,
+            PossiblePlayerTargetId = players.ToArray(),
+            VisionCard = pickedCard
+        });
+    }
+
+    /// <summary>
+    /// Vérifie si un personnage est un personnage avec 11 PDV ou moins
+    /// </summary>
+    /// <param name="characterName">Nom du personnage</param>
+    /// <returns>Booléen représentant le type du personnage</returns>
+    bool CheckLowHPCharacters(string characterName)
+    {
+        return characterName.StartsWith("A") || characterName.StartsWith("B")
+            || characterName.StartsWith("C") || characterName.StartsWith("E")
+            || characterName.StartsWith("M");
+    }
+
+    /// <summary>
+    /// Vérifie si un personnage est un personnage avec 12 PDV ou plus
+    /// </summary>
+    /// <param name="characterName">Nom du personnage</param>
+    /// <returns>Booléen représentant le type du personnage</returns>
+    bool CheckHighHPCharacters(string characterName)
+    {
+        return characterName.StartsWith("D") || characterName.StartsWith("F")
+            || characterName.StartsWith("G") || characterName.StartsWith("L")
+            || characterName.StartsWith("V");
+    }
+
 
     /// <summary>
     /// Fonction permettant de révéler son identité
@@ -957,7 +1015,7 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
             if (!player.IsDead() && player.Id != thiefId && player.ListCard.Count > 0)
                 choices.Add(player.Id);
 
-        if(choices.Count != 0)
+        if (choices.Count != 0)
         {
             EventView.Manager.Emit(new SelectStealCardEvent()
             {
@@ -1068,21 +1126,21 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
 
             Player currentPlayer = m_players[PlayerTurn.Value];
 
-            currentPlayer.RollTheDices.Value=true;
+            currentPlayer.RollTheDices.Value = true;
 
             if (currentPlayer.HasGuardian.Value)
             {
                 currentPlayer.HasGuardian.Value = false;
                 Console.WriteLine("Le joueur " + currentPlayer.Name + " n'est plus affecté par l'Ange Gardien !");
             }
-            
-            if(currentPlayer.Revealed.Value)
+
+            if (currentPlayer.Revealed.Value)
             {
                 if (currentPlayer.Character.characterType == CharacterType.Emi
                     || currentPlayer.Character.characterType == CharacterType.Franklin
                     || currentPlayer.Character.characterType == CharacterType.Georges)
                 {
-                    currentPlayer.CanUsePower.Value=true;
+                    currentPlayer.CanUsePower.Value = true;
                 }
             }
 
@@ -1091,27 +1149,27 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                 PlayerId = PlayerTurn.Value
             });
         }
-        else if(e is NewTurnEvent nte)
+        else if (e is NewTurnEvent nte)
         {
             Player currentPlayer = m_players[nte.PlayerId];
-            currentPlayer.RollTheDices.Value=false;
+            currentPlayer.RollTheDices.Value = false;
 
             if (currentPlayer.Character.characterType == CharacterType.Emi
                 || currentPlayer.Character.characterType == CharacterType.Franklin
                 || currentPlayer.Character.characterType == CharacterType.Georges)
             {
-                currentPlayer.CanUsePower.Value=false;
+                currentPlayer.CanUsePower.Value = false;
             }
 
             List<Position> position = new List<Position>();
 
             if (currentPlayer.HasCompass.Value)
-            {   
+            {
                 int lancer01 = UnityEngine.Random.Range(1, 6);
                 int lancer02 = UnityEngine.Random.Range(1, 4);
                 int lancer11 = UnityEngine.Random.Range(1, 6);
-                int lancer12 = UnityEngine.Random.Range(1, 4);  
-                
+                int lancer12 = UnityEngine.Random.Range(1, 4);
+
                 EventView.Manager.Emit(new SelectDiceThrow()
                 {
                     PlayerId = currentPlayer.Id,
@@ -1126,12 +1184,12 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                 int lancer01 = UnityEngine.Random.Range(1, 6);
                 int lancer02 = UnityEngine.Random.Range(1, 4);
 
-                while (position.Count>=0)
+                while (position.Count >= 0)
                 {
                     lancer01 = UnityEngine.Random.Range(1, 6);
                     lancer02 = UnityEngine.Random.Range(1, 4);
-                    
-                    switch (lancer01+lancer02)
+
+                    switch (lancer01 + lancer02)
                     {
                         case 2:
                         case 3:
@@ -1180,14 +1238,14 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
             }
 
         }
-        else if(e is SelectedDiceEvent sde)
+        else if (e is SelectedDiceEvent sde)
         {
-            Player currentPlayer=m_players[sde.PlayerId];
+            Player currentPlayer = m_players[sde.PlayerId];
             List<Position> position = new List<Position>();
 
-            while (position.Count>=0)
+            while (position.Count >= 0)
             {
-                switch (sde.D4Dice+sde.D6Dice)
+                switch (sde.D4Dice + sde.D6Dice)
                 {
                     case 2:
                     case 3:
@@ -1240,53 +1298,53 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
             currentPlayer.Position = mo.Location;
             gameBoard.setPositionOfAt(currentPlayer.Id, mo.Location);
 
-            currentPlayer.AttackPlayer.Value=true;
-            if(currentPlayer.HasSaber.Value)
-                currentPlayer.EndTurn.Value=false;
+            currentPlayer.AttackPlayer.Value = true;
+            if (currentPlayer.HasSaber.Value)
+                currentPlayer.EndTurn.Value = false;
             else
-                currentPlayer.EndTurn.Value=true;
+                currentPlayer.EndTurn.Value = true;
 
-            switch(currentPlayer.Position)
+            switch (currentPlayer.Position)
             {
                 case Position.Antre:
-                    currentPlayer.DrawLightCard.Value=true;
+                    currentPlayer.DrawLightCard.Value = true;
                     break;
                 case Position.Porte:
-                    currentPlayer.DrawLightCard.Value=true;
-                    currentPlayer.DrawDarknessCard.Value=true;
-                    currentPlayer.DrawVisionCard.Value=true;
+                    currentPlayer.DrawLightCard.Value = true;
+                    currentPlayer.DrawDarknessCard.Value = true;
+                    currentPlayer.DrawVisionCard.Value = true;
                     break;
                 case Position.Monastere:
-                    currentPlayer.DrawVisionCard.Value=true;
+                    currentPlayer.DrawVisionCard.Value = true;
                     break;
                 case Position.Cimetiere:
-                    currentPlayer.DrawDarknessCard.Value=true;
+                    currentPlayer.DrawDarknessCard.Value = true;
                     break;
                 case Position.Foret:
-                    List<int> target=new List<int>();
+                    List<int> target = new List<int>();
                     foreach (Player p in m_players)
-                        if(!p.IsDead())
+                        if (!p.IsDead())
                             target.Add(p.Id);
-                    
+
                     EventView.Manager.Emit(new ForestEvent()
                     {
-                        PlayerId=currentPlayer.Id,
-                        PossiblePlayerTargetId=target.ToArray(),
+                        PlayerId = currentPlayer.Id,
+                        PossiblePlayerTargetId = target.ToArray(),
                     });
                     break;
                 case Position.Sanctuaire:
-                    List<int> target2 =new List<int>();
+                    List<int> target2 = new List<int>();
                     foreach (Player p in m_players)
-                        if(!p.IsDead() && p.Id != currentPlayer.Id && p.ListCard.Count>0)
+                        if (!p.IsDead() && p.Id != currentPlayer.Id && p.ListCard.Count > 0)
                             target2.Add(p.Id);
 
                     EventView.Manager.Emit(new SelectStealCardEvent()
                     {
-                        PlayerId=currentPlayer.Id,
-                        PossiblePlayerTargetId= target2.ToArray()
+                        PlayerId = currentPlayer.Id,
+                        PossiblePlayerTargetId = target2.ToArray()
                     });
-                    break;   
-            }    
+                    break;
+            }
         }
         else if (e is PowerUsedEvent powerUsed)
         {
@@ -1296,6 +1354,61 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
         {
             DontUsePower(m_players[powerNotUsed.PlayerId]);
         }
+        else if (e is DrawCardEvent drawCard)
+        {
+            Player player = m_players[drawCard.PlayerId];
+
+            switch (drawCard.SelectedCardType)
+            {
+                case CardType.Darkness:
+                    Debug.Log("Le joueur " + m_players[PlayerTurn.Value].Name + " choisit de piocher une carte Ténèbres.");
+                    DarknessCard darknessCard = gameBoard.DrawCard(CardType.Darkness) as DarknessCard;
+
+                    if (darknessCard.isEquipement)
+                    {
+                        player.AddCard(darknessCard);
+                        Debug.Log("La carte " + darknessCard.cardName + " a été ajoutée à la main du joueur "
+                            + player.Name + ".");
+                    }
+
+                    DarknessCardPower(darknessCard, player.Id);
+
+                    if (!darknessCard.isEquipement)
+                        gameBoard.AddDiscard(darknessCard, CardType.Darkness);
+
+                    break;
+                case CardType.Light:
+
+                    Debug.Log("Le joueur " + player.Name + " pioche une carte Lumière.");
+
+                    LightCard lightCard = gameBoard.DrawCard(CardType.Light) as LightCard;
+
+                    if (lightCard.isEquipement)
+                    {
+                        player.AddCard(lightCard);
+                        Debug.Log("La carte " + lightCard.cardName + " a été ajoutée à la main du joueur "
+                            + player.Name + ".");
+                    }
+
+                    LightCardPower(lightCard, player.Id);
+
+                    if (!lightCard.isEquipement)
+                        gameBoard.AddDiscard(lightCard, CardType.Light);
+
+                    break;
+                case CardType.Vision:
+
+                    Debug.Log("Le joueur " + player.Name + " choisit de piocher une carte Vision.");
+
+                    VisionCard visionCard = gameBoard.DrawCard(CardType.Vision) as VisionCard;
+
+                    VisionCardPower(visionCard);
+
+                    gameBoard.AddDiscard(visionCard, CardType.Vision);
+
+                    break;
+            }
+        }
         else if (e is AttackPlayerEvent attackPlayer)
         {
             Player playerAttacking = m_players[attackPlayer.PlayerId];
@@ -1304,7 +1417,7 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
             int lancer1 = UnityEngine.Random.Range(1, 6);
             int lancer2 = UnityEngine.Random.Range(1, 4);
             int lancerTotal = (playerAttacking.HasSaber.Value == true) ? lancer2 : Mathf.Abs(lancer1 - lancer2);
-            
+
             if (lancerTotal == 0)
                 Debug.Log("Le lancer vaut 0, vous n'attaquez pas.");
             else
@@ -1358,7 +1471,7 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
             Player playerStealing = m_players[stealTarget.PlayerId];
             Player playerStealed = m_players[stealTarget.PlayerStealedId];
             string stealedCard = stealTarget.CardStealedName;
-            
+
             int indexCard = playerStealed.HasCard(stealedCard);
             playerStealing.AddCard(playerStealed.ListCard[indexCard]);
 
@@ -1366,12 +1479,12 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
             {
                 if (playerStealed.ListCard[indexCard].cardType == CardType.Darkness)
                 {
-                    DarknessCardPower(playerStealed.ListCard[playerStealed.ListCard.Count - 1] as DarknessCard);
+                    DarknessCardPower(playerStealed.ListCard[indexCard] as DarknessCard, playerStealing.Id);
                     LooseEquipmentCard(playerStealed.Id, indexCard, 0);
                 }
                 else if (playerStealed.ListCard[indexCard].cardType == CardType.Light)
                 {
-                    LightCardPower(playerStealed.ListCard[playerStealed.ListCard.Count - 1] as LightCard);
+                    LightCardPower(playerStealed.ListCard[indexCard] as LightCard, playerStealing.Id);
                     LooseEquipmentCard(playerStealed.Id, indexCard, 1);
                 }
             }
@@ -1396,12 +1509,12 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
             {
                 if (playerGiving.ListCard[indexCard].cardType == CardType.Darkness)
                 {
-                    DarknessCardPower(playerGiving.ListCard[playerGiving.ListCard.Count - 1] as DarknessCard);
+                    DarknessCardPower(playerGiving.ListCard[indexCard] as DarknessCard, playerGived.Id);
                     LooseEquipmentCard(playerGiving.Id, indexCard, 0);
                 }
                 else if (playerGiving.ListCard[indexCard].cardType == CardType.Light)
                 {
-                    LightCardPower(playerGiving.ListCard[playerGiving.ListCard.Count - 1] as LightCard);
+                    LightCardPower(playerGiving.ListCard[indexCard] as LightCard, playerGived.Id);
                     LooseEquipmentCard(playerGiving.Id, indexCard, 1);
                 }
             }
@@ -1462,7 +1575,7 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
             }
             else if (effectCard is LightCard effectLightCard)
             {
-                if(effectLightCard.lightEffect == LightEffect.Supreme
+                if (effectLightCard.lightEffect == LightEffect.Supreme
                     && hasRevealed
                     && player.Team == CharacterTeam.Hunter)
                 {
@@ -1471,8 +1584,8 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                 }
                 else if (effectLightCard.lightEffect == LightEffect.Chocolat
                             && hasRevealed
-                            && (player.Character.characterType == CharacterType.Allie 
-                                || player.Character.characterType == CharacterType.Emi 
+                            && (player.Character.characterType == CharacterType.Allie
+                                || player.Character.characterType == CharacterType.Emi
                                 || player.Character.characterType == CharacterType.Metamorphe))
                 {
                     player.Healed(player.Wound.Value);
@@ -1499,19 +1612,113 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                 playerChoosed.SetWound(7);
             }
         }
+        else if (e is VisionCardEffectEvent vcEffect)
+        {
+
+            Player playerGiving = m_players[vcEffect.PlayerId];
+            Player playerGived = m_players[vcEffect.TargetId];
+            VisionCard pickedCard = vcEffect.VisionCard;
+            bool metaPower = vcEffect.MetamorphePower;
+
+            Debug.Log("La carte Vision a été donnée au joueur " + playerGived.Name + ".");
+            CharacterTeam team = playerGived.Team;
+            /*
+            if (playerGived.Character.characterType == CharacterType.Metamorphe)
+            {
+                // A enlever plus tard
+                usePowerButton.gameObject.SetActive(true);
+                dontUsePowerButton.gameObject.SetActive(true);
+
+                playerGived.CanUsePower.Value = true;
+                playerGived.CanNotUsePower.Value = true;
+
+                m_pickedVisionCard = pickedCard;
+            }
+            */
+            // Cartes applicables en fonction des équipes ?
+            if ((team == CharacterTeam.Shadow && pickedCard.visionEffect.effectOnShadow && !metaPower)
+                || (team == CharacterTeam.Hunter && pickedCard.visionEffect.effectOnHunter)
+                || (team == CharacterTeam.Neutral && pickedCard.visionEffect.effectOnNeutral)
+                || (team == CharacterTeam.Shadow && !pickedCard.visionEffect.effectOnShadow && metaPower))
+            {
+                // Cas des cartes infligeant des Blessures
+                if (pickedCard.visionEffect.effectTakeWounds)
+                {
+                    playerGived.Wounded(pickedCard.visionEffect.nbWounds);
+                    CheckPlayerDeath(playerGived.Id);
+                }
+                // Cas des cartes soignant des Blessures
+                else if (pickedCard.visionEffect.effectHealingOneWound)
+                {
+                    if (playerGived.Wound.Value == 0)
+                    {
+                        playerGived.Wounded(1);
+                        CheckPlayerDeath(playerGived.Id);
+                    }
+                    else
+                    {
+                        playerGived.Healed(1);
+                        CheckPlayerDeath(playerGived.Id);
+                    }
+                }
+                // Cas des cartes volant une carte équipement ou infligeant des Blessures
+                else if (pickedCard.visionEffect.effectGivingEquipementCard)
+                {
+                    if (playerGived.ListCard.Count == 0)
+                    {
+                        Debug.Log("Vous ne possédez pas de carte équipement.");
+                        playerGived.Wounded(1);
+                    }
+                    else
+                    {
+                        Debug.Log("Voulez-vous donner une carte équipement ou subir une Blessure ?");
+
+                        EventView.Manager.Emit(new SelectGiveOrWoundEvent()
+                        {
+                            PlayerId = playerGived.Id
+                        });
+                    }
+                }
+                // Cas des cartes applicables en fonction des points de vie
+                else if (pickedCard.visionEffect.effectOnLowHP && CheckLowHPCharacters(playerGived.Character.characterName))
+                {
+                    playerGived.Wounded(1);
+                    CheckPlayerDeath(playerGived.Id);
+                }
+                else if (pickedCard.visionEffect.effectOnHighHP && CheckHighHPCharacters(playerGived.Character.characterName))
+                {
+                    playerGived.Wounded(2);
+                    CheckPlayerDeath(playerGived.Id);
+                }
+                // Cas de la carte Vision Suprême
+                else if (pickedCard.visionEffect.effectSupremeVision)
+                    //TODO montrer la carte personnage
+                    Debug.Log("C'est une carte Vision Suprême !");
+            }
+
+            else
+                Debug.Log("Rien ne se passe.");
+        }
+        else if (e is GiveOrWoundEvent giveOrWound)
+        {
+            Player player = m_players[giveOrWound.PlayerId];
+            bool give = giveOrWound.Give;
+
+            if (give)
+            {
+                Debug.Log("Vous choisissez de donner une carte équipement.");
+                GiveEquipmentCard(player.Id);
+            }
+            else
+            {
+                Debug.Log("Vous choisissez de subir 1 Blessure.");
+                player.Wounded(1);
+                CheckPlayerDeath(player.Id);
+            }
+        }
     }
 
     private void DontUsePower(Player player)
-    {
-        throw new NotImplementedException();
-    }
-
-    private void LightCardPower(LightCard lightCard)
-    {
-        throw new NotImplementedException();
-    }
-
-    private void DarknessCardPower(DarknessCard darknessCard)
     {
         throw new NotImplementedException();
     }
