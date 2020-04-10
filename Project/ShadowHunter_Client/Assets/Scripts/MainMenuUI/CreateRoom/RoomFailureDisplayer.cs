@@ -3,6 +3,7 @@ using System.Collections;
 using EventSystem;
 using ServerInterface.RoomEvents;
 using UnityEngine.UI;
+using Lang;
 
 public class RoomFailureDisplayer : MonoBehaviour, IListener<RoomFailureEvent>
 {
@@ -13,7 +14,7 @@ public class RoomFailureDisplayer : MonoBehaviour, IListener<RoomFailureEvent>
     {
         if (e.Msg != null)
         {
-            messageBox.text = e.Msg.Replace("\\n", "\n");
+            messageBox.text = Language.Translate(e.Msg).Replace("\\n", "\n");
             gameObject.SetActive(true);
         }
         else

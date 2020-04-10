@@ -3,6 +3,7 @@ using ServerInterface.AuthEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -23,8 +24,9 @@ namespace Assets.Scripts.MainMenuUI.Accounts
 
         public void OnButtonClic()
         {
-            EventView.Manager.Emit(new LogInEvent(new Account() { Login = login.text }, password.text));
-            Debug.Log(login.text + " " + password.text);
+            var sha256 = SHA256.Create();
+            var sha1pass = sha256.ComputeHash(Encoding.Unicode.GetBytes(password.text));
+            EventView.Manager.Emit(new LogInEvent(new Account() { Login = login.text }, Encoding.Unicode.GetString(sha1pass)));
         }
 
         public void OnPassChange()

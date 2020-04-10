@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.MainMenuUI.Accounts;
 using Assets.Scripts.MainMenuUI.SearchGame;
 using EventSystem;
+using IO;
 using Kernel.Settings;
 using Lang;
 using System;
@@ -14,12 +15,22 @@ namespace Assets.Scripts
 {
     class GameManager : MonoBehaviour
     {
-        static bool emulServer = true;
+        static bool emulServer = false;
         static bool EventLogger = true;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void OnBeforeSceneLoadRuntimeMethod()
         {
+            TextAsset[] langs = Resources.LoadAll<TextAsset>("AppData/Lang");
+            foreach (TextAsset t in langs)
+            {
+                Debug.Log(t.name);
+                if (!IOSystem.FileExists(IOSystem.GetFullPath("Lang/" + t.name + ".txt")))
+                {
+                    IOSystem.CreateFile("Lang/" + t.name + ".txt", t.text.Split('\n'));
+                }
+            }
+
             EventView.Load();
             SettingManager.Load();
             Language.Init();
@@ -32,6 +43,10 @@ namespace Assets.Scripts
             if (emulServer)
             {
                 ServerInterface.ServerTestEmul.Init();
+            }
+            else
+            {
+                ServerInterface.Network.NetworkView.Connect();
             }
         }
 

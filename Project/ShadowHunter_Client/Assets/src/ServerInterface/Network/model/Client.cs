@@ -1,5 +1,6 @@
 ﻿using EventSystem;
 using Kernel.Settings;
+using Network.events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace Network.model
 
         private void Send(string data)
         {
-            byte[] buffer = SettingManager.Encoder.Value.GetBytes(data);
+            byte[] buffer = SettingManager.Encoder.Value.GetBytes(data + '\0');
 
             NetworkStream stream = TcpClient.GetStream();
             stream.Write(buffer, 0, buffer.Length);
@@ -56,14 +57,19 @@ namespace Network.model
                 Stream = TcpClient.GetStream();
 
                 Logger.Info("[CLIENT " + TcpClient.Client.RemoteEndPoint + "] : Connected");
-                string data = null;
+                string data = "";
                 while ((i = Stream.Read(buffer, 0, buffer.Length)) != 0)
                 {
-                    data = SettingManager.Encoder.Value.GetString(buffer, 0, i);
-                    Logger.Comment("[CLIENT " + TcpClient.Client.RemoteEndPoint + " ] : " + data);
-                    Event e = Event.Deserialize(data, true);
-                    Logger.Comment("" + e);
-                    if (e != null) EventView.Manager.Emit(e, "network.emitted");
+                    data += SettingManager.Encoder.Value.GetString(buffer, 0, i);
+                    string[] msgs = data.Split('\0');
+                    for (int j = 0; j < msgs.Length-1; j++)
+                    {
+                        Logger.Comment("[CLIENT " + TcpClient.Client.RemoteEndPoint + " ] : " + data);
+                        Event e = Event.Deserialize(data, true);
+                        Logger.Comment("" + e);
+                        if (e != null) EventView.Manager.Emit(e, "network.emitted");
+                    }
+                    data = msgs[msgs.Length-1];
                 }
 
                 Logger.Info("[CLIENT " + TcpClient.Client.RemoteEndPoint + "] : Disconnected");
@@ -72,6 +78,7 @@ namespace Network.model
             catch (Exception e)
             {
                 Logger.Error(e);
+                EventView.Manager.Emit(new ServerOnlyEvent() { Msg = "message.network.error.global&" + e.GetType().FullName + "&" + e.Message.Replace(';', ',').Replace('&', '+') + "&" + e.StackTrace.Replace(';', ',').Replace('&', '+') });
             }
             finally
             {

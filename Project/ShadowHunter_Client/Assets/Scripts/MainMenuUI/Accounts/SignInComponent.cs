@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 using ServerInterface.AuthEvents;
 using EventSystem;
+using System.Security.Cryptography;
+using System.Text;
 
 public class SignInComponent : MonoBehaviour
 {
@@ -22,8 +24,9 @@ public class SignInComponent : MonoBehaviour
     {
         if (confirm_password.text == password.text)
         {
-            EventView.Manager.Emit(new SignInEvent() { Login = login.text, Password = password.text });
-            Debug.Log(login.text + " " + password.text);
+            var sha256 = SHA256.Create();
+            var sha1pass = sha256.ComputeHash(Encoding.Unicode.GetBytes(password.text));
+            EventView.Manager.Emit(new SignInEvent() { Login = login.text, Password = Encoding.Unicode.GetString(sha1pass) });
         }
     }
 
