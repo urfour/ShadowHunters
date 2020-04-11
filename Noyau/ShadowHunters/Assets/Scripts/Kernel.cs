@@ -104,21 +104,9 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
     /// </summary>
     private VisionCard m_pickedVisionCard;
     /// <summary>
-    /// Id du joueur dont c'est le tour
-    /// </summary>
-    //private int m_playerTurn = -1;
-    /// <summary>
-    /// Id du joueur récemment attaqué
-    /// </summary>    
-    private int m_playerAttackedId = -1;
-    /// <summary>
     /// Propriété d'accès à l'id du joueur attaqué
     /// </summary>
-    public int PlayerAttacked
-    {
-        get => m_playerAttackedId;
-        private set => m_playerAttackedId = value;
-    }
+    public Setting<int> PlayerAttacked { get; private set; } = new Setting<int>(-1);
     /// <summary>
     /// Dégats pris par le joueur attaqué par Bob
     /// </summary>    
@@ -869,6 +857,8 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                 {
                     PlayerId = playerAttackingId,
                     PossibleTargetId = playersId.ToArray(),
+                    PowerFranklin = false,
+                    PowerGeorges = false
                 });
             }
             else
@@ -882,8 +872,14 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                 {
                     foreach (Player player in players)
                     {
-                        if ((m_players[playerAttackingId].Character.characterType == CharacterType.Bob) && lancerTotal >= 2)
+                        if (m_players[playerAttackingId].Character.characterType == CharacterType.Bob 
+                            && m_players[playerAttackingId].Revealed.Value
+                            && lancerTotal >= 2)
+                        {
+                            m_damageBob = lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value;
+                            PlayerAttacked.Value = player.Id;
                             PlayerCardPower(m_players[playerAttackingId]);
+                        }
                         else
                         {
                             m_players[player.Id].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value);
@@ -940,8 +936,6 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
             }
             else
             {
-                m_playerAttackedId = targetId;
-
                 int lancer1 = UnityEngine.Random.Range(1, 6);
                 int lancer2 = UnityEngine.Random.Range(1, 4);
                 int lancerTotal = (m_players[playerAttackingId].HasSaber.Value == true) ? lancer2 : Mathf.Abs(lancer1 - lancer2);
@@ -955,10 +949,49 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                     {
                         foreach (Player player in players)
                         {
-                            m_players[player.Id].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value);
+                            if (m_players[playerAttackingId].Character.characterType == CharacterType.Bob
+                                && m_players[playerAttackingId].Revealed.Value
+                                && lancerTotal >= 2)
+                            {
+                                m_damageBob = lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value;
+                                PlayerAttacked.Value = player.Id;
+                                PlayerCardPower(m_players[playerAttackingId]);
+                            }
+                            else
+                            {
+                                m_players[player.Id].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value);
 
-                            // On vérifie si le joueur attaqué est mort
-                            CheckPlayerDeath(player.Id);
+                                // On vérifie si le joueur attaqué est mort
+                                CheckPlayerDeath(player.Id);
+
+                                // Le Loup-garou peut contre attaquer
+                                if (player.Character.characterType == CharacterType.LoupGarou
+                                    && player.Revealed.Value)
+                                    player.CanUsePower.Value = true;
+
+                                // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
+                                if (m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
+                                    && m_players[playerAttackingId].Revealed.Value
+                                    && lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value > 0)
+                                    PlayerCardPower(m_players[playerAttackingId]);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (m_players[playerAttackingId].Character.characterType == CharacterType.Bob
+                            && m_players[playerAttackingId].Revealed.Value
+                            && lancerTotal >= 2)
+                        {
+                            m_damageBob = lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value;
+                            PlayerAttacked.Value = targetId;
+                            PlayerCardPower(m_players[playerAttackingId]);
+                        }
+                        else
+                        {
+                            Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[targetId].Name + ".");
+
+                            m_players[targetId].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value);
 
                             // Le Loup-garou peut contre attaquer
                             if (m_players[targetId].Character.characterType == CharacterType.LoupGarou
@@ -970,38 +1003,14 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                                 && m_players[playerAttackingId].Revealed.Value
                                 && lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value > 0)
                                 PlayerCardPower(m_players[playerAttackingId]);
+
+                            CheckPlayerDeath(targetId);
                         }
-                    }
-                    else
-                    {
-
-                        Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[targetId].Name + ".");
-
-                        m_players[targetId].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value);
-
-                        // Le Loup-garou peut contre attaquer
-                        if (m_players[targetId].Character.characterType == CharacterType.LoupGarou
-                            && m_players[targetId].Revealed.Value)
-                            m_players[targetId].CanUsePower.Value = true;
-
-                        // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
-                        if (m_players[playerAttackingId].Character.characterType == CharacterType.Vampire
-                            && m_players[playerAttackingId].Revealed.Value
-                            && lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value > 0)
-                            PlayerCardPower(m_players[playerAttackingId]);
-
-                        CheckPlayerDeath(targetId);
                     }
                 }
             }
         }
     }
-
-    private void PlayerCardPower(Player player)
-    {
-        throw new NotImplementedException();
-    }
-
 
     /// <summary>
     /// Choix du joueur à qui voler une carte équipement
@@ -1106,6 +1115,136 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
             NbWoundsTaken = nbWoundsTaken,
             NbWoundsSelfHealed = nbWoundsSelfHealed
         });
+    }
+
+    /// <summary>
+    /// Activation de l'effet d'une carte Personnage
+    /// </summary>
+    /// <param name="player">Joueur utilisant l'effet de sa carte 
+    /// Personnage</param>
+    void PlayerCardPower(Player player)
+    {
+        m_players[player.Id].CanUsePower.Value = false;
+        m_players[player.Id].CanNotUsePower.Value = false;
+
+        switch (player.Character.characterType)
+        {
+            case CharacterType.Allie:
+                // Il faut que le joueur se soit révélé et qu'il n'ait pas encore utilisé son pouvoir
+                if (player.Revealed.Value && !player.UsedPower.Value)
+                {
+                    // Le joueur se soigne de toutes ses blessures
+                    player.Healed(player.Wound.Value);
+                }
+                break;
+            case CharacterType.Emi:
+                // On cherche l'index de la carte Lieu dans la liste des lieux
+                int indexEmi = gameBoard.GetIndexOfPosition(player.Position);
+
+                if (indexEmi == -1)
+                {
+                    MoveCharacter();
+                    ActivateLocationPower();
+                }
+                else
+                {
+                    // Le déplacement se fait vers le lieu adjacent
+                    if (indexEmi % 2 == 0)
+                        indexEmi++;
+                    else
+                        indexEmi--;
+
+                    // Nouvelle position du joueur
+                    Position newPosition = gameBoard.GetAreaAt(indexEmi).area;
+
+                    // On effectue le déplacement
+                    player.Position = newPosition;
+                    gameBoard.setPositionOfAt(player.Id, newPosition);
+
+                    // Activation du pouvoir du lieu
+                    ActivateLocationPower();
+                }
+
+                break;
+            case CharacterType.Metamorphe:
+                break;
+            case CharacterType.Bob:
+                // Il faut que le joueur se soit révélé et qu'il n'ait pas encore utilisé son pouvoir
+                if (player.Revealed.Value)
+                {
+                    EventView.Manager.Emit(new SelectBobPowerEvent()
+                    {
+                        PlayerId = player.Id
+                    });
+                }
+                break;
+            case CharacterType.Franklin:
+                if (player.Revealed.Value && !player.UsedPower.Value)
+                {
+                    List<int> playersId = new List<int>();
+                    foreach (Player playerT in m_players)
+                        if(playerT.Id != player.Id)
+                            playersId.Add(player.Id);
+
+                    player.UsedPower.Value = false;
+
+                    EventView.Manager.Emit(new SelectAttackTargetEvent()
+                    {
+                        PlayerId = player.Id,
+                        PossibleTargetId = playersId.ToArray(),
+                        PowerFranklin = true,
+                        PowerGeorges = false
+                    });
+                }
+                break;
+            case CharacterType.Georges:
+                if (player.Revealed.Value && !player.UsedPower.Value)
+                {
+                    List<int> playersId = new List<int>();
+                    foreach (Player playerT in m_players)
+                        if (playerT.Id != player.Id)
+                            playersId.Add(player.Id);
+
+                    player.UsedPower.Value = false;
+
+                    EventView.Manager.Emit(new SelectAttackTargetEvent()
+                    {
+                        PlayerId = player.Id,
+                        PossibleTargetId = playersId.ToArray(),
+                        PowerFranklin = false,
+                        PowerGeorges = true
+                    });
+                }
+                break;
+            case CharacterType.LoupGarou:
+                if (player.Revealed.Value)
+                    AttackCorrespondingPlayer(player.Id, PlayerTurn.Value, 0);
+                break;
+            case CharacterType.Vampire:
+                if (player.Revealed.Value)
+                    player.Healed(2);
+                break;
+            case CharacterType.Charles:
+                if (player.Revealed.Value)
+                    player.Wounded(2);
+                    AttackCorrespondingPlayer(player.Id, PlayerAttacked.Value, 0);
+                break;
+            case CharacterType.Daniel:
+                // Il faut que le joueur se soit révélé et qu'il n'ait pas encore utilisé son pouvoir
+                if (!player.Revealed.Value)
+                    RevealCard();
+                break;
+        }
+    }
+
+    private void ActivateLocationPower()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void MoveCharacter()
+    {
+        throw new NotImplementedException();
     }
 
     public void OnEvent(PlayerEvent e, string[] tags = null)
@@ -1409,6 +1548,10 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                     break;
             }
         }
+        else if (e is AttackEvent attack)
+        {
+            AttackCorrespondingPlayer(attack.PlayerId);
+        }
         else if (e is AttackPlayerEvent attackPlayer)
         {
             Player playerAttacking = m_players[attackPlayer.PlayerId];
@@ -1417,6 +1560,12 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
             int lancer1 = UnityEngine.Random.Range(1, 6);
             int lancer2 = UnityEngine.Random.Range(1, 4);
             int lancerTotal = (playerAttacking.HasSaber.Value == true) ? lancer2 : Mathf.Abs(lancer1 - lancer2);
+
+            if (attackPlayer.PowerFranklin)
+                lancerTotal = lancer1;
+            else if (attackPlayer.PowerGeorges)
+                lancerTotal = lancer2;
+
 
             if (lancerTotal == 0)
                 Debug.Log("Le lancer vaut 0, vous n'attaquez pas.");
@@ -1432,9 +1581,8 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                     && dommageTotal >= 2)
                 {
                     m_damageBob = dommageTotal;
-
-                    playerAttacking.CanUsePower.Value = true;
-                    playerAttacking.CanNotUsePower.Value = true;
+                    PlayerAttacked.Value = playerAttacked.Id;
+                    PlayerCardPower(playerAttacking);
                 }
                 else
                 {
@@ -1714,6 +1862,22 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                 Debug.Log("Vous choisissez de subir 1 Blessure.");
                 player.Wounded(1);
                 CheckPlayerDeath(player.Id);
+            }
+        }
+        else if (e is BobPowerEvent bobPower)
+        {
+            Player playerBob = m_players[bobPower.PlayerId];
+            Player playerBobed = m_players[PlayerAttacked.Value];
+            int bobDamages = m_damageBob;
+            bool usePower = bobPower.UsePower;
+
+            if (usePower)
+            {
+                StealEquipmentCard(playerBob.Id, playerBobed.Id);
+            }
+            else
+            {
+                AttackCorrespondingPlayer(playerBob.Id, playerBobed.Id, bobDamages);
             }
         }
     }
