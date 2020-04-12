@@ -1143,26 +1143,96 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
 
                 if (indexEmi == -1)
                 {
-                    MoveCharacter();
-                    ActivateLocationPower();
+                    List<Position> position = new List<Position>();
+
+                    if (player.HasCompass.Value)
+                    {
+                        int lancer01 = UnityEngine.Random.Range(1, 6);
+                        int lancer02 = UnityEngine.Random.Range(1, 4);
+                        int lancer11 = UnityEngine.Random.Range(1, 6);
+                        int lancer12 = UnityEngine.Random.Range(1, 4);
+
+                        EventView.Manager.Emit(new SelectDiceThrow()
+                        {
+                            PlayerId = player.Id,
+                            D6Dice1 = lancer01,
+                            D4Dice1 = lancer02,
+                            D6Dice2 = lancer11,
+                            D4Dice2 = lancer12,
+                        });
+                    }
+                    else
+                    {
+                        int lancer01 = UnityEngine.Random.Range(1, 6);
+                        int lancer02 = UnityEngine.Random.Range(1, 4);
+
+                        while (position.Count >= 0)
+                        {
+                            lancer01 = UnityEngine.Random.Range(1, 6);
+                            lancer02 = UnityEngine.Random.Range(1, 4);
+
+                            switch (lancer01 + lancer02)
+                            {
+                                case 2:
+                                case 3:
+                                    position.Add(Position.Antre);
+                                    break;
+                                case 4:
+                                case 5:
+                                    position.Add(Position.Porte);
+                                    break;
+                                case 6:
+                                    position.Add(Position.Monastere);
+                                    break;
+                                case 7:
+                                    position.Add(Position.Antre);
+                                    position.Add(Position.Porte);
+                                    position.Add(Position.Monastere);
+                                    position.Add(Position.Cimetiere);
+                                    position.Add(Position.Foret);
+                                    position.Add(Position.Foret);
+                                    break;
+                                case 8:
+                                    position.Add(Position.Cimetiere);
+                                    break;
+                                case 9:
+                                    position.Add(Position.Foret);
+                                    break;
+                                case 10:
+                                    position.Add(Position.Sanctuaire);
+                                    break;
+                            }
+                            if (position.Contains(player.Position))
+                            {
+                                player.Position = position[0];
+                            }
+                            else
+                                position.Remove(player.Position);
+
+                        }
+                        EventView.Manager.Emit(new SelectMovement()
+                        {
+                            PlayerId = player.Id,
+                            D6Dice = lancer01,
+                            D4Dice = lancer02,
+                            LocationAvailable = position.ToArray()
+                        });
+                    }
                 }
                 else
                 {
-                    // Le déplacement se fait vers le lieu adjacent
-                    if (indexEmi % 2 == 0)
-                        indexEmi++;
-                    else
-                        indexEmi--;
+                    List<Position> position = new List<Position>();
 
-                    // Nouvelle position du joueur
-                    Position newPosition = gameBoard.GetAreaAt(indexEmi).area;
+                    position.Add(gameBoard.GetAreaAt((indexEmi - 1) % 6).area);
+                    position.Add(gameBoard.GetAreaAt((indexEmi + 1) % 6).area);
 
-                    // On effectue le déplacement
-                    player.Position = newPosition;
-                    gameBoard.setPositionOfAt(player.Id, newPosition);
-
-                    // Activation du pouvoir du lieu
-                    ActivateLocationPower();
+                    EventView.Manager.Emit(new SelectMovement()
+                    {
+                        PlayerId = player.Id,
+                        D6Dice = UnityEngine.Random.Range(1, 6),
+                        D4Dice = UnityEngine.Random.Range(1, 4),
+                        LocationAvailable = position.ToArray()
+                    });
                 }
 
                 break;
@@ -1235,16 +1305,6 @@ public class Kernel : MonoBehaviour, IListener<PlayerEvent>
                     RevealCard();
                 break;
         }
-    }
-
-    private void ActivateLocationPower()
-    {
-        throw new NotImplementedException();
-    }
-
-    private void MoveCharacter()
-    {
-        throw new NotImplementedException();
     }
 
     public void OnEvent(PlayerEvent e, string[] tags = null)
