@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServerInterface.RoomEvents
+namespace ServerInterface.AuthEvents
 {
-    public class LeaveRoomEvent : RoomEvent
+    public class AskAccountEvent : AuthEvent
     {
+        public string Login { get; set; }
     }
 }

@@ -2,10 +2,11 @@
 using EventSystem;
 using ServerInterface.AuthEvents;
 using ServerInterface.RoomEvents;
-using ServerInterface.AuthEvents.event_in;
-using ServerInterface.AuthEvents.event_out;
 using System.Collections.Generic;
 using Network.model;
+using ShadowHunter_Server.Rooms;
+using Network.controller;
+using System.Threading;
 //using System.Data.SQLite;
 
 namespace ShadowHunter_Server.Accounts
@@ -15,8 +16,14 @@ namespace ShadowHunter_Server.Accounts
 
         public static GAccount Instance { get; private set; } = null;
 
-        public Dictionary<Client, Account> Accounts { get; private set; } = 
-            new Dictionary<Client, Account>();
+        public Dictionary<Account, Client> ConnectedAccounts { get; private set; } = 
+            new Dictionary<Account, Client>();
+        private Mutex accounts_mutex = new Mutex();
+
+        private Dictionary<string, Account> logins { get; set; } =
+            new Dictionary<string, Account>();
+        private Dictionary<string, string> passwords { get; set; } =
+            new Dictionary<string, string>();
 
 
         // Régit le comportement du serveur en fonction de l'évènement
@@ -25,71 +32,57 @@ namespace ShadowHunter_Server.Accounts
         //          - Liste des tags
         public void OnEvent(AuthEvent e, string[] tags = null)
         {
-            Console.WriteLine("Evènement d'authentification reçu.");
-            //throw new NotImplementedException();
-
-            if (e is LogInEvent logIn)
+            //UnityEngine.Debug.Log("AuthTestEmul : " + e);
+            accounts_mutex.WaitOne();
+            if (e is LogInEvent lie)
             {
-                Console.WriteLine("Demande de connexion.");
-                byte loginStatus = Authentify(logIn.Account.Login, 
-                    logIn.Password);
-                switch (loginStatus)
+                if (!logins.ContainsKey(lie.Account.Login))
                 {
-                    // identifiants corrects
-                    case 0:
-                        logIn.Account.IsLogged = true;
-                        Accounts.Add(logIn.GetSender(), logIn.Account);
-                        logIn.GetSender().Send(new AssingAccountEvent(
-                            logIn.Account, "credentials_ok"));
-                        break;
-
-                    // mauvais mot de passe
-                    case 1:
-                        logIn.GetSender().Send(new AuthInvalidEvent()
-                            { Msg = "auth.wrong_password;" });
-                        break;
-                    
-                    // login inexistant
-                    case 2:
-                        logIn.GetSender().Send(new AuthInvalidEvent()
-                            { Msg = "auth.inexistent_login; "
-                                 + logIn.Account.Login });
-                        break;
-
-                    default:
-                        logIn.GetSender().Send(new AuthInvalidEvent());
-                        break;
+                    e.GetSender().Send(new AuthInvalidEvent() { Msg = "message.auth.invalid.login.login_invalid" });
+                }
+                else if (passwords[lie.Account.Login] != lie.Password)
+                {
+                    e.GetSender().Send(new AuthInvalidEvent() { Msg = "message.auth.invalid.login.password_invalid" });
+                }
+                else if (e.GetSender().Account != null)
+                {
+                    e.GetSender().Send(new AuthInvalidEvent() { Msg = "message.auth.invalid.already_logged" });
+                }
+                else if (ConnectedAccounts.ContainsKey(logins[lie.Account.Login]))
+                {
+                    e.GetSender().Send(new AuthInvalidEvent() { Msg = "message.auth.invalid.account_already_online" });
+                }
+                else
+                {
+                    ConnectedAccounts.Add(logins[lie.Account.Login], e.GetSender());
+                    logins[lie.Account.Login].IsLogged = true;
+                    e.GetSender().Account = logins[lie.Account.Login];
+                    e.GetSender().Send(new AssingAccountEvent(logins[lie.Account.Login]));
+                    GRoom.Instance.AddClient(e.GetSender());
                 }
             }
-
-            // si le client demande à se déconnecter, on le retire
-            // du dictionnaire contenant les comptes actifs
-            else if (e is LogOutEvent logOut)
+            else if (e is LogOutEvent loe)
             {
-                Console.WriteLine("Logout");
-                Accounts.TryGetValue(logOut.GetSender(), out Account accountToLogOut);
-                accountToLogOut.IsLogged = false;
-                Accounts.Remove(logOut.GetSender());
-            }
+                // set IsLogged to false
+                if (e.GetSender().Account != null)
+                {
+                    e.GetSender().Account.IsLogged = false;
+                    ConnectedAccounts.Remove(e.GetSender().Account);
+                }
+                e.GetSender().Send(new AssingAccountEvent(null));
+                //GRoom.Instance.RemoveClient(e.GetSender());
 
-            // si l'utilisateur veut s'enregistrer, on vérifie que son compte
-            // n'existe pas, puis on le créé le cas échéant, et enfin on
-            // connecte l'utilisateur
+            }
             else if (e is SignInEvent sie)
             {
-                Console.WriteLine("Demande de création d'un compte.");
-                // on vérifie que l'évènement contient bien les informations nécessaires 
-                if (sie.Login == null || sie.Password == null)
+                if (logins.ContainsKey(sie.Login))
                 {
-                    sie.GetSender().Send(new AuthInvalidEvent() { Msg = "auth.null_event;" });
+                    e.GetSender().Send(new AuthInvalidEvent() { Msg = "message.auth.invalid.signin.login_unavailable&" + sie.Login });
                 }
-
-                // si le compte à créer existe déjà -> erreur
-                else if (Authentify(sie.Login, sie.Password) != 2)
+                else if (e.GetSender().Account != null)
                 {
-                    sie.GetSender().Send(new AuthInvalidEvent() { Msg = "auth.login_unavailable;" + sie.Login });
+                    e.GetSender().Send(new AuthInvalidEvent() { Msg = "message.auth.invalid.already_logged" });
                 }
-
                 else
                 {
                     Account a = new Account()
@@ -97,15 +90,38 @@ namespace ShadowHunter_Server.Accounts
                         Login = sie.Login,
                         IsLogged = true
                     };
-                    Accounts.Add(sie.GetSender(), a);
-                    Console.WriteLine("Création du compte...");
-                    if (CreateAccount(sie) == false)
-                    {
-                        sie.GetSender().Send(new AuthInvalidEvent() { Msg = "auth.account_creation_error;" });
-                    }
+                    passwords.Add(sie.Login, sie.Password);
+                    logins.Add(sie.Login, a);
+                    ConnectedAccounts.Add(a, e.GetSender());
+                    e.GetSender().Account = a;
+                    e.GetSender().Send(new AssingAccountEvent(a));
+                    GRoom.Instance.AddClient(e.GetSender());
                 }
             }
+            else if (e is AskAccountEvent aae)
+            {
+                if (!logins.ContainsKey(aae.Login))
+                {
+                    e.GetSender().Send(new AuthInvalidEvent() { Msg = "message.auth.invalid.asked_account_dont_exists"});
+                }
+                else
+                {
+                    e.GetSender().Send(new AccountDataEvent() { Account=logins[aae.Login] });
+                }
+            }
+            accounts_mutex.ReleaseMutex();
         }
+        
+
+        public void OnClientDisconnect(Client c)
+        {
+            if (c.Account != null && ConnectedAccounts.ContainsKey(c.Account))
+            {
+                c.Account.IsLogged = false;
+                ConnectedAccounts.Remove(c.Account);
+            }
+        }
+
         // Vérifie si les identifiants envoyés par l'utilisateur correspondent
         // à un utilisateur déjà enregistré
         // Entrée : un login et un mot de passe
@@ -205,8 +221,17 @@ namespace ShadowHunter_Server.Accounts
 
         public static void Init()
         {
-            new GAccount();
-            EventView.Manager.AddListener(Instance, true);
+            GAccount a = new GAccount();
+            EventView.Manager.AddListener(Instance);
+            Client.OnConnect.Add(
+                (sender) =>
+                {
+                    ((Client)sender).OnDisconnect.AddListener(
+                            (sender2) =>
+                            {
+                                a.OnClientDisconnect((Client)sender);
+                            });
+                });
             Console.WriteLine("GAccount OK");
         }
 

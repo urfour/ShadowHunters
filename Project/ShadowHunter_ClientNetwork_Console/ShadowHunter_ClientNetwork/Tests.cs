@@ -1,10 +1,7 @@
 ﻿using System;
 using EventSystem;
 using Network.events;
-using ServerInterface.AuthEvents.event_out;
-using ServerInterface.AuthEvents.event_in;
-using ServerInterface.RoomEvents.event_out;
-using ServerInterface.RoomEvents.event_in;
+using ServerInterface.AuthEvents;
 using ServerInterface.RoomEvents;
 
 namespace ShadowHunter_ClientNetwork

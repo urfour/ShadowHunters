@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ServerInterface.AuthEvents
 {
-    class AssingAccountEvent : AuthEvent
+    public class AssingAccountEvent : AuthEvent
     {
         public Account Account { get; set; }
 

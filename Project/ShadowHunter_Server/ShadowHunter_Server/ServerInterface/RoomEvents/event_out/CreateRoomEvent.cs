@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServerInterface.RoomEvents.event_out
+namespace ServerInterface.RoomEvents
 {
     public class CreateRoomEvent : RoomEvent
     {

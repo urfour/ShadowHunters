@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServerInterface.RoomEvents.event_out
+namespace ServerInterface.RoomEvents
 {
-    class ModifyRoomEvent : RoomEvent
+    public class ModifyRoomEvent : RoomEvent
     {
 
         public ModifyRoomEvent()

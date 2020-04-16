@@ -61,6 +61,10 @@
     <Compile Include="Network\SettingManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerInterface\RoomEvents\event_in\RoomLeavedEvent.cs" />
+    <Compile Include="ServerInterface\AuthEvents\event_out\AskAccountEvent.cs" />
+    <Compile Include="ServerInterface\RoomEvents\event_out\ReadyEvent.cs" />
+    <Compile Include="ServerInterface\RoomEvents\event_out\StartGameEvent.cs" />
     <Compile Include="Settings\Setting.cs" />
     <Compile Include="Settings\SettingItem.cs" />
     <Compile Include="Settings\SettingManager.cs" />
@@ -85,12 +89,6 @@
     <Compile Include="Rooms\GRoom.cs" />
     <Compile Include="ServerInterface\RoomEvents\event_in\RoomFailureEvent.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ServerInterface\" />
-    <Folder Include="ServerInterface\AuthEvents\" />
-    <Folder Include="ServerInterface\RoomEvents\" />
-    <Folder Include="Accounts\" />
-    <Folder Include="Rooms\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

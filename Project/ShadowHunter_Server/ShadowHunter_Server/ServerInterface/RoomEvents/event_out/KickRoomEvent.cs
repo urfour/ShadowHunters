@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServerInterface.RoomEvents.event_out
+namespace ServerInterface.RoomEvents
 {
-    class KickRoomEvent : RoomEvent
+    public class KickRoomEvent : RoomEvent
     {
         public Account Kicked { get; set; }
 

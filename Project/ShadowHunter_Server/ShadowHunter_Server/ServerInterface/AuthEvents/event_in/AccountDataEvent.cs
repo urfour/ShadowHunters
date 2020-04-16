@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServerInterface.AuthEvents.event_in
+namespace ServerInterface.AuthEvents
 {
-    class AccountDataEvent : AuthEvent
+    public class AccountDataEvent : AuthEvent
     {
         public Account Account { get; set; }
 
