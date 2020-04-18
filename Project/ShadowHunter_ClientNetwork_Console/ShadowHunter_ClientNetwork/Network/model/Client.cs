@@ -27,7 +27,7 @@ namespace Network.model
 
         private void Send(string data)
         {
-            byte[] buffer = SettingManager.Encoder.Value.GetBytes(data);
+            byte[] buffer = SettingManager.Encoder.Value.GetBytes(data + '\0');
 
             NetworkStream stream = TcpClient.GetStream();
             stream.Write(buffer, 0, buffer.Length);
