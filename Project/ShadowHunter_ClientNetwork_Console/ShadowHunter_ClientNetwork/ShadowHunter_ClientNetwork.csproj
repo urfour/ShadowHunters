@@ -42,6 +42,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\AuthEvents\event_out\AskAccountEvent.cs">
+      <Link>ServerInterface\AuthEvents\event_out\AskAccountEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\RoomEvents\event_in\RoomLeavedEvent.cs">
+      <Link>ServerInterface\RoomEvents\event_in\RoomLeavedEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\RoomEvents\event_out\ReadyEvent.cs">
+      <Link>ServerInterface\RoomEvents\event_out\ReadyEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\ShadowHunter_Server\ShadowHunter_Server\ServerInterface\RoomEvents\event_out\StartGameEvent.cs">
+      <Link>ServerInterface\RoomEvents\event_out\StartGameEvent.cs</Link>
+    </Compile>
     <Compile Include="EventSystem\controller\EventManager.cs" />
     <Compile Include="EventSystem\view\Event.cs" />
     <Compile Include="EventSystem\view\EventView.cs" />

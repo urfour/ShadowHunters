@@ -8,7 +8,8 @@ namespace ShadowHunter_ClientNetwork
 {
     public class Tests
     {
-
+        int kode;
+        string user = "testLogin";
 
         public void LaunchTests()
         {
@@ -17,19 +18,37 @@ namespace ShadowHunter_ClientNetwork
             {
                 if(String.Compare(msg, "signin")==0)
                 {
-                    EventView.Manager.Emit(new SignInEvent() { Login = "testLogin", Password = "testPassword" });
+                    user = Console.ReadLine();
+                    EventView.Manager.Emit(new SignInEvent() { Login = user, Password = "testPassword" });
                 }
 
-                else if (String.Compare(msg, "createRoom") == 0)
+                else if (String.Compare(msg, "createRoom") == 0) // test OK
                 {
-                    //EventView.Manager.Emit(new CreateRoomEvent() { RoomData = new RoomData(0, "testRoom", 8, 0, false, true) });
-                    EventView.Manager.Emit(new CreateRoomEvent());
+                    EventView.Manager.Emit(new CreateRoomEvent() { RoomData = new RoomData(0,"testRoom", 8, 0, false, true) });
+                    //EventView.Manager.Emit(new CreateRoomEvent());
                 }
 
-                else if (String.Compare(msg, "joinRoom") == 0)
+                else if (String.Compare(msg, "join") == 0) // OK
                 {
-                    //EventView.Manager.Emit(new CreateRoomEvent() { RoomData = new RoomData(0, "testRoom", 8, 0, false, true) });
-                    EventView.Manager.Emit(new JoinRoomEvent());
+                    kode = Int32.Parse(Console.ReadLine());
+                    EventView.Manager.Emit(new JoinRoomEvent() { RoomData = new RoomData(kode, "testRoom", 8, 0, false, true) });
+                }
+
+                else if (String.Compare(msg, "ready") == 0) // OK
+                {
+                    kode = Int32.Parse(Console.ReadLine());
+                    EventView.Manager.Emit(new ReadyEvent() { RoomData = new RoomData(kode, "testRoom", 8, 0, false, true) });
+                }
+
+                else if (String.Compare(msg, "leave") == 0) //ok
+                {
+                    EventView.Manager.Emit(new LeaveRoomEvent() { RoomData = new RoomData(kode, "testRoom", 8, 0, false, true) });
+                }
+
+                else if (String.Compare(msg, "start") == 0) //message.room.invalid.start.recquire_all_players_ready
+                {
+                    kode = Int32.Parse(Console.ReadLine());
+                    EventView.Manager.Emit(new StartGameEvent() { RoomData = new RoomData(kode, "testRoom", 8, 0, false, true) });
                 }
 
                 else
