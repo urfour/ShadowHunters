@@ -74,6 +74,8 @@ namespace ShadowHunter_Server.Rooms
                     {
                         e.GetSender().Send(new RoomFailureEvent() { Msg="message.room.invalid.join.please_leave_your_room_before"});
                     }
+
+
                     else
                     {
                         if (r.Data.CurrentNbPlayer < r.Data.MaxNbPlayer)
@@ -155,7 +157,7 @@ namespace ShadowHunter_Server.Rooms
                     room.RoomData_Mutex.WaitOne();
                     RoomData r = room.Data;
                     bool ready = true;
-                    for (int i = 0; i < r.MaxNbPlayer; i++)
+                    for (int i = 0; i < r.CurrentNbPlayer; i++)
                     {
                         if (!r.ReadyPlayers[i])
                         {
