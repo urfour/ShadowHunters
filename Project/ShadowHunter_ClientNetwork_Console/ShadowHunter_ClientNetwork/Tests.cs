@@ -10,6 +10,7 @@ namespace ShadowHunter_ClientNetwork
     {
         int kode;
         string user = "testLogin";
+        int maxPlayers = 8;
 
         public void LaunchTests()
         {
@@ -24,7 +25,8 @@ namespace ShadowHunter_ClientNetwork
 
                 else if (String.Compare(msg, "createRoom") == 0) // test OK
                 {
-                    EventView.Manager.Emit(new CreateRoomEvent() { RoomData = new RoomData(0,"testRoom", 8, 0, false, true) });
+                    maxPlayers = Int32.Parse(Console.ReadLine());
+                    EventView.Manager.Emit(new CreateRoomEvent() { RoomData = new RoomData(0,"testRoom", maxPlayers, 0, false, true) });
                     //EventView.Manager.Emit(new CreateRoomEvent());
                 }
 

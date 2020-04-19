@@ -34,26 +34,33 @@ namespace ShadowHunter_Server.Rooms
 
             if (e is CreateRoomEvent cre)
             {
-                //Room room = Rooms[cre.RoomData.Code];
-                RoomData r = cre.RoomData;
-                int code = rand.Next(10000, 100000);
-                int whilesafe = 100000;
-                while (Rooms.ContainsKey(code) && whilesafe > 0)
+                if (cre.RoomData.MaxNbPlayer < 4 || cre.RoomData.MaxNbPlayer > 8)
                 {
-                    code = rand.Next(10000, 100000);
-                    whilesafe--;
+                    e.GetSender().Send(new RoomFailureEvent() { Msg = "message.room.invalid.bad_MaxNbPlayer&" + cre.RoomData.Code });
                 }
-                r.Code = code;
-                r.CurrentNbPlayer = 1;
-                r.Players = new string[r.MaxNbPlayer];
-                r.ReadyPlayers = new bool[r.MaxNbPlayer];
-                r.Players[0] = cre.GetSender().Account.Login;
-                //r.Host = GAccount.Instance.LoggedAccount.Login;
-                Room room = new Room(r);
-                Rooms.Add(code, room);
-                Global.BroadCast(null, new RoomDataEvent() { RoomData = r });
-                e.GetSender().JoinRoom(room);
-                e.GetSender().Send(new RoomJoinedEvent() { RoomData = r });
+                else
+                {
+                    //Room room = Rooms[cre.RoomData.Code];
+                    RoomData r = cre.RoomData;
+                    int code = rand.Next(10000, 100000);
+                    int whilesafe = 100000;
+                    while (Rooms.ContainsKey(code) && whilesafe > 0)
+                    {
+                        code = rand.Next(10000, 100000);
+                        whilesafe--;
+                    }
+                    r.Code = code;
+                    r.CurrentNbPlayer = 1;
+                    r.Players = new string[r.MaxNbPlayer];
+                    r.ReadyPlayers = new bool[r.MaxNbPlayer];
+                    r.Players[0] = cre.GetSender().Account.Login;
+                    //r.Host = GAccount.Instance.LoggedAccount.Login;
+                    Room room = new Room(r);
+                    Rooms.Add(code, room);
+                    Global.BroadCast(null, new RoomDataEvent() { RoomData = r });
+                    e.GetSender().JoinRoom(room);
+                    e.GetSender().Send(new RoomJoinedEvent() { RoomData = r });
+                }
             }
             else if (e is JoinRoomEvent jre)
             {
