@@ -63,6 +63,12 @@ namespace ShadowHunter_ClientNetwork
                     EventView.Manager.Emit(new KickRoomEvent() { Kicked = new Account(), RoomData = new RoomData(kode, "testRoom", 8, 0, false, true) });
                 }
 
+                else if (String.Compare(msg, "modify") == 0) //message.room.invalid.start.recquire_all_players_ready
+                {
+                    kode = Int32.Parse(Console.ReadLine());
+                    EventView.Manager.Emit(new ModifyRoomEvent() { RoomData = new RoomData(kode, "modifiedRoom", 5, 0, false, true) });
+                }
+
                 else
                 {
                     EventView.Manager.Emit(new ChatMSGEvent() { MSG = msg });

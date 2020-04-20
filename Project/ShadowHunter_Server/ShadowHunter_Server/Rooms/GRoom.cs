@@ -197,7 +197,7 @@ namespace ShadowHunter_Server.Rooms
                 {
                     Rooms_Mutex.ReleaseMutex();
                     kre.GetSender().Send(new RoomFailureEvent()
-                        { Msg = "room.can_only_kick_if_host" });
+                        { Msg = "message.room.invalid.can_only_kick_if_host&" + kre.RoomData.Code });
 
                 }
 
@@ -225,6 +225,47 @@ namespace ShadowHunter_Server.Rooms
                     RemovePlayerFromRoom(GAccount.Instance.ConnectedAccounts[kre.Kicked], kre.RoomData);
                     Rooms_Mutex.ReleaseMutex();
                     GAccount.Instance.accounts_mutex.ReleaseMutex();
+                }
+            }
+
+            if (e is ModifyRoomEvent mre)
+            {
+                Rooms_Mutex.WaitOne();
+                // seul l'hôte peut modifier la salle
+                if (Rooms[mre.RoomData.Code].Data.Players[0] != mre.GetSender().Account.Login)
+                {
+                    Rooms_Mutex.ReleaseMutex();
+                    e.GetSender().Send(new RoomFailureEvent() { Msg = "message.room.invalid.can_only_modify_if_host&" + mre.RoomData.Code });
+                }
+
+                else
+                {
+                    Rooms[mre.RoomData.Code].RoomData_Mutex.WaitOne();
+
+                    if(mre.RoomData.MaxNbPlayer > 8 || mre.RoomData.MaxNbPlayer < 4)
+                    {
+                        Rooms[mre.RoomData.Code].RoomData_Mutex.ReleaseMutex();
+                        Rooms_Mutex.ReleaseMutex();
+                        e.GetSender().Send(new RoomFailureEvent() { Msg = "message.room.invalid.bad_MaxNbPlayer&" + mre.RoomData.Code });
+                    }
+
+                    else
+                    {
+                        Rooms[mre.RoomData.Code].Data.Name = mre.RoomData.Name;
+                        Rooms[mre.RoomData.Code].Data.HasPassword = mre.RoomData.HasPassword;
+                        Rooms[mre.RoomData.Code].Data.Password = mre.RoomData.Password;
+
+                        Rooms[mre.RoomData.Code].Data.MaxNbPlayer = mre.RoomData.MaxNbPlayer;
+                        string[] tempPlayers = Rooms[mre.RoomData.Code].Data.Players;
+                        Array.Resize(ref tempPlayers, mre.RoomData.MaxNbPlayer);
+                        Rooms[mre.RoomData.Code].Data.Players = tempPlayers;
+                        bool[] tempsReadyPlayers = Rooms[mre.RoomData.Code].Data.ReadyPlayers;
+                        Array.Resize(ref tempsReadyPlayers, mre.RoomData.MaxNbPlayer);
+                        Rooms[mre.RoomData.Code].Data.ReadyPlayers = tempsReadyPlayers;
+
+                        Rooms[mre.RoomData.Code].RoomData_Mutex.ReleaseMutex();
+                        Rooms_Mutex.ReleaseMutex();
+                    }
                 }
             }
 
