@@ -7,7 +7,7 @@ using Network.model;
 using ShadowHunter_Server.Rooms;
 using Network.controller;
 using System.Threading;
-//using System.Data.SQLite;
+using System.Data.SQLite;
 
 namespace ShadowHunter_Server.Accounts
 {
@@ -132,7 +132,7 @@ namespace ShadowHunter_Server.Accounts
         //              n'existe pas
         private byte Authentify(string login, string password)
         {
-            /*string connectionString = @"DataSource=..\..\database.db; Version=3;";
+            string connectionString = @"DataSource=..\..\database.db; Version=3;";
             int myUserId = -1;
 
             using (SQLiteConnection conn = new SQLiteConnection(connectionString))
@@ -170,9 +170,9 @@ namespace ShadowHunter_Server.Accounts
                 }
 
                 lecteur.Close();
-                conn.Close();*/
+                conn.Close();
                 return 1;
-           /* }*/
+            }
         }
 
         // Demande à la BDD de créer un compte
@@ -180,7 +180,7 @@ namespace ShadowHunter_Server.Accounts
         // Sortie : true si le compte a été créé, false sinon
         private bool CreateAccount(SignInEvent sie)
         {
-            /*string connectionString = @"DataSource=..\..\database.db; Version=3;";
+            string connectionString = @"DataSource=..\..\database.db; Version=3;";
             string login = sie.Login;
             string password = sie.Password;
 
@@ -201,9 +201,9 @@ namespace ShadowHunter_Server.Accounts
                 }
 
                 Console.WriteLine("Compte crée");
-                conn.Close();*/
+                conn.Close();
                 return true;
-           /*}*/
+           }
         }
 
 
