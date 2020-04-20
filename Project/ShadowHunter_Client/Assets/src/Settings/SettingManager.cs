@@ -10,12 +10,10 @@ using System.IO;
 
 namespace Kernel.Settings
 {
-
     [Serializable]
     public partial class SettingManager
     {
         public static SettingManager Settings { get; private set; }
-        
         public static void Load(string path = "Settings.XML")
         {
             path = IOSystem.GetFullPath(path);

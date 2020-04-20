@@ -13,7 +13,6 @@ namespace Lang
     class Language
     {
 
-
         #region SINGLOTON
         private static Language _instance;
         public static Language Instance
@@ -34,7 +33,6 @@ namespace Lang
 
             SettingManager.Settings.UI_Lang.AddListener((sender) => { Instance = new Language(SettingManager.Settings.UI_Lang.Value); });
         }
-        
         private static ListenableObject Notifier { get; set; } = new ListenableObject();
 
         public static string Translate(string label, params string[] args)
@@ -78,7 +76,7 @@ namespace Lang
             this.Lang = lang;
             this.Load();
         }
-
+        
         public string GetText(string label)
         {
             string[] args = label.Split('&');

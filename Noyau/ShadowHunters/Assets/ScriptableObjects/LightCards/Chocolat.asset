@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a8d1108b9b00904a9ead6c0814fdd58, type: 3}
+  m_Name: Chocolat
+  m_EditorClassIdentifier: 
+  cardName: Barre de chocolat
+  cardType: 2
+  isEquipement: 0
+  description: "Si vous \xEAtes Allie, Emi ou M\xE9tamorphe et que vous choisissez
+    de r\xE9v\xE9ler (ou avez d\xE9j\xE0 r\xE9v\xE9l\xE9) votre identit\xE9, vous
+    soignez toutes vos Blessures."
+  sprite: {fileID: 21300000, guid: 1d3251ad89295bc40a89a3cc05e24b51, type: 3}
+  isHidden: 0
+  lightEffect: 5

@@ -11,7 +11,7 @@ namespace IO
     class IOSystem : MonoBehaviour
     {
         public static string DataFolder = Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ShadowHunter"));
-        
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void OnBeforeSceneLoadRuntimeMethod()
         {
