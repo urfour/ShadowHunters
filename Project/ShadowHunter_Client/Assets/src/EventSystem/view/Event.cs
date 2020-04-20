@@ -27,7 +27,7 @@ namespace EventSystem
         /// </summary>
         /// <param name="data">XML de l'instance d'origine</param>
         /// <returns>L'événement désérialisé</returns>
-        public static Event Deserialize(string data)
+        public static Event Deserialize(string data, bool catchInvalidType = false)
         {
             int type_length = data.IndexOf(';');
             string type_name = data.Substring(0, type_length);
@@ -35,6 +35,7 @@ namespace EventSystem
             Type t = Type.GetType(type_name);
             if (t == null)
             {
+                if (catchInvalidType) return null;
                 if (EventView.Manager.LogError != null) EventView.Manager.LogError("Event.Deserialize(" + type_name + ") : unkown type");
                 else throw new ArgumentException("Event.Deserialize(" + type_name + ") : unkown type");
             }
