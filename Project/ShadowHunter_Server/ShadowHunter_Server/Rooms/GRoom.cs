@@ -188,7 +188,7 @@ namespace ShadowHunter_Server.Rooms
                 {
                     Rooms_Mutex.ReleaseMutex();
                     kre.GetSender().Send(new RoomFailureEvent()
-                        { Msg = "room.kicked_player_not_in_room" });
+                        { Msg = "message.room.invalid.kicked_player_not_in_room&" + kre.RoomData.Code });
 
                 }
 
@@ -206,7 +206,7 @@ namespace ShadowHunter_Server.Rooms
                 {
                     Rooms_Mutex.ReleaseMutex();
                     kre.GetSender().Send(new RoomFailureEvent()
-                        { Msg = "room.cant_kick_yourself" });
+                        { Msg = "message.room.invalid.cant_kick_yourself&" + kre.RoomData.Code });
                 }
 
                 // un joueur ne peut qu'expulser des membres de sa
@@ -216,13 +216,14 @@ namespace ShadowHunter_Server.Rooms
                 {
                     Rooms_Mutex.ReleaseMutex();
                     kre.GetSender().Send(new RoomFailureEvent()
-                        { Msg = "room.can_only_kick_in_own_room" });
+                        { Msg = "message.room.invalid.can_only_kick_in_own_room&" + kre.RoomData.Code });
                 }
 
                 else
                 {
                     GAccount.Instance.accounts_mutex.WaitOne();
                     RemovePlayerFromRoom(GAccount.Instance.ConnectedAccounts[kre.Kicked], kre.RoomData);
+                    Global.BroadCast(null, new RoomDataEvent() { RoomData = Rooms[kre.RoomData.Code].Data });
                     Rooms_Mutex.ReleaseMutex();
                     GAccount.Instance.accounts_mutex.ReleaseMutex();
                 }
@@ -255,6 +256,8 @@ namespace ShadowHunter_Server.Rooms
                         Rooms[mre.RoomData.Code].Data.HasPassword = mre.RoomData.HasPassword;
                         Rooms[mre.RoomData.Code].Data.Password = mre.RoomData.Password;
 
+                        /* on doit passer une variable intermédiaire pour redimensionner
+                         * une propriété de tableau */
                         Rooms[mre.RoomData.Code].Data.MaxNbPlayer = mre.RoomData.MaxNbPlayer;
                         string[] tempPlayers = Rooms[mre.RoomData.Code].Data.Players;
                         Array.Resize(ref tempPlayers, mre.RoomData.MaxNbPlayer);
@@ -262,6 +265,8 @@ namespace ShadowHunter_Server.Rooms
                         bool[] tempsReadyPlayers = Rooms[mre.RoomData.Code].Data.ReadyPlayers;
                         Array.Resize(ref tempsReadyPlayers, mre.RoomData.MaxNbPlayer);
                         Rooms[mre.RoomData.Code].Data.ReadyPlayers = tempsReadyPlayers;
+
+                        Global.BroadCast(null, new RoomDataEvent() { RoomData = Rooms[mre.RoomData.Code].Data });
 
                         Rooms[mre.RoomData.Code].RoomData_Mutex.ReleaseMutex();
                         Rooms_Mutex.ReleaseMutex();
