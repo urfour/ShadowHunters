@@ -157,7 +157,7 @@ namespace ShadowHunter_Server.Rooms
                     room.RoomData_Mutex.WaitOne();
                     RoomData r = room.Data;
                     bool ready = true;
-                    for (int i = 0; i < r.CurrentNbPlayer; i++)
+                    for (int i = 0; (i < r.CurrentNbPlayer) && (i>=4); i++)
                     {
                         if (!r.ReadyPlayers[i])
                         {
@@ -177,6 +177,57 @@ namespace ShadowHunter_Server.Rooms
                     room.RoomData_Mutex.ReleaseMutex();
                 }
             }
+
+            if (e is KickRoomEvent kre)
+            {
+                Rooms_Mutex.WaitOne();
+                // on ne peut pas expulser un joueur qui n'est pas dans la salle
+                // précisée
+
+                if (!Rooms[kre.RoomData.Code].Data.Players.Contains(kre.Kicked.Login))
+                {
+                    Rooms_Mutex.ReleaseMutex();
+                    kre.GetSender().Send(new RoomFailureEvent()
+                        { Msg = "room.kicked_player_not_in_room" });
+
+                }
+
+                // seul l'hôte de la salle peut kick un autre joueur
+                else if (Rooms[kre.RoomData.Code].Data.Players[0] != kre.GetSender().Account.Login)
+                {
+                    Rooms_Mutex.ReleaseMutex();
+                    kre.GetSender().Send(new RoomFailureEvent()
+                        { Msg = "room.can_only_kick_if_host" });
+
+                }
+
+                // un joueur ne peut pas s'expulser lui-même
+                else if (kre.GetSender().Account == kre.Kicked)
+                {
+                    Rooms_Mutex.ReleaseMutex();
+                    kre.GetSender().Send(new RoomFailureEvent()
+                        { Msg = "room.cant_kick_yourself" });
+                }
+
+                // un joueur ne peut qu'expulser des membres de sa
+                // propre salle 
+                else if (!Rooms[kre.RoomData.Code].Data.Players.ToList().
+                    Contains(kre.GetSender().Account.Login))
+                {
+                    Rooms_Mutex.ReleaseMutex();
+                    kre.GetSender().Send(new RoomFailureEvent()
+                        { Msg = "room.can_only_kick_in_own_room" });
+                }
+
+                else
+                {
+                    GAccount.Instance.accounts_mutex.WaitOne();
+                    RemovePlayerFromRoom(GAccount.Instance.ConnectedAccounts[kre.Kicked], kre.RoomData);
+                    Rooms_Mutex.ReleaseMutex();
+                    GAccount.Instance.accounts_mutex.ReleaseMutex();
+                }
+            }
+
         }
 
 

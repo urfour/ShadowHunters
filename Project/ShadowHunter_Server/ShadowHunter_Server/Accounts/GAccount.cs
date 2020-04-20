@@ -18,7 +18,7 @@ namespace ShadowHunter_Server.Accounts
 
         public Dictionary<Account, Client> ConnectedAccounts { get; private set; } = 
             new Dictionary<Account, Client>();
-        private Mutex accounts_mutex = new Mutex();
+        public Mutex accounts_mutex = new Mutex();
 
         private Dictionary<string, Account> logins { get; set; } =
             new Dictionary<string, Account>();

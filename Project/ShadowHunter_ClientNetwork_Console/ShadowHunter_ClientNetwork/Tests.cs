@@ -11,6 +11,7 @@ namespace ShadowHunter_ClientNetwork
         int kode;
         string user = "testLogin";
         int maxPlayers = 8;
+        string kicked;
 
         public void LaunchTests()
         {
@@ -51,6 +52,15 @@ namespace ShadowHunter_ClientNetwork
                 {
                     kode = Int32.Parse(Console.ReadLine());
                     EventView.Manager.Emit(new StartGameEvent() { RoomData = new RoomData(kode, "testRoom", 8, 0, false, true) });
+                }
+                else if (String.Compare(msg, "kick") == 0) //message.room.invalid.start.recquire_all_players_ready
+                {
+                    kode = Int32.Parse(Console.ReadLine());
+                    kicked = Console.ReadLine();
+                    Account k = new Account();
+                    k.Login = kicked;
+                    k.IsLogged = true;
+                    EventView.Manager.Emit(new KickRoomEvent() { Kicked = new Account(), RoomData = new RoomData(kode, "testRoom", 8, 0, false, true) });
                 }
 
                 else
