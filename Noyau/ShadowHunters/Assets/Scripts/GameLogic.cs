@@ -15,6 +15,8 @@ using Scripts.event_out;
 /// </summary>
 public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 {
+    public static GameLogic instance{ get; set; }
+
     /// <summary>
     /// Nombre de joueurs de la partie courante
     /// </summary>
@@ -187,6 +189,8 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// </summary>
     void Start()
     {
+        instance = this;
+
         EventView.Manager.AddListener(this, true);
 
         KernelUI kui = gameObject.AddComponent<KernelUI>();
@@ -387,18 +391,35 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// </summary>
     /// <param name="PlayerId">Id du joueur</param>
     /// <param name="CardId">Id de la carte</param>
-    /// <param name="type">Type de la carte, 0=Dark 1=Light</param>
     /// <returns></returns>
-    void LooseEquipmentCard(int PlayerId, int CardId, int type)
+    void LooseEquipmentCard(int PlayerId, int CardId)
     {
         CharacterTeam team = m_players[PlayerId].Team;
-        string character = m_players[PlayerId].Character.characterName;
         bool revealed = m_players[PlayerId].Revealed.Value;
 
-        if (type == 0)
+        m_players[PlayerId].PrintCards();
+
+        // Si l'index de la carte correspond au nombre de cartes du joueur
+        if (m_players[PlayerId].ListCard.Count <= CardId)
         {
-            DarknessCard card = m_players[PlayerId].ListCard[CardId] as DarknessCard;
-            DarknessEffect effect = card.darknessEffect;
+            Debug.LogError("Erreur : l'index de la carte ne correspond pas à la liste de cartes du joueur.");
+            return;
+        }
+
+        Card card = m_players[PlayerId].ListCard[CardId];
+
+        // Si la carte est un equimement
+        if (!card.isEquipement)
+        {
+            Debug.LogError("Erreur : la carte n'est pas un equipement.");
+            return;
+        }
+
+        // Si la carte est une carte ténèbre
+        if (card.cardType == CardType.Darkness)
+        {
+            DarknessCard dcard = card as DarknessCard;
+            DarknessEffect effect = dcard.darknessEffect;
 
             switch (effect)
             {
@@ -419,10 +440,11 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                     break;
             }
         }
-        else if (type == 1)
+        // Si la carte est une carte lumière
+        else if (card.cardType == CardType.Light)
         {
-            LightCard card = m_players[PlayerId].ListCard[CardId] as LightCard;
-            LightEffect effect = card.lightEffect;
+            LightCard lcard = card as LightCard;
+            LightEffect effect = lcard.lightEffect;
 
             switch (effect)
             {
@@ -458,11 +480,15 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             }
         }
         else
-        {
             Debug.LogError("Erreur : type en paramètre invalide.");
-        }
+
+
+        Debug.Log("Defausse de : " + card.cardName);
+        Debug.Log("Effet : " + card.description);
 
         m_players[PlayerId].RemoveCard(CardId);
+
+        m_players[PlayerId].PrintCards();
     }
 
 
@@ -510,7 +536,20 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 TakingWoundsEffect(idPlayer, false, 2, -2);
                 break;
             case DarknessEffect.Banane:
-                GiveEquipmentCard(idPlayer);
+                bool hasEquip = false;
+
+                foreach (Card card in m_players[idPlayer].ListCard)
+                    if (card.isEquipement)
+                        hasEquip = true;
+
+                if (hasEquip)
+                    GiveEquipmentCard(idPlayer);
+                else
+                {
+                    m_players[idPlayer].Wounded(1);
+                    CheckPlayerDeath(idPlayer);
+
+                }
                 break;
             case DarknessEffect.ChauveSouris:
                 TakingWoundsEffect(idPlayer, false, 2, 1);
@@ -1028,10 +1067,16 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// <returns>Itération terminée</returns>
     void StealEquipmentCard(int thiefId)
     {
+        // On peut seulement choisir les joueurs vivants qui ont au moins une carte equipement
         List<int> choices = new List<int>();
         foreach (Player player in m_players)
             if (!player.IsDead() && player.Id != thiefId && player.ListCard.Count > 0)
-                choices.Add(player.Id);
+                foreach (Card card in player.ListCard)
+                    if (card.isEquipement)
+                    {
+                        choices.Add(player.Id);
+                        break;
+                    }
 
         if (choices.Count != 0)
         {
@@ -1055,6 +1100,17 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// <returns></returns>
     void StealEquipmentCard(int thiefId, int playerId)
     {
+        bool hasEquip = false;
+        foreach (Card card in Player.GetPlayer(playerId).ListCard)
+            if (card.isEquipement)
+                hasEquip = true;
+
+        if (!hasEquip)
+        {
+            Debug.LogError("Erreur : Le joueur choisi n'a pas de cartes équipement.");
+            return;
+        }
+
         EventView.Manager.Emit(new SelectStealCardFromPlayerEvent()
         {
             PlayerId = thiefId,
@@ -1069,26 +1125,28 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// <returns>Itération terminée</returns>
     void GiveEquipmentCard(int giverPlayerId)
     {
-
         if (m_players[giverPlayerId].ListCard.Count == 0)
         {
-            Debug.Log("Vous ne possédez aucune carte équipement.");
-            m_players[giverPlayerId].Wounded(1);
-            CheckPlayerDeath(giverPlayerId);
+            Debug.LogError("Vous ne possédez aucune carte equipement.");
+            return;
         }
-        else
-        {
-            List<int> choices = new List<int>();
-            foreach (Player player in m_players)
-                if (!player.IsDead() && player.Id != giverPlayerId && player.ListCard.Count >= 0)
-                    choices.Add(player.Id);
 
-            EventView.Manager.Emit(new SelectGiveCardEvent()
-            {
-                PlayerId = giverPlayerId,
-                PossibleTargetId = choices.ToArray()
-            });
+        List<int> choices = new List<int>();
+        foreach (Player player in m_players)
+            if (!player.IsDead() && player.Id != giverPlayerId)
+                choices.Add(player.Id);
+
+        if (choices.Count == 0)
+        {
+            Debug.LogError("Erreur : Vous ne pouvez donner de cartes equipements à personne");
+            return;
         }
+
+        EventView.Manager.Emit(new SelectGiveCardEvent()
+        {
+            PlayerId = giverPlayerId,
+            PossibleTargetId = choices.ToArray()
+        });
     }
 
     /// <summary>
@@ -1315,6 +1373,65 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 break;
         }
     }
+
+    /// <summary>
+    //    /// Test de victoire d'un joueur
+    //    /// </summary>
+    //    /// <param name="playerId">Id du joueur à tester</param>
+    void HasWon(int playerId)
+    {
+        switch (m_players[playerId].Character.characterWinningCondition)
+        {
+            case WinningCondition.BeingAlive:
+                if (!m_players[playerId].Dead.Value && m_isGameOver)
+                    m_players[playerId].HasWon.Value = true;
+                break;
+            case WinningCondition.HavingEquipement:
+                if (m_players[playerId].ListCard.Count >= 5)
+                {
+                    m_players[playerId].HasWon.Value = true;
+                    m_isGameOver = true;
+                }
+                break;
+            case WinningCondition.Bryan:
+                // TODO vérifier si tue un perso de 13 HP ou plus
+                if (m_players[playerId].Position == Position.Sanctuaire && m_isGameOver)
+                    m_players[playerId].HasWon.Value = true;
+                break;
+            case WinningCondition.David:
+                int nbCardsOwned = 0;
+                if (m_players[playerId].HasCrucifix.Value)
+                    nbCardsOwned++;
+                if (m_players[playerId].HasAmulet.Value)
+                    nbCardsOwned++;
+                if (m_players[playerId].HasSpear.Value)
+                    nbCardsOwned++;
+                if (m_players[playerId].HasToge.Value)
+                    nbCardsOwned++;
+
+                if (nbCardsOwned >= 3)
+                {
+                    m_players[playerId].HasWon.Value = true;
+                    m_isGameOver = true;
+                }
+                break;
+            case WinningCondition.HunterCondition:
+                if (m_nbShadowsDeads == m_nbShadows)
+                {
+                    m_players[playerId].HasWon.Value = true;
+                    m_isGameOver = true;
+                }
+                break;
+            case WinningCondition.ShadowCondition:
+                if (m_nbHuntersDead == m_nbHunters || m_nbNeutralsDeads == 3)
+                {
+                    m_players[playerId].HasWon.Value = true;
+                    m_isGameOver = true;
+                }
+                break;
+        }
+    }
+
 
     public void OnEvent(PlayerEvent e, string[] tags = null)
     {
@@ -1720,30 +1837,31 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             Player playerStealing = m_players[stealTarget.PlayerId];
             Player playerStealed = m_players[stealTarget.PlayerStealedId];
             string stealedCard = stealTarget.CardStealedName;
-
             int indexCard = playerStealed.HasCard(stealedCard);
-            playerStealing.AddCard(playerStealed.ListCard[indexCard]);
 
-            if (playerStealed.ListCard[indexCard].isEquipement)
-            {
-                if (playerStealed.ListCard[indexCard].cardType == CardType.Darkness)
-                {
-                    DarknessCardPower(playerStealed.ListCard[indexCard] as DarknessCard, playerStealing.Id);
-                    LooseEquipmentCard(playerStealed.Id, indexCard, 0);
-                }
-                else if (playerStealed.ListCard[indexCard].cardType == CardType.Light)
-                {
-                    LightCardPower(playerStealed.ListCard[indexCard] as LightCard, playerStealing.Id);
-                    LooseEquipmentCard(playerStealed.Id, indexCard, 1);
-                }
-            }
-            else
+            if(!playerStealed.ListCard[indexCard].isEquipement)
             {
                 Debug.LogError("Erreur : la carte choisie n'est pas un équipement et ne devrait pas être là.");
+                return;
             }
+
+            playerStealing.PrintCards();
+
+            playerStealing.AddCard(playerStealed.ListCard[indexCard]);
+
+            if (playerStealed.ListCard[indexCard].cardType == CardType.Darkness)
+                DarknessCardPower(playerStealed.ListCard[indexCard] as DarknessCard, playerStealing.Id);
+
+            else if (playerStealed.ListCard[indexCard].cardType == CardType.Light)
+                LightCardPower(playerStealed.ListCard[indexCard] as LightCard, playerStealing.Id);
+
+            LooseEquipmentCard(playerStealed.Id, indexCard);
 
             Debug.Log("La carte " + stealedCard + " a été volée au joueur "
                 + playerStealed.Name + " par le joueur " + playerStealing.Name + " !");
+
+
+            playerStealing.PrintCards();
         }
         else if (e is GiveCardEvent giveCard)
         {
@@ -1760,15 +1878,12 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             if (playerGiving.ListCard[indexCard].isEquipement)
             {
                 if (playerGiving.ListCard[indexCard].cardType == CardType.Darkness)
-                {
                     DarknessCardPower(playerGiving.ListCard[indexCard] as DarknessCard, playerGived.Id);
-                    LooseEquipmentCard(playerGiving.Id, indexCard, 0);
-                }
+
                 else if (playerGiving.ListCard[indexCard].cardType == CardType.Light)
-                {
                     LightCardPower(playerGiving.ListCard[indexCard] as LightCard, playerGived.Id);
-                    LooseEquipmentCard(playerGiving.Id, indexCard, 1);
-                }
+
+                LooseEquipmentCard(playerGiving.Id, indexCard);
             }
             else
                 Debug.LogError("Erreur : la carte choisie n'est pas un équipement et ne devrait pas être là.");
@@ -2014,21 +2129,40 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         {
             Player psing = m_players[test.PlayerId];
 
-            
-            for (int i = 0; i < 2; i++)
-            {
-                DarknessCard darknessCard = gameBoard.DrawCard(CardType.Darkness) as DarknessCard;
-                LightCard lightCard = gameBoard.DrawCard(CardType.Light) as LightCard;
-
-                psing.AddCard(darknessCard);
-                psing.AddCard(lightCard);
-            }
-
-            //psing.PrintCards();
-
             GiveEquipmentCard(psing.Id);
 
-            //psing.PrintCards();
+            /*
+             * Player psed1 = m_players[test.PlayerId + 1];
+            Player psed2 = m_players[test.PlayerId + 2];
+            Player psed3 = m_players[test.PlayerId + 3];
+
+            for (int i = 0; i < 2; i++)
+            {
+                LightCard dc = gameBoard.DrawCard(CardType.Light) as LightCard;
+                while (!dc.isEquipement)
+                {
+                    dc = gameBoard.DrawCard(CardType.Light) as LightCard;
+                }
+                psed1.AddCard(dc);
+                psed2.AddCard(dc);
+                psed3.AddCard(dc);
+            }
+
+            StealEquipmentCard(psing.Id);
+            */
+
+            /*
+            // Test carte lumière non equipement
+            LightCard dc = gameBoard.DrawCard(CardType.Light) as LightCard;
+            while(!dc.isEquipement)
+            {
+                dc = gameBoard.DrawCard(CardType.Light) as LightCard;
+            }
+            psing.AddCard(dc);
+
+            LooseEquipmentCard(psing.Id, 0);
+            */
+
         }
     }
 

@@ -14,25 +14,6 @@ namespace Scripts
 {
     class KernelUI : MonoBehaviour, IListener<PlayerEvent>
     {
-        // Boutons d'interaction
-        public Dropdown choiceDropdown;
-        public Button rollDicesButton;
-        public Button visionCardsButton;
-        public Button darknessCardsButton;
-        public Button lightCardsButton;
-        public Button attackPlayer;
-        public Button endTurn;
-        public Button revealCardButton;
-        public Button validateButton;
-        public Toggle woundsForestToggle;
-        public Toggle healForestToggle;
-        public Button usePowerButton;
-        public Button dontUsePowerButton;
-        public Toggle giveEquipmentToggle;
-        public Toggle takingWoundsToggle;
-        public GameObject namesInterface;
-        public GameObject woundsInterface;
-
         public int m_player_turn;
         public int[] throw1;
         public int[] throw2;
@@ -61,6 +42,7 @@ namespace Scripts
                 SelectedCardType = CardType.Vision
             });
         }
+
         public void drawDarknessCard()
         {
             EventView.Manager.Emit(new DrawCardEvent()
@@ -69,6 +51,7 @@ namespace Scripts
                 SelectedCardType = CardType.Darkness
             });
         }
+
         public void drawLightCard()
         {
             EventView.Manager.Emit(new DrawCardEvent()
@@ -134,8 +117,7 @@ namespace Scripts
 
         public void SelectDiceThrow()
         {
-            string rollChoosen = choiceDropdown.captionText.text;
-            int lancer = int.Parse(rollChoosen);
+            int lancer = 5;
             int D6,D4;
             if(lancer == throw1[0]+throw1[1])
             {
@@ -147,9 +129,6 @@ namespace Scripts
                 D6=throw2[0];
                 D4=throw2[1];
             }
-            choiceDropdown.ClearOptions();
-            choiceDropdown.gameObject.SetActive(false);
-            validateButton.gameObject.SetActive(false);
 
             EventView.Manager.Emit(new SelectedDiceEvent()
             {
@@ -240,7 +219,7 @@ namespace Scripts
             else if (e is SelectDiceThrow sdt)
             {
                 //choisit quel lancé de dés il veut
-                choiceDropdown.gameObject.SetActive(true);
+                //choiceDropdown.gameObject.SetActive(true);
                 throw1[0]=sdt.D6Dice1;
                 throw1[1]=sdt.D4Dice1;
 
@@ -249,8 +228,8 @@ namespace Scripts
                 List<string> throws=new List<string>();
                 throws.Add(throw1[0]+throw1[1].ToString());
                 throws.Add(throw2[0]+throw2[1].ToString());
-                choiceDropdown.AddOptions(throws);
-                validateButton.gameObject.SetActive(true);
+                //choiceDropdown.AddOptions(throws);
+                //validateButton.gameObject.SetActive(true);
 
             }
             else if (e is SelectMovement sm)
@@ -301,13 +280,13 @@ namespace Scripts
                 Player p = Player.GetPlayer(sscfpe.PlayerStealedId);
 
                 bool isEquip = false;
-                Card card = p.ListCard[UnityEngine.Random.Range(0, p.ListCard.Count)];
+                Card card = p.ListCard[UnityEngine.Random.Range(0, p.ListCard.Count-1)];
                 if (card.isEquipement)
                     isEquip = true;
 
                 while (!isEquip)
                 {
-                    card = p.ListCard[UnityEngine.Random.Range(0, p.ListCard.Count)];
+                    card = p.ListCard[UnityEngine.Random.Range(0, p.ListCard.Count-1)];
                     if(card.isEquipement)
                         isEquip = true;
                 }
