@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Noyau.Players.model;
+using EventSystem;
 using Scripts.Settings;
 using UnityEngine;
 
@@ -20,42 +22,11 @@ public enum PlayerNames
 /// </summary>
 public class Player
 {
-    //private int id;                  // ordre du jeu d'un joueur
-    //private string playerName;       // nom du joueur
-    //private CharacterTeam team;      // shadow/hunter/neutre
-    //private int life;                // nombre de points de vie
-    //private int wound;               // nombre de blessure
-    //private bool revealed;           // carte révélée à tous ou cachée
-    //private bool dead;               // vivant ou mort
-    //private bool usedPower;          // pouvoir déjà utilisé ou non
-    //private int bonusAttack;         // bonus d'attaque (par défaut = 0)
-    //private int malusAttack;         // malus d'attaque (par défaut = 0)
-    //private int reductionWounds;     // réduction du nombre de Blessures subites (par défaut = 0)
-    //private bool hasGatling;         // le joueur possède-t-il la mitrailleuse ?
-    //private bool hasRevolver;        // le joueur possède-t-il le revolver ?
-    //private bool hasSaber;           // le joueur possède-t-il le sabre ?
-    //private bool hasAmulet;          // le joueur possède-t-il l'amulette ?
-    //private bool hasCompass;         // le joueur possède-t-il la boussole ?
-    //private bool hasBroche;          // le joueur possède-t-il la broche ?
-    //private bool hasCrucifix;        // le joueur possède-t-il le crucifix ?
-    //private bool hasSpear;           // le joueur possède-t-il la lance ?
-    //private bool hasToge;            // le joueur possède-t-il la toge ?
-    //private bool hasGuardian;        // le joueur est-il sous l'effet de l'ange gardien ?
-    //private bool hasAncestral;       // le joueur est-il sous l'effet du savoir ancestral ?
-    //private bool isTurn;             // est-ce le tour du joueur ?
-    //private bool hasWon;             // le joueur a-t-il gagné ?
-    //private Position position;       // position du joueur
-    //private Character character;     // personnage du joueur
-    //private List<Card> listCard;     // liste des cartes possédées par le joueur
 
     // ordre du jeu d'un joueur
     public int Id { get; private set; }
     // nom du joueur
     public string Name { get; private set; }
-    // shadow/hunter/neutre
-    public CharacterTeam Team { get; private set; }
-    // nombre de points de vie
-    public int Life { get; private set; }
     // nombre de blessure
     public Setting<int> Wound { get; private set; } = new Setting<int>(0);
     // carte révélée à tous ou cachée
@@ -125,61 +96,79 @@ public class Player
  
     private static List<Player> players = new List<Player>();
 
-    public Player(int id)
+    public Player(int id, Character c)
     {
         this.Id = id;
         this.Name = ((PlayerNames)id).ToString();
-        this.Life = 0;
         this.Position = Position.None;
         this.ListCard = new List<Card>();
-        players.Add(this);
+        this.Character = c;
+
+        // add death logic
+        Wound.AddListener((sender) =>
+        {
+            if (Wound.Value >= this.Character.characterHP)
+            {
+                this.Dead.Value = true;
+            }
+        });
+
+        if (c.team.Equals(CharacterTeam.Hunter))
+        {
+            CheckWinningCondition = WinningConditionFunction.Hunter;
+            SetWinningListeners = WinningConditionFunction.Hunter_listeners;
+        }
+        //players.Add(this);
     }
 
-    public void Wounded(int damage)
+    public virtual void Wounded(int damage)
     {
         if (damage > 0 && !HasGuardian.Value)
         {
-            string blessure = " Blessure";
+            //string blessure = " Blessure";
             
             if (ReductionWounds.Value > 0)
                 damage = (damage - ReductionWounds.Value < 0) ? 0 : damage - ReductionWounds.Value;
 
             this.Wound.Value += damage;
+            /*
             if (damage > 1)
                 blessure += "s";
             Debug.Log("Le joueur " + Id + " subit " + damage + blessure + " !");
+            */
         }
-
+        /*
         if (HasGuardian.Value)
         {
             Debug.Log("Le joueur " + Id + " est protégé par l'Ange Gardien !");
         }
-
-        if (this.IsDead())
-            this.Dead.Value = true;
+        */
     }
 
-    public void Healed(int heal)
+    public virtual void Healed(int heal)
     {
-        if (this.IsDead())
+        if (Dead.Value)
             return;
 
-        else if (Wound.Value == 0)
+        this.Wound.Value -= Mathf.Min(heal, this.Wound.Value);
+
+        /*
+        else if ()
             Debug.Log("Le joueur n'a pas de Blessures, il n'est donc pas soigné.");
-
-        else if (heal > 0)
-        {
-            string blessure = " Blessure";
-            this.Wound.Value -= heal;
-            if (heal > 1)
-                blessure += "s";
-            Debug.Log("Le joueur " + Id + " est soigné de " + heal + blessure + " !");
-        }
-
+        */
+        //string blessure = " Blessure";
+        /*
+        if (heal > 1)
+            blessure += "s";
+        Debug.Log("Le joueur " + Id + " est soigné de " + heal + blessure + " !");
+        */
+        /*
         if (this.Wound.Value < 0)
             this.Wound.Value = 0;
+        */
     }
     
+    /*
     public void SetWound (int wound)
     {
 		if (this.IsDead())
@@ -196,7 +185,9 @@ public class Player
 		}
 
 	}
+    */
 
+    /*
     public bool IsDead()
     {
         if (this.Wound.Value >= this.Life)
@@ -204,6 +195,7 @@ public class Player
 
         return false;
     }
+    */
 
     public void PrintCards()
     {
@@ -227,13 +219,7 @@ public class Player
     {
         ListCard.RemoveAt(index);
     }
-
-    public void SetCharacter(Character character)
-    {
-        this.Team = character.team;
-        this.Life = character.characterHP;
-        this.Character = character;
-    }
+    
 
     public int HasCard(string cardName)
     {
@@ -245,6 +231,19 @@ public class Player
         return -1;
     }
 
+    private CheckWinningCondition CheckWinningCondition { get; set; }
+    private SetWinningListeners SetWinningListeners { get; set; }
+
+    public void CheckWon()
+    {
+        if (!this.HasWon.Value && CheckWinningCondition(this))
+        {
+            this.HasWon.Value = true;
+        }
+    }
+
+
+    /*
     public static Player GetPlayer(int id)
     {
         foreach(Player p in players)
@@ -255,4 +254,5 @@ public class Player
 
         return null;
     }
+    */
 }   

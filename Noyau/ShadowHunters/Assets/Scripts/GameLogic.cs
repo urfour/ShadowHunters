@@ -15,90 +15,7 @@ using Scripts.event_out;
 /// </summary>
 public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 {
-    /// <summary>
-    /// Nombre de joueurs de la partie courante
-    /// </summary>
-    private int m_nbPlayers = 0;
-    /// <summary>
-    /// Propriété d'accès au nombre de joueurs
-    /// </summary>
-    public int NbPlayers
-    {
-        get => m_nbPlayers;
-        private set => m_nbPlayers = value;
-    }
-    /// <summary>
-    /// Nombre de Hunters dans la partie
-    /// </summary>
-    private int m_nbHunters = 0;
-    /// <summary>
-    /// Propriété d'accès au nombre de Hunters
-    /// </summary>
-    public int NbHunters
-    {
-        get => m_nbHunters;
-        private set => m_nbHunters = value;
-    }
-    /// <summary>
-    /// Nombre de Hunters morts
-    /// </summary>
-    private int m_nbHuntersDead = 0;
-    /// <summary>
-    /// Propriété d'accès au nombre de Hunters morts
-    /// </summary>
-    public int NbHuntersDead
-    {
-        get => m_nbHuntersDead;
-        private set => m_nbHuntersDead = value;
-    }
-    /// <summary>
-    /// Nombre de Shadows dans la partie
-    /// </summary>
-    private int m_nbShadows = 0;
-    /// <summary>
-    /// Propriété d'accès au nombre de Shadows
-    /// </summary>
-    public int NbShadows
-    {
-        get => m_nbShadows;
-        private set => m_nbShadows = value;
-    }
-    /// <summary>
-    /// Nombre de Shadow morts
-    /// </summary>
-    private int m_nbShadowsDeads = 0;
-    /// <summary>
-    /// Propriété d'accès au nombre de Shadow morts
-    /// </summary>
-    public int NbShadowsDeads
-    {
-        get => m_nbShadowsDeads;
-        private set => m_nbShadowsDeads = value;
-    }
-    /// <summary>
-    /// Nombre de Neutres dans la partie
-    /// </summary>
-    private int m_nbNeutrals = 0;
-    /// <summary>
-    /// Propriété d'accès au nombre de Neutres
-    /// </summary>
-    public int NbNeutrals
-    {
-        get => m_nbNeutrals;
-        private set => m_nbNeutrals = value;
-    }
-    /// <summary>
-    /// Nombre de Neutres morts
-    /// </summary>
-    private int m_nbNeutralsDeads = 0;
-    /// <summary>
-    /// Propriété d'accès au nombre de Neutres morts
-    /// </summary>
-    public int NeutralsDeads
-    {
-        get => m_nbNeutralsDeads;
-        private set => m_nbNeutralsDeads = value;
-    }
+    
     /// <summary>
     /// Carte vision donné au métamorphe
     /// </summary>
@@ -180,7 +97,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     {
         EventView.Load();
     }
-
+    /*
     /// <summary>
     /// Fonction appelée dès l'instanciation du GameObject auquel est lié le script,
     /// permettant de préparer le jeu.
@@ -197,76 +114,11 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 
         const int NB_PLAYERS = 5;
         PrepareGame(NB_PLAYERS);
-        /*visionCardsButton.gameObject.SetActive(false);
-        darknessCardsButton.gameObject.SetActive(false);
-        lightCardsButton.gameObject.SetActive(false);
-        attackPlayer.gameObject.SetActive(false);
-        endTurn.gameObject.SetActive(false);
-        choiceDropdown.gameObject.SetActive(false);
-        validateButton.gameObject.SetActive(false);
-        usePowerButton.gameObject.SetActive(false);
-        dontUsePowerButton.gameObject.SetActive(false);
-        woundsForestToggle.gameObject.SetActive(false);
-        healForestToggle.gameObject.SetActive(false);
-        giveEquipmentToggle.gameObject.SetActive(false);
-        takingWoundsToggle.gameObject.SetActive(false);*/
+       
         //InitInterface();
         //ChooseNextPlayer();
     }
-
-
-    /// <summary>
-    /// Ajout d'un joueur à la partie
-    /// </summary>
-    /// <param name="p">Joueur à ajouter dans la partie</param>
-    void AddPlayer(Player p)
-    {
-        this.m_players.Add(p);
-        m_nbPlayers++;
-    }
-
-    /// <summary>
-    /// Suppression d'un joueur à la partie (lors d'une déconnexion par exemple)
-    /// </summary>
-    /// <param name="p">Joueur à supprimer de la partie</param>
-    void DeletePlayer(Player p)
-    {
-        for (int i = 0; i < this.m_players.Count; ++i)
-        {
-            if (this.m_players[i] == p)
-            {
-                this.m_players.RemoveAt(i);
-                NbPlayers--;
-                break;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Préparation des decks de cartes et répartition des personnages aux joueurs
-    /// </summary>
-    /// <param name="nbPlayers">Nombre de joueurs de la partie</param>
-    void PrepareGame(int nbPlayers)
-    {
-        m_players = new List<Player>();
-        Player p;
-        gameBoard = new GameBoard(m_locationCards.PrepareDecks<LocationCard>(),
-            m_visionCards.PrepareDecks<VisionCard>(), m_darknessCards.PrepareDecks<DarknessCard>(),
-            m_lightCards.PrepareDecks<LightCard>(), nbPlayers);
-        List<Character> characters;
-        for (int i = 0; i < nbPlayers; i++)
-        {
-            p = new Player(i);
-            AddPlayer(p);
-        }
-        characters = PrepareCharacterCards();
-        for (int i = 0; i < nbPlayers; i++)
-        {
-            m_players[i].SetCharacter(characters[0]);
-            characters.RemoveAt(0);
-        }
-
-    }
+    */
 
     /// <summary>
     /// Redistribution des cartes lorsqu'une des pioches est vide
@@ -285,104 +137,6 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     }
 
     /// <summary>
-    /// Fonction permettant de préparer un deck de cartes en fonction du nombre de joueurs
-    /// </summary>
-    /// <param name="deck">Deck final construit</param>
-    /// <param name="deckCharacter">Deck comportant les cartes personnages du même type</param>
-    /// <param name="nb">Nombre de cartes à ajouter dans la pile finale</param>
-    /// <param name="addBob">Booléen représentant la nécessité d'ajouter Bob ou non</param>
-    void AddCharacterCards(List<Character> deck, List<Character> deckCharacter, int nb, bool addBob)
-    {
-        for (int i = 0; i < nb; i++)
-        {
-            if (nb >= 7 && !addBob)
-                i--;
-            else
-                deck.Add(deckCharacter[i]);
-        }
-    }
-
-    /// <summary>
-    /// Préparation des cartes Personnage en fonction du nombre de joueurs
-    /// </summary>
-    /// <returns>Liste des cartes Personnage préparée</returns>
-    List<Character> PrepareCharacterCards()
-    {
-        List<Character> HuntersCards = new List<Character>();
-        List<Character> ShadowsCards = new List<Character>();
-        List<Character> NeutralsCards = new List<Character>();
-        List<Character> characterCards = new List<Character>();
-        bool addBob = true;
-        switch (m_nbPlayers)
-        {
-            case 4:
-                m_nbHunters = m_nbShadows = 2;
-                break;
-            case 5:
-                m_nbHunters = m_nbShadows = 2;
-                m_nbNeutrals = 1;
-                break;
-            case 6:
-                m_nbHunters = m_nbShadows = m_nbNeutrals = 2;
-                break;
-            case 7:
-                m_nbHunters = m_nbShadows = 2;
-                m_nbNeutrals = 3;
-                addBob = false;
-                break;
-            case 8:
-                m_nbHunters = m_nbShadows = 3;
-                m_nbNeutrals = 2;
-                addBob = false;
-                break;
-        }
-        HuntersCards = m_hunterCharacters.PrepareDecks<Character>();
-        ShadowsCards = m_shadowCharacters.PrepareDecks<Character>();
-        NeutralsCards = m_shadowCharacters.PrepareDecks<Character>();
-
-        AddCharacterCards(characterCards, HuntersCards, NbHunters, addBob);
-        AddCharacterCards(characterCards, ShadowsCards, NbShadows, addBob);
-        AddCharacterCards(characterCards, NeutralsCards, NbNeutrals, addBob);
-        return characterCards;
-    }
-
-
-    /// <summary>
-    /// Test de mort d'un joueur après avoir subi des Blessures
-    /// </summary>
-    /// <param name="playerId">Id du joueur à tester</param>
-    void CheckPlayerDeath(int playerId)
-    {
-        if (m_players[playerId].IsDead())
-        {
-            Debug.Log("Le joueur " + m_players[playerId].Name + " est mort !");
-
-            if (m_nbHuntersDead == 0 && m_nbShadowsDeads == 0 && m_nbNeutralsDeads == 0)
-            {
-                foreach (Player player in m_players)
-                {
-                    if (player.Character.characterType == CharacterType.Daniel)
-                    {
-                        PlayerCardPower(player);
-                    }
-                }
-            }
-
-            if (m_players[playerId].Team == CharacterTeam.Hunter)
-                m_nbHuntersDead++;
-            else if (m_players[playerId].Team == CharacterTeam.Shadow)
-                m_nbShadowsDeads++;
-            else
-                m_nbNeutralsDeads++;
-
-            // if(m_players[PlayerTurn.Value].Character.characterType == CharacterType.Bryan && m_players[playerId].Life <= 12 && !m_players[PlayerTurn.Value].Revealed)
-            // {
-            //     PlayerCardPower(m_players[PlayerTurn.Value]);
-            // }
-        }
-    }
-
-    /// <summary>
     /// Perte d'une carte équipement pour un joueur
     /// </summary>
     /// <param name="PlayerId">Id du joueur</param>
@@ -391,7 +145,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     /// <returns></returns>
     void LooseEquipmentCard(int PlayerId, int CardId, int type)
     {
-        CharacterTeam team = m_players[PlayerId].Team;
+        CharacterTeam team = m_players[PlayerId].Character.team;
         string character = m_players[PlayerId].Character.characterName;
         bool revealed = m_players[PlayerId].Revealed.Value;
 
@@ -481,7 +235,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         List<Player> players = new List<Player>();
         foreach (Player player in m_players)
         {
-            if (!player.IsDead() && player.Id != playerId && player.Position != Position.None)
+            if (!player.Dead.Value && player.Id != playerId && player.Position != Position.None)
             {
                 positionOtherPlayer = gameBoard.GetIndexOfPosition(player.Position);
                 if ((positionIndex % 2 == 0 && (positionOtherPlayer == positionIndex || positionOtherPlayer == positionIndex + 1))
@@ -571,7 +325,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             case DarknessEffect.Rituel:
                 Debug.Log("Voulez-vous vous révéler ? Vous avez 6 secondes, sinon la carte se défausse.");
 
-                if (m_players[idPlayer].Revealed.Value && m_players[idPlayer].Team == CharacterTeam.Shadow)
+                if (m_players[idPlayer].Revealed.Value && m_players[idPlayer].Character.team == CharacterTeam.Shadow)
                 {
                     m_players[idPlayer].Healed(m_players[idPlayer].Wound.Value);
                     Debug.Log("Le joueur " + m_players[idPlayer].Name + " se soigne complètement");
