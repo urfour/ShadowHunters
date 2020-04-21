@@ -28,5 +28,14 @@ namespace Assets.Noyau.Players.view
         }
 
         public static int NbPlayer { get; private set; }
+
+        public static Player NextPlayer(Player currentPlayer)
+        {
+            if (!gPlayer.Players[(currentPlayer.Id + 1) % NbPlayer].Dead.Value)
+            {
+                return gPlayer.Players[(currentPlayer.Id + 1) % NbPlayer];
+            }
+            else return NextPlayer(gPlayer.Players[(currentPlayer.Id + 1) % NbPlayer]);
+        }
     }
 }

@@ -67,34 +67,19 @@ public class Player
     public Setting<bool> HasWon { get; private set; } = new Setting<bool>(false);
     // position du joueur
     public Position Position { get; set; }
-    //bouton piocher carte lumière
-    public Setting<bool> DrawLightCard { get; private set; } = new Setting<bool>(false);
-    //bouton piocher carte ténèbres
-    public Setting<bool> DrawDarknessCard { get; private set; } = new Setting<bool>(false);
-    //bouton piocher carte vision
-    public Setting<bool> DrawVisionCard { get; private set; } = new Setting<bool>(false);
-    // est-ce le tour du joueur ?
-    public Setting<bool> IsTurn { get; private set; } = new Setting<bool>(false);
+    
     // personnage du joueur
     public Character Character { get; private set; }
+
     // liste des cartes possédées par le joueur
     public List<Card> ListCard { get; private set; }
     // le joueur peut-il utiliser son pouvoir ?
     public Setting<bool> CanUsePower { get; private set; } = new Setting<bool>(false);
-    // le joueur peut-il ne pas utiliser son pouvoir ?
-    public Setting<bool> CanNotUsePower { get; private set; } = new Setting<bool>(false);
-    //bouton attaque un joueur
-    public Setting<bool> AttackPlayer { get; private set; } = new Setting<bool>(false);
-    //bouton début de tour
-    public Setting<bool> RollTheDices { get; private set; } = new Setting<bool>(false);
-    //bouton fin de tour
-    public Setting<bool> EndTurn { get; private set; } = new Setting<bool>(false);
-    //bouton heal event foret
-    public Setting<bool> ForestHeal { get; private set; } = new Setting<bool>(false);
-    //bouton wounds event foret  
-    public Setting<bool> ForestWounds { get; private set; } = new Setting<bool>(false);
+
+    public Setting<bool> OnAttacked { get; private set; } = new Setting<bool>(false);
+    public Setting<int> OnDealDamage { get; private set; } = new Setting<int>(0);
  
-    private static List<Player> players = new List<Player>();
+    //private static List<Player> players = new List<Player>();
 
     public Player(int id, Character c)
     {
@@ -116,28 +101,18 @@ public class Player
         //players.Add(this);
     }
 
-    public virtual void Wounded(int damage)
+    public virtual int Wounded(int damage)
     {
         if (damage > 0 && !HasGuardian.Value)
         {
-            //string blessure = " Blessure";
-            
+
             if (ReductionWounds.Value > 0)
                 damage = (damage - ReductionWounds.Value < 0) ? 0 : damage - ReductionWounds.Value;
 
             this.Wound.Value += damage;
-            /*
-            if (damage > 1)
-                blessure += "s";
-            Debug.Log("Le joueur " + Id + " subit " + damage + blessure + " !");
-            */
+            return damage;
         }
-        /*
-        if (HasGuardian.Value)
-        {
-            Debug.Log("Le joueur " + Id + " est protégé par l'Ange Gardien !");
-        }
-        */
+        return 0;
     }
 
     public virtual void Healed(int heal)
@@ -146,51 +121,8 @@ public class Player
             return;
 
         this.Wound.Value -= Mathf.Min(heal, this.Wound.Value);
-
-        /*
-        else if ()
-            Debug.Log("Le joueur n'a pas de Blessures, il n'est donc pas soigné.");
-        */
-        //string blessure = " Blessure";
-        /*
-        if (heal > 1)
-            blessure += "s";
-        Debug.Log("Le joueur " + Id + " est soigné de " + heal + blessure + " !");
-        */
-        /*
-        if (this.Wound.Value < 0)
-            this.Wound.Value = 0;
-        */
     }
     
-    /*
-    public void SetWound (int wound)
-    {
-		if (this.IsDead())
-            return;
-            
-        if (wound > 0)
-        {
-			string blessure = " Blessure";
-            if (wound > 1)
-				blessure += "s";
-				
-			this.Wound.Value = wound;
-			Debug.Log("Le joueur " + Id + " a maintenant " + wound + blessure + " !");
-		}
-
-	}
-    */
-
-    /*
-    public bool IsDead()
-    {
-        if (this.Wound.Value >= this.Life)
-            return true;
-
-        return false;
-    }
-    */
 
     public void PrintCards()
     {
@@ -225,18 +157,4 @@ public class Player
         }
         return -1;
     }
-
-
-    /*
-    public static Player GetPlayer(int id)
-    {
-        foreach(Player p in players)
-        {
-            if (p.Id == id)
-                return p;
-        }
-
-        return null;
-    }
-    */
 }   
