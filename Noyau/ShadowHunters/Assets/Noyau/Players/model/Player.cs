@@ -112,12 +112,7 @@ public class Player
                 this.Dead.Value = true;
             }
         });
-
-        if (c.team.Equals(CharacterTeam.Hunter))
-        {
-            CheckWinningCondition = WinningConditionFunction.Hunter;
-            SetWinningListeners = WinningConditionFunction.Hunter_listeners;
-        }
+        
         //players.Add(this);
     }
 
@@ -229,17 +224,6 @@ public class Player
                 return i;
         }
         return -1;
-    }
-
-    private CheckWinningCondition CheckWinningCondition { get; set; }
-    private SetWinningListeners SetWinningListeners { get; set; }
-
-    public void CheckWon()
-    {
-        if (!this.HasWon.Value && CheckWinningCondition(this))
-        {
-            this.HasWon.Value = true;
-        }
     }
 
 
