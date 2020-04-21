@@ -9,10 +9,15 @@ namespace ServerInterface.Network
 {
     public class NetworkView
     {
-
+        private static Client client;
         public static void Connect()
         {
-            new Client();
+            client= new Client();
+        }
+
+        public static void Disconnect()
+        {
+            client.Stop();
         }
     }
 }

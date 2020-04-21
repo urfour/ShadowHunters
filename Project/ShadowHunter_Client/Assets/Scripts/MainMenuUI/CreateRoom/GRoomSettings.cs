@@ -17,7 +17,7 @@ namespace Assets.Scripts.MainMenuUI.CreateRoom
     class GRoomSettings : MonoBehaviour
     {
         public InputField name;
-        public InputField password;
+        public Toggle isPrivate;
         public Slider nbPlayers;
         public Text displayNbPlayers;
 
@@ -31,19 +31,12 @@ namespace Assets.Scripts.MainMenuUI.CreateRoom
             nbPlayers.minValue = 4;
 
             OnNbPlayerChange();
-            OnPassWordChange();
             OnNameChange();
         }
 
         public void OnNameChange()
         {
             data.Name = name.text;
-        }
-
-        public void OnPassWordChange()
-        {
-            data.Password = password.text;
-            data.HasPassword = data.Password == null || data.Password.Length == 0;
         }
 
         public void OnNbPlayerChange()
@@ -54,6 +47,7 @@ namespace Assets.Scripts.MainMenuUI.CreateRoom
 
         public void Create()
         {
+            data.IsPrivate = isPrivate.isOn;
             EventView.Manager.Emit(new CreateRoomEvent(data));
         }
 

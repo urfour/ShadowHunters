@@ -2,8 +2,7 @@
 using EventSystem;
 using ServerInterface.RoomEvents;
 using UnityEngine;
-
-
+using UnityEngine.UI;
 
 class RoomComponent : MonoBehaviour, IListener<RoomEvent>
 {
@@ -20,6 +19,7 @@ class RoomComponent : MonoBehaviour, IListener<RoomEvent>
     public MenuSelection searchRoom;
     public MenuSelection waitingRoom;
 
+    public InputField privateJoinCode;
     public GameObject WaitingRoomListContent;
     public GameObject RoomPrefab;
 
@@ -80,9 +80,42 @@ class RoomComponent : MonoBehaviour, IListener<RoomEvent>
         
         foreach (var pair in GRoom.Instance.Rooms)
         {
-            GameObject o = GameObject.Instantiate(RoomPrefab, WaitingRoomListContent.transform);
-            RoomBarComponent rbc = o.GetComponent<RoomBarComponent>();
-            rbc.Display(pair.Value);
+            if (!pair.Value.IsPrivate.Value)
+            {
+                GameObject o = GameObject.Instantiate(RoomPrefab, WaitingRoomListContent.transform);
+                RoomBarComponent rbc = o.GetComponent<RoomBarComponent>();
+                rbc.Display(pair.Value);
+            }
+        }
+    }
+
+    public void OnPrivateJoin()
+    {
+        int code;
+        if (int.TryParse(privateJoinCode.text.Substring(1), out code))
+        {
+            EventView.Manager.Emit(new JoinRoomEvent() { RoomData = new RoomData() { Code = code } });
+        }
+    }
+
+    public void OnCodeTextModified(string newText)
+    {
+        Debug.Log("1 : " + privateJoinCode.text);
+        if (privateJoinCode.text.Length <= 0)
+        {
+            privateJoinCode.text = "#";
+        }
+        if (privateJoinCode.text[0] != '#')
+        {
+            privateJoinCode.text = '#' + privateJoinCode.text;
+        }
+        for (int i = privateJoinCode.text.Length-1; i > 0; i--)
+        {
+            if (!char.IsDigit(privateJoinCode.text[i]))
+            {
+                privateJoinCode.text = privateJoinCode.text.Remove(i,1);
+                //Debug.Log("1 : " + privateJoinCode.text);
+            }
         }
     }
 }

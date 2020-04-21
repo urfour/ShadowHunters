@@ -9,15 +9,15 @@ namespace ServerInterface.RoomEvents
     [Serializable]
     public class RoomData
     {
-        public RoomData(int code, string name, int maxNbPlayers, int currentNbPlayers, bool isSuppressed, bool hasPassword, bool isLaunched = false)
+        public RoomData(int code, string name, int maxNbPlayers, int currentNbPlayers, bool isSuppressed, bool isPrivate, bool isLaunched = false)
         {
             Code = code;
             Name = name;
             MaxNbPlayer = maxNbPlayers;
             CurrentNbPlayer = currentNbPlayers;
             IsSuppressed = isSuppressed;
-            HasPassword = hasPassword;
-            this.IsLaunched = isLaunched;
+            IsPrivate = isPrivate;
+            IsLaunched = isLaunched;
         }
 
         public RoomData()
@@ -36,7 +36,7 @@ namespace ServerInterface.RoomEvents
         // defined by host
         public string Name { get; set; } = "";
         public int MaxNbPlayer { get; set; } = 0;
-        public bool HasPassword { get; set; } = false;
+        public bool IsPrivate { get; set; } = false;
         public string Password { get; set; } = "";
     }
 }

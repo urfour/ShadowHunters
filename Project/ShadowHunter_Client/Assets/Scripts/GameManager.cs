@@ -63,6 +63,7 @@ namespace Assets.Scripts
         private void OnApplicationQuit()
         {
             SettingManager.Save();
+            ServerInterface.Network.NetworkView.Disconnect();
         }
 
         private void Update()

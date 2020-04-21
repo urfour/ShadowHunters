@@ -15,7 +15,7 @@ namespace Assets.Scripts.MainMenuUI.SearchGame
         public Setting<string> Name = new Setting<string>("");
         public Setting<int> CurrentNbPlayer = new Setting<int>(0);
         public Setting<int> MaxNbPlayer = new Setting<int>(0);
-        public Setting<bool> HasPassword = new Setting<bool>(false);
+        public Setting<bool> IsPrivate = new Setting<bool>(false);
         public Setting<string[]> Players = new Setting<string[]>(null);
 
         public Setting<bool> IsActive = new Setting<bool>(false);
@@ -38,7 +38,7 @@ namespace Assets.Scripts.MainMenuUI.SearchGame
             Name.Value = data.Name;
             MaxNbPlayer.Value = data.MaxNbPlayer;
             CurrentNbPlayer.Value = data.CurrentNbPlayer;
-            HasPassword.Value = data.HasPassword;
+            IsPrivate.Value = data.IsPrivate;
             IsActive.Value = true;
             Players.Value = data.Players;
             RawData = data;
