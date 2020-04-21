@@ -9,6 +9,7 @@ using Scripts;
 using Scripts.Settings;
 using Scripts.event_in;
 using Scripts.event_out;
+using Assets.Noyau.Players.view;
 
 namespace Scripts
 {
@@ -174,7 +175,7 @@ namespace Scripts
             }
             else if (e is SelectGiveCardEvent sgce)
             {
-                Player p = Player.GetPlayer(sgce.PlayerId);
+                Player p = PlayerView.GetPlayer(sgce.PlayerId);
 
                 bool isEquip = false;
                 Card card = p.ListCard[UnityEngine.Random.Range(0, p.ListCard.Count)];
@@ -266,7 +267,7 @@ namespace Scripts
             }
             else if (e is SelectStealCardEvent ssce)
             {
-                Player p = Player.GetPlayer(ssce.PossiblePlayerTargetId[UnityEngine.Random.Range(0, ssce.PossiblePlayerTargetId.Length)]);
+                Player p = PlayerView.GetPlayer(ssce.PossiblePlayerTargetId[UnityEngine.Random.Range(0, ssce.PossiblePlayerTargetId.Length)]);
 
                 EventView.Manager.Emit(new StealCardEvent()
                 {
@@ -277,7 +278,7 @@ namespace Scripts
             }
             else if (e is SelectStealCardFromPlayerEvent sscfpe)
             {
-                Player p = Player.GetPlayer(sscfpe.PlayerStealedId);
+                Player p = PlayerView.GetPlayer(sscfpe.PlayerStealedId);
 
                 bool isEquip = false;
                 Card card = p.ListCard[UnityEngine.Random.Range(0, p.ListCard.Count-1)];
@@ -304,7 +305,7 @@ namespace Scripts
                 bool up = false;
                 int pc = svpe.PossiblePlayerTargetId[UnityEngine.Random.Range(0, svpe.PossiblePlayerTargetId.Length)];
                 
-                if (Player.GetPlayer(pc).Character.characterType == CharacterType.Metamorphe)
+                if (PlayerView.GetPlayer(pc).Character.characterName == "Metamorphe")
                 {
                     if (UnityEngine.Random.Range(0, 1) == 0)
                         up = true;
