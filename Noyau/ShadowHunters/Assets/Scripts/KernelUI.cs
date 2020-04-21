@@ -10,6 +10,7 @@ using Scripts.Settings;
 using Scripts.event_in;
 using Scripts.event_out;
 using Assets.Noyau.Players.view;
+using Assets.Noyau.Cards.controller;
 
 namespace Scripts
 {
