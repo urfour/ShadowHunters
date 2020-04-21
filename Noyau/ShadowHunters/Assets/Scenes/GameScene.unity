@@ -210,23 +210,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 882858b6bddaf524dbb7b4d14817155a, type: 2}
   - {fileID: 11400000, guid: e5cc63057eb1f8d4b9f8a2c1638fb24e, type: 2}
   - {fileID: 11400000, guid: 7583d1b4fd71d604284a37d0c3c5e4e9, type: 2}
-  choiceDropdown: {fileID: 1875509073}
-  rollDicesButton: {fileID: 1279877997}
-  visionCardsButton: {fileID: 1622182318}
-  darknessCardsButton: {fileID: 433528464}
-  lightCardsButton: {fileID: 1501343778}
-  attackPlayer: {fileID: 99892200}
-  endTurn: {fileID: 1184086833}
-  revealCardButton: {fileID: 484115347}
-  validateButton: {fileID: 723568696}
-  woundsForestToggle: {fileID: 1838999765}
-  healForestToggle: {fileID: 299006590}
-  usePowerButton: {fileID: 167852033}
-  dontUsePowerButton: {fileID: 1083289093}
-  giveEquipmentToggle: {fileID: 1121723515}
-  takingWoundsToggle: {fileID: 821838126}
-  namesInterface: {fileID: 865312053}
-  woundsInterface: {fileID: 839861276}
 --- !u!4 &51328583 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 944627813585360565, guid: 5b9e8926d2585934db02d0954ad61acc,
@@ -533,8 +516,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 16695193}
-        m_MethodName: UsePower
+      - m_Target: {fileID: 633012177}
+        m_MethodName: usePower
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -601,11 +584,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 16695193}
+      objectReference: {fileID: 633012177}
     - target: {fileID: 1107092884582795333, guid: 5e46be9c0682943409b4bb6631cdad1b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Attack
+      value: attack
       objectReference: {fileID: 0}
     - target: {fileID: 1107092884582795335, guid: 5e46be9c0682943409b4bb6631cdad1b,
         type: 3}
@@ -789,6 +772,49 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 6754767891083242361}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &264205437
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 264205439}
+  - component: {fileID: 264205438}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &264205438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 264205437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6188aa4934003f04f87bd4f1e6e0d4f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &264205439
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 264205437}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.834152, y: 2.13589, z: -8.732792}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &299006588
 GameObject:
   m_ObjectHideFlags: 0
@@ -1420,6 +1446,117 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 619981714}
   m_CullTransparentMesh: 0
+--- !u!1001 &633012174
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2033454697}
+    m_Modifications:
+    - target: {fileID: 907491972685749886, guid: e188f7439ef76184a86dbac0b4d820ba,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 907491972685749886, guid: e188f7439ef76184a86dbac0b4d820ba,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 907491972685749886, guid: e188f7439ef76184a86dbac0b4d820ba,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 907491972685749886, guid: e188f7439ef76184a86dbac0b4d820ba,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 907491972685749886, guid: e188f7439ef76184a86dbac0b4d820ba,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 907491972685749886, guid: e188f7439ef76184a86dbac0b4d820ba,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 907491972685749886, guid: e188f7439ef76184a86dbac0b4d820ba,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 907491972685749886, guid: e188f7439ef76184a86dbac0b4d820ba,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 907491972685749886, guid: e188f7439ef76184a86dbac0b4d820ba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 907491972685749886, guid: e188f7439ef76184a86dbac0b4d820ba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 907491972685749886, guid: e188f7439ef76184a86dbac0b4d820ba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8076767854121148821, guid: e188f7439ef76184a86dbac0b4d820ba,
+        type: 3}
+      propertyPath: m_Name
+      value: KernelUI
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e188f7439ef76184a86dbac0b4d820ba, type: 3}
+--- !u!4 &633012175 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 907491972685749886, guid: e188f7439ef76184a86dbac0b4d820ba,
+    type: 3}
+  m_PrefabInstance: {fileID: 633012174}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &633012176 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8076767854121148821, guid: e188f7439ef76184a86dbac0b4d820ba,
+    type: 3}
+  m_PrefabInstance: {fileID: 633012174}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &633012177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 633012176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1332d95577852504f86a38f7ff99b03e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  choiceDropdown: {fileID: 1875509073}
+  rollDicesButton: {fileID: 1279877997}
+  visionCardsButton: {fileID: 1622182318}
+  darknessCardsButton: {fileID: 433528464}
+  lightCardsButton: {fileID: 1501343778}
+  attackPlayer: {fileID: 99892200}
+  endTurn: {fileID: 1184086833}
+  revealCardButton: {fileID: 484115347}
+  validateButton: {fileID: 723568696}
+  woundsForestToggle: {fileID: 1838999765}
+  healForestToggle: {fileID: 299006590}
+  usePowerButton: {fileID: 167852033}
+  dontUsePowerButton: {fileID: 1083289093}
+  giveEquipmentToggle: {fileID: 1121723515}
+  takingWoundsToggle: {fileID: 821838126}
+  namesInterface: {fileID: 865312053}
+  woundsInterface: {fileID: 839861276}
+  m_player_turn: 0
 --- !u!1001 &693446274
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1546,11 +1683,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 16695193}
+      objectReference: {fileID: 633012177}
     - target: {fileID: 7811855329484979437, guid: 1afe385ff9c7b2b4cbf5cb5ff7a5c542,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: RevealCard
+      value: revealCard
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1afe385ff9c7b2b4cbf5cb5ff7a5c542, type: 3}
@@ -2121,8 +2258,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 16695193}
-        m_MethodName: DontUsePower
+      - m_Target: {fileID: 633012177}
+        m_MethodName: dontUsePower
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2361,11 +2498,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 16695193}
+      objectReference: {fileID: 633012177}
     - target: {fileID: 1107092884582795333, guid: 5e46be9c0682943409b4bb6631cdad1b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ChooseNextPlayer
+      value: endOfTurn
       objectReference: {fileID: 0}
     - target: {fileID: 1107092884582795335, guid: 5e46be9c0682943409b4bb6631cdad1b,
         type: 3}
@@ -3189,6 +3326,11 @@ GameObject:
   - component: {fileID: 2033454696}
   - component: {fileID: 2033454695}
   - component: {fileID: 2033454694}
+  - component: {fileID: 2033454700}
+  - component: {fileID: 2033454699}
+  - component: {fileID: 2033454698}
+  - component: {fileID: 2033454701}
+  - component: {fileID: 2033454702}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -3291,6 +3433,7 @@ RectTransform:
   - {fileID: 423380131}
   - {fileID: 1121723516}
   - {fileID: 821838125}
+  - {fileID: 633012175}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3299,6 +3442,156 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &2033454698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033454693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1332d95577852504f86a38f7ff99b03e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  choiceDropdown: {fileID: 0}
+  rollDicesButton: {fileID: 0}
+  visionCardsButton: {fileID: 0}
+  darknessCardsButton: {fileID: 0}
+  lightCardsButton: {fileID: 0}
+  attackPlayer: {fileID: 0}
+  endTurn: {fileID: 0}
+  revealCardButton: {fileID: 0}
+  validateButton: {fileID: 0}
+  woundsForestToggle: {fileID: 0}
+  healForestToggle: {fileID: 0}
+  usePowerButton: {fileID: 0}
+  dontUsePowerButton: {fileID: 0}
+  giveEquipmentToggle: {fileID: 0}
+  takingWoundsToggle: {fileID: 0}
+  namesInterface: {fileID: 0}
+  woundsInterface: {fileID: 0}
+  m_player_turn: 0
+--- !u!114 &2033454699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033454693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1332d95577852504f86a38f7ff99b03e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  choiceDropdown: {fileID: 0}
+  rollDicesButton: {fileID: 0}
+  visionCardsButton: {fileID: 0}
+  darknessCardsButton: {fileID: 0}
+  lightCardsButton: {fileID: 0}
+  attackPlayer: {fileID: 0}
+  endTurn: {fileID: 0}
+  revealCardButton: {fileID: 0}
+  validateButton: {fileID: 0}
+  woundsForestToggle: {fileID: 0}
+  healForestToggle: {fileID: 0}
+  usePowerButton: {fileID: 0}
+  dontUsePowerButton: {fileID: 0}
+  giveEquipmentToggle: {fileID: 0}
+  takingWoundsToggle: {fileID: 0}
+  namesInterface: {fileID: 0}
+  woundsInterface: {fileID: 0}
+  m_player_turn: 0
+--- !u!114 &2033454700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033454693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1332d95577852504f86a38f7ff99b03e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  choiceDropdown: {fileID: 0}
+  rollDicesButton: {fileID: 0}
+  visionCardsButton: {fileID: 0}
+  darknessCardsButton: {fileID: 0}
+  lightCardsButton: {fileID: 0}
+  attackPlayer: {fileID: 0}
+  endTurn: {fileID: 0}
+  revealCardButton: {fileID: 0}
+  validateButton: {fileID: 0}
+  woundsForestToggle: {fileID: 0}
+  healForestToggle: {fileID: 0}
+  usePowerButton: {fileID: 0}
+  dontUsePowerButton: {fileID: 0}
+  giveEquipmentToggle: {fileID: 0}
+  takingWoundsToggle: {fileID: 0}
+  namesInterface: {fileID: 0}
+  woundsInterface: {fileID: 0}
+  m_player_turn: 0
+--- !u!114 &2033454701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033454693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1332d95577852504f86a38f7ff99b03e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  choiceDropdown: {fileID: 0}
+  rollDicesButton: {fileID: 0}
+  visionCardsButton: {fileID: 0}
+  darknessCardsButton: {fileID: 0}
+  lightCardsButton: {fileID: 0}
+  attackPlayer: {fileID: 0}
+  endTurn: {fileID: 0}
+  revealCardButton: {fileID: 0}
+  validateButton: {fileID: 0}
+  woundsForestToggle: {fileID: 0}
+  healForestToggle: {fileID: 0}
+  usePowerButton: {fileID: 0}
+  dontUsePowerButton: {fileID: 0}
+  giveEquipmentToggle: {fileID: 0}
+  takingWoundsToggle: {fileID: 0}
+  namesInterface: {fileID: 0}
+  woundsInterface: {fileID: 0}
+  m_player_turn: 0
+--- !u!114 &2033454702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033454693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1332d95577852504f86a38f7ff99b03e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  choiceDropdown: {fileID: 0}
+  rollDicesButton: {fileID: 0}
+  visionCardsButton: {fileID: 0}
+  darknessCardsButton: {fileID: 0}
+  lightCardsButton: {fileID: 0}
+  attackPlayer: {fileID: 0}
+  endTurn: {fileID: 0}
+  revealCardButton: {fileID: 0}
+  validateButton: {fileID: 0}
+  woundsForestToggle: {fileID: 0}
+  healForestToggle: {fileID: 0}
+  usePowerButton: {fileID: 0}
+  dontUsePowerButton: {fileID: 0}
+  giveEquipmentToggle: {fileID: 0}
+  takingWoundsToggle: {fileID: 0}
+  namesInterface: {fileID: 0}
+  woundsInterface: {fileID: 0}
+  m_player_turn: 0
 --- !u!1 &2114354529
 GameObject:
   m_ObjectHideFlags: 0
@@ -3570,11 +3863,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 16695193}
+      objectReference: {fileID: 633012177}
     - target: {fileID: 1107092884582795333, guid: 5e46be9c0682943409b4bb6631cdad1b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: MoveVisionCardLocation
+      value: drawVisionCard
       objectReference: {fileID: 0}
     - target: {fileID: 1107092884582795335, guid: 5e46be9c0682943409b4bb6631cdad1b,
         type: 3}
@@ -4259,11 +4552,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 16695193}
+      objectReference: {fileID: 633012177}
     - target: {fileID: 6642864351862459283, guid: 2ad3e48487a41724ca24bfe37a2416ad,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: MoveLightCardLocation
+      value: drawLightCard
       objectReference: {fileID: 0}
     - target: {fileID: 6642864351862459374, guid: 2ad3e48487a41724ca24bfe37a2416ad,
         type: 3}
@@ -4403,7 +4696,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 16695193}
+      objectReference: {fileID: 633012177}
     - target: {fileID: 6754767889942529399, guid: 61d414181eaf02f459f0dce8a2bff433,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
@@ -4417,7 +4710,7 @@ PrefabInstance:
     - target: {fileID: 6754767889942529399, guid: 61d414181eaf02f459f0dce8a2bff433,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: RollTheDices
+      value: rollDices
       objectReference: {fileID: 0}
     - target: {fileID: 6754767889942529399, guid: 61d414181eaf02f459f0dce8a2bff433,
         type: 3}
@@ -4552,11 +4845,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 16695193}
+      objectReference: {fileID: 633012177}
     - target: {fileID: 7811855329484979437, guid: 1afe385ff9c7b2b4cbf5cb5ff7a5c542,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: MoveDarknessCardLocation
+      value: drawDarknessCard
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1afe385ff9c7b2b4cbf5cb5ff7a5c542, type: 3}

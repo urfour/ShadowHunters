@@ -142,11 +142,11 @@ namespace EventSystem.controller
             if (EventsToLaunch.Count > 0)
             {
                 eventsToLaunch_Mutex.WaitOne();
-                foreach (WaitingLaunchEvent e in EventsToLaunch)
+                while (EventsToLaunch.Count > 0)
                 {
+                    WaitingLaunchEvent e = EventsToLaunch.Dequeue();
                     e.Listener.OnEvent(e.Event, e.Tags);
                 }
-                EventsToLaunch.Clear();
                 eventsToLaunch_Mutex.ReleaseMutex();
             }
         }

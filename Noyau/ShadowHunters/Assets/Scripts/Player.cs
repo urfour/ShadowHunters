@@ -118,6 +118,12 @@ public class Player
     public Setting<bool> RollTheDices { get; private set; } = new Setting<bool>(false);
     //bouton fin de tour
     public Setting<bool> EndTurn { get; private set; } = new Setting<bool>(false);
+    //bouton heal event foret
+    public Setting<bool> ForestHeal { get; private set; } = new Setting<bool>(false);
+    //bouton wounds event foret  
+    public Setting<bool> ForestWounds { get; private set; } = new Setting<bool>(false);
+ 
+    private static List<Player> players = new List<Player>();
 
     public Player(int id)
     {
@@ -126,6 +132,7 @@ public class Player
         this.Life = 0;
         this.Position = Position.None;
         this.ListCard = new List<Card>();
+        players.Add(this);
     }
 
     public void Wounded(int damage)
@@ -236,5 +243,16 @@ public class Player
                 return i;
         }
         return -1;
+    }
+
+    public static Player GetPlayer(int id)
+    {
+        foreach(Player p in players)
+        {
+            if (p.Id == id)
+                return p;
+        }
+
+        return null;
     }
 }   
