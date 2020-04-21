@@ -66,6 +66,7 @@ namespace ShadowHunter_ClientNetwork
 
                 else if (String.Compare(msg, "leave") == 0) //ok
                 {
+                    kode = Int32.Parse(Console.ReadLine());
                     EventView.Manager.Emit(new LeaveRoomEvent() { RoomData = new RoomData(kode, "testRoom", 8, 0, false, true) });
                 }
 

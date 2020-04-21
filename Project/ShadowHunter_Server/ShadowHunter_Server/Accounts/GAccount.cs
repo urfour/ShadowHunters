@@ -41,34 +41,35 @@ namespace ShadowHunter_Server.Accounts
                 {
                     e.GetSender().Send(new AuthInvalidEvent() { Msg = "message.auth.invalid.already_logged" });
                 }
+                else {
+                    switch (Authentify(lie.Account.Login, lie.Password))
+                    {
+                        // si l'utilisateur n'existe pas
+                        case 2:
+                            e.GetSender().Send(new AuthInvalidEvent() { Msg = "message.auth.invalid.login.login_invalid" });
+                            break;
 
-                switch(Authentify(lie.Account.Login, lie.Password))
-                {
-                    // si l'utilisateur n'existe pas
-                    case 2:
-                        e.GetSender().Send(new AuthInvalidEvent() { Msg = "message.auth.invalid.login.login_invalid" });
-                        break;
+                        // si le mot de passe n'est pas bon
+                        case 1:
+                            e.GetSender().Send(new AuthInvalidEvent() { Msg = "message.auth.invalid.login.password_invalid" });
+                            break;
 
-                    // si le mot de passe n'est pas bon
-                    case 1:
-                        e.GetSender().Send(new AuthInvalidEvent() { Msg = "message.auth.invalid.login.password_invalid" });
-                        break;
-
-                    // si les identifiants sont valides
-                    case 0:
-                        if (ConnectedAccounts.ContainsKey(lie.Account))
-                        {
-                            e.GetSender().Send(new AuthInvalidEvent() { Msg = "message.auth.invalid.account_already_online" });
-                        }
-                        else
-                        {
-                            lie.Account.IsLogged = true;
-                            ConnectedAccounts.Add(lie.Account, e.GetSender());
-                            e.GetSender().Account = lie.Account;
-                            e.GetSender().Send(new AssingAccountEvent(lie.Account));
-                            GRoom.Instance.AddClient(e.GetSender());
-                        }
-                        break;
+                        // si les identifiants sont valides
+                        case 0:
+                            if (ConnectedAccounts.ContainsKey(lie.Account))
+                            {
+                                e.GetSender().Send(new AuthInvalidEvent() { Msg = "message.auth.invalid.account_already_online" });
+                            }
+                            else
+                            {
+                                lie.Account.IsLogged = true;
+                                ConnectedAccounts.Add(lie.Account, e.GetSender());
+                                e.GetSender().Account = lie.Account;
+                                e.GetSender().Send(new AssingAccountEvent(lie.Account));
+                                GRoom.Instance.AddClient(e.GetSender());
+                            }
+                            break;
+                    }
                 }
 
                 
@@ -81,6 +82,7 @@ namespace ShadowHunter_Server.Accounts
                 {
                     e.GetSender().Account.IsLogged = false;
                     ConnectedAccounts.Remove(e.GetSender().Account);
+                    e.GetSender().Account = null;
                 }
                 e.GetSender().Send(new AssingAccountEvent(null));
                 //GRoom.Instance.RemoveClient(e.GetSender());
@@ -174,6 +176,7 @@ namespace ShadowHunter_Server.Accounts
                 if (!lecteur.HasRows)
                 {
                     lecteur.Close();
+                    command.Dispose();
                     conn.Close();
                     return 2;
                 }
@@ -187,6 +190,7 @@ namespace ShadowHunter_Server.Accounts
                 if (!lecteur.HasRows)
                 {
                     lecteur.Close();
+                    command.Dispose();
                     conn.Close();
                     return 1;
                 }
@@ -194,12 +198,15 @@ namespace ShadowHunter_Server.Accounts
                 {
                     if (myUserId == lecteur.GetInt32(0))
                     {
+                        lecteur.Close();
                         conn.Close();
+                        command.Dispose();
                         return 0;
                     }
                 }
 
                 lecteur.Close();
+                command.Dispose();
                 conn.Close();
                 return 1;
             }
@@ -225,12 +232,14 @@ namespace ShadowHunter_Server.Accounts
                 }
                 catch (SQLiteException except)
                 {
+                    command.Dispose();
                     conn.Close();
                     Console.WriteLine("Erreur: " + except.Message);
                     return false;
                 }
 
                 Console.WriteLine("Compte crée");
+                command.Dispose();
                 conn.Close();
                 return true;
            }
