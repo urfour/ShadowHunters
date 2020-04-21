@@ -14,23 +14,23 @@ namespace Assets.Noyau.Players.controller
         public GCharacter(int nbPlayers)
         {
             List<Character> Neutral = new List<Character>() {
-                new Character("Allie", CharacterTeam.Neutral, 8, null, null, null),
-                new Character("Bob", CharacterTeam.Neutral, 10, null, null, null),
-                new Character("Charles", CharacterTeam.Neutral, 11, null, null, null),
-                new Character("Daniel", CharacterTeam.Neutral, 13, null, null, null)
+                new Character("Allie", CharacterTeam.Neutral, 8, null, null),
+                new Character("Bob", CharacterTeam.Neutral, 10, null, null),
+                new Character("Charles", CharacterTeam.Neutral, 11, null, null),
+                new Character("Daniel", CharacterTeam.Neutral, 13, null, null)
             };
 
             List<Character> Hunter = new List<Character>()
             {
-                new Character("Emi", CharacterTeam.Hunter, 10, WinningConditionFunction.Hunter, WinningConditionFunction.Hunter_listeners, null),
-                new Character("Georges", CharacterTeam.Hunter, 14, WinningConditionFunction.Hunter, WinningConditionFunction.Hunter_listeners, GPower.George),
-                new Character("Franklin", CharacterTeam.Hunter, 12, WinningConditionFunction.Hunter, WinningConditionFunction.Hunter_listeners, null),
+                new Character("Emi", CharacterTeam.Hunter, 10, GGoal.HunterGoal, null),
+                new Character("Georges", CharacterTeam.Hunter, 14, GGoal.HunterGoal, GPower.George),
+                new Character("Franklin", CharacterTeam.Hunter, 12, GGoal.HunterGoal, null),
             };
             List<Character> Shadow = new List<Character>()
             {
-                new Character("Loup-Garou", CharacterTeam.Shadow, 14, WinningConditionFunction.Shadow, WinningConditionFunction.Shadow_listeners, null),
-                new Character("Vampire", CharacterTeam.Shadow, 13, WinningConditionFunction.Shadow, WinningConditionFunction.Shadow_listeners, null),
-                new Character("Métamorphe", CharacterTeam.Shadow, 11, WinningConditionFunction.Shadow, WinningConditionFunction.Shadow_listeners, null),
+                new Character("Loup-Garou", CharacterTeam.Shadow, 14, GGoal.ShadowGoal, null),
+                new Character("Vampire", CharacterTeam.Shadow, 13, GGoal.ShadowGoal, null),
+                new Character("Métamorphe", CharacterTeam.Shadow, 11, GGoal.ShadowGoal, null),
             };
 
             if (nbPlayers >= 7)

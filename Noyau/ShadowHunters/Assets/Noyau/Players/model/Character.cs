@@ -9,17 +9,15 @@ public class Character
     public readonly string characterName;
     public readonly CharacterTeam team;
     public readonly int characterHP;
-    public readonly CheckWinningCondition characterWinningCondition;
-    public readonly SetWinningListeners setWinningListeners;
     public readonly Power power;
+    public readonly Goal goal;
 
-    public Character(string characterName, CharacterTeam team, int characterHP, CheckWinningCondition characterWinningCondition, SetWinningListeners setWinningListeners, Power power)
+    public Character(string characterName, CharacterTeam team, int characterHP, Goal goal, Power power)
     {
         this.characterName = characterName;
         this.team = team;
         this.characterHP = characterHP;
-        this.characterWinningCondition = characterWinningCondition;
-        this.setWinningListeners = setWinningListeners;
+        this.goal = goal;
         this.power = power;
     }
 }
