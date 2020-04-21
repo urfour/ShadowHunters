@@ -10,6 +10,8 @@ namespace ShadowHunter_ClientNetwork
     {
         int kode;
         string user = "testLogin";
+        string password = "testPassword";
+        Account Compte = new Account();
         int maxPlayers = 8;
         string kicked;
 
@@ -20,8 +22,27 @@ namespace ShadowHunter_ClientNetwork
             {
                 if(String.Compare(msg, "signin")==0)
                 {
+                    Console.WriteLine("Pseudo :");
                     user = Console.ReadLine();
-                    EventView.Manager.Emit(new SignInEvent() { Login = user, Password = "testPassword" });
+                    Console.WriteLine("Mot de passe :");
+                    password = Console.ReadLine();
+                    EventView.Manager.Emit(new SignInEvent() { Login = user, Password = password });
+                }
+
+                else if (String.Compare(msg, "login") == 0)
+                {
+                    Console.WriteLine("Pseudo :");
+                    user = Console.ReadLine();
+                    Console.WriteLine("Mot de passe :");
+                    password = Console.ReadLine();
+                    Compte.Login = user;
+                    Compte.IsLogged = false;
+                    EventView.Manager.Emit(new LogInEvent() { Account = Compte, Password = password });
+                }
+
+                else if (String.Compare(msg, "logout") == 0)
+                {
+                    EventView.Manager.Emit(new LogOutEvent());
                 }
 
                 else if (String.Compare(msg, "createRoom") == 0) // test OK
