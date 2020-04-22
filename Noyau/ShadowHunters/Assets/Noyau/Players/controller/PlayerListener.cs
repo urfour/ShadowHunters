@@ -429,7 +429,9 @@ namespace Assets.Noyau.Players.controller
                     }
                 }
                 else
-                    //Debug.Log("Rien ne se passe.");
+                {
+                    Debug.Log("Rien ne se passe.");
+                }
             }
             else if (e is LightCardEffectEvent lcEffect)
             {
