@@ -7,6 +7,7 @@ using EventSystem;
 using Scripts.Settings;
 using UnityEngine;
 using Assets.Noyau.Players.view;
+using Assets.Noyau.Manager.view;
 
 public enum PlayerNames
 {

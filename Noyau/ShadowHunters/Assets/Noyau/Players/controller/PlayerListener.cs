@@ -1,6 +1,8 @@
 ﻿using Assets.Noyau.Cards.controller;
 using Assets.Noyau.Cards.model;
+using Assets.Noyau.Cards.view;
 using Assets.Noyau.event_in;
+using Assets.Noyau.event_out;
 using Assets.Noyau.Manager.view;
 using Assets.Noyau.Players.model;
 using Assets.Noyau.Players.view;
@@ -46,99 +48,7 @@ namespace Assets.Noyau.Players.controller
             else if (e is NewTurnEvent nte)
             {
                 GameManager.MovementAvailable.Value = true;
-                //currentPlayer.RollTheDices.Value = false;
-
-                /*
-                if (currentPlayer.Character.characterName == "Emi"
-                    || currentPlayer.Character.characterName == "Franklin"
-                    || currentPlayer.Character.characterName == "Georges")
-                {
-                    currentPlayer.CanUsePower.Value = false;
-                }
-                */
-                /*
-                List<Position> availableDestination = new List<Position>();
-
-                if (currentPlayer.HasCompass.Value)
-                {
-                    int lancer01 = UnityEngine.Random.Range(1, 6);
-                    int lancer02 = UnityEngine.Random.Range(1, 4);
-                    int lancer11 = UnityEngine.Random.Range(1, 6);
-                    int lancer12 = UnityEngine.Random.Range(1, 4);
-
-                    while (lancer11 + lancer12 == lancer01 + lancer02)
-                    {
-                        lancer11 = UnityEngine.Random.Range(1, 6);
-                        lancer12 = UnityEngine.Random.Range(1, 4);
-                    }
-
-                    EventView.Manager.Emit(new SelectDiceThrow()
-                    {
-                        PlayerId = currentPlayer.Id,
-                        D6Dice1 = lancer01,
-                        D4Dice1 = lancer02,
-                        D6Dice2 = lancer11,
-                        D4Dice2 = lancer12,
-                    });
-                }
-                else
-                {
-                    int lancer01 = UnityEngine.Random.Range(1, 6);
-                    int lancer02 = UnityEngine.Random.Range(1, 4);
-
-                    while (availableDestination.Count >= 0)
-                    {
-                        lancer01 = UnityEngine.Random.Range(1, 6);
-                        lancer02 = UnityEngine.Random.Range(1, 4);
-
-                        switch (lancer01 + lancer02)
-                        {
-                            case 2:
-                            case 3:
-                                availableDestination.Add(Position.Antre);
-                                break;
-                            case 4:
-                            case 5:
-                                availableDestination.Add(Position.Porte);
-                                break;
-                            case 6:
-                                availableDestination.Add(Position.Monastere);
-                                break;
-                            case 7:
-                                availableDestination.Add(Position.Antre);
-                                availableDestination.Add(Position.Porte);
-                                availableDestination.Add(Position.Monastere);
-                                availableDestination.Add(Position.Cimetiere);
-                                availableDestination.Add(Position.Foret);
-                                availableDestination.Add(Position.Foret);
-                                break;
-                            case 8:
-                                availableDestination.Add(Position.Cimetiere);
-                                break;
-                            case 9:
-                                availableDestination.Add(Position.Foret);
-                                break;
-                            case 10:
-                                availableDestination.Add(Position.Sanctuaire);
-                                break;
-                        }
-                        if (availableDestination.Contains(currentPlayer.Position))
-                        {
-                            currentPlayer.Position = availableDestination[0];
-                        }
-                        else
-                            availableDestination.Remove(currentPlayer.Position);
-
-                    }
-                    EventView.Manager.Emit(new SelectMovement()
-                    {
-                        PlayerId = currentPlayer.Id,
-                        D6Dice = lancer01,
-                        D4Dice = lancer02,
-                        LocationAvailable = availableDestination.ToArray()
-                    });
-                }
-                */
+                GameManager.StartOfTurn.Value = true;
             }
             else if (e is AskMovement am)
             {
@@ -208,16 +118,7 @@ namespace Assets.Noyau.Players.controller
             {
                 Player currentPlayer = PlayerView.GetPlayer(mo.PlayerId);
                 currentPlayer.Position = mo.Location;
-
-                /*
-                gameBoard.setPositionOfAt(currentPlayer.Id, mo.Location);
-
-                currentPlayer.AttackPlayer.Value = true;
-                if (currentPlayer.HasSaber.Value)
-                    currentPlayer.EndTurn.Value = false;
-                else
-                    currentPlayer.EndTurn.Value = true;
-                    */
+                
 
                 switch (currentPlayer.Position)
                 {
@@ -236,8 +137,7 @@ namespace Assets.Noyau.Players.controller
                         GameManager.PickDarknessDeck.Value = true;
                         break;
                     case Position.Foret:
-                        currentPlayer.ForestHeal.Value = true;
-                        currentPlayer.ForestWounds.Value = true;
+                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard))
                         break;
                     case Position.Sanctuaire:
                         List<int> target2 = new List<int>();
