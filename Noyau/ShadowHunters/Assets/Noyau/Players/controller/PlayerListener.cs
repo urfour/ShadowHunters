@@ -386,14 +386,14 @@ namespace Assets.Noyau.Players.controller
                         playerAttacked.Wounded(dommageTotal);
 
                         // Le Loup-garou peut contre attaquer
-                        if (playerAttacked.Character.characterName == "LoupGarou
+                        if (playerAttacked.Character.characterName == "LoupGarou"
                             && playerAttacked.Revealed.Value)
                         {
                             playerAttacked.CanUsePower.Value = true;
                         }
 
                         // Charles peut attaquer de nouveau
-                        if (playerAttacking.Character.characterName == "Charles
+                        if (playerAttacking.Character.characterName == "Charles"
                             && playerAttacking.Revealed.Value)
                         {
                             playerAttacking.CanUsePower.Value = true;
@@ -520,16 +520,18 @@ namespace Assets.Noyau.Players.controller
                     }
                     else if (effectLightCard.lightEffect == LightEffect.Chocolat
                                 && hasRevealed
-                                && (player.Character.characterName == "Allie
-                                    || player.Character.characterName == "Emi
-                                    || player.Character.characterName == "Metamorphe))
+                                && (player.Character.characterName == "Allie"
+                                    || player.Character.characterName == "Emi"
+                                    || player.Character.characterName == "Metamorphe"))
                     {
                         player.Healed(player.Wound.Value);
                         //Debug.Log("Le joueur " + player.Name + " se soigne complètement");
                     }
                 }
                 else
-                    //Debug.Log("Rien ne se passe.");
+                {
+                    Debug.Log("Rien ne se passe.");
+                }
             }
             else if (e is LightCardEffectEvent lcEffect)
             {

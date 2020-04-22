@@ -26,5 +26,21 @@ namespace Assets.Noyau.Cards.view
             GCard.visionDeck.RemoveAt(r);
             return c;
         }
+
+        public static LightCard PickLight()
+        {
+            int r = rand.Next(0, GCard.lightDeck.Count);
+            LightCard c = GCard.lightDeck[r];
+            GCard.lightDeck.RemoveAt(r);
+            return c;
+        }
+
+        public static DarknessCard PickDarkness()
+        {
+            int r = rand.Next(0, GCard.darknessDeck.Count);
+            DarknessCard c = GCard.darknessDeck[r];
+            GCard.darknessDeck.RemoveAt(r);
+            return c;
+        }
     }
 }

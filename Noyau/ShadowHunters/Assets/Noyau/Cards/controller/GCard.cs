@@ -32,11 +32,34 @@ namespace Assets.Noyau.Cards.controller
                 effect: (target) => 
                 {
                     VisionCard c = CardView.PickVision();
-                    EventView.Manager.Emit(new SelectVisionTargetEvent() { PlayerId=GameManager.PlayerTurn.Value.Id , cardId=c.Id });
+                    EventView.Manager.Emit(new SelectVisionTargetEvent()
+                    { 
+                        PlayerId=GameManager.PlayerTurn.Value.Id,
+                        cardId=c.Id 
+                    });
                 },
-                targetableCondition:null));
+                targetableCondition:null
+                ));
 
-            //Monastere = CreateUsableCard("");
+            Monastere = CreateUsableCard("card.location.monastere", CardType.Location, "card.location.monastere.description", true,
+                new CardEffect("card.location.monastere.effect.picklight",
+                effect: (target) =>
+                {
+                    LightCard c = CardView.PickLight();
+                },
+                targetableCondition: null
+                ));
+
+            Antre = CreateUsableCard("card.location.antre", CardType.Location, "card.location.antre.description", true,
+                new CardEffect("card.location.antre.effect.pickdarkness",
+                effect: (target) =>
+                {
+                    DarknessCard c = CardView.PickDarkness();
+                },
+                targetableCondition: null
+                ));
+
+
 
             darknessDeck = new List<DarknessCard>()
             {
