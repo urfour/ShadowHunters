@@ -3,6 +3,7 @@ using Assets.Noyau.Players.model;
 using Assets.Noyau.Players.view;
 using EventSystem;
 using Scripts.event_out;
+using Scripts.event_in;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -219,15 +220,21 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
-                //TODO
+                EventView.Manager.Emit(new RevealCard() { PlayerId = owner.Id , });
             },
             addListeners: (owner) =>
             {
-                //TODO
+                foreach (Player p in PlayerView.GetPlayers())
+                {
+                    p.Dead.AddListener((sender) => { owner.Character.goal.checkWinning(owner); });
+                }
             },
             availability: (owner) =>
             {
-                //TODO
+                if (!owner.Dead.Value && !owner.Revealed.Value)
+                {
+                    owner.Character.power.power(owner);
+                }
             }
             );
 
