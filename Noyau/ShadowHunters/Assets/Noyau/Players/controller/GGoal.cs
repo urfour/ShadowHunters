@@ -1,5 +1,6 @@
 ﻿using Assets.Noyau.Players.model;
 using Assets.Noyau.Players.view;
+using Assets.Noyau.Manager.view;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -103,7 +104,7 @@ namespace Assets.Noyau.Players.controller
             (
                 checkWinning: (owner) =>
                 {
-                    if(owner.NbEquipment>=5)
+                    if(owner.NbEquipment.Value >= 5)
                         owner.HasWon.Value=true;
                 },
                 setWinningListeners: (owner) =>
@@ -138,7 +139,7 @@ namespace Assets.Noyau.Players.controller
                 }
             );
 
-        public static GGoal DanielGoal = new Goal
+        public static Goal DanielGoal = new Goal
             (
                 checkWinning: (owner) =>
                 {
