@@ -352,6 +352,13 @@ namespace Assets.Noyau.Players.controller
                 //Debug.Log("Joueur " + playerAttacking.Id + " (" + playerAttacking.Character.characterName
                 //            + ") attaque joueur " + playerAttacked.Id + " (" + playerAttacked.Character.characterName + ")");
 
+
+                // On notifie le joueur qu'il subit une attaque (pour le Loup-Garou)
+                if (!attackPlayer.PowerFranklin && !attackPlayer.PowerGeorges)
+                {
+                    playerAttacked.OnAttacked.Value = attackPlayer.PlayerId;
+                }
+
                 int lancer1 = UnityEngine.Random.Range(1, 6);
                 int lancer2 = UnityEngine.Random.Range(1, 4);
                 int lancerTotal = (playerAttacking.HasSaber.Value == true) ? lancer2 : Math.Abs(lancer1 - lancer2);
@@ -369,7 +376,8 @@ namespace Assets.Noyau.Players.controller
                 {
                     //Debug.Log("Vous choisissez d'attaquer le joueur " + playerAttacked.Name + ".");
 
-                    int dommageTotal = lancerTotal + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value;
+                    // Si c'est la contre-attaque du loup, les objets ne comptent pas
+                    int dommageTotal = (attackPlayer.PowerLoup) ? lancerTotal : lancerTotal + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value;
 
                     // Si Bob est révélé et inflige 2 dégats ou plus, il peut voler une arme 
                     if (playerAttacking.Character.characterName == "Bob"
@@ -383,14 +391,7 @@ namespace Assets.Noyau.Players.controller
                     else
                     {
                         // Le joueur attaqué se prend des dégats
-                        playerAttacked.Wounded(dommageTotal,playerAttacking,true);
-
-                        // Le Loup-garou peut contre attaquer
-                        if (playerAttacked.Character.characterName == "LoupGarou"
-                            && playerAttacked.Revealed.Value)
-                        {
-                            playerAttacked.CanUsePower.Value = true;
-                        }
+                        playerAttacked.Wounded(dommageTotal, playerAttacking, true);
 
                         // Charles peut attaquer de nouveau
                         if (playerAttacking.Character.characterName == "Charles"

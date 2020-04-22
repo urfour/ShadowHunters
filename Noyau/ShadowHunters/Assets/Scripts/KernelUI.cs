@@ -154,12 +154,23 @@ namespace Scripts
             }
             else if (e is SelectAttackTargetEvent sate)
             {
+                int attacked;
+                if (sate.TargetID == -1)
+                {
+                    attacked = sate.PossibleTargetId[UnityEngine.Random.Range(0, sate.PossibleTargetId.Length)];
+                }
+                else
+                {
+                    attacked = sate.TargetID;
+                }
+
                 EventView.Manager.Emit(new AttackPlayerEvent()
                 {
                     PlayerId = sate.PlayerId,
-                    PlayerAttackedId = sate.PossibleTargetId[UnityEngine.Random.Range(0, sate.PossibleTargetId.Length)],
+                    PlayerAttackedId = attacked,
                     PowerFranklin = sate.PowerFranklin,
-                    PowerGeorges = sate.PowerGeorges
+                    PowerGeorges = sate.PowerGeorges,
+                    PowerLoup = sate.PowerLoup
                 });
             }
             else if (e is SelectBobPowerEvent sbce)

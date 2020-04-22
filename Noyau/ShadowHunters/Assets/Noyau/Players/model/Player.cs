@@ -82,7 +82,7 @@ public class Player
     // le joueur peut-il utiliser son pouvoir ?
     public Setting<bool> CanUsePower { get; private set; } = new Setting<bool>(false);
 
-    public Setting<bool> OnAttacked { get; private set; } = new Setting<bool>(false);
+    public Setting<int> OnAttacked { get; private set; } = new Setting<int>(-1);
     public Setting<int> OnDealDamage { get; private set; } = new Setting<int>(0);
  
     //private static List<Player> players = new List<Player>();
