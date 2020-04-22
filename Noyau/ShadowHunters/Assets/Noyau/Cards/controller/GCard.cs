@@ -21,42 +21,57 @@ namespace Assets.Noyau.Cards.controller
         public List<LightCard> lightDeck;
         public List<DarknessCard> darknessDeck;
 
-        public UsableCard Antre;
-        public UsableCard Monastere;
-        public UsableCard Cimetiere;
+        public UsableCard Foret;
+        public UsableCard Sanctuaire;
 
         public GCard()
         {
-            Antre = CreateUsableCard("card.location.antre", CardType.Location, "card.location.antre.description", true,
-                new CardEffect("card.location.antre.effect.pickvision",
-                effect: (target) => 
-                {
-                    VisionCard c = CardView.PickVision();
-                    EventView.Manager.Emit(new SelectVisionTargetEvent()
-                    { 
-                        PlayerId=GameManager.PlayerTurn.Value.Id,
-                        cardId=c.Id 
-                    });
-                },
-                targetableCondition:null
+            Foret = CreateUsableCard("card.location.foret", CardType.Location, "card.location.foret.description", true,
+                new CardEffect("card.location.foret.effect.wound",
+                    effect : (target) =>
+                    {
+                        target.Wounded(2);
+                    },
+                    targetableCondition: (target) =>
+                    {
+                        return target.HasBroche.Value;
+                    }
+                ),
+                new CardEffect("card.location.foret.effect.heal",
+                    effect: (target) =>
+                    {
+                        target.Healed(1);
+                    },
+                    targetableCondition: (target) =>
+                    {
+                        return true;
+                    }
                 ));
 
-            Monastere = CreateUsableCard("card.location.monastere", CardType.Location, "card.location.monastere.description", true,
-                new CardEffect("card.location.monastere.effect.picklight",
-                effect: (target) =>
-                {
-                    LightCard c = CardView.PickLight();
-                },
-                targetableCondition: null
-                ));
+            Sanctuaire = CreateUsableCard("card.location.sanctuaire", CardType.Location, "card.location.sanctuaire.description", true,
+                new CardEffect("card.location.sanctuaire.effect.steal",
+                    effect: (target) =>
+                    {
+                        List<int> choices = new List<int>();
+                        foreach (Player p in PlayerView.GetPlayers())
+                            if (!p.Dead.Value && p.Id != target.Id && p.ListCard.Count > 0)
+                                foreach (Card card in p.ListCard)
+                                    if (card is IEquipment)
+                                    {
+                                        choices.Add(p.Id);
+                                        break;
+                                    }
 
-            Antre = CreateUsableCard("card.location.antre", CardType.Location, "card.location.antre.description", true,
-                new CardEffect("card.location.antre.effect.pickdarkness",
-                effect: (target) =>
-                {
-                    DarknessCard c = CardView.PickDarkness();
-                },
-                targetableCondition: null
+                        if (choices.Count != 0)
+                        {
+                            EventView.Manager.Emit(new SelectStealCardEvent()
+                            {
+                                PlayerId = target.Id,
+                                PossiblePlayerTargetId = choices.ToArray()
+                            });
+                        }
+                    },
+                    targetableCondition: null
                 ));
 
 
@@ -116,6 +131,54 @@ namespace Assets.Noyau.Cards.controller
                     }
                     else
                         player.Wounded(1);
+                }),
+
+                CreateDarkness("card.darkness.darkness_chauve_souris", "card.darkness.darkness_chauve_souris.description",
+                condition: (player) =>
+                {
+                    return true;
+                },
+                effect: (player, card) =>
+                {
+                    List<int> players = new List<int>();
+
+                    foreach (Player p in PlayerView.GetPlayers())
+                        if (!player.Dead.Value && p.Id != player.Id)
+                            if (!player.HasAmulet.Value)
+                                players.Add(player.Id);
+
+                    EventView.Manager.Emit(new SelectPlayerTakingWoundsEvent()
+                    {
+                        PlayerId = player.Id,
+                        PossibleTargetId = players.ToArray(),
+                        IsPuppet = false,
+                        NbWoundsTaken = 2,
+                        NbWoundsSelfHealed = 1
+                    });
+                }),
+
+                CreateDarkness("card.darkness.darkness_chauve_souris", "card.darkness.darkness_chauve_souris.description",
+                condition: (player) =>
+                {
+                    return true;
+                },
+                effect: (player, card) =>
+                {
+                    List<int> players = new List<int>();
+
+                    foreach (Player p in PlayerView.GetPlayers())
+                        if (!player.Dead.Value && p.Id != player.Id)
+                            if (!player.HasAmulet.Value)
+                                players.Add(player.Id);
+
+                    EventView.Manager.Emit(new SelectPlayerTakingWoundsEvent()
+                    {
+                        PlayerId = player.Id,
+                        PossibleTargetId = players.ToArray(),
+                        IsPuppet = false,
+                        NbWoundsTaken = 2,
+                        NbWoundsSelfHealed = 1
+                    });
                 }),
 
                 CreateDarkness("card.darkness.darkness_chauve_souris", "card.darkness.darkness_chauve_souris.description",
@@ -262,6 +325,34 @@ namespace Assets.Noyau.Cards.controller
                 effect: (player, card) =>
                 {
                     player.HasSaber.Value = true;
+                }),
+
+                CreateDarkness("card.darkness.darkness_succube", "card.darkness.darkness_succube.description",
+                condition: (player) =>
+                {
+                    return true;
+                },
+                effect: (player, card) =>
+                {
+                    List<int> choices = new List<int>();
+
+                    foreach (Player p in PlayerView.GetPlayers())
+                        if (!player.Dead.Value && p.Id != player.Id && p.ListCard.Count > 0)
+                            foreach (Card c in player.ListCard)
+                                if (c is IEquipment)
+                                {
+                                    choices.Add(player.Id);
+                                    break;
+                                }
+
+                    if (choices.Count != 0)
+                    {
+                        EventView.Manager.Emit(new SelectStealCardEvent()
+                        {
+                            PlayerId = player.Id,
+                            PossiblePlayerTargetId = choices.ToArray()
+                        });
+                    }
                 }),
 
                 CreateDarkness("card.darkness.darkness_succube", "card.darkness.darkness_succube.description",
@@ -521,10 +612,52 @@ namespace Assets.Noyau.Cards.controller
                     });
                 }),
 
+                CreateVision("card.vision.vision_cupide", "card.vision.vision_cupide.description",
+                condition: (player) =>
+                {
+                    return player.Character.team == CharacterTeam.Neutral
+                        || player.Character.team == CharacterTeam.Shadow;
+                },
+                effect: (player) =>
+                {
+                    EventView.Manager.Emit(new SelectGiveOrWoundEvent()
+                    {
+                        PlayerId = player.Id
+                    });
+                }),
+
                 CreateVision("card.vision.vision_enivrante", "card.vision.vision_enivrante.description",
                 condition: (player) =>
                 {
                     return player.Character.team == CharacterTeam.Neutral
+                        || player.Character.team == CharacterTeam.Hunter;
+                },
+                effect: (player) =>
+                {
+                    EventView.Manager.Emit(new SelectGiveOrWoundEvent()
+                    {
+                        PlayerId = player.Id
+                    });
+                }),
+
+                CreateVision("card.vision.vision_enivrante", "card.vision.vision_enivrante.description",
+                condition: (player) =>
+                {
+                    return player.Character.team == CharacterTeam.Neutral
+                        || player.Character.team == CharacterTeam.Hunter;
+                },
+                effect: (player) =>
+                {
+                    EventView.Manager.Emit(new SelectGiveOrWoundEvent()
+                    {
+                        PlayerId = player.Id
+                    });
+                }),
+
+                CreateVision("card.vision.vision_furtive", "card.vision.vision_furtive.description",
+                condition: (player) =>
+                {
+                    return player.Character.team == CharacterTeam.Shadow
                         || player.Character.team == CharacterTeam.Hunter;
                 },
                 effect: (player) =>
@@ -605,6 +738,16 @@ namespace Assets.Noyau.Cards.controller
                 condition: (player) =>
                 {
                     return player.Character.team == CharacterTeam.Shadow;
+                },
+                effect: (player) =>
+                {
+                    player.Wounded(1);
+                }),
+
+                CreateVision("card.vision.vision_mortifere", "card.vision.vision_mortifere.description",
+                condition: (player) =>
+                {
+                    return player.Character.team == CharacterTeam.Hunter;
                 },
                 effect: (player) =>
                 {
