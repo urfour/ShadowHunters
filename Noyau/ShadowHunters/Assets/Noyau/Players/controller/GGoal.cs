@@ -49,7 +49,7 @@ namespace Assets.Noyau.Players.controller
                     int nbNeutralDead = 0;
                     foreach (Player p in PlayerView.GetPlayers())
                     {
-                        if (p.Character.team.Equals(CharacterTeam.Shadow) && !p.Dead.Value)
+                        if (p.Character.team.Equals(CharacterTeam.Hunter) && !p.Dead.Value)
                         {
                             HunterAlive = true;
                             break;
@@ -73,6 +73,100 @@ namespace Assets.Noyau.Players.controller
                         {
                             p.Dead.AddListener((sender) => { owner.Character.goal.checkWinning(owner); });
                         }
+                    }
+                }
+            );
+
+        public static Goal AllieGoal = new Goal
+            (
+                checkWinning: (owner) =>
+                {
+                    if(!owner.Dead.Value)
+                    {
+                        foreach (Player p in PlayerView.GetPlayers())
+                        {
+                            if(p.HasWon.Value)
+                                owner.HasWon.Value=true;
+                        }
+                    }
+                },
+                setWinningListeners: (owner) =>
+                {
+                    foreach (Player p in PlayerView.GetPlayers())
+                    {
+                        p.HasWon.AddListener((sender) => { owner.Character.goal.checkWinning(owner); });
+                    }
+                }
+            );
+
+        public static Goal BobGoal = new Goal
+            (
+                checkWinning: (owner) =>
+                {
+                    if(owner.NbEquipment>=5)
+                        owner.HasWon.Value=true;
+                },
+                setWinningListeners: (owner) =>
+                {
+                    owner.NbEquipment.AddListener((sender) => { owner.Character.goal.checkWinning(owner); });
+                }
+            );
+
+        public static Goal CharlesGoal = new Goal
+            (
+                checkWinning: (owner) =>
+                {
+                    int nbDead=0;
+                    foreach (Player p in PlayerView.GetPlayers())
+                    {
+                        if (!p.Dead.Value)
+                        {
+                            nbDead++;
+                        }
+                        
+                    }
+                    if(nbDead>=3 && GameManager.HasKilled.Value)
+                        owner.HasWon.Value=true;
+                },
+                setWinningListeners: (owner) =>
+                {
+                    GameManager.HasKilled.AddListener((sender) => { owner.Character.goal.checkWinning(owner); });
+                    foreach (Player p in PlayerView.GetPlayers())
+                    {
+                        p.Dead.AddListener((sender) => { owner.Character.goal.checkWinning(owner); });
+                    }
+                }
+            );
+
+        public static GGoal DanielGoal = new Goal
+            (
+                checkWinning: (owner) =>
+                {
+                    bool ShadowAlive = false;
+                    int nbDead = 0;
+                    foreach (Player p in PlayerView.GetPlayers())
+                    {
+                        if (p.Character.team.Equals(CharacterTeam.Shadow) && !p.Dead.Value)
+                        {
+                            ShadowAlive = true;
+                            break;
+                        }
+                        if (p.Dead.Value)
+                        {
+                            nbDead++;
+                        }
+                    }
+                    bool status = !ShadowAlive || (nbDead <= 1 && owner.Dead.Value);
+                    if (status != owner.HasWon.Value)
+                    {
+                        owner.HasWon.Value = status;
+                    }
+                },
+                setWinningListeners: (owner) =>
+                {
+                    foreach (Player p in PlayerView.GetPlayers())
+                    {
+                        p.Dead.AddListener((sender) => { owner.Character.goal.checkWinning(owner); });
                     }
                 }
             );

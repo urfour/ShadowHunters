@@ -20,6 +20,8 @@ namespace Assets.Noyau.Manager.view
         public static Setting<bool> PickDarknessDeck { get; private set; } = new Setting<bool>(false);
         public static Setting<bool> PickLightnessDeck { get; private set; } = new Setting<bool>(false);
 
+        public static Setting<bool> HasKilled {get; private set; } = new Setting<bool>(false);
+
         public static Setting<bool> TurnEndable { get; private set; } = new Setting<bool>(false);
 
         public static void Init(int nbPlayers)
