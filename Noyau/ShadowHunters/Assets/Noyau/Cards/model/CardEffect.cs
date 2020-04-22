@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Noyau.Cards.controller;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Assets.Noyau.Cards.model
 {
-    public delegate void Effect(Player target);
+    public delegate void Effect(Player target, Card card);
     public delegate bool PlayerTargetable(Player target);
     public class CardEffect
     {
