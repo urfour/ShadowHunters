@@ -15,5 +15,6 @@ namespace Scripts.event_out
         public bool PowerFranklin { get; set; } = false;
         public bool PowerGeorges { get; set; } = false;
         public bool PowerLoup { get; set; } = false;
+        public bool PowerCharles { get; set; } = false;
     }
 }

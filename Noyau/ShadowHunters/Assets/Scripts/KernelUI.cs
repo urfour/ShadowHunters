@@ -170,7 +170,8 @@ namespace Scripts
                     PlayerAttackedId = attacked,
                     PowerFranklin = sate.PowerFranklin,
                     PowerGeorges = sate.PowerGeorges,
-                    PowerLoup = sate.PowerLoup
+                    PowerLoup = sate.PowerLoup,
+                    PowerCharles = sate.PowerCharles,
                 });
             }
             else if (e is SelectBobPowerEvent sbce)
@@ -255,10 +256,20 @@ namespace Scripts
             }
             else if (e is SelectPlayerTakingWoundsEvent sptwe)
             {
+                int wounded;
+                if (sptwe.TargetID == -1)
+                {
+                    wounded = sptwe.PossibleTargetId[UnityEngine.Random.Range(0, sptwe.PossibleTargetId.Length)];
+                }
+                else
+                {
+                    wounded = sptwe.TargetID;
+                }
+
                 EventView.Manager.Emit(new TakingWoundsEffectEvent()
                 {
                     PlayerId = sptwe.PlayerId,
-                    PlayerAttackedId = sptwe.PossibleTargetId[UnityEngine.Random.Range(0, sptwe.PossibleTargetId.Length)],
+                    PlayerAttackedId = wounded,
                     IsPuppet = sptwe.IsPuppet,
                     NbWoundsTaken = sptwe.NbWoundsTaken,
                     NbWoundsSelfHealed = sptwe.NbWoundsSelfHealed
@@ -266,15 +277,31 @@ namespace Scripts
             }
             else if (e is SelectRevealOrNotEvent srone)
             {
-                bool up = false;
-                if (UnityEngine.Random.Range(0, 1) == 0)
+                bool up;
+
+                if (srone.PowerDaniel)
                     up = true;
+                else
+                { //Choix User
+                    up = false;
+                    if (UnityEngine.Random.Range(0, 1) == 0)
+                        up = true;
+                }
+
+                if (up)
+                {
+                    EventView.Manager.Emit(new RevealCard()
+                    {
+                        PlayerId = srone.PlayerId
+                    });
+                }
 
                 EventView.Manager.Emit(new RevealOrNotEvent()
                 {
                     PlayerId = srone.PlayerId,
                     EffectCard = srone.EffectCard,
-                    HasRevealed = up
+                    HasRevealed = up,
+                    PowerLoup = srone.PowerLoup
                 });
             }
             else if (e is SelectStealCardEvent ssce)

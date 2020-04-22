@@ -356,7 +356,7 @@ namespace Assets.Noyau.Players.controller
                 // On notifie le joueur qu'il subit une attaque (pour le Loup-Garou)
                 if (!attackPlayer.PowerFranklin && !attackPlayer.PowerGeorges)
                 {
-                    playerAttacked.OnAttacked.Value = attackPlayer.PlayerId;
+                    playerAttacked.OnAttacked.Value = playerAttacking.Id;
                 }
 
                 int lancer1 = UnityEngine.Random.Range(1, 6);
@@ -371,7 +371,7 @@ namespace Assets.Noyau.Players.controller
                 //Debug.Log("Le lancer vaut : " + lancerTotal);
 
                 if (lancerTotal == 0)
-                    Debug.Log("Le lancer vaut 0, vous n'attaquez pas.");
+                    /*Debug.Log("Le lancer vaut 0, vous n'attaquez pas.")*/;
                 else
                 {
                     //Debug.Log("Vous choisissez d'attaquer le joueur " + playerAttacked.Name + ".");
@@ -393,11 +393,10 @@ namespace Assets.Noyau.Players.controller
                         // Le joueur attaqué se prend des dégats
                         playerAttacked.Wounded(dommageTotal, playerAttacking, true);
 
-                        // Charles peut attaquer de nouveau
-                        if (playerAttacking.Character.characterName == "Charles"
-                            && playerAttacking.Revealed.Value)
+                        // On notifie le joueur qu'il vient d'attaquer (pour Charles)
+                        if (!attackPlayer.PowerFranklin && !attackPlayer.PowerGeorges && !attackPlayer.PowerCharles)
                         {
-                            playerAttacking.CanUsePower.Value = true;
+                            playerAttacking.OnAttacking.Value = playerAttacked.Id;
                         }
                     }
                 }
@@ -502,7 +501,8 @@ namespace Assets.Noyau.Players.controller
                 Player player = PlayerView.GetPlayer(revealOrNot.PlayerId);
                 bool hasRevealed = revealOrNot.HasRevealed;
                 Card effectCard = revealOrNot.EffectCard;
-
+                bool PowerLoup = revealOrNot.PowerLoup;
+                
                 if (effectCard is DarknessCard
                     && hasRevealed
                     && player.Character.team == CharacterTeam.Shadow)
@@ -531,7 +531,12 @@ namespace Assets.Noyau.Players.controller
                 }
                 else
                 {
-                    Debug.Log("Rien ne se passe.");
+                    // Si on s'est révélé dans le but de contre-attaquer, on active le pouvoir immédiatement
+                    // (on saute volontairement l'étape du bouton UsePower car il paraît évident qu'on veut l'utiliser par cette action)
+                    if (PowerLoup && hasRevealed)
+                    {
+                        player.Character.power.power(player);
+                    }
                 }
             }
             else if (e is LightCardEffectEvent lcEffect)

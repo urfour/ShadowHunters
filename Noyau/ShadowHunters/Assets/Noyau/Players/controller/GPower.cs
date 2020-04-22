@@ -3,7 +3,6 @@ using Assets.Noyau.Players.model;
 using Assets.Noyau.Players.view;
 using EventSystem;
 using Scripts.event_out;
-using Scripts.event_in;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +28,7 @@ namespace Assets.Noyau.Players.controller
                         targatable.Add(p.Id);
                     }
                 }
-                EventView.Manager.Emit(new SelectAttackTargetEvent() { PossibleTargetId = targatable.ToArray(), PowerGeorges = true, });
+                EventView.Manager.Emit(new SelectAttackTargetEvent() { PlayerId = owner.Id, PossibleTargetId = targatable.ToArray(), PowerGeorges = true, });
             },
             addListeners: (owner) =>
             {
@@ -62,7 +61,7 @@ namespace Assets.Noyau.Players.controller
                         targatable.Add(p.Id);
                     }
                 }
-                EventView.Manager.Emit(new SelectAttackTargetEvent() { PossibleTargetId = targatable.ToArray(), PowerFranklin = true, });
+                EventView.Manager.Emit(new SelectAttackTargetEvent() { PlayerId = owner.Id, PossibleTargetId = targatable.ToArray(), PowerFranklin = true, });
             },
             addListeners: (owner) =>
             {
@@ -111,7 +110,9 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
-                EventView.Manager.Emit(new SelectAttackTargetEvent() { TargetID = owner.OnAttacked.Value, PowerLoup = true, });
+                EventView.Manager.Emit(new SelectAttackTargetEvent() { PlayerId = owner.Id, TargetID = owner.OnAttacked.Value, PowerLoup = true, });
+                // empêche le spam du pouvoir
+                owner.CanUsePower.Value = false;
             },
             addListeners: (owner) =>
             {
@@ -120,17 +121,25 @@ namespace Assets.Noyau.Players.controller
             },
             availability: (owner) =>
             {
+                // Si le joueur attaquant met fin à son tour, dès le début du suivant on coupe le pouvoir
                 bool start = GameManager.StartOfTurn.Value;
-                if (start && owner.CanUsePower.Value)
+                if (start)
                 {
-                    owner.CanUsePower.Value = false;
-                    owner.OnAttacked.Value = -1;
+                    if (owner.CanUsePower.Value)
+                        owner.CanUsePower.Value = false;
                 }
-
-                bool available = owner.OnAttacked.Value != -1 && owner.Revealed.Value;
-                if (owner.CanUsePower.Value != available)
+                else // Si la raison de l'appel vient de OnAttacked (donc pas start)
                 {
-                    owner.CanUsePower.Value = available;
+                    // Si le loup n'est pas révélé, on lui propose de se révéler
+                    if (!owner.Revealed.Value)
+                    {
+                        EventView.Manager.Emit(new SelectRevealOrNotEvent() { PlayerId = owner.Id, PowerLoup = true });
+                    }
+                    // Si le loup est révélé, il peut utiliser son pouvoir
+                    else if (!owner.CanUsePower.Value)
+                    {
+                        owner.CanUsePower.Value = true;
+                    }
                 }
             }
             );
@@ -204,15 +213,32 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
-                //TODO
+                owner.Wounded(2, owner, false);
+                EventView.Manager.Emit(new SelectPlayerTakingWoundsEvent() { PlayerId = owner.Id, TargetID = owner.Id, NbWoundsTaken = 2, });
+                EventView.Manager.Emit(new SelectAttackTargetEvent() { PlayerId = owner.Id, TargetID = owner.OnAttacking.Value, });
+                // empêche le spam du pouvoir
+                owner.CanUsePower.Value = false;
             },
             addListeners: (owner) =>
             {
-                //TODO
+                owner.OnAttacking.AddListener((sender) => { owner.Character.power.availability(owner); });
+                GameManager.StartOfTurn.AddListener((sender) => { owner.Character.power.availability(owner); });
             },
             availability: (owner) =>
             {
-                //TODO
+                //Après la fin de son tour, le pouvoir n'est plus dispo
+                bool start = GameManager.StartOfTurn.Value;
+                if (start && owner.CanUsePower.Value)
+                {
+                    owner.CanUsePower.Value = false;
+                }
+
+                // Si la raison de l'appel vient de OnAttacking (donc pas start) et que Charles est révélé, on active le pouvoir
+                bool available = !start && owner.Revealed.Value;
+                if (!owner.CanUsePower.Value && available)
+                {
+                    owner.CanUsePower.Value = true;
+                }
             }
             );
 
@@ -220,7 +246,7 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
-                EventView.Manager.Emit(new RevealCard() { PlayerId = owner.Id , });
+                EventView.Manager.Emit(new SelectRevealOrNotEvent() { PlayerId = owner.Id ,  PowerDaniel = true});
             },
             addListeners: (owner) =>
             {

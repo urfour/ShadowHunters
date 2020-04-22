@@ -7,6 +7,7 @@ using EventSystem;
 using Scripts.Settings;
 using UnityEngine;
 using Assets.Noyau.Players.view;
+using Assets.Noyau.Manager.view;
 
 public enum PlayerNames
 {
@@ -82,7 +83,11 @@ public class Player
     // le joueur peut-il utiliser son pouvoir ?
     public Setting<bool> CanUsePower { get; private set; } = new Setting<bool>(false);
 
+    // Id du joueur qui m'a attaqué en dernier (Loup-garou)
     public Setting<int> OnAttacked { get; private set; } = new Setting<int>(-1);
+    // Id du joueur que j'ai attaqué en dernier (Charles)
+    public Setting<int> OnAttacking { get; private set; } = new Setting<int>(-1);
+
     public Setting<int> OnDealDamage { get; private set; } = new Setting<int>(0);
  
     //private static List<Player> players = new List<Player>();
