@@ -30,11 +30,11 @@ namespace Assets.Noyau.Cards.controller
                 new CardEffect("card.location.foret.effect.wound",
                     effect : (target) =>
                     {
-                        target.Wounded(2);
+                        target.Wounded(2, GameManager.PlayerTurn.Value, false);
                     },
                     targetableCondition: (target) =>
                     {
-                        return target.HasBroche.Value;
+                        return !target.HasBroche.Value;
                     }
                 ),
                 new CardEffect("card.location.foret.effect.heal",
