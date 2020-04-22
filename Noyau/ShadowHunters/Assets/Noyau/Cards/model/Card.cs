@@ -11,14 +11,20 @@ namespace Assets.Noyau.Cards.controller
     /// Définition d'une carte
     /// (les cartes Lieu utilisent cette implémentation)
     /// </summary>
-    [System.Serializable]
+    /// 
     public class Card
     {
-        public string cardName;
-        public CardType cardType;
-        public bool isEquipement;
-        public string description;
-        public Sprite sprite;
-        public bool isHidden;
+        public readonly string cardLabel;
+        public readonly CardType cardType;
+        public readonly string description;
+        public readonly int Id;
+
+        public Card(string cardLabel, CardType cardType, string description, int id)
+        {
+            this.cardLabel = cardLabel;
+            this.cardType = cardType;
+            this.description = description;
+            Id = id;
+        }
     }
 }

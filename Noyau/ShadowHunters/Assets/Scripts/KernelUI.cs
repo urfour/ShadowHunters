@@ -194,7 +194,7 @@ namespace Scripts
                 {
                     PlayerId = sgce.PlayerId,
                     PlayerGivedId = sgce.PossibleTargetId[UnityEngine.Random.Range(0, sgce.PossibleTargetId.Length)],
-                    CardGivedName = card.cardName
+                    CardGivedName = card.cardLabel
                 });
             }
             else if (e is SelectGiveOrWoundEvent sgowe)
@@ -297,7 +297,7 @@ namespace Scripts
                 {
                     PlayerId = sscfpe.PlayerId,
                     PlayerStealedId = sscfpe.PlayerStealedId,
-                    CardStealedName = card.cardName
+                    CardStealedName = card.cardLabel
                 });
             }
             else if (e is SelectVisionPowerEvent svpe)

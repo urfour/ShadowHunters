@@ -9,6 +9,7 @@ namespace Assets.Noyau.Cards.model
 {
     public struct VisionEffect
     {
+        /*
         // Types de cartes vision
         public bool effectOnShadow; // "Je pense que tu es Shadow"
         public bool effectOnHunter; // "Je pense que tu es Hunter"
@@ -22,6 +23,7 @@ namespace Assets.Noyau.Cards.model
         public bool effectHealingOneWound; // Soigner 1 Blessure
         public bool effectTakeWounds; // Subir x Blessures
         public int nbWounds; // Nombre de Blessures subies
+        */
     }
 
     public delegate bool VisionCardCondition(Player player);
@@ -34,7 +36,8 @@ namespace Assets.Noyau.Cards.model
 
         public VisionEffect visionEffect;
 
-        public VisionCard(VisionCardCondition condition, VisionCardEffect effect)
+        public VisionCard(string cardLabel, CardType cardType, string description, int id, VisionCardCondition condition, VisionCardEffect effect) : 
+            base(cardLabel, cardType, description, id)
         {
             this.condition = condition;
             this.effect = effect;
