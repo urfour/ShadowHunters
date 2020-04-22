@@ -67,7 +67,8 @@ public class Player
     public Setting<bool> HasWon { get; private set; } = new Setting<bool>(false);
     // position du joueur
     public Position Position { get; set; }
-    
+
+
     // personnage du joueur
     public Character Character { get; private set; }
 

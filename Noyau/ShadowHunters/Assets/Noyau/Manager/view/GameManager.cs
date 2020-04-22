@@ -13,6 +13,14 @@ namespace Assets.Noyau.Manager.view
     {
         public static Setting<Player> PlayerTurn { get; private set; } = new Setting<Player>(null);
         public static Setting<bool> StartOfTurn { get; private set; } = new Setting<bool>(true);
+        public static Setting<bool> MovementAvailable { get; private set; } = new Setting<bool>(false);
+        public static Setting<bool> AttackAvailable { get; private set; } = new Setting<bool>(false);
+
+        public static Setting<bool> PickVisionDeck { get; private set; } = new Setting<bool>(false);
+        public static Setting<bool> PickDarknessDeck { get; private set; } = new Setting<bool>(false);
+        public static Setting<bool> PickLightnessDeck { get; private set; } = new Setting<bool>(false);
+
+        public static Setting<bool> TurnEndable { get; private set; } = new Setting<bool>(false);
 
         public static void Init(int nbPlayers)
         {

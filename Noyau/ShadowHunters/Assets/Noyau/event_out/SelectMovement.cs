@@ -10,7 +10,5 @@ namespace Scripts.event_out
     public class SelectMovement : PlayerEvent
     {
         public Position[] LocationAvailable;
-        public int D6Dice { get; set; }
-        public int D4Dice { get; set; }
     }
 }

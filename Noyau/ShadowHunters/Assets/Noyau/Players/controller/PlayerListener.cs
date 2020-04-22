@@ -1,5 +1,6 @@
 ﻿using Assets.Noyau.Cards.controller;
 using Assets.Noyau.Cards.model;
+using Assets.Noyau.event_in;
 using Assets.Noyau.Manager.view;
 using Assets.Noyau.Players.model;
 using Assets.Noyau.Players.view;
@@ -44,17 +45,19 @@ namespace Assets.Noyau.Players.controller
             }
             else if (e is NewTurnEvent nte)
             {
-                Player currentPlayer = PlayerView.GetPlayer(nte.PlayerId);
+                GameManager.MovementAvailable.Value = true;
                 //currentPlayer.RollTheDices.Value = false;
 
+                /*
                 if (currentPlayer.Character.characterName == "Emi"
                     || currentPlayer.Character.characterName == "Franklin"
                     || currentPlayer.Character.characterName == "Georges")
                 {
                     currentPlayer.CanUsePower.Value = false;
                 }
-
-                List<Position> position = new List<Position>();
+                */
+                /*
+                List<Position> availableDestination = new List<Position>();
 
                 if (currentPlayer.HasCompass.Value)
                 {
@@ -62,6 +65,12 @@ namespace Assets.Noyau.Players.controller
                     int lancer02 = UnityEngine.Random.Range(1, 4);
                     int lancer11 = UnityEngine.Random.Range(1, 6);
                     int lancer12 = UnityEngine.Random.Range(1, 4);
+
+                    while (lancer11 + lancer12 == lancer01 + lancer02)
+                    {
+                        lancer11 = UnityEngine.Random.Range(1, 6);
+                        lancer12 = UnityEngine.Random.Range(1, 4);
+                    }
 
                     EventView.Manager.Emit(new SelectDiceThrow()
                     {
@@ -77,7 +86,7 @@ namespace Assets.Noyau.Players.controller
                     int lancer01 = UnityEngine.Random.Range(1, 6);
                     int lancer02 = UnityEngine.Random.Range(1, 4);
 
-                    while (position.Count >= 0)
+                    while (availableDestination.Count >= 0)
                     {
                         lancer01 = UnityEngine.Random.Range(1, 6);
                         lancer02 = UnityEngine.Random.Range(1, 4);
@@ -86,39 +95,39 @@ namespace Assets.Noyau.Players.controller
                         {
                             case 2:
                             case 3:
-                                position.Add(Position.Antre);
+                                availableDestination.Add(Position.Antre);
                                 break;
                             case 4:
                             case 5:
-                                position.Add(Position.Porte);
+                                availableDestination.Add(Position.Porte);
                                 break;
                             case 6:
-                                position.Add(Position.Monastere);
+                                availableDestination.Add(Position.Monastere);
                                 break;
                             case 7:
-                                position.Add(Position.Antre);
-                                position.Add(Position.Porte);
-                                position.Add(Position.Monastere);
-                                position.Add(Position.Cimetiere);
-                                position.Add(Position.Foret);
-                                position.Add(Position.Foret);
+                                availableDestination.Add(Position.Antre);
+                                availableDestination.Add(Position.Porte);
+                                availableDestination.Add(Position.Monastere);
+                                availableDestination.Add(Position.Cimetiere);
+                                availableDestination.Add(Position.Foret);
+                                availableDestination.Add(Position.Foret);
                                 break;
                             case 8:
-                                position.Add(Position.Cimetiere);
+                                availableDestination.Add(Position.Cimetiere);
                                 break;
                             case 9:
-                                position.Add(Position.Foret);
+                                availableDestination.Add(Position.Foret);
                                 break;
                             case 10:
-                                position.Add(Position.Sanctuaire);
+                                availableDestination.Add(Position.Sanctuaire);
                                 break;
                         }
-                        if (position.Contains(currentPlayer.Position))
+                        if (availableDestination.Contains(currentPlayer.Position))
                         {
-                            currentPlayer.Position = position[0];
+                            currentPlayer.Position = availableDestination[0];
                         }
                         else
-                            position.Remove(currentPlayer.Position);
+                            availableDestination.Remove(currentPlayer.Position);
 
                     }
                     EventView.Manager.Emit(new SelectMovement()
@@ -126,69 +135,81 @@ namespace Assets.Noyau.Players.controller
                         PlayerId = currentPlayer.Id,
                         D6Dice = lancer01,
                         D4Dice = lancer02,
-                        LocationAvailable = position.ToArray()
+                        LocationAvailable = availableDestination.ToArray()
                     });
                 }
-
+                */
             }
-            else if (e is SelectedDiceEvent sde)
+            else if (e is AskMovement am)
             {
-                Player currentPlayer = PlayerView.GetPlayer(sde.PlayerId);
-                List<Position> position = new List<Position>();
+                List<int> dicesRolls = new List<int>();
 
-                while (position.Count >= 0)
+                int nbrolls = 1;
+
+                if (GameManager.PlayerTurn.Value.HasCompass.Value)
                 {
-                    switch (sde.D4Dice + sde.D6Dice)
+                    nbrolls++;
+                }
+
+                List<Position> availableDestination = new List<Position>();
+                while (nbrolls > 0)
+                {
+                    int val = UnityEngine.Random.Range(1, 6) + UnityEngine.Random.Range(1, 4);
+                    Position tmpavailableDestination = Position.None;
+                    switch (val)
                     {
                         case 2:
                         case 3:
-                            position.Add(Position.Antre);
+                            tmpavailableDestination = Position.Antre;
                             break;
                         case 4:
                         case 5:
-                            position.Add(Position.Porte);
+                            tmpavailableDestination = Position.Porte;
                             break;
                         case 6:
-                            position.Add(Position.Monastere);
+                            tmpavailableDestination = Position.Monastere;
                             break;
                         case 7:
-                            position.Add(Position.Antre);
-                            position.Add(Position.Porte);
-                            position.Add(Position.Monastere);
-                            position.Add(Position.Cimetiere);
-                            position.Add(Position.Foret);
-                            position.Add(Position.Sanctuaire);
+                            availableDestination = new List<Position>()
+                            {
+                                Position.Antre,
+                                Position.Porte,
+                                Position.Monastere,
+                                Position.Cimetiere,
+                                Position.Foret,
+                                Position.Sanctuaire
+                            };
+                            nbrolls = 0;
                             break;
                         case 8:
-                            position.Add(Position.Cimetiere);
+                            tmpavailableDestination = Position.Cimetiere;
                             break;
                         case 9:
-                            position.Add(Position.Foret);
+                            tmpavailableDestination = Position.Foret;
                             break;
                         case 10:
-                            position.Add(Position.Sanctuaire);
+                            tmpavailableDestination = Position.Sanctuaire;
                             break;
                     }
-                    if (position.Contains(currentPlayer.Position))
+                    if (!availableDestination.Contains(tmpavailableDestination) && GameManager.PlayerTurn.Value.Position != tmpavailableDestination)
                     {
-                        currentPlayer.Position = position[0];
+                        availableDestination.Add(tmpavailableDestination);
+                        nbrolls--;
                     }
-                    else
-                        position.Remove(currentPlayer.Position);
-
                 }
+                availableDestination.Remove(GameManager.PlayerTurn.Value.Position);
+
                 EventView.Manager.Emit(new SelectMovement()
                 {
-                    PlayerId = currentPlayer.Id,
-                    D6Dice = sde.D6Dice,
-                    D4Dice = sde.D4Dice,
-                    LocationAvailable = position.ToArray()
+                    LocationAvailable = availableDestination.ToArray()
                 });
             }
             else if (e is MoveOn mo)
             {
                 Player currentPlayer = PlayerView.GetPlayer(mo.PlayerId);
                 currentPlayer.Position = mo.Location;
+
+                /*
                 gameBoard.setPositionOfAt(currentPlayer.Id, mo.Location);
 
                 currentPlayer.AttackPlayer.Value = true;
@@ -196,22 +217,23 @@ namespace Assets.Noyau.Players.controller
                     currentPlayer.EndTurn.Value = false;
                 else
                     currentPlayer.EndTurn.Value = true;
+                    */
 
                 switch (currentPlayer.Position)
                 {
                     case Position.Antre:
-                        currentPlayer.DrawLightCard.Value = true;
+                        GameManager.PickVisionDeck.Value = true;
                         break;
                     case Position.Porte:
-                        currentPlayer.DrawLightCard.Value = true;
-                        currentPlayer.DrawDarknessCard.Value = true;
-                        currentPlayer.DrawVisionCard.Value = true;
+                        GameManager.PickVisionDeck.Value = true;
+                        GameManager.PickLightnessDeck.Value = true;
+                        GameManager.PickDarknessDeck.Value = true;
                         break;
                     case Position.Monastere:
-                        currentPlayer.DrawVisionCard.Value = true;
+                        GameManager.PickLightnessDeck.Value = true;
                         break;
                     case Position.Cimetiere:
-                        currentPlayer.DrawDarknessCard.Value = true;
+                        GameManager.PickDarknessDeck.Value = true;
                         break;
                     case Position.Foret:
                         currentPlayer.ForestHeal.Value = true;
