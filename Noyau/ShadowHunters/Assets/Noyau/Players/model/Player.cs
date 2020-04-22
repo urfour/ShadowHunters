@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Noyau.Cards.controller;
+using Assets.Noyau.Cards.model;
 using Assets.Noyau.Players.model;
 using EventSystem;
 using Scripts.Settings;
@@ -130,8 +132,8 @@ public class Player
         Debug.Log("Joueur " + Name + " : ");
         foreach (Card c in ListCard)
         {
-            Debug.Log("Carte : " + c.cardName);
-            if (c.isEquipement)
+            Debug.Log("Carte : " + c.cardLabel);
+            if (c is IEquipment)
                 Debug.Log("C'est une carte équipement !");
             else
                 Debug.Log("C'est une carte à utilisation unique.");
@@ -153,7 +155,7 @@ public class Player
     {
         for (int i = 0 ; i < ListCard.Count ; i++)
         {
-            if (ListCard[i].cardName.Equals(cardName))
+            if (ListCard[i].cardLabel.Equals(cardName))
                 return i;
         }
         return -1;

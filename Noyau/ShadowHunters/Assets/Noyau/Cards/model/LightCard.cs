@@ -14,8 +14,9 @@ namespace Assets.Noyau.Cards.model
     {
         public readonly LightCardCondition condition;
         public readonly LightCardEffect effect;
-
-        public LightCard(LightCardCondition condition, LightCardEffect effect)
+        
+        public LightCard(string cardLabel, CardType cardType, string description, int id, LightCardCondition condition, LightCardEffect effect) :
+            base(cardLabel, cardType, description, id)
         {
             this.condition = condition;
             this.effect = effect;

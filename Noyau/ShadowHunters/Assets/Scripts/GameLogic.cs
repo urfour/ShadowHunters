@@ -9,6 +9,8 @@ using Scripts;
 using Scripts.Settings;
 using Scripts.event_in;
 using Scripts.event_out;
+using Assets.Noyau.Cards.model;
+using Assets.Noyau.Cards.controller;
 
 /// <summary>
 /// Classe représentant la logique du jeu, à savoir la gestion des règles et des interactions 
@@ -161,7 +163,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         Card card = m_players[PlayerId].ListCard[CardId];
 
         // Si la carte est un equimement
-        if (!card.isEquipement)
+        if (!card is IEquipment)
         {
             Debug.LogError("Erreur : la carte n'est pas un equipement.");
             return;
@@ -291,7 +293,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 bool hasEquip = false;
 
                 foreach (Card card in m_players[idPlayer].ListCard)
-                    if (card.isEquipement)
+                    if (card is IEquipment)
                         hasEquip = true;
 
                 if (hasEquip)
@@ -815,7 +817,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         foreach (Player player in m_players)
             if (!player.Dead.Value && player.Id != thiefId && player.ListCard.Count > 0)
                 foreach (Card card in player.ListCard)
-                    if (card.isEquipement)
+                    if (card is IEquipment)
                     {
                         choices.Add(player.Id);
                         break;
@@ -845,7 +847,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     {
         bool hasEquip = false;
         foreach (Card card in m_players[playerId].ListCard)
-            if (card.isEquipement)
+            if (card is IEquipment)
                 hasEquip = true;
 
         if (!hasEquip)
@@ -1462,7 +1464,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                     Debug.Log("Le joueur " + player.Name + " choisit de piocher une carte Ténèbres.");
                     DarknessCard darknessCard = gameBoard.DrawCard(CardType.Darkness) as DarknessCard;
 
-                    if (darknessCard.isEquipement)
+                    if (darknessCard is IEquipment)
                     {
                         player.AddCard(darknessCard);
                         Debug.Log("La carte " + darknessCard.cardName + " a été ajoutée à la main du joueur "
@@ -1471,7 +1473,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 
                     DarknessCardPower(darknessCard, player.Id);
 
-                    if (!darknessCard.isEquipement)
+                    if (!darknessCard is IEquipment)
                         gameBoard.AddDiscard(darknessCard, CardType.Darkness);
 
                     break;
@@ -1481,7 +1483,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 
                     LightCard lightCard = gameBoard.DrawCard(CardType.Light) as LightCard;
 
-                    if (lightCard.isEquipement)
+                    if (lightCard is IEquipment)
                     {
                         player.AddCard(lightCard);
                         Debug.Log("La carte " + lightCard.cardName + " a été ajoutée à la main du joueur "
@@ -1490,7 +1492,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 
                     LightCardPower(lightCard, player.Id);
 
-                    if (!lightCard.isEquipement)
+                    if (!lightCard is IEquipment)
                         gameBoard.AddDiscard(lightCard, CardType.Light);
 
                     break;
@@ -1581,7 +1583,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             string stealedCard = stealTarget.CardStealedName;
             int indexCard = playerStealed.HasCard(stealedCard);
 
-            if(!playerStealed.ListCard[indexCard].isEquipement)
+            if(!playerStealed.ListCard[indexCard] is IEquipment)
             {
                 Debug.LogError("Erreur : la carte choisie n'est pas un équipement et ne devrait pas être là.");
                 return;
@@ -1617,7 +1619,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             playerGiving.PrintCards();
             playerGived.PrintCards();
 
-            if (playerGiving.ListCard[indexCard].isEquipement)
+            if (playerGiving.ListCard[indexCard] is IEquipment)
             {
                 if (playerGiving.ListCard[indexCard].cardType == CardType.Darkness)
                     DarknessCardPower(playerGiving.ListCard[indexCard] as DarknessCard, playerGived.Id);
@@ -1855,7 +1857,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             for (int i = 0; i < 2; i++)
             {
                 LightCard dc = gameBoard.DrawCard(CardType.Light) as LightCard;
-                while (!dc.isEquipement)
+                while (!dc is IEquipment)
                 {
                     dc = gameBoard.DrawCard(CardType.Light) as LightCard;
                 }
@@ -1870,7 +1872,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             /*
             // Test carte lumière non equipement
             LightCard dc = gameBoard.DrawCard(CardType.Light) as LightCard;
-            while(!dc.isEquipement)
+            while(!dc is IEquipment)
             {
                 dc = gameBoard.DrawCard(CardType.Light) as LightCard;
             }

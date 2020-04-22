@@ -295,7 +295,7 @@ namespace Assets.Noyau.Players.controller
                         //Debug.Log("Le joueur " + player.Name + " choisit de piocher une carte Ténèbres.");
                         DarknessCard darknessCard = gameBoard.DrawCard(CardType.Darkness) as DarknessCard;
 
-                        if (darknessCard.isEquipement)
+                        if (darknessCard is IEquipment)
                         {
                             player.AddCard(darknessCard);
                             //Debug.Log("La carte " + darknessCard.cardName + " a été ajoutée à la main du joueur "
@@ -304,7 +304,7 @@ namespace Assets.Noyau.Players.controller
 
                         DarknessCardPower(darknessCard, player.Id);
 
-                        if (!darknessCard.isEquipement)
+                        if (!darknessCard is IEquipment)
                             gameBoard.AddDiscard(darknessCard, CardType.Darkness);
 
                         break;
@@ -314,7 +314,7 @@ namespace Assets.Noyau.Players.controller
 
                         LightCard lightCard = gameBoard.DrawCard(CardType.Light) as LightCard;
 
-                        if (lightCard.isEquipement)
+                        if (lightCard is IEquipment)
                         {
                             player.AddCard(lightCard);
                             //Debug.Log("La carte " + lightCard.cardName + " a été ajoutée à la main du joueur "
@@ -323,7 +323,7 @@ namespace Assets.Noyau.Players.controller
 
                         LightCardPower(lightCard, player.Id);
 
-                        if (!lightCard.isEquipement)
+                        if (!lightCard is IEquipment)
                             gameBoard.AddDiscard(lightCard, CardType.Light);
 
                         break;
@@ -410,7 +410,7 @@ namespace Assets.Noyau.Players.controller
                 int indexCard = playerStealed.HasCard(stealedCard);
                 playerStealing.AddCard(playerStealed.ListCard[indexCard]);
 
-                if (playerStealed.ListCard[indexCard].isEquipement)
+                if (playerStealed.ListCard[indexCard] is IEquipment)
                 {
                     if (playerStealed.ListCard[indexCard].cardType == CardType.Darkness)
                     {
@@ -443,7 +443,7 @@ namespace Assets.Noyau.Players.controller
                 playerGiving.PrintCards();
                 playerGived.PrintCards();
 
-                if (playerGiving.ListCard[indexCard].isEquipement)
+                if (playerGiving.ListCard[indexCard] is IEquipment)
                 {
                     if (playerGiving.ListCard[indexCard].cardType == CardType.Darkness)
                     {
@@ -643,7 +643,24 @@ namespace Assets.Noyau.Players.controller
             }
             else if (e is RevealCard reveal)
             {
-                RevealCard(PlayerView.GetPlayer(reveal.PlayerId));
+                //RevealCard(PlayerView.GetPlayer(reveal.PlayerId));
+                Player p = PlayerView.GetPlayer(reveal.PlayerId);
+
+                p.Revealed.Value = true;
+
+                if (p.HasSpear.Value == true && p.Character.team == CharacterTeam.Hunter)
+                    p.BonusAttack.Value += 2;
+
+                // Si le joueur est Allie, il peut utiliser son pouvoir à tout moment
+                // Si le joueur est Emi, Franklin ou Georges et qu'il est au début de son tour, il peut utiliser son pouvoir
+                if (p.Character.characterName == "Allie"
+                    || (GameManager.StartOfTurn.Value
+                        && (p.Character.characterName == "Emi"
+                            || p.Character.characterName == "Franklin"
+                            || p.Character.characterName == "Georges")))
+                {
+                    p.CanUsePower.Value = true;
+                }
             }
             else if (e is TestEvent test)
             {
