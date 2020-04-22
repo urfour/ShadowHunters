@@ -14,10 +14,10 @@ namespace Assets.Noyau.Players.controller
         public GCharacter(int nbPlayers)
         {
             List<Character> Neutral = new List<Character>() {
-                new Character("Allie", CharacterTeam.Neutral, 8, null, null),
-                new Character("Bob", CharacterTeam.Neutral, 10, null, null),
-                new Character("Charles", CharacterTeam.Neutral, 11, null, null),
-                new Character("Daniel", CharacterTeam.Neutral, 13, null, null)
+                new Character("Allie", CharacterTeam.Neutral, 8, GGoal.AllieGoal, null),
+                new Character("Bob", CharacterTeam.Neutral, 10, GGoal.BobGoal, null),
+                new Character("Charles", CharacterTeam.Neutral, 11, GGoal.CharlesGoal, null),
+                new Character("Daniel", CharacterTeam.Neutral, 13, GGoal.DanielGoal, null)
             };
 
             List<Character> Hunter = new List<Character>()

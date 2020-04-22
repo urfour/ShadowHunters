@@ -4,6 +4,7 @@ using Assets.Noyau.Players.model;
 using EventSystem;
 using Scripts.Settings;
 using UnityEngine;
+using Assets.Noyau.Players.view;
 
 public enum PlayerNames
 {
@@ -63,6 +64,8 @@ public class Player
     public Setting<bool> HasGuardian { get; private set; } = new Setting<bool>(false);
     // le joueur est-il sous l'effet du savoir ancestral ?
     public Setting<bool> HasAncestral { get; private set; } = new Setting<bool>(false);
+    // nb d'équipements
+    public Setting<int> NbEquipment { get; private set; } = new Setting<int>(0);
     // le joueur a-t-il gagné ?
     public Setting<bool> HasWon { get; private set; } = new Setting<bool>(false);
     // position du joueur
@@ -102,8 +105,11 @@ public class Player
         //players.Add(this);
     }
 
-    public virtual int Wounded(int damage)
+    public virtual int Wounded(int damage, Player attacker, bool isAttack)
     {
+        if(attacker.Character.characterName=="Charles" && isAttack)
+            GameManager.HasKilled.Value=true;
+
         if (damage > 0 && !HasGuardian.Value)
         {
 
@@ -141,11 +147,13 @@ public class Player
     public void AddCard(Card card)
     {
         ListCard.Add(card);
+        NbEquipment++;
     }
 
     public void RemoveCard(int index)
     {
         ListCard.RemoveAt(index);
+        NbEquipment--;
     }
     
 

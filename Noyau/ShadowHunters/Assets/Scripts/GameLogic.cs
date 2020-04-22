@@ -298,7 +298,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                     GiveEquipmentCard(idPlayer);
                 else
                 {
-                    m_players[idPlayer].Wounded(1);
+                    m_players[idPlayer].Wounded(1,m_players[PlayerTurn],false);
                 }
                 break;
             case DarknessEffect.ChauveSouris:
@@ -341,7 +341,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                     foreach (Player p in m_players)
                     {
                         if (p.Position == area && !p.HasAmulet.Value)
-                            p.Wounded(3);
+                            p.Wounded(3,m_players[PlayerTurn],false);
                     }
                 }
                 break;
@@ -491,7 +491,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 foreach (Player p in m_players)
                 {
                     if (p.Id != idPlayer)
-                        p.Wounded(2);
+                        p.Wounded(2,m_players[PlayerTurn],false);
                 }
                 break;
 
@@ -681,7 +681,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                         }
                         else
                         {
-                            m_players[player.Id].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value);
+                            m_players[player.Id].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value,m_players[PlayerTurn],true);
                             
                             // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
                             if (m_players[playerAttackingId].Character.characterName == "Vampire"
@@ -717,7 +717,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
     {
         if (damage > 0)
         {
-            m_players[targetId].Wounded(damage);
+            m_players[targetId].Wounded(damage,m_players[playerAttackingId],true);
 
             if (m_players[targetId].Character.characterName == "LoupGarou"
                             && m_players[targetId].Revealed.Value)
@@ -755,7 +755,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                             }
                             else
                             {
-                                m_players[player.Id].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value);
+                                m_players[player.Id].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value,m_players[playerAttackingId],true);
 
                                 // Le Loup-garou peut contre attaquer
                                 if (player.Character.characterName == "LoupGarou"
@@ -784,7 +784,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                         {
                             Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[targetId].Name + ".");
 
-                            m_players[targetId].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value);
+                            m_players[targetId].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value,m_players[playerAttackingId],true);
 
                             // Le Loup-garou peut contre attaquer
                             if (m_players[targetId].Character.characterName == "LoupGarou"
@@ -1106,7 +1106,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 break;
             case "Charles":
                 if (player.Revealed.Value)
-                    player.Wounded(2);
+                    player.Wounded(2,player,false);
                 AttackCorrespondingPlayer(player.Id, PlayerAttacked.Value, 0);
                 break;
             case "Daniel":
@@ -1550,7 +1550,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 else
                 {
                     // Le joueur attaqué se prend des dégats
-                    playerAttacked.Wounded(dommageTotal);
+                    playerAttacked.Wounded(dommageTotal,playerAttacking,true);
 
                     // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
                     if (playerAttacking.Character.characterName == "Vampire"
@@ -1650,22 +1650,22 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 Debug.Log("Le lancer donne " + lancer + ".");
 
                 if (lancer <= 4)
-                    playerAttacked.Wounded(nbWoundsTaken);
+                    playerAttacked.Wounded(nbWoundsTaken,playerAttacking,false);
                 else
-                    playerAttacking.Wounded(nbWoundsTaken);
+                    playerAttacking.Wounded(nbWoundsTaken,playerAttacking,false);
             }
             else
             {
                 
                 if (nbWoundsSelfHealed < 0)
-                    playerAttacking.Wounded(-nbWoundsSelfHealed);
+                    playerAttacking.Wounded(-nbWoundsSelfHealed,playerAttacking,false);
                 else
                     playerAttacking.Healed(nbWoundsSelfHealed);
 
                 if (nbWoundsTaken < 0)
                     playerAttacked.Healed(-nbWoundsTaken);
                 else
-                    playerAttacked.Wounded(nbWoundsTaken);
+                    playerAttacked.Wounded(nbWoundsTaken,playerAttacking,false);
             }
         }
         else if (e is RevealOrNotEvent revealOrNot)
@@ -1763,13 +1763,13 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             {
                 // Cas des cartes infligeant des Blessures
                 if (pickedCard.visionEffect.effectTakeWounds)
-                    playerGived.Wounded(pickedCard.visionEffect.nbWounds);
+                    playerGived.Wounded(pickedCard.visionEffect.nbWounds,playerGiving,false);
 
                 // Cas des cartes soignant des Blessures
                 else if (pickedCard.visionEffect.effectHealingOneWound)
                 {
                     if (playerGived.Wound.Value == 0)
-                        playerGived.Wounded(1);
+                        playerGived.Wounded(1,playerGiving,false);
                     else
                         playerGived.Healed(1);
                 }
@@ -1779,7 +1779,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                     if (playerGived.ListCard.Count == 0)
                     {
                         Debug.Log("Vous ne possédez pas de carte équipement.");
-                        playerGived.Wounded(1);
+                        playerGived.Wounded(1,playerGiving,false);
                     }
                     else
                     {
@@ -1794,9 +1794,9 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             }
             // Cas des cartes applicables en fonction des points de vie
             else if (pickedCard.visionEffect.effectOnLowHP && CheckLowHPCharacters(playerGived.Character.characterName))
-                playerGived.Wounded(1);
+                playerGived.Wounded(1,playerGiving,false);
             else if (pickedCard.visionEffect.effectOnHighHP && CheckHighHPCharacters(playerGived.Character.characterName))
-                playerGived.Wounded(2);
+                playerGived.Wounded(2,playerGiving,false);
 
             // Cas de la carte Vision Suprême
             else if (pickedCard.visionEffect.effectSupremeVision)
@@ -1818,7 +1818,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             else
             {
                 Debug.Log("Vous choisissez de subir 1 Blessure.");
-                player.Wounded(1);
+                player.Wounded(1,m_players[PlayerTurn],false);
             }
         }
         else if (e is BobPowerEvent bobPower)

@@ -383,17 +383,17 @@ namespace Assets.Noyau.Players.controller
                     else
                     {
                         // Le joueur attaqué se prend des dégats
-                        playerAttacked.Wounded(dommageTotal);
+                        playerAttacked.Wounded(dommageTotal,playerAttacking,true);
 
                         // Le Loup-garou peut contre attaquer
-                        if (playerAttacked.Character.characterName == "LoupGarou
+                        if (playerAttacked.Character.characterName == "LoupGarou"
                             && playerAttacked.Revealed.Value)
                         {
                             playerAttacked.CanUsePower.Value = true;
                         }
 
                         // Charles peut attaquer de nouveau
-                        if (playerAttacking.Character.characterName == "Charles
+                        if (playerAttacking.Character.characterName == "Charles"
                             && playerAttacking.Revealed.Value)
                         {
                             playerAttacking.CanUsePower.Value = true;
@@ -478,22 +478,22 @@ namespace Assets.Noyau.Players.controller
                     int lancer = UnityEngine.Random.Range(1, 6);
                     //Debug.Log("Le lancer donne " + lancer + ".");
                     if (lancer <= 4)
-                        playerAttacked.Wounded(nbWoundsTaken);
+                        playerAttacked.Wounded(nbWoundsTaken,playerAttacking,false);
                     else
-                        playerAttacking.Wounded(nbWoundsTaken);
+                        playerAttacking.Wounded(nbWoundsTaken,playerAttacking,false);
                 }
                 else
                 {
 
                     if (nbWoundsSelfHealed < 0)
-                        playerAttacking.Wounded(-nbWoundsSelfHealed);
+                        playerAttacking.Wounded(-nbWoundsSelfHealed,playerAttacking,false);
                     else
                         playerAttacking.Healed(nbWoundsSelfHealed);
 
                     if (nbWoundsTaken < 0)
                         playerAttacked.Healed(-nbWoundsTaken);
                     else
-                        playerAttacked.Wounded(nbWoundsTaken);
+                        playerAttacked.Wounded(nbWoundsTaken,playerAttacking,false);
                 }
             }
             else if (e is RevealOrNotEvent revealOrNot)
@@ -520,9 +520,9 @@ namespace Assets.Noyau.Players.controller
                     }
                     else if (effectLightCard.lightEffect == LightEffect.Chocolat
                                 && hasRevealed
-                                && (player.Character.characterName == "Allie
-                                    || player.Character.characterName == "Emi
-                                    || player.Character.characterName == "Metamorphe))
+                                && (player.Character.characterName == "Allie"
+                                    || player.Character.characterName == "Emi"
+                                    || player.Character.characterName == "Metamorphe"))
                     {
                         player.Healed(player.Wound.Value);
                         //Debug.Log("Le joueur " + player.Name + " se soigne complètement");
@@ -572,13 +572,13 @@ namespace Assets.Noyau.Players.controller
                 {
                     // Cas des cartes infligeant des Blessures
                     if (pickedCard.visionEffect.effectTakeWounds)
-                        playerGived.Wounded(pickedCard.visionEffect.nbWounds);
+                        playerGived.Wounded(pickedCard.visionEffect.nbWounds,playerGiving,false);
 
                     // Cas des cartes soignant des Blessures
                     else if (pickedCard.visionEffect.effectHealingOneWound)
                     {
                         if (playerGived.Wound.Value == 0)
-                            playerGived.Wounded(1);
+                            playerGived.Wounded(1,playerGiving,false);
                         else
                             playerGived.Healed(1);
                     }
@@ -588,7 +588,7 @@ namespace Assets.Noyau.Players.controller
                         if (playerGived.ListCard.Count == 0)
                         {
                             //Debug.Log("Vous ne possédez pas de carte équipement.");
-                            playerGived.Wounded(1);
+                            playerGived.Wounded(1,playerGiving,false);
                         }
                         else
                         {
@@ -604,9 +604,9 @@ namespace Assets.Noyau.Players.controller
                 // Cas des cartes applicables en fonction des points de vie
                 //else if (pickedCard.visionEffect.effectOnLowHP && CheckLowHPCharacters(playerGived.Character.characterName))
                 else if (pickedCard.visionEffect.effectOnLowHP && pickedCard.condition(playerGived))
-                            playerGived.Wounded(1);
+                            playerGived.Wounded(1,playerGiving,false);
                 else if (pickedCard.visionEffect.effectOnHighHP && pickedCard.condition(playerGived))
-                    playerGived.Wounded(2);
+                    playerGived.Wounded(2,playerGiving,false);
 
                 // Cas de la carte Vision Suprême
                 else if (pickedCard.visionEffect.effectSupremeVision)
@@ -627,7 +627,7 @@ namespace Assets.Noyau.Players.controller
                 if (give)
                     GiveEquipmentCard(player.Id);
                 else
-                    player.Wounded(1);
+                    player.Wounded(1,player,false);
             }
             else if (e is BobPowerEvent bobPower)
             {
