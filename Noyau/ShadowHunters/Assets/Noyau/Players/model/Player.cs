@@ -89,6 +89,8 @@ public class Player
     public Setting<int> OnAttacking { get; private set; } = new Setting<int>(-1);
 
     public Setting<int> OnDealDamage { get; private set; } = new Setting<int>(0);
+
+    public Setting<int> DamageDealed { get; private set; } = new Setting<int>(-1);
  
     //private static List<Player> players = new List<Player>();
 
@@ -121,7 +123,11 @@ public class Player
 
             if (ReductionWounds.Value > 0)
                 damage = (damage - ReductionWounds.Value < 0) ? 0 : damage - ReductionWounds.Value;
-
+            
+            //si c'est une attaque pour les pouvoirs du Vampire et Bob
+            if(isAttack)
+                attacker.DamageDealed=damage;
+            
             this.Wound.Value += damage;
             return damage;
         }

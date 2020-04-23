@@ -86,7 +86,7 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
-                //TODO
+                
             },
             addListeners: (owner) =>
             {
@@ -148,18 +148,23 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
-                //TODO
+                owner.Healed(2);
             },
             addListeners: (owner) =>
             {
-                //TODO
+                owner.DamageDealed.AddListener((sender) => { owner.Character.power.availability(owner); });
             },
             availability: (owner) =>
             {
-                //TODO
+                if(owner.Revealed.Value && owner.DamageDealed.Value > 0)
+                {
+                    owner.power.power(owner);
+                }
+                return false;
             }
             );
 
+/* pas besoin de le faire car déjà géré par les cartes visions
         public static Power Metamorphe = new Power
             (
             power: (owner) =>
@@ -175,21 +180,25 @@ namespace Assets.Noyau.Players.controller
                 //TODO
             }
             );
-
+*/
         //NEUTRES
         public static Power Allie = new Power
             (
             power: (owner) =>
             {
-                //TODO
+                owner.Healed(owner.Wound.Value);
             },
             addListeners: (owner) =>
             {
-                //TODO
+                owner.Revealed.AddListener((sender) => { owner.Character.power.availability(owner); });
             },
             availability: (owner) =>
             {
-                //TODO
+                if(owner.Revealed.Value)
+                {
+                    owner.power.power(owner);
+                }
+                return false;
             }
             );
 
@@ -197,15 +206,19 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
-                //TODO
+                EventView.Manager.Emit(new SelectBobChoiceEvent() { PlayerId = owner.Id});
             },
             addListeners: (owner) =>
             {
-                //TODO
+                owner.DamageDealed.AddListener((sender) => { owner.Character.power.availability(owner); });
             },
             availability: (owner) =>
             {
-                //TODO
+                if(owner.Revealed.Value && owner.DamageDealed.Value >= 2)
+                {
+                    owner.power.power(owner);
+                }
+                return false;
             }
             );
 
@@ -261,6 +274,7 @@ namespace Assets.Noyau.Players.controller
                 {
                     owner.Character.power.power(owner);
                 }
+                return false;
             }
             );
 
