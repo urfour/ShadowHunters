@@ -137,19 +137,10 @@ namespace Assets.Noyau.Players.controller
                         GameManager.PickDarknessDeck.Value = true;
                         break;
                     case Position.Foret:
-                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard))
+                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Foret.Id));
                         break;
                     case Position.Sanctuaire:
-                        List<int> target2 = new List<int>();
-                        foreach (Player p in PlayerView.GetPlayers())
-                            if (!p.Dead.Value && p.Id != currentPlayer.Id && p.ListCard.Count > 0)
-                                target2.Add(p.Id);
-
-                        EventView.Manager.Emit(new SelectStealCardEvent()
-                        {
-                            PlayerId = currentPlayer.Id,
-                            PossiblePlayerTargetId = target2.ToArray()
-                        });
+                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Sanctuaire.Id));
                         break;
                 }
             }
