@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assets.Noyau.Cards.controller;
 
 namespace Scripts.event_out
 {
@@ -11,6 +12,8 @@ namespace Scripts.event_out
     // Renvoie l'event RevealOrNotEvent
     public class SelectRevealOrNotEvent : PlayerEvent
     {
-        public Card EffectCard { get; set; }
+        public Card EffectCard { get; set; } = null;
+        public bool PowerDaniel { get; set; } = false;
+        public bool PowerLoup { get; set; } = false;
     }
 }

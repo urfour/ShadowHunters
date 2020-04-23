@@ -13,5 +13,7 @@ namespace Scripts.event_out
         public int PlayerAttackedId { get; set; }
         public bool PowerFranklin { get; set; }
         public bool PowerGeorges { get; set; }
+        public bool PowerLoup { get; set; }
+        public bool PowerCharles { get; set; }
     }
 }

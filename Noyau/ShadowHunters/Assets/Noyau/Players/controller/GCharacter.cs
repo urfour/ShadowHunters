@@ -24,11 +24,11 @@ namespace Assets.Noyau.Players.controller
             {
                 new Character("Emi", CharacterTeam.Hunter, 10, GGoal.HunterGoal, null),
                 new Character("Georges", CharacterTeam.Hunter, 14, GGoal.HunterGoal, GPower.George),
-                new Character("Franklin", CharacterTeam.Hunter, 12, GGoal.HunterGoal, null),
+                new Character("Franklin", CharacterTeam.Hunter, 12, GGoal.HunterGoal, GPower.Franklin),
             };
             List<Character> Shadow = new List<Character>()
             {
-                new Character("Loup-Garou", CharacterTeam.Shadow, 14, GGoal.ShadowGoal, null),
+                new Character("Loup-Garou", CharacterTeam.Shadow, 14, GGoal.ShadowGoal, GPower.Loup),
                 new Character("Vampire", CharacterTeam.Shadow, 13, GGoal.ShadowGoal, null),
                 new Character("Métamorphe", CharacterTeam.Shadow, 11, GGoal.ShadowGoal, null),
             };
