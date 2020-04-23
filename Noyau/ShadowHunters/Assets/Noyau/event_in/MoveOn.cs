@@ -9,6 +9,6 @@ namespace Scripts.event_in
     // déplace le joueur sur le lieu
     public class MoveOn : PlayerEvent
     {
-        public Position Location { get; set; }
+        public int Location { get; set; }
     }
 }

@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Assets.Noyau.Manager.view.GameManager;
 
 namespace Assets.Noyau.Players.controller
 {
@@ -63,7 +64,9 @@ namespace Assets.Noyau.Players.controller
                 while (nbrolls > 0)
                 {
                     int val = UnityEngine.Random.Range(1, 6) + UnityEngine.Random.Range(1, 4);
+
                     Position tmpavailableDestination = Position.None;
+
                     switch (val)
                     {
                         case 2:
@@ -99,13 +102,13 @@ namespace Assets.Noyau.Players.controller
                             tmpavailableDestination = Position.Sanctuaire;
                             break;
                     }
-                    if (!availableDestination.Contains(tmpavailableDestination) && GameManager.PlayerTurn.Value.Position != tmpavailableDestination)
+                    if (!availableDestination.Contains(tmpavailableDestination) && GameManager.Board[GameManager.PlayerTurn.Value.Position.Value] != tmpavailableDestination)
                     {
                         availableDestination.Add(tmpavailableDestination);
                         nbrolls--;
                     }
                 }
-                availableDestination.Remove(GameManager.PlayerTurn.Value.Position);
+                availableDestination.Remove(GameManager.Board[GameManager.PlayerTurn.Value.Position.Value]);
 
                 EventView.Manager.Emit(new SelectMovement()
                 {
@@ -115,10 +118,9 @@ namespace Assets.Noyau.Players.controller
             else if (e is MoveOn mo)
             {
                 Player currentPlayer = PlayerView.GetPlayer(mo.PlayerId);
-                currentPlayer.Position = mo.Location;
-                
+                currentPlayer.Position.Value = mo.Location;
 
-                switch (currentPlayer.Position)
+                switch (GameManager.Board[currentPlayer.Position.Value])
                 {
                     case Position.Antre:
                         GameManager.PickVisionDeck.Value = true;
@@ -135,10 +137,10 @@ namespace Assets.Noyau.Players.controller
                         GameManager.PickDarknessDeck.Value = true;
                         break;
                     case Position.Foret:
-                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Foret.Id));
+                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Foret.Id, false));
                         break;
                     case Position.Sanctuaire:
-                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Sanctuaire.Id));
+                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Sanctuaire.Id, false));
                         break;
                 }
             }
@@ -174,121 +176,87 @@ namespace Assets.Noyau.Players.controller
                     NbWoundsSelfHealed = 0
                 });
             }
-            else if (e is DrawCardEvent drawCard)
+            else if (e is DrawCardEvent drawCard && GameManager.PlayerTurn.Value.Id == e.PlayerId)
             {
                 Player player = PlayerView.GetPlayer(drawCard.PlayerId);
+                Card pickedCard = null;
 
                 switch (drawCard.SelectedCardType)
                 {
                     case CardType.Darkness:
-                        //Debug.Log("Le joueur " + player.Name + " choisit de piocher une carte Ténèbres.");
-                        DarknessCard darknessCard = gameBoard.DrawCard(CardType.Darkness) as DarknessCard;
-
-                        if (darknessCard is EquipmentCard)
-                        {
-                            player.AddCard(darknessCard);
-                            //Debug.Log("La carte " + darknessCard.cardName + " a été ajoutée à la main du joueur "
-                            //    + player.Name + ".");
-                        }
-
-                        DarknessCardPower(darknessCard, player.Id);
-
-                        if (!darknessCard is IEquipment)
-                            gameBoard.AddDiscard(darknessCard, CardType.Darkness);
-
+                        pickedCard = CardView.PickDarkness();
                         break;
                     case CardType.Light:
-
-                        //Debug.Log("Le joueur " + player.Name + " pioche une carte Lumière.");
-
-                        LightCard lightCard = gameBoard.DrawCard(CardType.Light) as LightCard;
-
-                        if (lightCard is IEquipment)
-                        {
-                            player.AddCard(lightCard);
-                            //Debug.Log("La carte " + lightCard.cardName + " a été ajoutée à la main du joueur "
-                            //    + player.Name + ".");
-                        }
-
-                        LightCardPower(lightCard, player.Id);
-
-                        if (!lightCard is IEquipment)
-                            gameBoard.AddDiscard(lightCard, CardType.Light);
-
+                        pickedCard = CardView.PickLight();
                         break;
                     case CardType.Vision:
-
-                        //Debug.Log("Le joueur " + player.Name + " choisit de piocher une carte Vision.");
-
-                        VisionCard visionCard = gameBoard.DrawCard(CardType.Vision) as VisionCard;
-
-                        VisionCardPower(visionCard, player.Id);
-
-                        gameBoard.AddDiscard(visionCard, CardType.Vision);
-
+                        pickedCard = CardView.PickVision();
                         break;
+                }
+
+                if (pickedCard is UsableCard pickedUsableCard)
+                {
+                    EventView.Manager.Emit(new SelectUsableCardPickedEvent(pickedUsableCard.Id, pickedCard.cardType == CardType.Vision));
+                }
+                else if (pickedCard is EquipmentCard pickedEquipmentCard)
+                {
+                    EventView.Manager.Emit(new DrawEquipmentCardEvent(pickedEquipmentCard.Id));
+                    pickedEquipmentCard.equipe(player);
                 }
             }
             else if (e is AttackEvent attack)
             {
-                AttackCorrespondingPlayer(attack.PlayerId);
+                Player player = PlayerView.GetPlayer(attack.PlayerId);
+
+                List<Player> targetablePlayers = player.getTargetablePlayers();
+
+                if(targetablePlayers.Count != 0)
+                {
+                    if (!player.HasGatling.Value)
+                    {
+                        List<int> playersId = new List<int>();
+                        foreach (Player p in PlayerView.GetPlayers())
+                            playersId.Add(p.Id);
+
+                        EventView.Manager.Emit(new SelectAttackTargetEvent()
+                        {
+                            PlayerId = player.Id,
+                            PossibleTargetId = playersId.ToArray(),
+                            PowerFranklin = false,
+                            PowerGeorges = false
+                        });
+                    }
+                    else
+                    {
+                        int lancer = 0;
+
+                        if (player.HasSaber.Value)
+                            lancer = UnityEngine.Random.Range(1, 4);
+                        else
+                            lancer = UnityEngine.Random.Range(1, 6) - UnityEngine.Random.Range(1, 4);
+                        
+                        if (lancer != 0)
+                            foreach (Player p in PlayerView.GetPlayers())
+                                p.Wounded(lancer + player.BonusAttack.Value - player.MalusAttack.Value, player, true);
+                    }
+                }
             }
             else if (e is AttackPlayerEvent attackPlayer)
             {
                 Player playerAttacking = PlayerView.GetPlayer(attackPlayer.PlayerId);
                 Player playerAttacked = PlayerView.GetPlayer(attackPlayer.PlayerAttackedId);
 
-                //Debug.Log("Joueur " + playerAttacking.Id + " (" + playerAttacking.Character.characterName
-                //            + ") attaque joueur " + playerAttacked.Id + " (" + playerAttacked.Character.characterName + ")");
+                int lancer = 0;
 
-
-                // On notifie le joueur qu'il subit une attaque (pour le Loup-Garou)
-                if (!attackPlayer.PowerFranklin && !attackPlayer.PowerGeorges)
-                {
-                    playerAttacked.OnAttacked.Value = playerAttacking.Id;
-                }
-
-                int lancer1 = UnityEngine.Random.Range(1, 6);
-                int lancer2 = UnityEngine.Random.Range(1, 4);
-                int lancerTotal = (playerAttacking.HasSaber.Value == true) ? lancer2 : Math.Abs(lancer1 - lancer2);
-
-                if (attackPlayer.PowerFranklin)
-                    lancerTotal = lancer1;
-                else if (attackPlayer.PowerGeorges)
-                    lancerTotal = lancer2;
+                if (playerAttacking.HasSaber.Value)
+                    lancer = UnityEngine.Random.Range(1, 4);
+                else
+                    lancer = UnityEngine.Random.Range(1, 6) - UnityEngine.Random.Range(1, 4);
 
                 //Debug.Log("Le lancer vaut : " + lancerTotal);
 
-                if (lancerTotal == 0)
-                    /*Debug.Log("Le lancer vaut 0, vous n'attaquez pas.")*/;
-                else
-                {
-                    //Debug.Log("Vous choisissez d'attaquer le joueur " + playerAttacked.Name + ".");
-
-                    // Si c'est la contre-attaque du loup, les objets ne comptent pas
-                    int dommageTotal = (attackPlayer.PowerLoup) ? lancerTotal : lancerTotal + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value;
-
-                    // Si Bob est révélé et inflige 2 dégats ou plus, il peut voler une arme 
-                    if (playerAttacking.Character.characterName == "Bob"
-                        && playerAttacking.Revealed.Value
-                        && dommageTotal >= 2)
-                    {
-                        m_damageBob = dommageTotal;
-                        PlayerAttacked.Value = playerAttacked.Id;
-                        PlayerCardPower(playerAttacking);
-                    }
-                    else
-                    {
-                        // Le joueur attaqué se prend des dégats
-                        playerAttacked.Wounded(dommageTotal, playerAttacking, true);
-
-                        // On notifie le joueur qu'il vient d'attaquer (pour Charles)
-                        if (!attackPlayer.PowerFranklin && !attackPlayer.PowerGeorges && !attackPlayer.PowerCharles)
-                        {
-                            playerAttacking.OnAttacking.Value = playerAttacked.Id;
-                        }
-                    }
-                }
+                if (lancer != 0)
+                    playerAttacked.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
             }
             else if (e is StealCardEvent stealTarget)
             {
@@ -299,26 +267,11 @@ namespace Assets.Noyau.Players.controller
                 int indexCard = playerStealed.HasCard(stealedCard);
                 playerStealing.AddCard(playerStealed.ListCard[indexCard]);
 
-                if (playerStealed.ListCard[indexCard] is EquipmentCard)
+                if (playerStealed.ListCard[indexCard] is EquipmentCard pickedCard)
                 {
-                    if (playerStealed.ListCard[indexCard].cardType == CardType.Darkness)
-                    {
-                        DarknessCardPower(playerStealed.ListCard[indexCard] as DarknessCard, playerStealing.Id);
-                        LooseEquipmentCard(playerStealed.Id, indexCard, 0);
-                    }
-                    else if (playerStealed.ListCard[indexCard].cardType == CardType.Light)
-                    {
-                        LightCardPower(playerStealed.ListCard[indexCard] as LightCard, playerStealing.Id);
-                        LooseEquipmentCard(playerStealed.Id, indexCard, 1);
-                    }
+                    pickedCard.equipe(playerStealing);
+                    pickedCard.unequipe(playerStealed);
                 }
-                else
-                {
-                    //Debug.LogError("Erreur : la carte choisie n'est pas un équipement et ne devrait pas être là.");
-                }
-
-                //Debug.Log("La carte " + stealedCard + " a été volée au joueur "
-                //    + playerStealed.Name + " par le joueur " + playerStealing.Name + " !");
             }
             else if (e is GiveCardEvent giveCard)
             {
@@ -332,27 +285,11 @@ namespace Assets.Noyau.Players.controller
                 playerGiving.PrintCards();
                 playerGived.PrintCards();
 
-                if (playerGiving.ListCard[indexCard] is IEquipment)
+                if (playerGiving.ListCard[indexCard] is EquipmentCard pickedCard)
                 {
-                    if (playerGiving.ListCard[indexCard].cardType == CardType.Darkness)
-                    {
-                        DarknessCardPower(playerGiving.ListCard[indexCard] as DarknessCard, playerGived.Id);
-                        LooseEquipmentCard(playerGiving.Id, indexCard, 0);
-                    }
-                    else if (playerGiving.ListCard[indexCard].cardType == CardType.Light)
-                    {
-                        LightCardPower(playerGiving.ListCard[indexCard] as LightCard, playerGived.Id);
-                        LooseEquipmentCard(playerGiving.Id, indexCard, 1);
-                    }
+                    pickedCard.equipe(playerGived);
+                    pickedCard.unequipe(playerGiving);
                 }
-                else
-                    //Debug.LogError("Erreur : la carte choisie n'est pas un équipement et ne devrait pas être là.");
-
-                //Debug.Log("La carte " + givedCard + " a été donnée au joueur "
-                //    + playerGived.Name + " par le joueur " + playerGiving.Name + " !");
-
-                playerGiving.PrintCards();
-                playerGived.PrintCards();
             }
             else if (e is TakingWoundsEffectEvent takingWounds)
             {
@@ -365,7 +302,6 @@ namespace Assets.Noyau.Players.controller
                 if (isPuppet)
                 {
                     int lancer = UnityEngine.Random.Range(1, 6);
-                    //Debug.Log("Le lancer donne " + lancer + ".");
                     if (lancer <= 4)
                         playerAttacked.Wounded(nbWoundsTaken,playerAttacking,false);
                     else
@@ -385,80 +321,39 @@ namespace Assets.Noyau.Players.controller
                         playerAttacked.Wounded(nbWoundsTaken,playerAttacking,false);
                 }
             }
-            else if (e is RevealOrNotEvent revealOrNot)
-            {
-                Player player = PlayerView.GetPlayer(revealOrNot.PlayerId);
-                bool hasRevealed = revealOrNot.HasRevealed;
-                Card effectCard = revealOrNot.EffectCard;
-                bool PowerLoup = revealOrNot.PowerLoup;
-                
-                if (effectCard.cardType is CardType.Darkness
-                    && hasRevealed
-                    && player.Character.team == CharacterTeam.Shadow)
-                {
-                    player.Healed(player.Wound.Value);
-                    //Debug.Log("Le joueur " + player.Name + " se soigne complètement");
-                }
-                else if (effectCard.cardType is CardType.Light)
-                {
-                    if (effectLightCard.lightEffect == LightEffect.Supreme
-                        && hasRevealed
-                        && player.Character.team == CharacterTeam.Hunter)
-                    {
-                        player.Healed(player.Wound.Value);
-                        //Debug.Log("Le joueur " + player.Name + " se soigne complètement");
-                    }
-                    else if (effectLightCard.lightEffect == LightEffect.Chocolat
-                                && hasRevealed
-                                && (player.Character.characterName == "Allie"
-                                    || player.Character.characterName == "Emi"
-                                    || player.Character.characterName == "Metamorphe"))
-                    {
-                        player.Healed(player.Wound.Value);
-                        //Debug.Log("Le joueur " + player.Name + " se soigne complètement");
-                    }
-                }
-                else
-                {
-                    // Si on s'est révélé dans le but de contre-attaquer, on active le pouvoir immédiatement
-                    // (on saute volontairement l'étape du bouton UsePower car il paraît évident qu'on veut l'utiliser par cette action)
-                    if (PowerLoup && hasRevealed)
-                    {
-                        player.Character.power.power(player);
-                    }
-                }
-            }
             else if (e is LightCardEffectEvent lcEffect)
             {
                 Player player = PlayerView.GetPlayer(lcEffect.PlayerId);
                 Player playerChoosed = PlayerView.GetPlayer(lcEffect.PlayerChoosenId);
-                LightCard lightCard = lcEffect.LightCard;
+                UsableCard lightCard = lcEffect.LightCard as UsableCard;
 
-                if (lightCard.lightEffect == LightEffect.Benediction)
+                foreach(CardEffect effect in lightCard.cardEffect)
                 {
-                    //Debug.Log("Vous choisissez de soigner le joueur " + playerChoosed.Name + ".");
+                    if (effect.targetableCondition(playerChoosed))
+                        effect.effect(playerChoosed, lightCard);
+                }
+
+                /*if (lightCard.cardLabel == "card.light.light_benediction")
+                {
                     playerChoosed.Healed(UnityEngine.Random.Range(1, 6));
                 }
-                else if (lightCard.lightEffect == LightEffect.Benediction)
+                else if (lightCard.cardLabel == "card.light.light_premiers_secours")
                 {
-                    //Debug.Log("Vous choisissez d'infliger 7 blessures au joueur " + playerChoosed.Name + ".");
                     playerChoosed.Wound.Value = 7;
-                }
+                }*/
             }
             else if (e is VisionCardEffectEvent vcEffect)
             {
-
                 Player playerGiving = PlayerView.GetPlayer(vcEffect.PlayerId);
                 Player playerGived = PlayerView.GetPlayer(vcEffect.TargetId);
-                VisionCard pickedCard = vcEffect.VisionCard;
-                bool metaPower = vcEffect.MetamorphePower;
+                UsableCard visionCard = vcEffect.VisionCard as UsableCard;
 
-                // Utilisation de GCard
-                if (pickedCard.condition(playerGived) || metaPower)
-                    pickedCard.effect(playerGived);
-
-
-
+                foreach (CardEffect effect in visionCard.cardEffect)
+                {
+                    if (effect.targetableCondition(playerGived))
+                        effect.effect(playerGived, visionCard);
+                }
+                /*
                 CharacterTeam team = playerGived.Character.team;
 
                 // Cartes applicables en fonction des équipes ?
@@ -514,7 +409,7 @@ namespace Assets.Noyau.Players.controller
                 else
                 {
                     //Debug.Log("Rien ne se passe.");
-                }
+                }*/
             }
             else if (e is GiveOrWoundEvent giveOrWound)
             {
@@ -522,62 +417,37 @@ namespace Assets.Noyau.Players.controller
                 bool give = giveOrWound.Give;
 
                 if (give)
-                    GiveEquipmentCard(player.Id);
+                {
+                    if (player.ListCard.Count == 0)
+                    {
+                        return;
+                    }
+
+                    List<int> choices = new List<int>();
+                    foreach (Player p in PlayerView.GetPlayers())
+                        if (!p.Dead.Value && p.Id != player.Id)
+                            choices.Add(p.Id);
+
+                    if (choices.Count != 0)
+                    {
+                        EventView.Manager.Emit(new SelectGiveCardEvent()
+                        {
+                            PlayerId = player.Id,
+                            PossibleTargetId = choices.ToArray()
+                        });
+                    }
+                }
                 else
                     player.Wounded(1,player,false);
             }
-            else if (e is BobPowerEvent bobPower)
-            {
-                Player playerBob = PlayerView.GetPlayer(bobPower.PlayerId);
-                Player playerBobed = PlayerView.GetPlayer(PlayerAttacked.Value);
-                int bobDamages = m_damageBob;
-                bool usePower = bobPower.UsePower;
-
-                if (usePower)
-                    StealEquipmentCard(playerBob.Id, playerBobed.Id);
-                else
-                    AttackCorrespondingPlayer(playerBob.Id, playerBobed.Id, bobDamages);
-            }
             else if (e is RevealCard reveal)
             {
-                //RevealCard(PlayerView.GetPlayer(reveal.PlayerId));
                 Player p = PlayerView.GetPlayer(reveal.PlayerId);
 
                 p.Revealed.Value = true;
 
                 if (p.HasSpear.Value == true && p.Character.team == CharacterTeam.Hunter)
                     p.BonusAttack.Value += 2;
-
-                // Si le joueur est Allie, il peut utiliser son pouvoir à tout moment
-                // Si le joueur est Emi, Franklin ou Georges et qu'il est au début de son tour, il peut utiliser son pouvoir
-                if (p.Character.characterName == "Allie"
-                    || (GameManager.StartOfTurn.Value
-                        && (p.Character.characterName == "Emi"
-                            || p.Character.characterName == "Franklin"
-                            || p.Character.characterName == "Georges")))
-                {
-                    p.CanUsePower.Value = true;
-                }
-            }
-            else if (e is TestEvent test)
-            {
-                Player psing = PlayerView.GetPlayer(test.PlayerId);
-
-
-                for (int i = 0; i < 2; i++)
-                {
-                    DarknessCard darknessCard = gameBoard.DrawCard(CardType.Darkness) as DarknessCard;
-                    LightCard lightCard = gameBoard.DrawCard(CardType.Light) as LightCard;
-
-                    psing.AddCard(darknessCard);
-                    psing.AddCard(lightCard);
-                }
-
-                //psing.PrintCards();
-
-                GiveEquipmentCard(psing.Id);
-
-                //psing.PrintCards();
             }
         }
     }

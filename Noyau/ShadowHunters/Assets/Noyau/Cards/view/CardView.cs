@@ -19,26 +19,26 @@ namespace Assets.Noyau.Cards.view
             GCard = new GCard();
         }
 
-        public static VisionCard PickVision()
+        public static Card PickVision()
         {
             int r = rand.Next(0, GCard.visionDeck.Count);
-            VisionCard c = GCard.visionDeck[r];
+            Card c = GCard.visionDeck[r];
             GCard.visionDeck.RemoveAt(r);
             return c;
         }
 
-        public static LightCard PickLight()
+        public static Card PickLight()
         {
             int r = rand.Next(0, GCard.lightDeck.Count);
-            LightCard c = GCard.lightDeck[r];
+            Card c = GCard.lightDeck[r];
             GCard.lightDeck.RemoveAt(r);
             return c;
         }
 
-        public static DarknessCard PickDarkness()
+        public static Card PickDarkness()
         {
             int r = rand.Next(0, GCard.darknessDeck.Count);
-            DarknessCard c = GCard.darknessDeck[r];
+            Card c = GCard.darknessDeck[r];
             GCard.darknessDeck.RemoveAt(r);
             return c;
         }

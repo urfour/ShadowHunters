@@ -231,7 +231,7 @@ namespace Assets.Noyau.Cards.controller
 
                         if (lancer != 7)
                             foreach (Player p in PlayerView.GetPlayers())
-                                if (p.Position == area && !p.HasAmulet.Value)
+                                if (GameManager.Board[p.Position.Value] == area && !p.HasAmulet.Value)
                                     p.Wounded(3, GameManager.PlayerTurn.Value, false);
                     })),
 

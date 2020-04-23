@@ -9,6 +9,18 @@ using System.Threading.Tasks;
 
 namespace Assets.Noyau.Manager.view
 {
+
+    public enum Position
+    {
+        None,
+        Antre,
+        Cimetiere,
+        Foret,
+        Monastere,
+        Porte,
+        Sanctuaire
+    }
+
     public static class GameManager
     {
         public static Setting<Player> PlayerTurn { get; private set; } = new Setting<Player>(null);
@@ -24,10 +36,32 @@ namespace Assets.Noyau.Manager.view
 
         public static Setting<bool> TurnEndable { get; private set; } = new Setting<bool>(false);
 
+        public static Dictionary<int, Position> Board { get; private set; } = new Dictionary<int, Position>();
+
         public static void Init(int nbPlayers)
         {
             PlayerView.Init(nbPlayers);
             CardView.Init();
+            List<Position> p = new List<Position>()
+            {
+                Position.Antre,
+                Position.Cimetiere,
+                Position.Foret,
+                Position.Monastere,
+                Position.Porte,
+                Position.Sanctuaire
+            };
+
+            Random r = new Random();
+
+            int index;
+
+            for (int i = 0; i < 6; i++)
+            {
+                index = r.Next(0, p.Count);
+                Board.Add(i, p[index]);
+                p.RemoveAt(index);
+            }
         }
     }
 }

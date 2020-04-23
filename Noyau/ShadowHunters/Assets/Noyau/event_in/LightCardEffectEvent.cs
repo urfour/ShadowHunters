@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Noyau.Cards.controller;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,6 @@ namespace Scripts.event_in
     public class LightCardEffectEvent : PlayerEvent
     {
         public int PlayerChoosenId { get; set; }
-        public LightCard LightCard { get; set; }
+        public Card LightCard { get; set; }
     }
 }

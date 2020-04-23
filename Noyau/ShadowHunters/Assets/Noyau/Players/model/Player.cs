@@ -72,7 +72,7 @@ public class Player
     // le joueur a-t-il gagné ?
     public Setting<bool> HasWon { get; private set; } = new Setting<bool>(false);
     // position du joueur
-    public Position Position { get; set; }
+    public Setting<int> Position { get; private set; } = new Setting<int>(-1);
 
 
     // personnage du joueur
@@ -96,7 +96,6 @@ public class Player
     {
         this.Id = id;
         this.Name = ((PlayerNames)id).ToString();
-        this.Position = Position.None;
         this.ListCard = new List<Card>();
         this.Character = c;
 
@@ -144,7 +143,7 @@ public class Player
         foreach (Card c in ListCard)
         {
             Debug.Log("Carte : " + c.cardLabel);
-            if (c is IEquipment)
+            if (c is EquipmentCard)
                 Debug.Log("C'est une carte équipement !");
             else
                 Debug.Log("C'est une carte à utilisation unique.");
@@ -154,13 +153,13 @@ public class Player
     public void AddCard(Card card)
     {
         ListCard.Add(card);
-        NbEquipment++;
+        NbEquipment.Value++;
     }
 
     public void RemoveCard(int index)
     {
         ListCard.RemoveAt(index);
-        NbEquipment--;
+        NbEquipment.Value--;
     }
     
 
@@ -172,5 +171,31 @@ public class Player
                 return i;
         }
         return -1;
+    }
+
+
+    public List<Player> getTargetablePlayers()
+    {
+        List<Player> tps = new List<Player>();
+
+        int posP1 = this.Position.Value;
+        int posP2;
+
+        foreach (Player player in PlayerView.GetPlayers())
+        {
+            if (!player.Dead.Value && player.Id != this.Id && player.Position.Value != -1)
+            {
+                posP2 = player.Position.Value;
+                if (((posP1 % 2 == 0 && (posP2 == posP1 || posP2 == posP1 + 1))
+                    || (posP2 % 2 == 1 && (posP2 == posP1 || posP2 == posP1 - 1)))
+                    && !this.HasRevolver.Value)
+                    tps.Add(player);
+
+                else
+                    tps.Add(player);
+            }
+        }
+
+        return tps;
     }
 }   

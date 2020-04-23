@@ -264,8 +264,13 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             if (!player.Dead.Value && player.Id != playerId && player.Position != Position.None)
             {
                 positionOtherPlayer = gameBoard.GetIndexOfPosition(player.Position);
-                if ((positionIndex % 2 == 0 && (positionOtherPlayer == positionIndex || positionOtherPlayer == positionIndex + 1))
-                    || (positionIndex % 2 == 1 && (positionOtherPlayer == positionIndex || positionOtherPlayer == positionIndex - 1)))
+                if ((positionIndex % 2 == 0 
+                    && (positionOtherPlayer == positionIndex 
+                        || positionOtherPlayer == positionIndex + 1))
+                    || (positionIndex % 2 == 1 
+                        && (positionOtherPlayer == positionIndex 
+                            || positionOtherPlayer == positionIndex - 1)))
+
                     if (!hasRevolver)
                         players.Add(player);
                     else if (hasRevolver)
