@@ -17,7 +17,7 @@ namespace Assets.Noyau.Cards.controller
     {
         public List<Card> cards = new List<Card>();
 
-        public List<VisionCard> visionDeck;
+        public List<Card> visionDeck;
         public List<Card> lightDeck;
         public List<Card> darknessDeck;
 
@@ -512,285 +512,274 @@ namespace Assets.Noyau.Cards.controller
                             && player.Character.characterName != "Metamorphe";
                     },
                     effect: (player, card) =>
-                {
-                    //RevealCard(m_players[idPlayer]);
-                    EventView.Manager.Emit(new RevealCard()
                     {
-                        PlayerId = player.Id
-                    });
-                })),
+                        EventView.Manager.Emit(new RevealCard()
+                        {
+                            PlayerId = player.Id
+                        });
+                    })),
 
                 CreateUsableCard("card.light.light_premiers_secours", CardType.Light, "card.light.light_premiers_secours.description", false,
                 new CardEffect("card.light.light_premiers_secours.effect",
                     targetableCondition: null,
                     effect: (player, card) =>
-                {
-                    List<int> players = new List<int>();
-                    foreach (Player p in PlayerView.GetPlayers())
-                        if (!p.Dead.Value)
-                            players.Add(p.Id);
-
-                    EventView.Manager.Emit(new SelectLightCardTargetEvent()
                     {
-                        PlayerId = player.Id,
-                        PossibleTargetId = players.ToArray(),
-                        LightCard = card
-                    });
-                })),
+                        List<int> players = new List<int>();
+                        foreach (Player p in PlayerView.GetPlayers())
+                            if (!p.Dead.Value)
+                                players.Add(p.Id);
+
+                        EventView.Manager.Emit(new SelectLightCardTargetEvent()
+                        {
+                            PlayerId = player.Id,
+                            PossibleTargetId = players.ToArray(),
+                            LightCard = card
+                        });
+                    })),
 
                 CreateUsableCard("card.light.light_savoir", CardType.Light, "card.light.light_savoir.description", false,
                 new CardEffect("card.light.light_savoir.effect",
                     targetableCondition: null,
                     effect: (player, card) =>
-                {
-                    player.HasAncestral.Value = true;
-                })),
+                    {
+                        player.HasAncestral.Value = true;
+                    })),
 
                 CreateEquipmentCard("card.light.light_toge", CardType.Light, "card.light.light_toge.description",
                     condition: null,
                     effect: (player, card) =>
-                {
-                    player.HasToge.Value = true;
-                    player.MalusAttack.Value++;
-                    player.ReductionWounds.Value = 1;
-                })
+                    {
+                        player.HasToge.Value = true;
+                        player.MalusAttack.Value++;
+                        player.ReductionWounds.Value = 1;
+                    })
             };
 
-            visionDeck = new List<VisionCard>()
+            visionDeck = new List<Card>()
             {
-                CreateVision("card.vision.vision_destructrice", "card.vision.vision_destructrice.description", 
-                condition: (player) =>
-                {
-                    return player.Character.characterHP >= 12;
-                },
-                effect: (player) =>
-                {
-                    player.Wounded(1, player, false);
-                }),
-
-                CreateVision("card.vision.vision_clairvoyante", "card.vision.vision_clairvoyante.description",
-                condition: (player) =>
-                {
-                    return player.Character.characterHP <= 11;
-                },
-                effect: (player) =>
-                {
-                    player.Wounded(2, player, false);
-                }),
-
-                CreateVision("card.vision.vision_cupide", "card.vision.vision_cupide.description",
-                condition: (player) =>
-                {
-                    return player.Character.team == CharacterTeam.Neutral
-                        || player.Character.team == CharacterTeam.Shadow;
-                },
-                effect: (player) =>
-                {
-                    EventView.Manager.Emit(new SelectGiveOrWoundEvent()
+                CreateUsableCard("card.vision.vision_destructrice", CardType.Vision, "card.vision.vision_destructrice.description", false,
+                new CardEffect("card.vision.vision_destructrice.effect",
+                    targetableCondition: (player) =>
                     {
-                        PlayerId = player.Id
-                    });
-                }),
-
-                CreateVision("card.vision.vision_cupide", "card.vision.vision_cupide.description",
-                condition: (player) =>
-                {
-                    return player.Character.team == CharacterTeam.Neutral
-                        || player.Character.team == CharacterTeam.Shadow;
-                },
-                effect: (player) =>
-                {
-                    EventView.Manager.Emit(new SelectGiveOrWoundEvent()
+                        return player.Character.characterHP >= 12;
+                    },
+                    effect: (player, card) =>
                     {
-                        PlayerId = player.Id
-                    });
-                }),
-
-                CreateVision("card.vision.vision_enivrante", "card.vision.vision_enivrante.description",
-                condition: (player) =>
-                {
-                    return player.Character.team == CharacterTeam.Neutral
-                        || player.Character.team == CharacterTeam.Hunter;
-                },
-                effect: (player) =>
-                {
-                    EventView.Manager.Emit(new SelectGiveOrWoundEvent()
-                    {
-                        PlayerId = player.Id
-                    });
-                }),
-
-                CreateVision("card.vision.vision_enivrante", "card.vision.vision_enivrante.description",
-                condition: (player) =>
-                {
-                    return player.Character.team == CharacterTeam.Neutral
-                        || player.Character.team == CharacterTeam.Hunter;
-                },
-                effect: (player) =>
-                {
-                    EventView.Manager.Emit(new SelectGiveOrWoundEvent()
-                    {
-                        PlayerId = player.Id
-                    });
-                }),
-
-                CreateVision("card.vision.vision_furtive", "card.vision.vision_furtive.description",
-                condition: (player) =>
-                {
-                    return player.Character.team == CharacterTeam.Shadow
-                        || player.Character.team == CharacterTeam.Hunter;
-                },
-                effect: (player) =>
-                {
-                    EventView.Manager.Emit(new SelectGiveOrWoundEvent()
-                    {
-                        PlayerId = player.Id
-                    });
-                }),
-
-                CreateVision("card.vision.vision_furtive", "card.vision.vision_furtive.description",
-                condition: (player) =>
-                {
-                    return player.Character.team == CharacterTeam.Shadow
-                        || player.Character.team == CharacterTeam.Hunter;
-                },
-                effect: (player) =>
-                {
-                    EventView.Manager.Emit(new SelectGiveOrWoundEvent()
-                    {
-                        PlayerId = player.Id
-                    });
-                }),
-
-                CreateVision("card.vision.vision_divine", "card.vision.vision_divine.description",
-                condition: (player) =>
-                {
-                    return player.Character.team == CharacterTeam.Hunter;
-                },
-                effect: (player) =>
-                {
-                    if (player.Wound.Value == 0)
                         player.Wounded(1, player, false);
-                    else
-                        player.Healed(1);
-                }),
+                    })),
 
-                CreateVision("card.vision.vision_divine", "card.vision.vision_divine.description",
-                condition: (player) =>
-                {
-                    return player.Character.team == CharacterTeam.Hunter;
-                },
-                effect: (player) =>
-                {
-                    if (player.Wound.Value == 0)
+                CreateUsableCard("card.vision.vision_clairvoyante", CardType.Vision, "card.vision.vision_clairvoyante.description", false,
+                new CardEffect("card.vision.vision_clairvoyante.effect",
+                    targetableCondition: (player) =>
+                    {
+                        return player.Character.characterHP <= 11;
+                    },
+                    effect: (player, card) =>
+                    {
+                        player.Wounded(2, player, false);
+                    })),
+
+                CreateUsableCard("card.vision.vision_cupide", CardType.Vision, "card.vision.vision_cupide.description", false,
+                new CardEffect("card.vision.vision_cupide.effect",
+                    targetableCondition: (player) =>
+                    {
+                        return player.Character.team == CharacterTeam.Neutral
+                            || player.Character.team == CharacterTeam.Shadow;
+                    },
+                    effect: (player, card) =>
+                    {
+                        EventView.Manager.Emit(new SelectGiveOrWoundEvent()
+                        {
+                            PlayerId = player.Id
+                        });
+                    })),
+
+                CreateUsableCard("card.vision.vision_cupide", CardType.Vision, "card.vision.vision_cupide.description", false,
+                new CardEffect("card.vision.vision_cupide.effect",
+                    targetableCondition: (player) =>
+                    {
+                        return player.Character.team == CharacterTeam.Neutral
+                            || player.Character.team == CharacterTeam.Shadow;
+                    },
+                    effect: (player, card) =>
+                    {
+                        EventView.Manager.Emit(new SelectGiveOrWoundEvent()
+                        {
+                            PlayerId = player.Id
+                        });
+                    })),
+
+                CreateUsableCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
+                new CardEffect("card.vision.vision_enivrante.effect",
+                    targetableCondition: (player) =>
+                    {
+                        return player.Character.team == CharacterTeam.Neutral
+                            || player.Character.team == CharacterTeam.Hunter;
+                    },
+                    effect: (player, card) =>
+                    {
+                        EventView.Manager.Emit(new SelectGiveOrWoundEvent()
+                        {
+                            PlayerId = player.Id
+                        });
+                    })),
+
+                CreateUsableCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
+                new CardEffect("card.vision.vision_enivrante.effect",
+                    targetableCondition: (player) =>
+                    {
+                        return player.Character.team == CharacterTeam.Neutral
+                            || player.Character.team == CharacterTeam.Hunter;
+                    },
+                    effect: (player, card) =>
+                    {
+                        EventView.Manager.Emit(new SelectGiveOrWoundEvent()
+                        {
+                            PlayerId = player.Id
+                        });
+                    })),
+
+                CreateUsableCard("card.vision.vision_furtive", CardType.Vision, "card.vision.vision_furtive.description", false,
+                new CardEffect("card.vision.vision_furtive.effect",
+                    targetableCondition: (player) =>
+                    {
+                        return player.Character.team == CharacterTeam.Shadow
+                            || player.Character.team == CharacterTeam.Hunter;
+                    },
+                    effect: (player, card) =>
+                    {
+                        EventView.Manager.Emit(new SelectGiveOrWoundEvent()
+                        {
+                            PlayerId = player.Id
+                        });
+                    })),
+
+                CreateUsableCard("card.vision.vision_furtive", CardType.Vision, "card.vision.vision_furtive.description", false,
+                new CardEffect("card.vision.vision_furtive.effect",
+                    targetableCondition: (player) =>
+                    {
+                        return player.Character.team == CharacterTeam.Shadow
+                            || player.Character.team == CharacterTeam.Hunter;
+                    },
+                    effect: (player, card) =>
+                    {
+                        EventView.Manager.Emit(new SelectGiveOrWoundEvent()
+                        {
+                            PlayerId = player.Id
+                        });
+                    })),
+
+                CreateUsableCard("card.vision.vision_divine", CardType.Vision, "card.vision.vision_divine.description", false,
+                new CardEffect("card.vision.vision_divine.effect",
+                    targetableCondition: (player) =>
+                    {
+                        return player.Character.team == CharacterTeam.Hunter;
+                    },
+                    effect: (player, card) =>
+                    {
+                        if (player.Wound.Value == 0)
+                            player.Wounded(1, player, false);
+                        else
+                            player.Healed(1);
+                    })),
+
+                CreateUsableCard("card.vision.vision_divine", CardType.Vision, "card.vision.vision_divine.description", false,
+                new CardEffect("card.vision.vision_divine.effect",
+                    targetableCondition: (player) =>
+                    {
+                        return player.Character.team == CharacterTeam.Hunter;
+                    },
+                    effect: (player, card) =>
+                    {
+                        if (player.Wound.Value == 0)
+                            player.Wounded(1, player, false);
+                        else
+                            player.Healed(1);
+                    })),
+
+                CreateUsableCard("card.vision.vision_lugubre", CardType.Vision, "card.vision.vision_lugubre.description", false,
+                new CardEffect("card.vision.vision_lugubre.effect",
+                    targetableCondition: (player) =>
+                    {
+                        return player.Character.team == CharacterTeam.Shadow;
+                    },
+                    effect: (player, card) =>
+                    {
+                        if (player.Wound.Value == 0)
+                            player.Wounded(1, player, false);
+                        else
+                            player.Healed(1);
+                    })),
+
+                CreateUsableCard("card.vision.vision_reconfortante", CardType.Vision, "card.vision.vision_reconfortante.description", false,
+                new CardEffect("card.vision.vision_reconfortante.effect",
+                    targetableCondition: (player) =>
+                    {
+                        return player.Character.team == CharacterTeam.Neutral;
+                    },
+                    effect: (player, card) =>
+                    {
+                        if (player.Wound.Value == 0)
+                            player.Wounded(1, player, false);
+                        else
+                            player.Healed(1);
+                    })),
+
+                CreateUsableCard("card.vision.vision_foudroyante", CardType.Vision, "card.vision.vision_foudroyante.description", false,
+                new CardEffect("card.vision.vision_foudroyante.effect",
+                    targetableCondition: (player) =>
+                    {
+                        return player.Character.team == CharacterTeam.Shadow;
+                    },
+                    effect: (player, card) =>
+                    {
                         player.Wounded(1, player, false);
-                    else
-                        player.Healed(1);
-                }),
+                    })),
 
-                CreateVision("card.vision.vision_lugubre", "card.vision.vision_lugubre.description",
-                condition: (player) =>
-                {
-                    return player.Character.team == CharacterTeam.Shadow;
-                },
-                effect: (player) =>
-                {
-                    if (player.Wound.Value == 0)
+                CreateUsableCard("card.vision.vision_mortifere", CardType.Vision, "card.vision.vision_mortifere.description", false,
+                new CardEffect("card.vision.vision_mortifere.effect",
+                    targetableCondition: (player) =>
+                    {
+                        return player.Character.team == CharacterTeam.Hunter;
+                    },
+                    effect: (player, card) =>
+                    {
                         player.Wounded(1, player, false);
-                    else
-                        player.Healed(1);
-                }),
+                    })),
 
-                CreateVision("card.vision.vision_reconfortante", "card.vision.vision_reconfortante.description",
-                condition: (player) =>
-                {
-                    return player.Character.team == CharacterTeam.Neutral;
-                },
-                effect: (player) =>
-                {
-                    if (player.Wound.Value == 0)
+                CreateUsableCard("card.vision.vision_mortifere", CardType.Vision, "card.vision.vision_mortifere.description", false,
+                new CardEffect("card.vision.vision_mortifere.effect",
+                    targetableCondition: (player) =>
+                    {
+                        return player.Character.team == CharacterTeam.Hunter;
+                    },
+                    effect: (player, card) =>
+                    {
                         player.Wounded(1, player, false);
-                    else
-                        player.Healed(1);
-                }),
+                    })),
 
-                CreateVision("card.vision.vision_foudroyante", "card.vision.vision_foudroyante.description",
-                condition: (player) =>
-                {
-                    return player.Character.team == CharacterTeam.Shadow;
-                },
-                effect: (player) =>
-                {
-                    player.Wounded(1, player, false);
-                }),
+                CreateUsableCard("card.vision.vision_purificatrice", CardType.Vision, "card.vision.vision_purificatrice.description", false,
+                new CardEffect("card.vision.vision_purificatrice.effect",
+                    targetableCondition: (player) =>
+                    {
+                        return player.Character.team == CharacterTeam.Shadow;
+                    },
+                    effect: (player, card) =>
+                    {
+                        player.Wounded(2, player, false);
+                    })),
 
-                CreateVision("card.vision.vision_mortifere", "card.vision.vision_mortifere.description",
-                condition: (player) =>
-                {
-                    return player.Character.team == CharacterTeam.Hunter;
-                },
-                effect: (player) =>
-                {
-                    player.Wounded(1, player, false);
-                }),
-
-                CreateVision("card.vision.vision_mortifere", "card.vision.vision_mortifere.description",
-                condition: (player) =>
-                {
-                    return player.Character.team == CharacterTeam.Hunter;
-                },
-                effect: (player) =>
-                {
-                    player.Wounded(1, player, false);
-                }),
-
-                CreateVision("card.vision.vision_purificatrice", "card.vision.vision_purificatrice.description",
-                condition: (player) =>
-                {
-                    return player.Character.team == CharacterTeam.Shadow;
-                },
-                effect: (player) =>
-                {
-                    player.Wounded(2, player, false);
-                }),
-
-                CreateVision("card.vision.vision_supreme", "card.vision.vision_supreme.description",
-                condition: (player) =>
-                {
-                    return true;
-                },
-                effect: (player) =>
-                {
-                    // Montrer la carte au joueur
-                })
-        };
-        }
-
-        public VisionCard CreateVision(string cardLabel, string description, VisionCardCondition condition, VisionCardEffect effect)
-        {
-            int id = cards.Count;
-            VisionCard c = new VisionCard(cardLabel, CardType.Vision, description, id, condition, effect);
-            cards.Add(c);
-            visionDeck.Add(c);
-            return c;
-        }
-
-        public LightCard CreateLight(string cardLabel, string description, LightCardCondition condition, LightCardEffect effect)
-        {
-            int id = cards.Count;
-            LightCard c = new LightCard(cardLabel, CardType.Vision, description, id, condition, effect);
-            cards.Add(c);
-            lightDeck.Add(c);
-            return c;
-        }
-
-        public DarknessCard CreateDarkness(string cardLabel, string description, DarknessCardCondition condition, DarknessCardEffect effect)
-        {
-            int id = cards.Count;
-            DarknessCard c = new DarknessCard(cardLabel, CardType.Vision, description, id, condition, effect);
-            cards.Add(c);
-            darknessDeck.Add(c);
-            return c;
+                CreateUsableCard("card.vision.vision_supreme", CardType.Vision, "card.vision.vision_supreme.description", false,
+                new CardEffect("card.vision.vision_supreme.effect",
+                    targetableCondition: (player) =>
+                    {
+                        return true;
+                    },
+                    effect: (player, card) =>
+                    {
+                        // Montrer la carte au joueur
+                    }))
+            };
         }
 
         public EquipmentCard CreateEquipmentCard(string cardLabel, CardType cardType, string description, EquipmentCondition condition, EquipmentEffect effect)

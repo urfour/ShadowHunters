@@ -24,18 +24,16 @@ namespace Assets.Noyau.Players.controller
             {
                 if (GameManager.PlayerTurn.Value == null)
                     GameManager.PlayerTurn.Value = PlayerView.GetPlayer(UnityEngine.Random.Range(0, PlayerView.NbPlayer));
+
                 else if (GameManager.PlayerTurn.Value.HasAncestral.Value) // si le joueur a utilisé le savoir ancestral, le joueur suivant reste lui
-                {
                     GameManager.PlayerTurn.Value.HasAncestral.Value = false;
-                }
+
                 else
                     GameManager.PlayerTurn.Value = PlayerView.NextPlayer(GameManager.PlayerTurn.Value);
                 
 
                 if (GameManager.PlayerTurn.Value.HasGuardian.Value)
-                {
                     GameManager.PlayerTurn.Value.HasGuardian.Value = false;
-                }
 
 
                 EventView.Manager.Emit(new SelectedNextPlayer()
@@ -295,7 +293,7 @@ namespace Assets.Noyau.Players.controller
                         //Debug.Log("Le joueur " + player.Name + " choisit de piocher une carte Ténèbres.");
                         DarknessCard darknessCard = gameBoard.DrawCard(CardType.Darkness) as DarknessCard;
 
-                        if (darknessCard is IEquipment)
+                        if (darknessCard is EquipmentCard)
                         {
                             player.AddCard(darknessCard);
                             //Debug.Log("La carte " + darknessCard.cardName + " a été ajoutée à la main du joueur "
@@ -410,7 +408,7 @@ namespace Assets.Noyau.Players.controller
                 int indexCard = playerStealed.HasCard(stealedCard);
                 playerStealing.AddCard(playerStealed.ListCard[indexCard]);
 
-                if (playerStealed.ListCard[indexCard] is IEquipment)
+                if (playerStealed.ListCard[indexCard] is EquipmentCard)
                 {
                     if (playerStealed.ListCard[indexCard].cardType == CardType.Darkness)
                     {
@@ -503,14 +501,14 @@ namespace Assets.Noyau.Players.controller
                 Card effectCard = revealOrNot.EffectCard;
                 bool PowerLoup = revealOrNot.PowerLoup;
                 
-                if (effectCard is DarknessCard
+                if (effectCard.cardType is CardType.Darkness
                     && hasRevealed
                     && player.Character.team == CharacterTeam.Shadow)
                 {
                     player.Healed(player.Wound.Value);
                     //Debug.Log("Le joueur " + player.Name + " se soigne complètement");
                 }
-                else if (effectCard is LightCard effectLightCard)
+                else if (effectCard.cardType is CardType.Light)
                 {
                     if (effectLightCard.lightEffect == LightEffect.Supreme
                         && hasRevealed
