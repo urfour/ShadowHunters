@@ -264,7 +264,7 @@ namespace Assets.Noyau.Players.controller
                 if (lancerTotal == 0)
                     /*Debug.Log("Le lancer vaut 0, vous n'attaquez pas.")*/;
                 else
-                {
+                {   
                     //Debug.Log("Vous choisissez d'attaquer le joueur " + playerAttacked.Name + ".");
 
                     // Si c'est la contre-attaque du loup, les objets ne comptent pas
