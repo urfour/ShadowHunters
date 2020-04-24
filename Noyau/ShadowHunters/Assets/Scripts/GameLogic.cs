@@ -1441,7 +1441,6 @@
 //            {
 //                wounds=-1;
 //            }
-            
 //            EventView.Manager.Emit(new SelectPlayerTakingWoundsEvent()
 //            {
 //                PlayerId = fste.PlayerId,
@@ -1663,7 +1662,6 @@
 //            }
 //            else
 //            {
-                
 //                if (nbWoundsSelfHealed < 0)
 //                    playerAttacking.Wounded(-nbWoundsSelfHealed,playerAttacking,false);
 //                else

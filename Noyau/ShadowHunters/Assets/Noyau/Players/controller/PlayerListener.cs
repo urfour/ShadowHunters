@@ -445,33 +445,23 @@ namespace Assets.Noyau.Players.controller
             }
             else if (e is BobPowerEvent bpe)
             {
-                Player playerBob = PlayerView.GetPlayer(bpe.PlayerId);
-                
-                
-                Player playerBobed = PlayerView.GetPlayer(GameManager.PlayerAttackedByBob);
-                int bobDamages = GameManager.DamageDoneByBob;
+                bool UsePower = bpe.UsePower;
 
-                bool usePower = bpe.UsePower;
-
-                if (usePower)
+                if (UsePower)
                 {
-                    bool hasEquip = false;
-                    foreach (Card card in playerBobed.ListCard)
-                        if (card is EquipmentCard)
-                            hasEquip = true;
+                    int BobId = bpe.PlayerId;
+                    Player Bob = PlayerView.GetPlayer(BobId);
 
-                    if (hasEquip)
+                    // On commence par annuler les dommages que la cible a subit
+                    Player cible = PlayerView.GetPlayer(Bob.OnAttacking.Value);
+                    cible.Healed(Bob.DamageDealed.Value);
+
+                    // On lui vole ensuite un équipement
+                    EventView.Manager.Emit(new SelectStealCardFromPlayerEvent()
                     {
-                        EventView.Manager.Emit(new SelectStealCardFromPlayerEvent()
-                        {
-                            PlayerId = playerBob.Id,
-                            PlayerStealedId = playerBobed.Id
-                        });
-                    }
-                }
-                else
-                {
-                    playerBobed.Wounded(bobDamages, playerBob, true);
+                        PlayerId = BobId,
+                        PlayerStealedId = Bob.OnAttacking.Value
+                    });
                 }
             }
         }

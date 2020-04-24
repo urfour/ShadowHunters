@@ -82,6 +82,8 @@ public class Player
     public List<Card> ListCard { get; private set; }
     // le joueur peut-il utiliser son pouvoir ?
     public Setting<bool> CanUsePower { get; private set; } = new Setting<bool>(false);
+    // le joueur a-t-il déjà utilisé son pouvoir une fois (utilisé pour les usages uniques)
+    public Setting<bool> PowerUsed { get; private set; } = new Setting<bool>(false);
 
     // Id du joueur qui m'a attaqué en dernier (Loup-garou)
     public Setting<int> OnAttacked { get; private set; } = new Setting<int>(-1);
@@ -89,7 +91,7 @@ public class Player
     public Setting<int> OnAttacking { get; private set; } = new Setting<int>(-1);
 
     public Setting<int> OnDealDamage { get; private set; } = new Setting<int>(0);
-
+    // Nombre de dommage infligé pour la dernière fois en attaquant
     public Setting<int> DamageDealed { get; private set; } = new Setting<int>(-1);
  
     //private static List<Player> players = new List<Player>();
