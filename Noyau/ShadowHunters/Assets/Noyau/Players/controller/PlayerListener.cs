@@ -460,7 +460,7 @@ namespace Assets.Noyau.Players.controller
 
                     // On commence par annuler les dommages que la cible a subit
                     Player cible = PlayerView.GetPlayer(Bob.OnAttacking.Value);
-                    cible.Healed(Bob.OnDealDamage.Value);
+                    cible.Healed(Bob.DamageDealed.Value);
 
                     // On lui vole ensuite un équipement
                     EventView.Manager.Emit(new SelectStealCardFromPlayerEvent()

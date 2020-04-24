@@ -14,22 +14,22 @@ namespace Assets.Noyau.Players.controller
         public GCharacter(int nbPlayers)
         {
             List<Character> Neutral = new List<Character>() {
-                new Character("Allie", CharacterTeam.Neutral, 8, GGoal.AllieGoal, null),
-                new Character("Bob", CharacterTeam.Neutral, 10, GGoal.BobGoal, null),
-                new Character("Charles", CharacterTeam.Neutral, 11, GGoal.CharlesGoal, null),
-                new Character("Daniel", CharacterTeam.Neutral, 13, GGoal.DanielGoal, null)
+                new Character("Allie", CharacterTeam.Neutral, 8, GGoal.AllieGoal, GPower.Allie),
+                new Character("Bob", CharacterTeam.Neutral, 10, GGoal.BobGoal, GPower.Bob),
+                new Character("Charles", CharacterTeam.Neutral, 11, GGoal.CharlesGoal, GPower.Charles),
+                new Character("Daniel", CharacterTeam.Neutral, 13, GGoal.DanielGoal, GPower.Daniel)
             };
 
             List<Character> Hunter = new List<Character>()
             {
-                new Character("Emi", CharacterTeam.Hunter, 10, GGoal.HunterGoal, null),
+                new Character("Emi", CharacterTeam.Hunter, 10, GGoal.HunterGoal, GPower.Emi),
                 new Character("Georges", CharacterTeam.Hunter, 14, GGoal.HunterGoal, GPower.George),
                 new Character("Franklin", CharacterTeam.Hunter, 12, GGoal.HunterGoal, GPower.Franklin),
             };
             List<Character> Shadow = new List<Character>()
             {
                 new Character("Loup-Garou", CharacterTeam.Shadow, 14, GGoal.ShadowGoal, GPower.Loup),
-                new Character("Vampire", CharacterTeam.Shadow, 13, GGoal.ShadowGoal, null),
+                new Character("Vampire", CharacterTeam.Shadow, 13, GGoal.ShadowGoal, GPower.Vampire),
                 new Character("Métamorphe", CharacterTeam.Shadow, 11, GGoal.ShadowGoal, null),
             };
 

@@ -1038,10 +1038,11 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 }
                 else
                 {
-                    List<Position> position = new List<Position>();
-
-                    position.Add(gameBoard.GetAreaAt((indexEmi - 1) % 6).area);
-                    position.Add(gameBoard.GetAreaAt((indexEmi + 1) % 6).area);
+                    List<Position> position = new List<Position>
+                    {
+                        gameBoard.GetAreaAt((indexEmi - 1) % 6).area,
+                        gameBoard.GetAreaAt((indexEmi + 1) % 6).area
+                    };
 
                     EventView.Manager.Emit(new SelectMovement()
                     {

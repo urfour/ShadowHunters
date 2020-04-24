@@ -29,18 +29,18 @@ namespace Assets.Noyau.Players.controller
                     }
                 }
                 EventView.Manager.Emit(new SelectAttackTargetEvent() { PlayerId = owner.Id, PossibleTargetId = targatable.ToArray(), PowerGeorges = true, });
+                owner.PowerUsed.Value = true;
             },
             addListeners: (owner) =>
             {
                 // initialisation des listeners qui appeleront availability
-                GameManager.PlayerTurn.AddListener((sender) => { owner.Character.power.availability(owner); });
                 GameManager.StartOfTurn.AddListener((sender) => { owner.Character.power.availability(owner); });
                 owner.Revealed.AddListener((sender) => { owner.Character.power.availability(owner); });
             },
             availability: (owner) =>
             {
                 // fonction qui test si le pouvoir peut être utilisé
-                bool available = GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value;
+                bool available = GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
                 if (owner.CanUsePower.Value != available)
                 {
                     owner.CanUsePower.Value = available;
@@ -62,18 +62,18 @@ namespace Assets.Noyau.Players.controller
                     }
                 }
                 EventView.Manager.Emit(new SelectAttackTargetEvent() { PlayerId = owner.Id, PossibleTargetId = targatable.ToArray(), PowerFranklin = true, });
+                owner.PowerUsed.Value = true;
             },
             addListeners: (owner) =>
             {
                 // initialisation des listeners qui appeleront availability
-                GameManager.PlayerTurn.AddListener((sender) => { owner.Character.power.availability(owner); });
                 GameManager.StartOfTurn.AddListener((sender) => { owner.Character.power.availability(owner); });
                 owner.Revealed.AddListener((sender) => { owner.Character.power.availability(owner); });
             },
             availability: (owner) =>
             {
                 // fonction qui test si le pouvoir peut être utilisé
-                bool available = GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value;
+                bool available = GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
                 if (owner.CanUsePower.Value != available)
                 {
                     owner.CanUsePower.Value = available;
@@ -86,7 +86,21 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
-                
+                // Si Emi se TP elle ne peut pas en plus se déplacer normalement
+                GameManager.MovementAvailable.Value = false;
+
+                int position = owner.Position.Value;
+                int choice1 = (position + 1) % 6;
+                int choice2 = (position - 1) % 6 ;
+
+                Position[] availableDestination = new Position[]
+                {
+                    GameManager.Board.ElementAt(choice1).Value,
+                    GameManager.Board.ElementAt(choice2).Value
+                };
+
+                EventView.Manager.Emit(new SelectMovement() { LocationAvailable = availableDestination, PlayerId = owner.Id });
+
             },
             addListeners: (owner) =>
             {
@@ -185,6 +199,9 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
+                //Elle ne pourra plus jamais l'utiliser
+                owner.CanUsePower.Value = false;
+
                 owner.Healed(owner.Wound.Value);
             },
             addListeners: (owner) =>

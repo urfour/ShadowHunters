@@ -239,9 +239,11 @@ namespace Scripts
 
                 throw2[0]=sdt.D6Dice2;
                 throw2[1]=sdt.D4Dice2;
-                List<string> throws=new List<string>();
-                throws.Add(throw1[0]+throw1[1].ToString());
-                throws.Add(throw2[0]+throw2[1].ToString());
+                List<string> throws = new List<string>
+                {
+                    throw1[0] + throw1[1].ToString(),
+                    throw2[0] + throw2[1].ToString()
+                };
                 //choiceDropdown.AddOptions(throws);
                 //validateButton.gameObject.SetActive(true);
 
