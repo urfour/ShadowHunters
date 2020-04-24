@@ -449,6 +449,27 @@ namespace Assets.Noyau.Players.controller
                 if (p.HasSpear.Value == true && p.Character.team == CharacterTeam.Hunter)
                     p.BonusAttack.Value += 2;
             }
+            else if (e is BobPowerEvent bpe)
+            {
+                bool UsePower = bpe.UsePower;
+
+                if (UsePower)
+                {
+                    int BobId = bpe.PlayerId;
+                    Player Bob = PlayerView.GetPlayer(BobId);
+
+                    // On commence par annuler les dommages que la cible a subit
+                    Player cible = PlayerView.GetPlayer(Bob.OnAttacking.Value);
+                    cible.Healed(Bob.OnDealDamage.Value);
+
+                    // On lui vole ensuite un équipement
+                    EventView.Manager.Emit(new SelectStealCardFromPlayerEvent()
+                    {
+                        PlayerId = BobId,
+                        PlayerStealedId = Bob.OnAttacking.Value
+                    });
+                }
+            }
         }
     }
 }
