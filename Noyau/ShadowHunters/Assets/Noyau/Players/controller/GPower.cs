@@ -158,9 +158,8 @@ namespace Assets.Noyau.Players.controller
             {
                 if(owner.Revealed.Value && owner.DamageDealed.Value > 0)
                 {
-                    owner.power.power(owner);
+                    owner.Character.power.power(owner);
                 }
-                return false;
             }
             );
 
@@ -196,9 +195,8 @@ namespace Assets.Noyau.Players.controller
             {
                 if(owner.Revealed.Value)
                 {
-                    owner.power.power(owner);
+                    owner.Character.power.power(owner);
                 }
-                return false;
             }
             );
 
@@ -206,7 +204,7 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
-                EventView.Manager.Emit(new SelectBobChoiceEvent() { PlayerId = owner.Id});
+                EventView.Manager.Emit(new SelectBobPowerEvent() { PlayerId = owner.Id});
             },
             addListeners: (owner) =>
             {
@@ -216,9 +214,8 @@ namespace Assets.Noyau.Players.controller
             {
                 if(owner.Revealed.Value && owner.DamageDealed.Value >= 2)
                 {
-                    owner.power.power(owner);
+                    owner.Character.power.power(owner);
                 }
-                return false;
             }
             );
 
@@ -274,10 +271,8 @@ namespace Assets.Noyau.Players.controller
                 {
                     owner.Character.power.power(owner);
                 }
-                return false;
             }
             );
-
     }
 }
 

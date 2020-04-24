@@ -60,55 +60,49 @@ namespace Assets.Noyau.Players.controller
                     nbrolls++;
                 }
 
-                List<Position> availableDestination = new List<Position>();
+                List<int> availableDestination = new List<int>();
+
                 while (nbrolls > 0)
                 {
                     int val = UnityEngine.Random.Range(1, 6) + UnityEngine.Random.Range(1, 4);
 
-                    Position tmpavailableDestination = Position.None;
+                    int tmpavailableDestination = -1;
+
 
                     switch (val)
                     {
                         case 2:
                         case 3:
-                            tmpavailableDestination = Position.Antre;
+                            tmpavailableDestination = GameManager.Board.FirstOrDefault(x => x.Value == Position.Antre).Key;
                             break;
                         case 4:
                         case 5:
-                            tmpavailableDestination = Position.Porte;
+                            tmpavailableDestination = GameManager.Board.FirstOrDefault(x => x.Value == Position.Porte).Key;
                             break;
                         case 6:
-                            tmpavailableDestination = Position.Monastere;
+                            tmpavailableDestination = GameManager.Board.FirstOrDefault(x => x.Value == Position.Monastere).Key;
                             break;
                         case 7:
-                            availableDestination = new List<Position>()
-                            {
-                                Position.Antre,
-                                Position.Porte,
-                                Position.Monastere,
-                                Position.Cimetiere,
-                                Position.Foret,
-                                Position.Sanctuaire
-                            };
+                            availableDestination = new List<int>() {0, 1, 2, 3, 4, 5};
                             nbrolls = 0;
                             break;
                         case 8:
-                            tmpavailableDestination = Position.Cimetiere;
+                            tmpavailableDestination = GameManager.Board.FirstOrDefault(x => x.Value == Position.Cimetiere).Key;
                             break;
                         case 9:
-                            tmpavailableDestination = Position.Foret;
+                            tmpavailableDestination = GameManager.Board.FirstOrDefault(x => x.Value == Position.Foret).Key;
                             break;
                         case 10:
-                            tmpavailableDestination = Position.Sanctuaire;
+                            tmpavailableDestination = GameManager.Board.FirstOrDefault(x => x.Value == Position.Sanctuaire).Key;
                             break;
                     }
-                    if (!availableDestination.Contains(tmpavailableDestination) && GameManager.Board[GameManager.PlayerTurn.Value.Position.Value] != tmpavailableDestination)
+                    if (!availableDestination.Contains(tmpavailableDestination) && GameManager.PlayerTurn.Value.Position.Value != tmpavailableDestination)
                     {
                         availableDestination.Add(tmpavailableDestination);
                         nbrolls--;
                     }
                 }
-                availableDestination.Remove(GameManager.Board[GameManager.PlayerTurn.Value.Position.Value]);
+                availableDestination.Remove(GameManager.PlayerTurn.Value.Position.Value);
 
                 EventView.Manager.Emit(new SelectMovement()
                 {
@@ -448,6 +442,37 @@ namespace Assets.Noyau.Players.controller
 
                 if (p.HasSpear.Value == true && p.Character.team == CharacterTeam.Hunter)
                     p.BonusAttack.Value += 2;
+            }
+            else if (e is BobPowerEvent bpe)
+            {
+                Player playerBob = PlayerView.GetPlayer(bpe.PlayerId);
+                
+                
+                Player playerBobed = PlayerView.GetPlayer(GameManager.PlayerAttackedByBob);
+                int bobDamages = GameManager.DamageDoneByBob;
+
+                bool usePower = bpe.UsePower;
+
+                if (usePower)
+                {
+                    bool hasEquip = false;
+                    foreach (Card card in playerBobed.ListCard)
+                        if (card is EquipmentCard)
+                            hasEquip = true;
+
+                    if (hasEquip)
+                    {
+                        EventView.Manager.Emit(new SelectStealCardFromPlayerEvent()
+                        {
+                            PlayerId = playerBob.Id,
+                            PlayerStealedId = playerBobed.Id
+                        });
+                    }
+                }
+                else
+                {
+                    playerBobed.Wounded(bobDamages, playerBob, true);
+                }
             }
         }
     }

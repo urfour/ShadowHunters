@@ -36,6 +36,9 @@ namespace Assets.Noyau.Manager.view
 
         public static Setting<bool> TurnEndable { get; private set; } = new Setting<bool>(false);
 
+        public static int PlayerAttackedByBob = -1;
+        public static int DamageDoneByBob = -1;
+
         public static Dictionary<int, Position> Board { get; private set; } = new Dictionary<int, Position>();
 
         public static void Init(int nbPlayers)

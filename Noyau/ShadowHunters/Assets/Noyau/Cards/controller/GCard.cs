@@ -27,20 +27,14 @@ namespace Assets.Noyau.Cards.controller
         public GCard()
         {
             Foret = CreateUsableCard("card.location.foret", CardType.Location, "card.location.foret.description", true,
-                new CardEffect("card.location.foret.effect.wound",
+                new CardEffect("card.location.foret.effect",
                     effect : (target, card) =>
                     {
                         target.Wounded(2, GameManager.PlayerTurn.Value, false);
-                    },
-                    targetableCondition: (target) =>
-                    {
-                        return !target.HasBroche.Value;
-                    }
-                ),
-                new CardEffect("card.location.foret.effect.heal",
-                    effect: (target, card) =>
-                    {
-                        target.Healed(1);
+                        EventView.Manager.Emit(new SelectForestPowerEvent()
+                        {
+                            PlayerId = target.Id
+                        });
                     },
                     targetableCondition: (target) =>
                     {
@@ -49,7 +43,7 @@ namespace Assets.Noyau.Cards.controller
                 ));
 
             Sanctuaire = CreateUsableCard("card.location.sanctuaire", CardType.Location, "card.location.sanctuaire.description", true,
-                new CardEffect("card.location.sanctuaire.effect.steal",
+                new CardEffect("card.location.sanctuaire.effect",
                     effect: (target, card) =>
                     {
                         List<(Card equipment, Player owner)> equipments = new List<(Card equipment, Player owner)>();
@@ -78,7 +72,10 @@ namespace Assets.Noyau.Cards.controller
             {
                 CreateUsableCard("card.darkness.darkness_araignee", CardType.Darkness, "card.darkness.darkness_araignee.description", false,
                 new CardEffect("card.darkness.darkness_araignee.effect",
-                    targetableCondition: null,
+                    targetableCondition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         List<int> players = new List<int>();
@@ -100,7 +97,10 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_banane", CardType.Darkness, "card.darkness.darkness_banane.description", false,
                 new CardEffect("card.darkness.darkness_banane.effect",
-                    targetableCondition: null,
+                    targetableCondition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         bool hasEquip = false;
@@ -131,7 +131,10 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_chauve_souris", CardType.Darkness, "card.darkness.darkness_chauve_souris.description", false,
                 new CardEffect("card.darkness.darkness_chauve_souris.effect",
-                    targetableCondition: null,
+                    targetableCondition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         List<int> players = new List<int>();
@@ -153,7 +156,10 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_chauve_souris", CardType.Darkness, "card.darkness.darkness_chauve_souris.description", false,
                 new CardEffect("card.darkness.darkness_chauve_souris.effect",
-                    targetableCondition: null,
+                    targetableCondition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         List<int> players = new List<int>();
@@ -175,7 +181,10 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_chauve_souris", CardType.Darkness, "card.darkness.darkness_chauve_souris.description", false,
                 new CardEffect("card.darkness.darkness_chauve_souris.effect",
-                    targetableCondition: null,
+                    targetableCondition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         List<int> players = new List<int>();
@@ -197,7 +206,10 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_dynamite", CardType.Darkness, "card.darkness.darkness_dynamite.description", false,
                 new CardEffect("card.darkness.darkness_dynamite.effect",
-                    targetableCondition: null,
+                    targetableCondition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         int lancer = UnityEngine.Random.Range(1, 6) + UnityEngine.Random.Range(1, 4);
@@ -267,7 +279,10 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_poupee", CardType.Darkness, "card.darkness.darkness_poupee.description", false,
                 new CardEffect("card.darkness.darkness_poupee.effect",
-                    targetableCondition: null,
+                    targetableCondition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         List<int> players = new List<int>();
@@ -298,7 +313,10 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_rituel", CardType.Darkness, "card.darkness.darkness_rituel.description", false,
                 new CardEffect("card.darkness.darkness_rituel.effect",
-                    targetableCondition: null,
+                    targetableCondition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         if (player.Revealed.Value && player.Character.team == CharacterTeam.Shadow)
@@ -323,7 +341,10 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_succube", CardType.Darkness, "card.darkness.darkness_succube.description", false,
                 new CardEffect("card.darkness.darkness_succube.effect",
-                    targetableCondition: null,
+                    targetableCondition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         List<(Card equipment, Player owner)> equipments = new List<(Card equipment, Player owner)>();
@@ -346,7 +367,10 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_succube", CardType.Darkness, "card.darkness.darkness_succube.description", false,
                 new CardEffect("card.darkness.darkness_succube.effect",
-                    targetableCondition: null,
+                    targetableCondition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         List<(Card equipment, Player owner)> equipments = new List<(Card equipment, Player owner)>();
@@ -392,7 +416,10 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.light.light_ange_gardien", CardType.Light, "card.light.light_ange_gardien.description", false,
                 new CardEffect("card.light.light_ange_gardien.effect",
-                    targetableCondition: null,
+                    targetableCondition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         player.HasGuardian.Value = true;
@@ -438,7 +465,10 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.light.light_benediction", CardType.Light, "card.light.light_benediction.description", false,
                 new CardEffect("card.light.light_benediction.effect",
-                    targetableCondition: null,
+                    targetableCondition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         List<int> players = new List<int>();
@@ -456,21 +486,30 @@ namespace Assets.Noyau.Cards.controller
                     })),
 
                 CreateEquipmentCard("card.light.light_boussole", CardType.Light, "card.light.light_boussole.description",
-                    condition: null,
+                    condition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         player.HasCompass.Value = true;
                     }),
 
                 CreateEquipmentCard("card.light.light_broche", CardType.Light, "card.light.light_broche.description",
-                    condition: null,
+                    condition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         player.HasBroche.Value = true;
                     }),
 
                 CreateEquipmentCard("card.light.light_crucifix", CardType.Light, "card.light.light_crucifix.description",
-                    condition: null,
+                    condition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         player.HasCrucifix.Value = true;
@@ -478,7 +517,10 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.light.light_eclair", CardType.Light, "card.light.light_eclair.description", false,
                 new CardEffect("card.light.light_eclair.effect",
-                    targetableCondition: null,
+                    targetableCondition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         foreach (Player p in PlayerView.GetPlayers())
@@ -488,14 +530,20 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.light.light_eau_benite", CardType.Light, "card.light.light_eau_benite.description", false,
                 new CardEffect("card.light.light_eau_benite.effect",
-                    targetableCondition: null,
+                    targetableCondition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         player.Healed(2);
                     })),
 
                 CreateEquipmentCard("card.light.light_lance", CardType.Light, "card.light.light_lance.description",
-                    condition: null,
+                    condition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         player.HasSpear.Value = true;
@@ -521,7 +569,10 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.light.light_premiers_secours", CardType.Light, "card.light.light_premiers_secours.description", false,
                 new CardEffect("card.light.light_premiers_secours.effect",
-                    targetableCondition: null,
+                    targetableCondition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         List<int> players = new List<int>();
@@ -539,14 +590,20 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.light.light_savoir", CardType.Light, "card.light.light_savoir.description", false,
                 new CardEffect("card.light.light_savoir.effect",
-                    targetableCondition: null,
+                    targetableCondition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         player.HasAncestral.Value = true;
                     })),
 
                 CreateEquipmentCard("card.light.light_toge", CardType.Light, "card.light.light_toge.description",
-                    condition: null,
+                    condition: (player) =>
+                    {
+                        return true;
+                    },
                     effect: (player, card) =>
                     {
                         player.HasToge.Value = true;

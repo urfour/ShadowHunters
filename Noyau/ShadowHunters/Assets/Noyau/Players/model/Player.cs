@@ -126,7 +126,7 @@ public class Player
             
             //si c'est une attaque pour les pouvoirs du Vampire et Bob
             if(isAttack)
-                attacker.DamageDealed=damage;
+                attacker.DamageDealed.Value = damage;
             
             this.Wound.Value += damage;
             return damage;

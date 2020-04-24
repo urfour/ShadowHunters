@@ -1,4 +1,5 @@
-﻿using Assets.Noyau.Cards.model;
+﻿using Assets.Noyau.Cards.controller;
+using Assets.Noyau.Cards.model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Noyau.Cards.controller;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,6 @@ namespace Scripts.event_out
     public class SelectLightCardTargetEvent : PlayerEvent
     {
         public int[] PossibleTargetId { get; set; }
-        public LightCard LightCard { get; set; }
+        public Card LightCard { get; set; }
     }
 }

@@ -11,6 +11,7 @@ using Scripts.event_in;
 using Scripts.event_out;
 using Assets.Noyau.Players.view;
 using Assets.Noyau.Cards.controller;
+using Assets.Noyau.Cards.model;
 
 namespace Scripts
 {
@@ -120,16 +121,16 @@ namespace Scripts
         public void SelectDiceThrow()
         {
             int lancer = 5;
-            int D6,D4;
-            if(lancer == throw1[0]+throw1[1])
+            int D6, D4;
+            if (lancer == throw1[0] + throw1[1])
             {
-                D6=throw1[0];
-                D4=throw1[1];
+                D6 = throw1[0];
+                D4 = throw1[1];
             }
             else
             {
-                D6=throw2[0];
-                D4=throw2[1];
+                D6 = throw2[0];
+                D4 = throw2[1];
             }
 
             EventView.Manager.Emit(new SelectedDiceEvent()
@@ -192,13 +193,13 @@ namespace Scripts
 
                 bool isEquip = false;
                 Card card = p.ListCard[UnityEngine.Random.Range(0, p.ListCard.Count)];
-                if (card.isEquipement)
+                if (card is EquipmentCard)
                     isEquip = true;
 
                 while (!isEquip)
                 {
                     card = p.ListCard[UnityEngine.Random.Range(0, p.ListCard.Count)];
-                    if (card.isEquipement)
+                    if (card is EquipmentCard)
                         isEquip = true;
                 }
 
@@ -234,14 +235,14 @@ namespace Scripts
             {
                 //choisit quel lancé de dés il veut
                 //choiceDropdown.gameObject.SetActive(true);
-                throw1[0]=sdt.D6Dice1;
-                throw1[1]=sdt.D4Dice1;
+                throw1[0] = sdt.D6Dice1;
+                throw1[1] = sdt.D4Dice1;
 
-                throw2[0]=sdt.D6Dice2;
-                throw2[1]=sdt.D4Dice2;
-                List<string> throws=new List<string>();
-                throws.Add(throw1[0]+throw1[1].ToString());
-                throws.Add(throw2[0]+throw2[1].ToString());
+                throw2[0] = sdt.D6Dice2;
+                throw2[1] = sdt.D4Dice2;
+                List<string> throws = new List<string>();
+                throws.Add(throw1[0] + throw1[1].ToString());
+                throws.Add(throw2[0] + throw2[1].ToString());
                 //choiceDropdown.AddOptions(throws);
                 //validateButton.gameObject.SetActive(true);
 
@@ -306,13 +307,13 @@ namespace Scripts
             }
             else if (e is SelectStealCardEvent ssce)
             {
-                Player p = PlayerView.GetPlayer(ssce.PossiblePlayerTargetId[UnityEngine.Random.Range(0, ssce.PossiblePlayerTargetId.Length)]);
+                Player p = ssce.PossiblePlayerTargetId[UnityEngine.Random.Range(0, ssce.PossiblePlayerTargetId.Length)].owner;
 
                 EventView.Manager.Emit(new StealCardEvent()
                 {
                     PlayerId = ssce.PlayerId,
                     PlayerStealedId = p.Id,
-                    CardStealedName = p.ListCard[UnityEngine.Random.Range(0, p.ListCard.Count)].cardName
+                    CardStealedName = p.ListCard[UnityEngine.Random.Range(0, p.ListCard.Count)].cardLabel
                 });
             }
             else if (e is SelectStealCardFromPlayerEvent sscfpe)
@@ -320,14 +321,14 @@ namespace Scripts
                 Player p = PlayerView.GetPlayer(sscfpe.PlayerStealedId);
 
                 bool isEquip = false;
-                Card card = p.ListCard[UnityEngine.Random.Range(0, p.ListCard.Count-1)];
-                if (card.isEquipement)
+                Card card = p.ListCard[UnityEngine.Random.Range(0, p.ListCard.Count - 1)];
+                if (card is EquipmentCard)
                     isEquip = true;
 
                 while (!isEquip)
                 {
-                    card = p.ListCard[UnityEngine.Random.Range(0, p.ListCard.Count-1)];
-                    if(card.isEquipement)
+                    card = p.ListCard[UnityEngine.Random.Range(0, p.ListCard.Count - 1)];
+                    if (card is EquipmentCard)
                         isEquip = true;
                 }
 
@@ -338,27 +339,26 @@ namespace Scripts
                     CardStealedName = card.cardLabel
                 });
             }
-            else if (e is SelectVisionPowerEvent svpe)
+            /*else if (e is SelectVisionPowerEvent svpe)
             {
 
                 bool up = false;
                 int pc = svpe.PossiblePlayerTargetId[UnityEngine.Random.Range(0, svpe.PossiblePlayerTargetId.Length)];
-                
+
                 if (PlayerView.GetPlayer(pc).Character.characterName == "Metamorphe")
                 {
                     if (UnityEngine.Random.Range(0, 1) == 0)
                         up = true;
                 }
-                
+
 
                 EventView.Manager.Emit(new VisionCardEffectEvent()
                 {
                     PlayerId = svpe.PlayerId,
                     TargetId = pc,
-                    VisionCard = svpe.VisionCard,
-                    MetamorphePower = up,
+                    VisionCard = svpe.VisionCard
                 });
-            }
+            }*/
         }
     }
 }
