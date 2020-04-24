@@ -158,9 +158,8 @@ namespace Assets.Noyau.Players.controller
             {
                 if(owner.Revealed.Value && owner.DamageDealed.Value > 0)
                 {
-                    owner.power.power(owner);
+                    owner.Character.power.power(owner);
                 }
-                return false;
             }
             );
 
@@ -194,11 +193,11 @@ namespace Assets.Noyau.Players.controller
             },
             availability: (owner) =>
             {
+                // A partir du moment où elle se révèle, elle peut utiliser son pouvoir n'importe quand (mais pas forcément immédiatement)
                 if(owner.Revealed.Value)
                 {
-                    owner.power.power(owner);
+                    owner.CanUsePower.Value = true;
                 }
-                return false;
             }
             );
 
@@ -206,7 +205,7 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
-                EventView.Manager.Emit(new SelectBobChoiceEvent() { PlayerId = owner.Id});
+                EventView.Manager.Emit(new SelectBobPowerEvent() { PlayerId = owner.Id});
             },
             addListeners: (owner) =>
             {
@@ -216,9 +215,8 @@ namespace Assets.Noyau.Players.controller
             {
                 if(owner.Revealed.Value && owner.DamageDealed.Value >= 2)
                 {
-                    owner.power.power(owner);
+                    owner.Character.power.power(owner);
                 }
-                return false;
             }
             );
 
@@ -265,16 +263,17 @@ namespace Assets.Noyau.Players.controller
             {
                 foreach (Player p in PlayerView.GetPlayers())
                 {
-                    p.Dead.AddListener((sender) => { owner.Character.goal.checkWinning(owner); });
+                    if (p.Id != owner.Id)
+                        p.Dead.AddListener((sender) => { owner.Character.goal.checkWinning(owner); });
                 }
             },
             availability: (owner) =>
             {
-                if (!owner.Dead.Value && !owner.Revealed.Value)
+                // A ce moment Daniel est forcément vivant car sinon il aurait gagné
+                if (!owner.Revealed.Value)
                 {
                     owner.Character.power.power(owner);
                 }
-                return false;
             }
             );
 
