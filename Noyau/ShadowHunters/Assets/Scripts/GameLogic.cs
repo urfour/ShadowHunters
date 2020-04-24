@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -121,7 +121,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         //InitInterface();
         //ChooseNextPlayer();
     }
-    */
+    
 
     /// <summary>
     /// Redistribution des cartes lorsqu'une des pioches est vide
@@ -1183,7 +1183,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
                 break;
         }
     }
-    */
+    
 
 
     public void OnEvent(PlayerEvent e, string[] tags = null)
@@ -1762,7 +1762,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
 
                 m_pickedVisionCard = pickedCard;
             }
-            */
+            
             // Cartes applicables en fonction des équipes ?
             if ((team == CharacterTeam.Shadow && pickedCard.visionEffect.effectOnShadow && !metaPower)
                 || (team == CharacterTeam.Hunter && pickedCard.visionEffect.effectOnHunter)
@@ -1885,7 +1885,7 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
             psing.AddCard(dc);
 
             LooseEquipmentCard(psing.Id, 0);
-            */
+            
 
         }
     }
@@ -1895,3 +1895,4 @@ public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
         throw new NotImplementedException();
     }
 }
+*/

@@ -1,4 +1,4 @@
-﻿using Assets.Noyau.Cards.controller;
+﻿/*using Assets.Noyau.Cards.controller;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -253,4 +253,4 @@ public class GameBoard
 		}
 		Debug.Log("La carte " + type + " a été retirée de la défausse.");
 	}
-}
+}*/
