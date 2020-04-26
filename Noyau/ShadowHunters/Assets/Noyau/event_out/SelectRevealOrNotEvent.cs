@@ -7,9 +7,11 @@ using Assets.Noyau.Cards.controller;
 
 namespace Scripts.event_out
 {
-    // Evenement qui permet au joueur de choisir s'il veut se révéler ou pas 
-    // Attribut : id du joueur et carte qui fait effet
-    // Renvoie l'event RevealOrNotEvent
+    /// <summary>
+    /// Event qui permet au joueur de choisir s'il veut se révéler ou pas 
+    /// Attribut : id du joueur et carte qui fait effet
+    /// Renvoie l'event RevealOrNotEvent
+    /// </summary>
     public class SelectRevealOrNotEvent : PlayerEvent
     {
         public Card EffectCard { get; set; } = null;

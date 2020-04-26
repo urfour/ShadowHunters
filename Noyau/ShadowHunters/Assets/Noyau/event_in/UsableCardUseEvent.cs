@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Assets.Noyau.event_in
 {
+    /// <summary>
+    /// Event d'utilisation d'une carte à usage unique
+    /// </summary>
     class UsableCardUseEvent : PlayerEvent
     {
         public int Cardid { get; set; }

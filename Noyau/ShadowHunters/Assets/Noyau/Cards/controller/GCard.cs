@@ -13,6 +13,10 @@ using Scripts.event_in;
 
 namespace Assets.Noyau.Cards.controller
 {
+    /// <summary>
+    /// Classe qui va instancier toute les cartes du jeu.
+    /// </summary>
+
     public class GCard
     {
         public List<Card> cards = new List<Card>();
@@ -26,6 +30,10 @@ namespace Assets.Noyau.Cards.controller
 
         public GCard()
         {
+            /// <summary>
+            /// Fonction qui va instancier le lieu Forêt avec ses pouvoirs comme une carte à usage unique.
+            /// </summary>
+            /// <returns> Renvoie un UsableCard</returns>
             Foret = CreateUsableCard("card.location.foret", CardType.Location, "card.location.foret.description", true,
                 new CardEffect("card.location.foret.effect",
                     effect : (target, card) =>
@@ -42,6 +50,10 @@ namespace Assets.Noyau.Cards.controller
                     }
                 ));
 
+            /// <summary>
+            /// Fonction qui va instancier le lieu Sanctuaire avec ses pouvoirs comme une carte à usage unique.
+            /// </summary>
+            /// <returns> Renvoie un UsableCard</returns>
             Sanctuaire = CreateUsableCard("card.location.sanctuaire", CardType.Location, "card.location.sanctuaire.description", true,
                 new CardEffect("card.location.sanctuaire.effect",
                     effect: (target, card) =>
@@ -67,7 +79,10 @@ namespace Assets.Noyau.Cards.controller
                 ));
 
 
-
+            /// <summary>
+            /// Fonction qui va instancier les cartes ténèbres avec leur pouvoirs.
+            /// </summary>
+            /// <returns> Renvoie une liste de Card</returns>
             darknessDeck = new List<Card>()
             {
                 CreateUsableCard("card.darkness.darkness_araignee", CardType.Darkness, "card.darkness.darkness_araignee.description", false,
@@ -401,7 +416,11 @@ namespace Assets.Noyau.Cards.controller
                         player.BonusAttack.Value++;
                     }),
             };
-
+            
+            /// <summary>
+            /// Fonction qui va instancier les cartes lumières avec leur pouvoirs.
+            /// </summary>
+            /// <returns> Renvoie une liste de Card</returns>
             lightDeck = new List<Card>()
             {
                 CreateEquipmentCard("card.light.light_amulette", CardType.Light, "card.light.light_amulette.description",
@@ -612,6 +631,10 @@ namespace Assets.Noyau.Cards.controller
                     })
             };
 
+            /// <summary>
+            /// Fonction qui va instancier les cartes visions avec leur pouvoirs.
+            /// </summary>
+            /// <returns> Renvoie une liste de Card</returns>
             visionDeck = new List<Card>()
             {
                 CreateUsableCard("card.vision.vision_destructrice", CardType.Vision, "card.vision.vision_destructrice.description", false,
@@ -839,6 +862,15 @@ namespace Assets.Noyau.Cards.controller
             };
         }
 
+        /// <summary>
+        /// Fonction qui va instancier une carte équipement.
+        /// </summary>
+        /// <param name="cardLabel">Label de la carte</param>
+        /// <param name="cardType">Type de la carte</param>
+        /// <param name="description">Sa description</param>
+        /// <param name="condition">Condition d'usage de la carte</param>
+        /// <param name="effect">L'effet de la carte</param>
+        /// <returns> Renvoie une EquipmentCard</returns>
         public EquipmentCard CreateEquipmentCard(string cardLabel, CardType cardType, string description, EquipmentCondition condition, EquipmentEffect effect)
         {
             EquipmentCard c = new EquipmentCard(cardLabel, cardType, description, cards.Count, null, null, condition, effect);
@@ -846,6 +878,15 @@ namespace Assets.Noyau.Cards.controller
             return c;
         }
 
+        /// <summary>
+        /// Fonction qui va instancier une carte à usage unique.
+        /// </summary>
+        /// <param name="cardLabel">Label de la carte</param>
+        /// <param name="cardType">Type de la carte</param>
+        /// <param name="description">Sa description</param>
+        /// <param name="canDismiss">Booléen pour dire si la carte peut être défaussée</param>
+        /// <param name="cardEffect">Tableau d'effets de la carte</param>
+        /// <returns> Renvoie une EquipmentCard</returns>
         public UsableCard CreateUsableCard(string cardLabel, CardType cardType, string description, bool canDismiss, params CardEffect[] cardEffect)
         {
             int id = cards.Count;

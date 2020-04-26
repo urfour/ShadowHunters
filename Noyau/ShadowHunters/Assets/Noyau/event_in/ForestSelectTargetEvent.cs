@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_in
 {
-    // Evenement qui permet de choisir un joueur parmis une liste de joueurs
-    // et soit de le soigner de 1 soit de le blesser de 2 (il peut se choisir lui-même dans les 2 cas)
+    /// <summary>
+    /// Evenement qui permet de choisir un joueur parmis une liste de joueurs
+    /// et soit de le soigner de 1 soit de le blesser de 2 (il peut se choisir lui-même dans les 2 cas)
+    /// </summary>
     
     // WARNING !!! si un perso dans la liste a la broche de chance
     // WARNING !!! ne peut pas prendre de dégats mais peut toujours etre soigné

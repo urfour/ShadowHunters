@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_out
 {
+    /// <summary>
+    /// Event qui se déclenche à la fin du tour d'un autre joueur
+    /// annonce le prochain joueur
+    /// </summary>
     class SelectedNextPlayer : PlayerEvent
     {
     }

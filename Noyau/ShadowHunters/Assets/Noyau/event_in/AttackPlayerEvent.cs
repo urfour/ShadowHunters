@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_out
 {
-    // Retour de l'evenement SelectAttackTargetEvent
-    // Renvoie l'id du joueur attaquant, l'id du joueur attaqué et 2 booléans pour savoir si l'event vient du pouvoir d'un personnage
+    /// <summary>
+    /// Retour de l'evenement SelectAttackTargetEvent
+    /// Renvoie l'id du joueur attaquant, l'id du joueur attaqué et 2 booléens pour savoir si l'event vient du pouvoir d'un personnage
+    /// </summary>
     public class AttackPlayerEvent : PlayerEvent
     {
         public int PlayerAttackedId { get; set; }

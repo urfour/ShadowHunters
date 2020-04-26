@@ -7,10 +7,20 @@ using System.Threading.Tasks;
 
 namespace Assets.Noyau.Players.controller
 {
+    /// <summary>
+    /// Classe qui va instancier tout les personnages du jeu.
+    /// </summary>
+
     class GCharacter
     {
         public List<Character> characters = new List<Character>();
         private Random rand = new Random();
+
+        /// <summary>
+        /// Fonction qui va préparer les decks des différentes équipes
+        /// en fonction du nombre de joueurs
+        /// </summary>
+        /// <param name="nbPlayers">Le nombre de joueurs de la partie</param>
         public GCharacter(int nbPlayers)
         {
             List<Character> Neutral = new List<Character>() {
@@ -102,6 +112,9 @@ namespace Assets.Noyau.Players.controller
             }
         }
 
+        /// <summary>
+        /// Fonction qui attribue un personnage à un joueur.
+        /// </summary>
         public Character PickCharacter()
         {
             int r = rand.Next(0, characters.Count);

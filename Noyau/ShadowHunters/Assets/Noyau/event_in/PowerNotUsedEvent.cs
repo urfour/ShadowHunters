@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_out
 {
-    // Evenement qui se déclenche quand un joueur clique sur le bouton de refus d'activation de pouvoir
+    /// <summary>
+    /// Evenement qui se déclenche quand un joueur clique sur le bouton 
+    /// de refus d'activation de pouvoir
+    /// </summary>
     public class PowerNotUsedEvent : PlayerEvent
     {
     }

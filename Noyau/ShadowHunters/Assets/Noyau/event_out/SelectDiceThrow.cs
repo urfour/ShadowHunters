@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_out
 {
-    // event pour le cas où le joueur à la boussole et choisi entre 2 lancers
+    /// <summary>
+    /// Event pour le cas où le joueur a la boussole (choisit entre 2 lancers)
+    /// </summary>
     public class SelectDiceThrow : PlayerEvent
     {
         public int D6Dice1 { get; set; }

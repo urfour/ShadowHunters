@@ -7,7 +7,9 @@ using Assets.Noyau.Manager.view;
 
 namespace Scripts.event_out
 {
-    // event qui va donner le(s) lieu(x) et les résultats des lancers
+    /// <summary>
+    /// Event qui va donner le(s) lieu(x) et les résultats des lancers
+    /// </summary>
     public class SelectMovement : PlayerEvent
     {
         public int[] LocationAvailable;

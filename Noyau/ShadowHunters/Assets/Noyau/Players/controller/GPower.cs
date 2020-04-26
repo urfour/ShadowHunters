@@ -11,10 +11,20 @@ using System.Threading.Tasks;
 
 namespace Assets.Noyau.Players.controller
 {
+    /// <summary>
+    /// Classe qui va instancier tout les pouvoirs des personnages.
+    /// </summary>
     class GPower
     {
 
         // HUNTERS
+
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir de Georges.
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
         public static Power George = new Power
             (
             power: (owner) =>
@@ -48,6 +58,12 @@ namespace Assets.Noyau.Players.controller
             }
             );
 
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir de Franklin.
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
         public static Power Franklin = new Power
             (
             power: (owner) =>
@@ -81,7 +97,12 @@ namespace Assets.Noyau.Players.controller
             }
             );
 
-        // en chantier
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir d'Emi.
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
         public static Power Emi = new Power
             (
             power: (owner) =>
@@ -126,6 +147,13 @@ namespace Assets.Noyau.Players.controller
             );
 
         //SHADOWS
+
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir du Loup-Garou.
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
         public static Power Loup = new Power
             (
             power: (owner) =>
@@ -164,6 +192,12 @@ namespace Assets.Noyau.Players.controller
             }
             );
 
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir du Vampire.
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
         public static Power Vampire = new Power
             (
             power: (owner) =>
@@ -201,6 +235,13 @@ namespace Assets.Noyau.Players.controller
             );
 */
         //NEUTRES
+
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir d'Allie.
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
         public static Power Allie = new Power
             (
             power: (owner) =>
@@ -224,6 +265,12 @@ namespace Assets.Noyau.Players.controller
             }
             );
 
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir de Bob.
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
         public static Power Bob = new Power
             (
             power: (owner) =>
@@ -243,6 +290,12 @@ namespace Assets.Noyau.Players.controller
             }
             );
 
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir de Charles.
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
         public static Power Charles = new Power
             (
             power: (owner) =>
@@ -276,6 +329,12 @@ namespace Assets.Noyau.Players.controller
             }
             );
 
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir de Daniel.
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
         public static Power Daniel = new Power
             (
             power: (owner) =>

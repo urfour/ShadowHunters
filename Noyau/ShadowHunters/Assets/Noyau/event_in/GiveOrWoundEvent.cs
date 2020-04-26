@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_in
 {
-    // Retour de l'evenement SelectGiveOrWoundEvent
-    // Renvoie l'id du joueur et si veut donner ou se blesser (si give == false, alors il choisit blessure) 
+    /// <summary>
+    /// Retour de l'evenement SelectGiveOrWoundEvent
+    /// Renvoie l'id du joueur et si veut donner ou se blesser 
+    /// (si Give == false, alors il choisit blessure) 
+    /// </summary>
     public class GiveOrWoundEvent : PlayerEvent
     {
         public bool Give { get; set; }

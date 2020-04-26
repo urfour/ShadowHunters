@@ -26,76 +26,141 @@ public enum PlayerNames
 /// </summary>
 public class Player
 {
-
-    // ordre du jeu d'un joueur
+    /// <summary>
+    /// ordre du jeu d'un joueur
+    /// </summary>
     public int Id { get; private set; }
-    // nom du joueur
+    /// <summary>
+    /// nom du joueur
+    /// </summary>
     public string Name { get; private set; }
-    // nombre de blessure
+    /// <summary>
+    /// nombre de blessure
+    /// </summary>
+
     public Setting<int> Wound { get; private set; } = new Setting<int>(0);
-    // carte révélée à tous ou cachée
+    /// <summary>
+    /// carte révélée à tous ou cachée
+    /// </summary>
     public Setting<bool> Revealed { get; private set; } = new Setting<bool>(false);
-    // vivant ou mort
+    /// <summary>
+    /// vivant ou mort
+    /// </summary>
     public Setting<bool> Dead { get; private set; } = new Setting<bool>(false);
-    // pouvoir déjà utilisé ou non
+    /// <summary>
+    /// pouvoir déjà utilisé ou non
+    /// </summary>
     public Setting<bool> UsedPower { get; private set; } = new Setting<bool>(false);
-    // bonus d'attaque (par défaut = 0)
+    /// <summary>
+    /// bonus d'attaque (par défaut = 0)
+    /// </summary>
     public Setting<int> BonusAttack { get; private set; } = new Setting<int>(0);
-    // malus d'attaque (par défaut = 0)
+    /// <summary>
+    /// malus d'attaque (par défaut = 0)
+    /// </summary>
     public Setting<int> MalusAttack { get; private set; } = new Setting<int>(0);
-    // réduction du nombre de Blessures subites (par défaut = 0)
+    /// <summary>
+    /// réduction du nombre de Blessures subites (par défaut = 0)
+    /// </summary>
     public Setting<int> ReductionWounds { get; private set; } = new Setting<int>(0);
-    // le joueur possède-t-il la mitrailleuse ?
+    /// <summary>
+    /// le joueur possède-t-il la mitrailleuse ?
+    /// </summary>
+
     public Setting<bool> HasGatling { get; private set; } = new Setting<bool>(false);
-    // le joueur possède-t-il le revolver ?
+    /// <summary>
+    /// le joueur possède-t-il le revolver ?
+    /// </summary>
     public Setting<bool> HasRevolver { get; private set; } = new Setting<bool>(false);
-    // le joueur possède-t-il le sabre ?
+    /// <summary>
+    /// le joueur possède-t-il le sabre ?
+    /// </summary>
     public Setting<bool> HasSaber { get; private set; } = new Setting<bool>(false);
-    // le joueur possède-t-il l'amulette ?
+    /// <summary>
+    /// le joueur possède-t-il l'amulette ?
+    /// </summary>
     public Setting<bool> HasAmulet { get; private set; } = new Setting<bool>(false);
-    // le joueur possède-t-il la broche ?
+    /// <summary>
+    /// le joueur possède-t-il la broche ?
+    /// </summary>
     public Setting<bool> HasBroche { get; private set; } = new Setting<bool>(false);
-    // le joueur possède-t-il la boussole ?
+    /// <summary>
+    /// le joueur possède-t-il la boussole ?
+    /// </summary>
     public Setting<bool> HasCompass { get; private set; } = new Setting<bool>(false);
-    // le joueur possède-t-il le crucifix ?
+    /// <summary>
+    /// le joueur possède-t-il le crucifix ?
+    /// </summary>
     public Setting<bool> HasCrucifix { get; private set; } = new Setting<bool>(false);
-    // le joueur possède-t-il la lance ?
+    /// <summary>
+    /// le joueur possède-t-il la lance ?
+    /// </summary>
     public Setting<bool> HasSpear { get; private set; } = new Setting<bool>(false);
-    // le joueur possède-t-il la toge ?
+    /// <summary>
+    /// le joueur possède-t-il la toge ?
+    /// </summary>
     public Setting<bool> HasToge { get; private set; } = new Setting<bool>(false);
-    // le joueur est-il sous l'effet de l'ange gardien ?
+    /// <summary>
+    /// le joueur est-il sous l'effet de l'ange gardien ?
+    /// </summary>
     public Setting<bool> HasGuardian { get; private set; } = new Setting<bool>(false);
-    // le joueur est-il sous l'effet du savoir ancestral ?
+    /// <summary>
+    /// le joueur est-il sous l'effet du savoir ancestral ?
+    /// </summary>
     public Setting<bool> HasAncestral { get; private set; } = new Setting<bool>(false);
-    // nb d'équipements
+    /// <summary>
+    /// nb d'équipements
+    /// </summary>
     public Setting<int> NbEquipment { get; private set; } = new Setting<int>(0);
-    // le joueur a-t-il gagné ?
+    /// <summary>
+    /// le joueur a-t-il gagné ?
+    /// </summary>
     public Setting<bool> HasWon { get; private set; } = new Setting<bool>(false);
-    // position du joueur
+    /// <summary>
+    /// position du joueur
+    /// </summary>
     public Setting<int> Position { get; private set; } = new Setting<int>(-1);
 
-
-    // personnage du joueur
+    /// <summary>
+    /// personnage du joueur
+    /// </summary>
     public Character Character { get; private set; }
-
-    // liste des cartes possédées par le joueur
+    /// <summary>
+    /// liste des cartes possédées par le joueur
+    /// </summary>
     public List<Card> ListCard { get; private set; }
-    // le joueur peut-il utiliser son pouvoir ?
+    /// <summary>
+    /// le joueur peut-il utiliser son pouvoir ?
+    /// </summary>
     public Setting<bool> CanUsePower { get; private set; } = new Setting<bool>(false);
-    // le joueur a-t-il déjà utilisé son pouvoir une fois (utilisé pour les usages uniques)
+    /// <summary>
+    /// le joueur a-t-il déjà utilisé son pouvoir une fois (utilisé pour les usages uniques)
+    /// </summary>
     public Setting<bool> PowerUsed { get; private set; } = new Setting<bool>(false);
-
-    // Id du joueur qui m'a attaqué en dernier (Loup-garou)
+    /// <summary>
+    /// Id du joueur qui m'a attaqué en dernier (Loup-garou)
+    /// </summary>
     public Setting<int> OnAttacked { get; private set; } = new Setting<int>(-1);
-    // Id du joueur que j'ai attaqué en dernier (Charles)
+    /// <summary>
+    /// Id du joueur que j'ai attaqué en dernier (Charles)
+    /// </summary>
     public Setting<int> OnAttacking { get; private set; } = new Setting<int>(-1);
-
+    /// <summary>
+    /// Nombre de dommage reçu
+    /// </summary>
     public Setting<int> OnDealDamage { get; private set; } = new Setting<int>(0);
-    // Nombre de dommage infligé pour la dernière fois en attaquant
+    /// <summary>
+    /// Nombre de dommage infligé pour la dernière fois en attaquant
+    /// </summary>
     public Setting<int> DamageDealed { get; private set; } = new Setting<int>(-1);
  
-    //private static List<Player> players = new List<Player>();
+    ///private static List<Player> players = new List<Player>();
 
+    /// <summary>
+    /// Constructeur d'un joueur
+    /// </summary>
+    /// <param name="id">Id du joueur</param>
+    /// <param name="c">Personnage qu'il va jouer</param>
     public Player(int id, Character c)
     {
         this.Id = id;
@@ -115,6 +180,12 @@ public class Player
         //players.Add(this);
     }
 
+    /// <summary>
+    /// Fonction qui inflige des dégâts
+    /// </summary>
+    /// <param name="damage">Le nombre de dommage</param>
+    /// <param name="attacker">Joueur qui l'a attaqué</param>
+    /// <param name="isAttack">Booléen si c'est une attaque ou des dégats infligés par une carte à effet</param>
     public virtual int Wounded(int damage, Player attacker, bool isAttack)
     {
         if(attacker.Character.characterName=="Charles" && isAttack)
@@ -136,6 +207,10 @@ public class Player
         return 0;
     }
 
+    /// <summary>
+    /// Fonction qui soigne
+    /// </summary>
+    /// <param name="heal">Le nombre de point de vie soignés</param>
     public virtual void Healed(int heal)
     {
         if (Dead.Value)
@@ -158,19 +233,30 @@ public class Player
         }
     }
 
+    /// <summary>
+    /// Fonction qui ajoute une carte au joueur
+    /// </summary>
+    /// <param name="card">La carte ajoutée</param>
     public void AddCard(Card card)
     {
         ListCard.Add(card);
         NbEquipment.Value++;
     }
 
+    /// <summary>
+    /// Fonction qui enlève une carte au joueur
+    /// </summary>
+    /// <param name="index">L'index de la carte enlevée</param>
     public void RemoveCard(int index)
     {
         ListCard.RemoveAt(index);
         NbEquipment.Value--;
     }
     
-
+    /// <summary>
+    /// Fonction qui renvoie l'indice de la carte chez un joueur
+    /// </summary>
+    /// <param name="cardName">Le nom de la carte recherchée</param>
     public int HasCard(string cardName)
     {
         for (int i = 0 ; i < ListCard.Count ; i++)
@@ -181,7 +267,9 @@ public class Player
         return -1;
     }
 
-
+    /// <summary>
+    /// Fonction qui renvoie la liste de joueurs pouvant être ciblés lors d'une attaque
+    /// </summary>
     public List<Player> getTargetablePlayers()
     {
         List<Player> tps = new List<Player>();

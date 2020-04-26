@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_in
 {
-    // Event qui se déclenche que le joueur appuis sur le bouton d'attaque
+    /// <summary>
+    /// Event qui se déclenche que le joueur appuie sur le bouton d'attaque
+    /// </summary>
     public class AttackEvent : PlayerEvent
     {
     }

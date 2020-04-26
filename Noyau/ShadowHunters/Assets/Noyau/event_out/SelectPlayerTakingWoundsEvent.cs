@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_out
 {
-    // Evenement qui permet de choisir un joueur à attaquer parmis une liste de joueur 
-    // Renvoie l'event TakingWoundsEvent
+    /// <summary>
+    /// Event qui permet de choisir un joueur à attaquer parmi une liste de joueurs
+    /// Attributs: nb de blessures infligées, de soins sur soi, si la carte est la poupée démoniaque
+    /// Renvoie l'event TakingWoundsEvent
+    /// </summary>
     public class SelectPlayerTakingWoundsEvent : PlayerEvent
     {
         public int[] PossibleTargetId { get; set; }

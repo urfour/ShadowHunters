@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_in
 {
-    // Retour de l'evenement SelectLightCardTargetEvent
-    // Attribut : id du joueur et carte qui fait effet
+    /// <summary>
+    /// Retour de l'evenement SelectLightCardTargetEvent
+    /// Attribut : id du joueur et carte qui fait effet
+    /// </summary>
     public class LightCardEffectEvent : PlayerEvent
     {
         public int PlayerChoosenId { get; set; }

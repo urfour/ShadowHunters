@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_in
 {
-    // Retour des evenements SelectStealCardEvent et SelectStealCardFromPlayerEvent
-    // Renvoie l'id du joueur qui vole, l'id du joueur volé et la carte volée
+    /// <summary>
+    /// Retour des evenements SelectStealCardEvent et SelectStealCardFromPlayerEvent
+    /// Renvoie l'id du joueur qui vole, l'id du joueur volÃ© et la carte volÃ©e
+    /// </summary>
     public class StealCardEvent : PlayerEvent
     {
         public int PlayerStealedId { get; set; }
