@@ -94,7 +94,6 @@ public class GameLogic : MonoBehaviour
 //    /// </summary>
 //    public List<Character> m_neutralCharacters;
 
-
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void OnBeforeSceneLoadRuntimeMethod()
     {
