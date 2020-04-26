@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Noyau.event_in
+namespace Scripts.event_in
 {
     class UsableCardUseEvent : PlayerEvent
     {

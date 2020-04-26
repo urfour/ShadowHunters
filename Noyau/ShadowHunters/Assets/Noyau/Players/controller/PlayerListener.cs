@@ -2,7 +2,6 @@
 using Assets.Noyau.Cards.model;
 using Assets.Noyau.Cards.view;
 using Assets.Noyau.event_in;
-using Assets.Noyau.event_out;
 using Assets.Noyau.Manager.view;
 using Assets.Noyau.Players.model;
 using Assets.Noyau.Players.view;
@@ -171,10 +170,13 @@ namespace Assets.Noyau.Players.controller
                     NbWoundsSelfHealed = 0
                 });
             }
-            else if (e is DrawCardEvent drawCard && GameManager.PlayerTurn.Value.Id == e.PlayerId)
+            else if (e is DrawCardEvent drawCard/* && GameManager.PlayerTurn.Value.Id == e.PlayerId*/)
             {
                 Player player = PlayerView.GetPlayer(drawCard.PlayerId);
                 Card pickedCard = null;
+
+                Debug.Log("Joueur qui pioche : " + player.Name);
+                Debug.Log("Deck selectionné : " + drawCard.SelectedCardType);
 
                 switch (drawCard.SelectedCardType)
                 {
@@ -189,15 +191,41 @@ namespace Assets.Noyau.Players.controller
                         break;
                 }
 
+                Debug.Log("Carte piochée : " + pickedCard.cardLabel);
+                Debug.Log("Equipement ? " + (pickedCard is EquipmentCard));
+
                 if (pickedCard is UsableCard pickedUsableCard)
                 {
-                    EventView.Manager.Emit(new SelectUsableCardPickedEvent(pickedUsableCard.Id, pickedCard.cardType == CardType.Vision));
+                    Debug.Log("pickedCard is UsableCard pickedUsableCard");
+                    EventView.Manager.Emit(new SelectUsableCardPickedEvent(pickedUsableCard.Id, pickedUsableCard.cardType == CardType.Vision));
                 }
                 else if (pickedCard is EquipmentCard pickedEquipmentCard)
                 {
                     EventView.Manager.Emit(new DrawEquipmentCardEvent(pickedEquipmentCard.Id));
-                    pickedEquipmentCard.equipe(player);
+                    pickedEquipmentCard.equipe(player, pickedEquipmentCard);
                 }
+
+                player.PrintCards();
+            }
+            else if (e is UsableCardUseEvent ecue)
+            {
+                Card c = CardView.GCard.cards[ecue.Cardid];
+                int effect = ecue.EffectSelected;
+                Player p1 = PlayerView.GetPlayer(ecue.PlayerId);
+                Player p2 = PlayerView.GetPlayer(ecue.PlayerSelected);
+
+                UsableCard uCard = c as UsableCard;
+
+                Debug.Log("UsableCard piochée : " + uCard.cardLabel);
+
+                if (uCard.cardEffect[effect].targetableCondition(p2))
+                {
+                    Debug.Log("L'effet s'active !");
+                    uCard.cardEffect[effect].effect(p2, uCard);
+                }
+                else
+                    Debug.Log("L'effet ne s'active pas !");
+
             }
             else if (e is AttackEvent attack)
             {
@@ -207,8 +235,6 @@ namespace Assets.Noyau.Players.controller
                 Debug.Log("Joueur attaquant : " + player.Name);
 
                 List<Player> targetablePlayers = player.getTargetablePlayers();
-
-                targetablePlayers.Add(PlayerView.GetPlayer(attack.PlayerId+1));
 
                 Debug.Log("Nombres joueurs attaquables : " + targetablePlayers.Count);
                 foreach (Player p in targetablePlayers)
@@ -222,7 +248,7 @@ namespace Assets.Noyau.Players.controller
                     {
                         List<int> playersId = new List<int>();
                         foreach (Player p in targetablePlayers)
-                            if (p.Id != player.Id)
+                            if (!p.Dead.Value && p.Id != player.Id)
                                 playersId.Add(p.Id);
 
                         Debug.Log("Envoi de SelectAttackTargetEvent");
@@ -242,7 +268,7 @@ namespace Assets.Noyau.Players.controller
                         if (player.HasSaber.Value)
                             lancer = UnityEngine.Random.Range(1, 4);
                         else
-                            lancer = UnityEngine.Random.Range(1, 6) - UnityEngine.Random.Range(1, 4);
+                            lancer = Math.Abs(UnityEngine.Random.Range(1, 6) - UnityEngine.Random.Range(1, 4));
 
                         Debug.Log("On attaque tout le monde !");
 
@@ -250,15 +276,11 @@ namespace Assets.Noyau.Players.controller
 
                         if (lancer != 0)
                             foreach (Player p in targetablePlayers)
-                                Debug.Log("Vie de " + p.Name + " : " + p.Wound);
-
-                        if (lancer != 0)
-                            foreach (Player p in targetablePlayers)
+                            {
+                                Debug.Log("Degat de " + p.Name + " avant : " + p.Wound.Value);
                                 p.Wounded(lancer + player.BonusAttack.Value - player.MalusAttack.Value, player, true);
-
-                        if (lancer != 0)
-                            foreach (Player p in targetablePlayers)
-                                Debug.Log("Vie de " + p.Name + " : " + p.Wound);
+                                Debug.Log("Degat de " + p.Name + " avant : " + p.Wound.Value);
+                            }
                     }
                 }
                 else
@@ -285,42 +307,53 @@ namespace Assets.Noyau.Players.controller
 
                 if (lancer != 0)
                 {
-                    Debug.Log("Vie avant : " + playerAttacked.Wound.Value);
+                    Debug.Log("Wounds avant : " + playerAttacked.Wound.Value);
                     playerAttacked.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
-                    Debug.Log("Vie après : " + playerAttacked.Wound.Value);
+                    Debug.Log("Wounds après : " + playerAttacked.Wound.Value);
+                    Debug.Log("Vie total : " + playerAttacked.Character.characterHP);
+                    Debug.Log("Mort ? " + playerAttacked.Dead.Value);
                 }
             }
             else if (e is StealCardEvent stealTarget)
             {
                 Player playerStealing = PlayerView.GetPlayer(stealTarget.PlayerId);
                 Player playerStealed = PlayerView.GetPlayer(stealTarget.PlayerStealedId);
-                string stealedCard = stealTarget.CardStealedName;
+                Card card = playerStealed.ListCard[playerStealed.HasCard(stealTarget.CardStealedName)];
 
-                int indexCard = playerStealed.HasCard(stealedCard);
-                playerStealing.AddCard(playerStealed.ListCard[indexCard]);
-
-                if (playerStealed.ListCard[indexCard] is EquipmentCard pickedCard)
+                Debug.Log("Joueur voleur : " + playerStealing.Name);
+                Debug.Log("Joueur volé : " + playerStealed.Name);
+                Debug.Log("Carte volé : " + card.cardLabel);
+                
+                if (card is EquipmentCard pickedCard)
                 {
-                    pickedCard.equipe(playerStealing);
-                    pickedCard.unequipe(playerStealed);
+                    playerStealing.PrintCards();
+                    playerStealed.PrintCards();
+                    pickedCard.equipe(playerStealing, pickedCard);
+                    pickedCard.unequipe(playerStealed, pickedCard);
+                    playerStealing.PrintCards();
+                    playerStealed.PrintCards();
                 }
+                else
+                    Debug.Log("La carte volée n'est pas un equipement.");
             }
             else if (e is GiveCardEvent giveCard)
             {
                 Player playerGiving = PlayerView.GetPlayer(giveCard.PlayerId);
                 Player playerGived = PlayerView.GetPlayer(giveCard.PlayerGivedId);
-                string givedCard = giveCard.CardGivedName;
+                Card card = playerGiving.ListCard[playerGiving.HasCard(giveCard.CardGivedName)];
 
-                int indexCard = playerGiving.HasCard(givedCard);
-                playerGived.AddCard(playerGiving.ListCard[indexCard]);
+                Debug.Log("Joueur donneur : " + playerGiving.Name);
+                Debug.Log("Joueur receveur : " + playerGived.Name);
+                Debug.Log("Carte donnée : " + card.cardLabel);
 
-                playerGiving.PrintCards();
-                playerGived.PrintCards();
-
-                if (playerGiving.ListCard[indexCard] is EquipmentCard pickedCard)
+                if (card is EquipmentCard pickedCard)
                 {
-                    pickedCard.equipe(playerGived);
-                    pickedCard.unequipe(playerGiving);
+                    playerGiving.PrintCards();
+                    playerGived.PrintCards();
+                    pickedCard.equipe(playerGived, pickedCard);
+                    pickedCard.unequipe(playerGiving, pickedCard);
+                    playerGiving.PrintCards();
+                    playerGived.PrintCards();
                 }
             }
             else if (e is TakingWoundsEffectEvent takingWounds)
@@ -331,9 +364,19 @@ namespace Assets.Noyau.Players.controller
                 int nbWoundsTaken = takingWounds.NbWoundsTaken;
                 int nbWoundsSelfHealed = takingWounds.NbWoundsSelfHealed;
 
+                Debug.Log("Joueur qui wound : " + playerAttacking.Name);
+                Debug.Log("Joueur qui est wound : " + playerAttacked.Name);
+                Debug.Log("Poupee : " + isPuppet);
+                Debug.Log("Degats : " + nbWoundsTaken);
+                Debug.Log("Soins : " + nbWoundsSelfHealed);
+
+                Debug.Log("Blessure " + playerAttacking.Name + " avant : " + playerAttacking.Wound.Value);
+                Debug.Log("Blessure " + playerAttacked.Name + " avant : " + playerAttacked.Wound.Value);
+
                 if (isPuppet)
                 {
                     int lancer = UnityEngine.Random.Range(1, 6);
+                    Debug.Log("Lancer : " + lancer);
                     if (lancer <= 4)
                         playerAttacked.Wounded(nbWoundsTaken,playerAttacking,false);
                     else
@@ -341,7 +384,6 @@ namespace Assets.Noyau.Players.controller
                 }
                 else
                 {
-
                     if (nbWoundsSelfHealed < 0)
                         playerAttacking.Wounded(-nbWoundsSelfHealed,playerAttacking,false);
                     else
@@ -352,6 +394,8 @@ namespace Assets.Noyau.Players.controller
                     else
                         playerAttacked.Wounded(nbWoundsTaken,playerAttacking,false);
                 }
+                Debug.Log("Blessure " + playerAttacking.Name + " après : " + playerAttacking.Wound.Value);
+                Debug.Log("Blessure " + playerAttacked.Name + " après : " + playerAttacked.Wound.Value);
             }
             else if (e is LightCardEffectEvent lcEffect)
             {
@@ -501,6 +545,32 @@ namespace Assets.Noyau.Players.controller
                         PlayerStealedId = Bob.OnAttacking.Value
                     });
                 }
+            }
+            else if (e is TestEvent te)
+            {
+
+                Debug.Log("ID : " + te.PlayerId);
+
+                Player player = PlayerView.GetPlayer(te.PlayerId);
+
+                Debug.Log("Joueur attaquant : " + player.Name);
+
+                List<int> listTarget = new List<int>();
+                foreach (Player p in PlayerView.GetPlayers())
+                    if (!p.Dead.Value && p.Id != player.Id)
+                        listTarget.Add(p.Id);
+
+                if (listTarget.Count != 0)
+                    EventView.Manager.Emit(new SelectPlayerTakingWoundsEvent()
+                    {
+                        PlayerId = player.Id,
+                        PossibleTargetId = listTarget.ToArray(),
+                        IsPuppet = true,
+                        NbWoundsTaken = 3,
+                        NbWoundsSelfHealed = 0
+                    });
+                else
+                    Debug.Log("Pas de joueur à blesser.");
             }
         }
     }

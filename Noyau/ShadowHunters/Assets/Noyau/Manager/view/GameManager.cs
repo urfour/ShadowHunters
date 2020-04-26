@@ -70,6 +70,8 @@ namespace Assets.Noyau.Manager.view
                 Board.Add(i, p[index]);
                 p.RemoveAt(index);
             }
+
+            PlayerTurn.Value = PlayerView.GetPlayer(0);
         }
     }
 }

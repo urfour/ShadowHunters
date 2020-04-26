@@ -12,6 +12,7 @@ using Scripts.event_out;
 using Assets.Noyau.Players.view;
 using Assets.Noyau.Cards.controller;
 using Assets.Noyau.Cards.model;
+using Assets.Noyau.Cards.view;
 
 namespace Scripts
 {
@@ -191,24 +192,24 @@ namespace Scripts
             {
                 Player p = PlayerView.GetPlayer(sgce.PlayerId);
 
-                bool isEquip = false;
-                Card card = p.ListCard[UnityEngine.Random.Range(0, p.ListCard.Count)];
-                if (card is EquipmentCard)
-                    isEquip = true;
+                int equip = -1;
 
-                while (!isEquip)
+                for (int i = 0; i < p.ListCard.Count; i++)
                 {
-                    card = p.ListCard[UnityEngine.Random.Range(0, p.ListCard.Count)];
-                    if (card is EquipmentCard)
-                        isEquip = true;
+                    if(p.ListCard[i] is EquipmentCard)
+                    {
+                        equip = i;
+                        break;
+                    }
                 }
 
-                EventView.Manager.Emit(new GiveCardEvent()
-                {
-                    PlayerId = sgce.PlayerId,
-                    PlayerGivedId = sgce.PossibleTargetId[UnityEngine.Random.Range(0, sgce.PossibleTargetId.Length)],
-                    CardGivedName = card.cardLabel
-                });
+                if (equip != -1)
+                    EventView.Manager.Emit(new GiveCardEvent()
+                    {
+                        PlayerId = sgce.PlayerId,
+                        PlayerGivedId = sgce.PossibleTargetId[UnityEngine.Random.Range(0, sgce.PossibleTargetId.Length)],
+                        CardGivedName = p.ListCard[equip].cardLabel
+                    });
             }
             else if (e is SelectGiveOrWoundEvent sgowe)
             {
@@ -262,13 +263,9 @@ namespace Scripts
             {
                 int wounded;
                 if (sptwe.TargetID == -1)
-                {
                     wounded = sptwe.PossibleTargetId[UnityEngine.Random.Range(0, sptwe.PossibleTargetId.Length)];
-                }
                 else
-                {
                     wounded = sptwe.TargetID;
-                }
 
                 EventView.Manager.Emit(new TakingWoundsEffectEvent()
                 {
@@ -277,6 +274,24 @@ namespace Scripts
                     IsPuppet = sptwe.IsPuppet,
                     NbWoundsTaken = sptwe.NbWoundsTaken,
                     NbWoundsSelfHealed = sptwe.NbWoundsSelfHealed
+                });
+            }
+            else if (e is SelectUsableCardPickedEvent sucpe)
+            {
+                //UsableCard c = CardView.GCard.cards[sucpe.CardId] as UsableCard;
+
+                /*int pSelect = UnityEngine.Random.Range(0, PlayerView.GetPlayers().Length - 1);
+                while (pSelect == sucpe.PlayerId)
+                    pSelect = UnityEngine.Random.Range(0, PlayerView.GetPlayers().Length - 1);*/
+
+                Debug.Log("e is SelectUsableCardPickedEvent sucpe");
+
+                EventView.Manager.Emit(new UsableCardUseEvent()
+                {
+                    PlayerId = sucpe.PlayerId,
+                    Cardid = sucpe.CardId,
+                    EffectSelected = 0,
+                    PlayerSelected = 1
                 });
             }
             else if (e is SelectRevealOrNotEvent srone)
@@ -310,13 +325,13 @@ namespace Scripts
             }
             else if (e is SelectStealCardEvent ssce)
             {
-                Player p = ssce.PossiblePlayerTargetId[UnityEngine.Random.Range(0, ssce.PossiblePlayerTargetId.Length)].owner;
+                (Card card, Player owner) = ssce.PossiblePlayerTargetId[UnityEngine.Random.Range(0, ssce.PossiblePlayerTargetId.Length)];
 
                 EventView.Manager.Emit(new StealCardEvent()
                 {
                     PlayerId = ssce.PlayerId,
-                    PlayerStealedId = p.Id,
-                    CardStealedName = p.ListCard[UnityEngine.Random.Range(0, p.ListCard.Count)].cardLabel
+                    PlayerStealedId = owner.Id,
+                    CardStealedName = card.cardLabel
                 });
             }
             else if (e is SelectStealCardFromPlayerEvent sscfpe)
@@ -341,6 +356,10 @@ namespace Scripts
                     PlayerStealedId = sscfpe.PlayerStealedId,
                     CardStealedName = card.cardLabel
                 });
+            }
+            else if (e is DrawEquipmentCardEvent dece)
+            {
+                Debug.Log("C'est un equipement.");
             }
             /*else if (e is SelectVisionPowerEvent svpe)
             {

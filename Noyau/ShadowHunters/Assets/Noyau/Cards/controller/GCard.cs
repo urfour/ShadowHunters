@@ -30,7 +30,6 @@ namespace Assets.Noyau.Cards.controller
                 new CardEffect("card.location.foret.effect",
                     effect : (target, card) =>
                     {
-                        target.Wounded(2, GameManager.PlayerTurn.Value, false);
                         EventView.Manager.Emit(new SelectForestPowerEvent()
                         {
                             PlayerId = target.Id
@@ -841,7 +840,16 @@ namespace Assets.Noyau.Cards.controller
 
         public EquipmentCard CreateEquipmentCard(string cardLabel, CardType cardType, string description, EquipmentCondition condition, EquipmentEffect effect)
         {
-            EquipmentCard c = new EquipmentCard(cardLabel, cardType, description, cards.Count, null, null, condition, effect);
+            EquipmentCard c = new EquipmentCard(cardLabel, cardType, description, cards.Count,
+                equipe: (player, card) =>
+                {
+                    player.AddCard(card);
+                }, 
+                unequipe: (player, card) =>
+                {
+                    player.RemoveCard(player.HasCard(card.cardLabel));
+                }, 
+                condition, effect);
             cards.Add(c);
             return c;
         }

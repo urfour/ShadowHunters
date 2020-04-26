@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 namespace Assets.Noyau.Cards.model
 {
 
-    public delegate void Equipe(Player player);
-    public delegate void Unequipe(Player player);
+    public delegate void Equipe(Player player, EquipmentCard card);
+    public delegate void Unequipe(Player player, EquipmentCard card);
     public delegate bool EquipmentCondition(Player player);
     public delegate void EquipmentEffect(Player player, Card card);
 

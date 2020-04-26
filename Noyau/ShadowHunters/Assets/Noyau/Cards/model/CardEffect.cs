@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Assets.Noyau.Cards.model
 {
-    public delegate void Effect(Player target, Card card);
+    public delegate void Effect(Player target, UsableCard card);
     public delegate bool PlayerTargetable(Player target);
     public class CardEffect
     {
