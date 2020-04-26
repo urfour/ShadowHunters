@@ -1,11 +1,15 @@
 ﻿using Assets.Noyau.Cards.view;
+using Assets.Noyau.Players.controller;
 using Assets.Noyau.Players.view;
+using EventSystem;
+using Scripts;
 using Scripts.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.Noyau.Manager.view
 {
@@ -45,6 +49,7 @@ namespace Assets.Noyau.Manager.view
         {
             PlayerView.Init(nbPlayers);
             CardView.Init();
+
             List<Position> p = new List<Position>()
             {
                 Position.Antre,
@@ -55,7 +60,7 @@ namespace Assets.Noyau.Manager.view
                 Position.Sanctuaire
             };
 
-            Random r = new Random();
+            System.Random r = new System.Random();
 
             int index;
 

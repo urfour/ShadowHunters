@@ -1,22 +1,24 @@
-﻿//using System;
-//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
-//using UnityEngine.UI;
-//using UnityEngine.Events;
-//using EventSystem;
-//using Scripts;
-//using Scripts.Settings;
-//using Scripts.event_in;
-//using Scripts.event_out;
-//using Assets.Noyau.Cards.model;
-//using Assets.Noyau.Cards.controller;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Events;
+using EventSystem;
+using Scripts;
+using Scripts.Settings;
+using Scripts.event_in;
+using Scripts.event_out;
+using Assets.Noyau.Cards.model;
+using Assets.Noyau.Cards.controller;
+using Assets.Noyau.Players.controller;
+using Assets.Noyau.Manager.view;
 
-///// <summary>
-///// Classe représentant la logique du jeu, à savoir la gestion des règles et des interactions 
-///// </summary>
-//public class GameLogic : MonoBehaviour, IListener<PlayerEvent>
-//{
+/// <summary>
+/// Classe représentant la logique du jeu, à savoir la gestion des règles et des interactions 
+/// </summary>
+public class GameLogic : MonoBehaviour
+{
 //    /// <summary>
 //    /// Carte vision donné au métamorphe
 //    /// </summary>
@@ -93,35 +95,32 @@
 //    public List<Character> m_neutralCharacters;
 
 
-//    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-//    public static void OnBeforeSceneLoadRuntimeMethod()
-//    {
-//        EventView.Load();
-//    }
-//    /*
-//    /// <summary>
-//    /// Fonction appelée dès l'instanciation du GameObject auquel est lié le script,
-//    /// permettant de préparer le jeu.
-//    /// </summary>
-//    void Start()
-//    {
-//        instance = this;
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    public static void OnBeforeSceneLoadRuntimeMethod()
+    {
+        EventView.Load();
+    }
 
-//        EventView.Manager.AddListener(this, true);
+    /// <summary>
+    /// Fonction appelée dès l'instanciation du GameObject auquel est lié le script,
+    /// permettant de préparer le jeu.
+    /// </summary>
+    void Start()
+    {
+        //instance = this;
 
-//        KernelUI kui = gameObject.AddComponent<KernelUI>();
+        EventView.Manager.AddListener(new PlayerListener(), true);
 
-//        EventView.Manager.AddListener(kui, true);
+        KernelUI kui = gameObject.AddComponent<KernelUI>();
 
-//        Debug.Log("double addlistener");
+        EventView.Manager.AddListener(kui, true);
 
-//        const int NB_PLAYERS = 5;
-//        PrepareGame(NB_PLAYERS);
-       
-//        //InitInterface();
-//        //ChooseNextPlayer();
-//    }
-//    */
+        GameManager.Init(6);
+
+        //InitInterface();
+        //ChooseNextPlayer();
+    }
+
 
 //    /// <summary>
 //    /// Redistribution des cartes lorsqu'une des pioches est vide
@@ -264,11 +263,11 @@
 //            if (!player.Dead.Value && player.Id != playerId && player.Position != Position.None)
 //            {
 //                positionOtherPlayer = gameBoard.GetIndexOfPosition(player.Position);
-//                if ((positionIndex % 2 == 0 
-//                    && (positionOtherPlayer == positionIndex 
+//                if ((positionIndex % 2 == 0
+//                    && (positionOtherPlayer == positionIndex
 //                        || positionOtherPlayer == positionIndex + 1))
-//                    || (positionIndex % 2 == 1 
-//                        && (positionOtherPlayer == positionIndex 
+//                    || (positionIndex % 2 == 1
+//                        && (positionOtherPlayer == positionIndex
 //                            || positionOtherPlayer == positionIndex - 1)))
 
 //                    if (!hasRevolver)
@@ -305,7 +304,7 @@
 //                    GiveEquipmentCard(idPlayer);
 //                else
 //                {
-//                    m_players[idPlayer].Wounded(1,m_players[PlayerTurn],false);
+//                    m_players[idPlayer].Wounded(1, m_players[PlayerTurn], false);
 //                }
 //                break;
 //            case DarknessEffect.ChauveSouris:
@@ -348,7 +347,7 @@
 //                    foreach (Player p in m_players)
 //                    {
 //                        if (p.Position == area && !p.HasAmulet.Value)
-//                            p.Wounded(3,m_players[PlayerTurn],false);
+//                            p.Wounded(3, m_players[PlayerTurn], false);
 //                    }
 //                }
 //                break;
@@ -498,7 +497,7 @@
 //                foreach (Player p in m_players)
 //                {
 //                    if (p.Id != idPlayer)
-//                        p.Wounded(2,m_players[PlayerTurn],false);
+//                        p.Wounded(2, m_players[PlayerTurn], false);
 //                }
 //                break;
 
@@ -688,8 +687,8 @@
 //                        }
 //                        else
 //                        {
-//                            m_players[player.Id].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value,m_players[PlayerTurn],true);
-                            
+//                            m_players[player.Id].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value, m_players[PlayerTurn], true);
+
 //                            // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
 //                            if (m_players[playerAttackingId].Character.characterName == "Vampire"
 //                                && m_players[playerAttackingId].Revealed.Value
@@ -724,7 +723,7 @@
 //    {
 //        if (damage > 0)
 //        {
-//            m_players[targetId].Wounded(damage,m_players[playerAttackingId],true);
+//            m_players[targetId].Wounded(damage, m_players[playerAttackingId], true);
 
 //            if (m_players[targetId].Character.characterName == "LoupGarou"
 //                            && m_players[targetId].Revealed.Value)
@@ -762,7 +761,7 @@
 //                            }
 //                            else
 //                            {
-//                                m_players[player.Id].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value,m_players[playerAttackingId],true);
+//                                m_players[player.Id].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value, m_players[playerAttackingId], true);
 
 //                                // Le Loup-garou peut contre attaquer
 //                                if (player.Character.characterName == "LoupGarou"
@@ -791,7 +790,7 @@
 //                        {
 //                            Debug.Log("Vous choisissez d'attaquer le joueur " + m_players[targetId].Name + ".");
 
-//                            m_players[targetId].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value,m_players[playerAttackingId],true);
+//                            m_players[targetId].Wounded(lancerTotal + m_players[playerAttackingId].BonusAttack.Value - m_players[playerAttackingId].MalusAttack.Value, m_players[playerAttackingId], true);
 
 //                            // Le Loup-garou peut contre attaquer
 //                            if (m_players[targetId].Character.characterName == "LoupGarou"
@@ -1113,7 +1112,7 @@
 //                break;
 //            case "Charles":
 //                if (player.Revealed.Value)
-//                    player.Wounded(2,player,false);
+//                    player.Wounded(2, player, false);
 //                AttackCorrespondingPlayer(player.Id, PlayerAttacked.Value, 0);
 //                break;
 //            case "Daniel":
@@ -1423,23 +1422,23 @@
 //            {
 //                if (!p.Dead.Value)
 //                {
-//                    if(fste.Hurt)
-//                        if(!p.HasBroche.Value)
+//                    if (fste.Hurt)
+//                        if (!p.HasBroche.Value)
 //                            target.Add(p.Id);
 //                        else
 //                            continue;
 //                    else
 //                        target.Add(p.Id);
 //                }
-//            }   
+//            }
 //            int wounds;
-//            if(fste.Hurt)
+//            if (fste.Hurt)
 //            {
-//                wounds=2;
+//                wounds = 2;
 //            }
 //            else
 //            {
-//                wounds=-1;
+//                wounds = -1;
 //            }
 //            EventView.Manager.Emit(new SelectPlayerTakingWoundsEvent()
 //            {
@@ -1461,7 +1460,7 @@
 //        else if (e is DrawCardEvent drawCard)
 //        {
 //            Player player = m_players[drawCard.PlayerId];
-            
+
 //            switch (drawCard.SelectedCardType)
 //            {
 //                case CardType.Darkness:
@@ -1522,7 +1521,7 @@
 //            Player playerAttacking = m_players[attackPlayer.PlayerId];
 //            Player playerAttacked = m_players[attackPlayer.PlayerAttackedId];
 
-//            Debug.Log("Joueur " + playerAttacking.Id + " (" + playerAttacking.Character.characterName 
+//            Debug.Log("Joueur " + playerAttacking.Id + " (" + playerAttacking.Character.characterName
 //                        + ") attaque joueur " + playerAttacked.Id + " (" + playerAttacked.Character.characterName + ")");
 
 //            int lancer1 = UnityEngine.Random.Range(1, 6);
@@ -1556,7 +1555,7 @@
 //                else
 //                {
 //                    // Le joueur attaqué se prend des dégats
-//                    playerAttacked.Wounded(dommageTotal,playerAttacking,true);
+//                    playerAttacked.Wounded(dommageTotal, playerAttacking, true);
 
 //                    // Le Vampire se soigne 2 blessures s'il est révélé et s'il a infligé des dégats
 //                    if (playerAttacking.Character.characterName == "Vampire"
@@ -1587,7 +1586,7 @@
 //            string stealedCard = stealTarget.CardStealedName;
 //            int indexCard = playerStealed.HasCard(stealedCard);
 
-//            if(!playerStealed.ListCard[indexCard] is IEquipment)
+//            if (!playerStealed.ListCard[indexCard] is IEquipment)
 //            {
 //                Debug.LogError("Erreur : la carte choisie n'est pas un équipement et ne devrait pas être là.");
 //                return;
@@ -1656,21 +1655,21 @@
 //                Debug.Log("Le lancer donne " + lancer + ".");
 
 //                if (lancer <= 4)
-//                    playerAttacked.Wounded(nbWoundsTaken,playerAttacking,false);
+//                    playerAttacked.Wounded(nbWoundsTaken, playerAttacking, false);
 //                else
-//                    playerAttacking.Wounded(nbWoundsTaken,playerAttacking,false);
+//                    playerAttacking.Wounded(nbWoundsTaken, playerAttacking, false);
 //            }
 //            else
 //            {
 //                if (nbWoundsSelfHealed < 0)
-//                    playerAttacking.Wounded(-nbWoundsSelfHealed,playerAttacking,false);
+//                    playerAttacking.Wounded(-nbWoundsSelfHealed, playerAttacking, false);
 //                else
 //                    playerAttacking.Healed(nbWoundsSelfHealed);
 
 //                if (nbWoundsTaken < 0)
 //                    playerAttacked.Healed(-nbWoundsTaken);
 //                else
-//                    playerAttacked.Wounded(nbWoundsTaken,playerAttacking,false);
+//                    playerAttacked.Wounded(nbWoundsTaken, playerAttacking, false);
 //            }
 //        }
 //        else if (e is RevealOrNotEvent revealOrNot)
@@ -1768,13 +1767,13 @@
 //            {
 //                // Cas des cartes infligeant des Blessures
 //                if (pickedCard.visionEffect.effectTakeWounds)
-//                    playerGived.Wounded(pickedCard.visionEffect.nbWounds,playerGiving,false);
+//                    playerGived.Wounded(pickedCard.visionEffect.nbWounds, playerGiving, false);
 
 //                // Cas des cartes soignant des Blessures
 //                else if (pickedCard.visionEffect.effectHealingOneWound)
 //                {
 //                    if (playerGived.Wound.Value == 0)
-//                        playerGived.Wounded(1,playerGiving,false);
+//                        playerGived.Wounded(1, playerGiving, false);
 //                    else
 //                        playerGived.Healed(1);
 //                }
@@ -1784,7 +1783,7 @@
 //                    if (playerGived.ListCard.Count == 0)
 //                    {
 //                        Debug.Log("Vous ne possédez pas de carte équipement.");
-//                        playerGived.Wounded(1,playerGiving,false);
+//                        playerGived.Wounded(1, playerGiving, false);
 //                    }
 //                    else
 //                    {
@@ -1799,9 +1798,9 @@
 //            }
 //            // Cas des cartes applicables en fonction des points de vie
 //            else if (pickedCard.visionEffect.effectOnLowHP && CheckLowHPCharacters(playerGived.Character.characterName))
-//                playerGived.Wounded(1,playerGiving,false);
+//                playerGived.Wounded(1, playerGiving, false);
 //            else if (pickedCard.visionEffect.effectOnHighHP && CheckHighHPCharacters(playerGived.Character.characterName))
-//                playerGived.Wounded(2,playerGiving,false);
+//                playerGived.Wounded(2, playerGiving, false);
 
 //            // Cas de la carte Vision Suprême
 //            else if (pickedCard.visionEffect.effectSupremeVision)
@@ -1823,7 +1822,7 @@
 //            else
 //            {
 //                Debug.Log("Vous choisissez de subir 1 Blessure.");
-//                player.Wounded(1,m_players[PlayerTurn],false);
+//                player.Wounded(1, m_players[PlayerTurn], false);
 //            }
 //        }
 //        else if (e is BobPowerEvent bobPower)
@@ -1891,4 +1890,4 @@
 //    {
 //        throw new NotImplementedException();
 //    }
-//}
+}

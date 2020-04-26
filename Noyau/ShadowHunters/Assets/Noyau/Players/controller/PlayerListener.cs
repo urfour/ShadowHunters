@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using static Assets.Noyau.Manager.view.GameManager;
 
 namespace Assets.Noyau.Players.controller
@@ -200,17 +201,31 @@ namespace Assets.Noyau.Players.controller
             }
             else if (e is AttackEvent attack)
             {
+                Debug.Log("ID attaquant : " + attack.PlayerId);
                 Player player = PlayerView.GetPlayer(attack.PlayerId);
+
+                Debug.Log("Joueur attaquant : " + player.Name);
 
                 List<Player> targetablePlayers = player.getTargetablePlayers();
 
-                if(targetablePlayers.Count != 0)
+                targetablePlayers.Add(PlayerView.GetPlayer(attack.PlayerId+1));
+
+                Debug.Log("Nombres joueurs attaquables : " + targetablePlayers.Count);
+                foreach (Player p in targetablePlayers)
+                    Debug.Log("Joueurs attaquables : " + p.Name);
+
+                if (targetablePlayers.Count != 0)
                 {
+                    Debug.Log("Gatling ? " + player.HasGatling.Value);
+
                     if (!player.HasGatling.Value)
                     {
                         List<int> playersId = new List<int>();
-                        foreach (Player p in PlayerView.GetPlayers())
-                            playersId.Add(p.Id);
+                        foreach (Player p in targetablePlayers)
+                            if (p.Id != player.Id)
+                                playersId.Add(p.Id);
+
+                        Debug.Log("Envoi de SelectAttackTargetEvent");
 
                         EventView.Manager.Emit(new SelectAttackTargetEvent()
                         {
@@ -228,11 +243,27 @@ namespace Assets.Noyau.Players.controller
                             lancer = UnityEngine.Random.Range(1, 4);
                         else
                             lancer = UnityEngine.Random.Range(1, 6) - UnityEngine.Random.Range(1, 4);
-                        
+
+                        Debug.Log("On attaque tout le monde !");
+
+                        Debug.Log("Lancer : " + lancer);
+
                         if (lancer != 0)
-                            foreach (Player p in PlayerView.GetPlayers())
+                            foreach (Player p in targetablePlayers)
+                                Debug.Log("Vie de " + p.Name + " : " + p.Wound);
+
+                        if (lancer != 0)
+                            foreach (Player p in targetablePlayers)
                                 p.Wounded(lancer + player.BonusAttack.Value - player.MalusAttack.Value, player, true);
+
+                        if (lancer != 0)
+                            foreach (Player p in targetablePlayers)
+                                Debug.Log("Vie de " + p.Name + " : " + p.Wound);
                     }
+                }
+                else
+                {
+                    Debug.Log("Il n'y a personne à attaquer !");
                 }
             }
             else if (e is AttackPlayerEvent attackPlayer)
@@ -240,17 +271,24 @@ namespace Assets.Noyau.Players.controller
                 Player playerAttacking = PlayerView.GetPlayer(attackPlayer.PlayerId);
                 Player playerAttacked = PlayerView.GetPlayer(attackPlayer.PlayerAttackedId);
 
+                Debug.Log("Joueur attaquant : " + playerAttacking.Name);
+                Debug.Log("Joueur attaqué : " + playerAttacked.Name);
+
                 int lancer = 0;
 
                 if (playerAttacking.HasSaber.Value)
                     lancer = UnityEngine.Random.Range(1, 4);
                 else
-                    lancer = UnityEngine.Random.Range(1, 6) - UnityEngine.Random.Range(1, 4);
+                    lancer = Math.Abs(UnityEngine.Random.Range(1, 6) - UnityEngine.Random.Range(1, 4));
 
-                //Debug.Log("Le lancer vaut : " + lancerTotal);
+                Debug.Log("Le lancer vaut : " + lancer);
 
                 if (lancer != 0)
+                {
+                    Debug.Log("Vie avant : " + playerAttacked.Wound.Value);
                     playerAttacked.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
+                    Debug.Log("Vie après : " + playerAttacked.Wound.Value);
+                }
             }
             else if (e is StealCardEvent stealTarget)
             {

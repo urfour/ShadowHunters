@@ -17,7 +17,7 @@ namespace Scripts
 {
     class KernelUI : MonoBehaviour, IListener<PlayerEvent>
     {
-        public int m_player_turn;
+        public int m_player_turn = 0;
         public int[] throw1;
         public int[] throw2;
 

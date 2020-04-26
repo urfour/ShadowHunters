@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.Noyau.Players.controller
 {
@@ -12,7 +13,6 @@ namespace Assets.Noyau.Players.controller
 
         public GPlayer(int nbPlayers)
         {
-
             GCharacter characters = new GCharacter(nbPlayers);
 
             Players = new Player[nbPlayers];
@@ -21,11 +21,11 @@ namespace Assets.Noyau.Players.controller
                 Players[i] = new Player(i, characters.PickCharacter());
             }
 
-            foreach (Player p in Players)
+            /*foreach (Player p in Players)
             {
                 p.Character.goal.setWinningListeners(p);
                 p.Character.power.addListeners(p);
-            }
+            }*/
         }
         
     }
