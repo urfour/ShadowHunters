@@ -7,10 +7,17 @@ using UnityEngine;
 
 namespace Assets.Noyau.Players.controller
 {
+    /// <summary>
+    /// Classe qui va instancier tout les joueurs.
+    /// </summary>
     class GPlayer
     {
         public Player[] Players { get; private set; }
 
+        /// <summary>
+        /// Fonction qui va instancier chaque joueur avec un personnage différent.
+        /// </summary>
+        /// <param name="nbPlayers">Le nombre de joueurs</param>
         public GPlayer(int nbPlayers)
         {
             GCharacter characters = new GCharacter(nbPlayers);

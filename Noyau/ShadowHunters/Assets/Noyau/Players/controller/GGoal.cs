@@ -9,8 +9,16 @@ using System.Threading.Tasks;
 
 namespace Assets.Noyau.Players.controller
 {
+    /// <summary>
+    /// Classe qui va instancier toute les conditions de victoire des personnages du jeu.
+    /// </summary>
     public static class GGoal
     {
+        /// <summary>
+        /// Fonction qui va instancier la condition de victoire des personnages de l'équipe Hunter.
+        /// </summary>
+        /// <param name="checkWinning">Fonction qui test la condition de victoire</param>
+        /// <param name="setWinningListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
         public static Goal HunterGoal = new Goal
             (
                 checkWinning: (owner) =>
@@ -42,6 +50,11 @@ namespace Assets.Noyau.Players.controller
                 }
             );
 
+        /// <summary>
+        /// Fonction qui va instancier la condition de victoire des personnages de l'équipe Shadow.
+        /// </summary>
+        /// <param name="checkWinning">Fonction qui test la condition de victoire</param>
+        /// <param name="setWinningListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
         public static Goal ShadowGoal = new Goal
             (
                 checkWinning: (owner) =>
@@ -78,6 +91,11 @@ namespace Assets.Noyau.Players.controller
                 }
             );
 
+        /// <summary>
+        /// Fonction qui va instancier la condition de victoire d'Allie.
+        /// </summary>
+        /// <param name="checkWinning">Fonction qui test la condition de victoire</param>
+        /// <param name="setWinningListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
         public static Goal AllieGoal = new Goal
             (
                 checkWinning: (owner) =>
@@ -100,6 +118,11 @@ namespace Assets.Noyau.Players.controller
                 }
             );
 
+        /// <summary>
+        /// Fonction qui va instancier la condition de victoire de Bob.
+        /// </summary>
+        /// <param name="checkWinning">Fonction qui test la condition de victoire</param>
+        /// <param name="setWinningListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
         public static Goal BobGoal = new Goal
             (
                 checkWinning: (owner) =>
@@ -113,6 +136,11 @@ namespace Assets.Noyau.Players.controller
                 }
             );
 
+        /// <summary>
+        /// Fonction qui va instancier la condition de victoire de Charles.
+        /// </summary>
+        /// <param name="checkWinning">Fonction qui test la condition de victoire</param>
+        /// <param name="setWinningListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
         public static Goal CharlesGoal = new Goal
             (
                 checkWinning: (owner) =>
@@ -139,6 +167,11 @@ namespace Assets.Noyau.Players.controller
                 }
             );
 
+        /// <summary>
+        /// Fonction qui va instancier la condition de victoire de Daniel.
+        /// </summary>
+        /// <param name="checkWinning">Fonction qui test la condition de victoire</param>
+        /// <param name="setWinningListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
         public static Goal DanielGoal = new Goal
             (
                 checkWinning: (owner) =>

@@ -13,12 +13,18 @@ namespace Assets.Noyau.Cards.view
         public static GCard GCard;
         private static Random rand;
 
+        /// <summary>
+        /// Initialise toute les cartes du jeu.
+        /// </summary>
         public static void Init()
         {
             rand = new Random();
             GCard = new GCard();
         }
 
+        /// <summary>
+        /// Fonction qui permet de piocher une carte Vision.
+        /// </summary>
         public static Card PickVision()
         {
             int r = rand.Next(0, GCard.visionDeck.Count);
@@ -27,6 +33,9 @@ namespace Assets.Noyau.Cards.view
             return c;
         }
 
+        /// <summary>
+        /// Fonction qui permet de piocher une carte Lumière.
+        /// </summary>
         public static Card PickLight()
         {
             int r = rand.Next(0, GCard.lightDeck.Count);
@@ -35,6 +44,9 @@ namespace Assets.Noyau.Cards.view
             return c;
         }
 
+        /// <summary>
+        /// Fonction qui permet de piocher une carte Ténèbre.
+        /// </summary>
         public static Card PickDarkness()
         {
             int r = rand.Next(0, GCard.darknessDeck.Count);

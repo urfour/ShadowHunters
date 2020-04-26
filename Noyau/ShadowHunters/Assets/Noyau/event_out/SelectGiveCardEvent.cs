@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_out
 {
-    // Evenement qui permet de choisir un joueur à qui donner une carte parmis une liste de joueur
+    /// <summary>
+    /// Event qui permet de choisir un joueur à qui donner une carte parmi une liste de joueurs
+    /// </summary>
     public class SelectGiveCardEvent : PlayerEvent
     {
         public int[] PossibleTargetId { get; set; } 

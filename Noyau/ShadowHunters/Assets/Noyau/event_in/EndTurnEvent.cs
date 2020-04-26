@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_in
 {
-    // event du bouton de fin de tour qui va permettre de choisir le prochain joueur
+    /// <summary>
+    /// Event du bouton de fin de tour qui va permettre de choisir le prochain joueur
+    /// </summary>
     public class EndTurnEvent : PlayerEvent
     {
     }

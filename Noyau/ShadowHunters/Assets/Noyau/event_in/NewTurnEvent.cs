@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_out
 {
-    // event du bouton lancer les dés
+    /// <summary>
+    /// Event qui annonce le début du tour pour un joueur
+    /// </summary>
     public class NewTurnEvent : PlayerEvent
     {
     }

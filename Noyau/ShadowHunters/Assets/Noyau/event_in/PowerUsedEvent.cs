@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_out
 {
-    // Evenement qui se déclenche quand un joueur clique sur le bouton d'activation de pouvoir
+    /// <summary>
+    /// Event qui se dÃ©clenche quand un joueur clique sur le bouton d'activation de pouvoir
+    /// </summary>
     public class PowerUsedEvent : PlayerEvent
     {
     }

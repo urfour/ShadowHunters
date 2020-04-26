@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_out
 {
-    // Retour de l'evenement SelectPlayerTakingWoundsEffectEvent
-    // Renvoie l'id du joueur attaquant et l'id du joueur attaqué
+    /// <summary>
+    /// Retour de l'evenement SelectPlayerTakingWoundsEffectEvent
+    /// Renvoie l'id du joueur attaquant et l'id du joueur attaqué
+    /// </summary>
     public class TakingWoundsEffectEvent : PlayerEvent
     {
         public int PlayerAttackedId { get; set; }

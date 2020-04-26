@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_out
 {
-    // Evenement qui permet de choisir sur qui on souhaite utiliser une carte lumière
-    // Attribut : id du joueur et carte qui fait effet
-    // Renvoie l'event LightCardEffectEvent
+    /// <summary>
+    /// Event qui permet de choisir sur qui on souhaite utiliser une carte lumière
+    /// Attribut : id du joueur et carte qui fait effet
+    /// Renvoie l'event LightCardEffectEvent
+    /// </summary>
     public class SelectLightCardTargetEvent : PlayerEvent
     {
         public int[] PossibleTargetId { get; set; }

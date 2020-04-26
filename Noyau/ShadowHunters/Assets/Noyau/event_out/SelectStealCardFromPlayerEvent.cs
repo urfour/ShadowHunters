@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_out
 {
-    // Evenement qui permet de choisir une carte à volé parmis les cartes d'un joueur
+    /// <summary>
+    /// Event qui permet de choisir une carte à voler parmi les cartes d'un joueur
+    /// </summary>
     public class SelectStealCardFromPlayerEvent : PlayerEvent
     {
         public int PlayerStealedId { get; set; } 

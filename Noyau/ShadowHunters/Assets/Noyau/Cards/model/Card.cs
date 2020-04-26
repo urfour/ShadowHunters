@@ -11,7 +11,7 @@ namespace Assets.Noyau.Cards.controller
     /// Définition d'une carte
     /// (les cartes Lieu utilisent cette implémentation)
     /// </summary>
-    /// 
+     
     public class Card
     {
         public readonly string cardLabel;
@@ -19,6 +19,13 @@ namespace Assets.Noyau.Cards.controller
         public readonly string description;
         public readonly int Id;
 
+        /// <summary>
+        /// Constructeur d'une carte.
+        /// </summary>
+        /// <param name="cardLabel">Label de la carte</param>
+        /// <param name="cardType">Type de la carte</param>
+        /// <param name="description">Sa description</param>
+        /// <param name="id">Son identifiant</param>
         public Card(string cardLabel, CardType cardType, string description, int id)
         {
             this.cardLabel = cardLabel;

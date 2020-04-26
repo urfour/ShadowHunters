@@ -9,12 +9,22 @@ namespace Assets.Noyau.Cards.model
 {
     public delegate void Effect(Player target, UsableCard card);
     public delegate bool PlayerTargetable(Player target);
+
+    /// <summary>
+    /// Définition de l'effet d'une carte et de la cible.
+    /// </summary>
     public class CardEffect
     {
         public readonly string description;
         public readonly Effect effect;
         public readonly PlayerTargetable targetableCondition;
 
+        /// <summary>
+        /// Constructeur de l'effet d'une carte et de la cible.
+        /// </summary>
+        /// <param name="description">Sa description</param>
+        /// <param name="effect">Fonction qui implémente l'effet de la carte</param>
+        /// <param name="targetableCondition">Fonction qui désigne les cibles</param>
         public CardEffect(string description, Effect effect, PlayerTargetable targetableCondition)
         {
             this.description = description;

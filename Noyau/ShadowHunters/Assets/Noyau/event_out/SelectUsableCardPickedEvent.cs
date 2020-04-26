@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Scripts.event_out
 {
+    /// <summary>
+    /// Event qui annonce qu'une carte à usage unique est piochée
+    /// </summary>
     public class SelectUsableCardPickedEvent : PlayerEvent
     {
         public int CardId { get; set; }
