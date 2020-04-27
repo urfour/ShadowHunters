@@ -192,7 +192,6 @@ namespace Assets.Noyau.Players.controller
 
                 if (pickedCard is UsableCard pickedUsableCard)
                 {
-                    Debug.Log("pickedCard is UsableCard pickedUsableCard");
                     EventView.Manager.Emit(new SelectUsableCardPickedEvent(pickedUsableCard.Id, pickedUsableCard.cardType == CardType.Vision));
                 }
                 else if (pickedCard is EquipmentCard pickedEquipmentCard)
@@ -200,8 +199,6 @@ namespace Assets.Noyau.Players.controller
                     EventView.Manager.Emit(new DrawEquipmentCardEvent(pickedEquipmentCard.Id));
                     pickedEquipmentCard.equipe(player, pickedEquipmentCard);
                 }
-
-                player.PrintCards();
             }
             else if (e is UsableCardUseEvent ecue)
             {
@@ -212,7 +209,8 @@ namespace Assets.Noyau.Players.controller
 
                 UsableCard uCard = c as UsableCard;
 
-                Debug.Log("UsableCard piochée : " + uCard.cardLabel);
+                if (uCard.cardType != CardType.Vision)
+                    p2 = p1;
 
                 if (uCard.cardEffect[effect].targetableCondition(p2))
                 {
@@ -314,7 +312,7 @@ namespace Assets.Noyau.Players.controller
             {
                 Player playerStealing = PlayerView.GetPlayer(stealTarget.PlayerId);
                 Player playerStealed = PlayerView.GetPlayer(stealTarget.PlayerStealedId);
-                Card card = playerStealed.ListCard[playerStealed.HasCard(stealTarget.CardStealedName)];
+                Card card = CardView.GetCard(stealTarget.CardId);
 
                 Debug.Log("Joueur voleur : " + playerStealing.Name);
                 Debug.Log("Joueur volé : " + playerStealed.Name);
@@ -336,7 +334,8 @@ namespace Assets.Noyau.Players.controller
             {
                 Player playerGiving = PlayerView.GetPlayer(giveCard.PlayerId);
                 Player playerGived = PlayerView.GetPlayer(giveCard.PlayerGivedId);
-                Card card = playerGiving.ListCard[playerGiving.HasCard(giveCard.CardGivedName)];
+                Card card = CardView.GetCard(giveCard.CardId);
+
 
                 Debug.Log("Joueur donneur : " + playerGiving.Name);
                 Debug.Log("Joueur receveur : " + playerGived.Name);
@@ -399,89 +398,14 @@ namespace Assets.Noyau.Players.controller
                 Player playerChoosed = PlayerView.GetPlayer(lcEffect.PlayerChoosenId);
                 UsableCard lightCard = lcEffect.LightCard as UsableCard;
 
-                foreach(CardEffect effect in lightCard.cardEffect)
-                {
-                    if (effect.targetableCondition(playerChoosed))
-                        effect.effect(playerChoosed, lightCard);
-                }
-
-                /*if (lightCard.cardLabel == "card.light.light_benediction")
+                if (lightCard.cardLabel == "card.light.light_benediction")
                 {
                     playerChoosed.Healed(UnityEngine.Random.Range(1, 6));
                 }
                 else if (lightCard.cardLabel == "card.light.light_premiers_secours")
                 {
                     playerChoosed.Wound.Value = 7;
-                }*/
-            }
-            else if (e is VisionCardEffectEvent vcEffect)
-            {
-                Player playerGiving = PlayerView.GetPlayer(vcEffect.PlayerId);
-                Player playerGived = PlayerView.GetPlayer(vcEffect.TargetId);
-                UsableCard visionCard = vcEffect.VisionCard as UsableCard;
-
-                foreach (CardEffect effect in visionCard.cardEffect)
-                {
-                    if (effect.targetableCondition(playerGived))
-                        effect.effect(playerGived, visionCard);
                 }
-                /*
-                CharacterTeam team = playerGived.Character.team;
-
-                // Cartes applicables en fonction des équipes ?
-                if ((team == CharacterTeam.Shadow && pickedCard.visionEffect.effectOnShadow && !metaPower)
-                    || (team == CharacterTeam.Hunter && pickedCard.visionEffect.effectOnHunter)
-                    || (team == CharacterTeam.Neutral && pickedCard.visionEffect.effectOnNeutral)
-                    || (team == CharacterTeam.Shadow && !pickedCard.visionEffect.effectOnShadow && metaPower))
-                {
-                    // Cas des cartes infligeant des Blessures
-                    if (pickedCard.visionEffect.effectTakeWounds)
-                        playerGived.Wounded(pickedCard.visionEffect.nbWounds,playerGiving,false);
-
-                    // Cas des cartes soignant des Blessures
-                    else if (pickedCard.visionEffect.effectHealingOneWound)
-                    {
-                        if (playerGived.Wound.Value == 0)
-                            playerGived.Wounded(1,playerGiving,false);
-                        else
-                            playerGived.Healed(1);
-                    }
-                    // Cas des cartes volant une carte équipement ou infligeant des Blessures
-                    else if (pickedCard.visionEffect.effectGivingEquipementCard)
-                    {
-                        if (playerGived.ListCard.Count == 0)
-                        {
-                            //Debug.Log("Vous ne possédez pas de carte équipement.");
-                            playerGived.Wounded(1,playerGiving,false);
-                        }
-                        else
-                        {
-                            //Debug.Log("Voulez-vous donner une carte équipement ou subir une Blessure ?");
-
-                            EventView.Manager.Emit(new SelectGiveOrWoundEvent()
-                            {
-                                PlayerId = playerGived.Id
-                            });
-                        }
-                    }
-                }
-                // Cas des cartes applicables en fonction des points de vie
-                //else if (pickedCard.visionEffect.effectOnLowHP && CheckLowHPCharacters(playerGived.Character.characterName))
-                else if (pickedCard.visionEffect.effectOnLowHP && pickedCard.condition(playerGived))
-                            playerGived.Wounded(1,playerGiving,false);
-                else if (pickedCard.visionEffect.effectOnHighHP && pickedCard.condition(playerGived))
-                    playerGived.Wounded(2,playerGiving,false);
-
-                // Cas de la carte Vision Suprême
-                else if (pickedCard.visionEffect.effectSupremeVision)
-                {
-                    //TODO montrer la carte personnage
-                    //Debug.Log("C'est une carte Vision Suprême !");
-                }
-                else
-                {
-                    //Debug.Log("Rien ne se passe.");
-                }*/
             }
             else if (e is GiveOrWoundEvent giveOrWound)
             {
@@ -512,7 +436,7 @@ namespace Assets.Noyau.Players.controller
                 else
                     player.Wounded(1,player,false);
             }
-            else if (e is RevealCard reveal)
+            else if (e is RevealCardEvent reveal)
             {
                 Player p = PlayerView.GetPlayer(reveal.PlayerId);
 
@@ -520,6 +444,23 @@ namespace Assets.Noyau.Players.controller
 
                 if (p.HasSpear.Value == true && p.Character.team == CharacterTeam.Hunter)
                     p.BonusAttack.Value += 2;
+
+                Debug.Log("Le joueur " + p.Name + " se révèle.");
+            }
+            else if (e is RevealOrNotEvent rone)
+            {
+                Player player = PlayerView.GetPlayer(rone.PlayerId);
+                Card card = rone.EffectCard;
+                bool revealed = rone.HasRevealed;
+                bool powerLoup = rone.PowerLoup;
+
+                if (revealed)
+                {
+                    if (card.cardLabel == "card.darkness.darkness_rituel"
+                        || card.cardLabel == "card.light.light_supreme"
+                        || card.cardLabel == "card.light.light_chocolat")
+                        player.Healed(player.Wound.Value);
+                }
             }
             else if (e is BobPowerEvent bpe)
             {

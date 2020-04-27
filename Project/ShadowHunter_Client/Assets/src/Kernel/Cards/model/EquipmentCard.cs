@@ -11,7 +11,8 @@ namespace Assets.Noyau.Cards.model
     public delegate void Equipe(Player player, EquipmentCard card);
     public delegate void Unequipe(Player player, EquipmentCard card);
     public delegate bool EquipmentCondition(Player player);
-    public delegate void EquipmentEffect(Player player, Card card);
+    public delegate void EquipmentAddEffect(Player player, Card card);
+    public delegate void EquipmentRemoveEffect(Player player, Card card);
 
     /// <summary>
     /// Définition d'une carte équipement
@@ -21,8 +22,9 @@ namespace Assets.Noyau.Cards.model
     {
         public readonly Equipe equipe;
         public readonly Unequipe unequipe;
-        public readonly EquipmentCondition condition;
-        public readonly EquipmentEffect effect;
+        public readonly EquipmentCondition condition; public readonly EquipmentAddEffect addEffect;
+        public readonly EquipmentRemoveEffect rmEffect;
+
 
         /// <summary>
         /// Constructeur d'une carte équipement.
@@ -35,13 +37,13 @@ namespace Assets.Noyau.Cards.model
         /// <param name="unequipe">Fonction qui enlève l'quipement au joueur</param>
         /// <param name="condition">Fonction qui désigne les cibles</param>
         /// <param name="effect">Fonction qui implémente l'effet de la carte</param>
-        public EquipmentCard(string cardLabel, CardType cardType, string description, int id, Equipe equipe, Unequipe unequipe, EquipmentCondition condition, EquipmentEffect effect) :
+        public EquipmentCard(string cardLabel, CardType cardType, string description, int id, Equipe equipe, Unequipe unequipe, EquipmentCondition condition, EquipmentAddEffect addeffect, EquipmentRemoveEffect rmeffect) :
             base(cardLabel, cardType, description, id)
         {
             this.equipe = equipe;
             this.unequipe = unequipe;
-            this.condition = condition;
-            this.effect = effect;
+            this.condition = condition; this.addEffect = addeffect;
+            this.rmEffect = rmeffect;
         }
     }
 }

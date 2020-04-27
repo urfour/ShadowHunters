@@ -1,12 +1,7 @@
 ﻿using Assets.Noyau.Cards.model;
-using Assets.Noyau.Cards.view;
 using Assets.Noyau.Manager.view;
 using EventSystem;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Scripts.event_out;
 using Assets.Noyau.Players.view;
 using Scripts.event_in;
@@ -95,9 +90,9 @@ namespace Assets.Noyau.Cards.controller
                         List<int> players = new List<int>();
 
                         foreach (Player p in PlayerView.GetPlayers())
-                            if (!player.Dead.Value && p.Id != player.Id)
-                                if (!player.HasAmulet.Value)
-                                    players.Add(player.Id);
+                            if (!p.Dead.Value && p.Id != player.Id)
+                                if (!p.HasAmulet.Value)
+                                    players.Add(p.Id);
 
                         EventView.Manager.Emit(new SelectPlayerTakingWoundsEvent()
                         {
@@ -154,9 +149,9 @@ namespace Assets.Noyau.Cards.controller
                         List<int> players = new List<int>();
 
                         foreach (Player p in PlayerView.GetPlayers())
-                            if (!player.Dead.Value && p.Id != player.Id)
-                                if (!player.HasAmulet.Value)
-                                    players.Add(player.Id);
+                            if (!p.Dead.Value && p.Id != player.Id)
+                                if (!p.HasAmulet.Value)
+                                    players.Add(p.Id);
 
                         EventView.Manager.Emit(new SelectPlayerTakingWoundsEvent()
                         {
@@ -179,9 +174,9 @@ namespace Assets.Noyau.Cards.controller
                         List<int> players = new List<int>();
 
                         foreach (Player p in PlayerView.GetPlayers())
-                            if (!player.Dead.Value && p.Id != player.Id)
-                                if (!player.HasAmulet.Value)
-                                    players.Add(player.Id);
+                            if (!p.Dead.Value && p.Id != player.Id)
+                                if (!p.HasAmulet.Value)
+                                    players.Add(p.Id);
 
                         EventView.Manager.Emit(new SelectPlayerTakingWoundsEvent()
                         {
@@ -204,9 +199,9 @@ namespace Assets.Noyau.Cards.controller
                         List<int> players = new List<int>();
 
                         foreach (Player p in PlayerView.GetPlayers())
-                            if (!player.Dead.Value && p.Id != player.Id)
-                                if (!player.HasAmulet.Value)
-                                    players.Add(player.Id);
+                            if (!p.Dead.Value && p.Id != player.Id)
+                                if (!p.HasAmulet.Value)
+                                    players.Add(p.Id);
 
                         EventView.Manager.Emit(new SelectPlayerTakingWoundsEvent()
                         {
@@ -258,7 +253,7 @@ namespace Assets.Noyau.Cards.controller
                         if (lancer != 7)
                             foreach (Player p in PlayerView.GetPlayers())
                                 if (GameManager.Board[p.Position.Value] == area && !p.HasAmulet.Value)
-                                    p.Wounded(3, GameManager.PlayerTurn.Value, false);
+                                    p.Wounded(3, player, false);
                     })),
 
                 CreateEquipmentCard("card.darkness.darkness_hache", CardType.Darkness, "card.darkness.darkness_hache.description",
@@ -266,30 +261,45 @@ namespace Assets.Noyau.Cards.controller
                     {
                         return true;
                     },
-                    effect: (player, card) =>
-                {
-                    player.BonusAttack.Value++;
-                }),
+                    addeffect: (player, card) =>
+                    {
+                        player.BonusAttack.Value++;
+                    },
+                    rmeffect: (player, card) =>
+                    {
+                        player.BonusAttack.Value--;
+                    }),
+
 
                 CreateEquipmentCard("card.darkness.darkness_hachoir", CardType.Darkness, "card.darkness.darkness_hachoir.description",
                     condition: (player) =>
                     {
                         return true;
                     },
-                    effect: (player, card) =>
+                    addeffect: (player, card) =>
                     {
                         player.BonusAttack.Value++;
+                    },
+                    rmeffect: (player, card) =>
+                    {
+                        player.BonusAttack.Value--;
                     }),
+
 
                 CreateEquipmentCard("card.darkness.darkness_mitrailleuse", CardType.Darkness, "card.darkness.darkness_mitrailleuse.description",
                     condition: (player) =>
                     {
                         return true;
                     },
-                    effect: (player, card) =>
+                    addeffect: (player, card) =>
                     {
                         player.HasGatling.Value = true;
+                    },
+                    rmeffect: (player, card) =>
+                    {
+                        player.HasGatling.Value = false;
                     }),
+
 
                 CreateUsableCard("card.darkness.darkness_poupee", CardType.Darkness, "card.darkness.darkness_poupee.description", false,
                 new CardEffect("card.darkness.darkness_poupee.effect",
@@ -302,8 +312,8 @@ namespace Assets.Noyau.Cards.controller
                         List<int> players = new List<int>();
 
                         foreach (Player p in PlayerView.GetPlayers())
-                            if (!player.Dead.Value && p.Id != player.Id)
-                                players.Add(player.Id);
+                            if (!p.Dead.Value && p.Id != player.Id)
+                                players.Add(p.Id);
 
                         EventView.Manager.Emit(new SelectPlayerTakingWoundsEvent()
                         {
@@ -320,10 +330,15 @@ namespace Assets.Noyau.Cards.controller
                     {
                         return true;
                     },
-                    effect: (player, card) =>
+                    addeffect: (player, card) =>
                     {
                         player.HasRevolver.Value = true;
+                    },
+                    rmeffect: (player, card) =>
+                    {
+                        player.HasRevolver.Value = false;
                     }),
+
 
                 CreateUsableCard("card.darkness.darkness_rituel", CardType.Darkness, "card.darkness.darkness_rituel.description", false,
                 new CardEffect("card.darkness.darkness_rituel.effect",
@@ -339,7 +354,9 @@ namespace Assets.Noyau.Cards.controller
                             EventView.Manager.Emit(new SelectRevealOrNotEvent()
                             {
                                 PlayerId = player.Id,
-                                EffectCard = card
+                                EffectCard = card,
+                                PowerDaniel = false,
+                                PowerLoup = false
                             });
                     })),
 
@@ -348,10 +365,15 @@ namespace Assets.Noyau.Cards.controller
                     {
                         return true;
                     },
-                    effect: (player, card) =>
+                    addeffect: (player, card) =>
                     {
                         player.HasSaber.Value = true;
+                    },
+                    rmeffect: (player, card) =>
+                    {
+                        player.HasSaber.Value = false;
                     }),
+
 
                 CreateUsableCard("card.darkness.darkness_succube", CardType.Darkness, "card.darkness.darkness_succube.description", false,
                 new CardEffect("card.darkness.darkness_succube.effect",
@@ -410,10 +432,15 @@ namespace Assets.Noyau.Cards.controller
                     {
                         return true;
                     },
-                    effect: (player, card) =>
+                    addeffect: (player, card) =>
                     {
                         player.BonusAttack.Value++;
+                    },
+                    rmeffect: (player, card) =>
+                    {
+                        player.BonusAttack.Value--;
                     }),
+
             };
             
             /// <summary>
@@ -427,9 +454,13 @@ namespace Assets.Noyau.Cards.controller
                     {
                         return true;
                     },
-                    effect: (player, card) =>
+                    addeffect: (player, card) =>
                     {
                         player.HasAmulet.Value = true;
+                    },
+                    rmeffect: (player, card) =>
+                    {
+                        player.HasAmulet.Value = false;
                     }),
 
                 CreateUsableCard("card.light.light_ange_gardien", CardType.Light, "card.light.light_ange_gardien.description", false,
@@ -465,9 +496,10 @@ namespace Assets.Noyau.Cards.controller
                 new CardEffect("card.light.light_chocolat.effect",
                     targetableCondition: (player) =>
                     {
-                        return player.Character.characterName == "Allie"
-                                || player.Character.characterName == "Emi"
-                                || player.Character.characterName == "Metamorphe";
+                        return player.Character.characterName == "character.name.allie"
+                                || player.Character.characterName == "character.name.emi"
+                                || player.Character.characterName == "character.name.metamorphe";
+
                     },
                     effect: (player, card) =>
                     {
@@ -492,7 +524,7 @@ namespace Assets.Noyau.Cards.controller
                         List<int> players = new List<int>();
 
                         foreach (Player p in PlayerView.GetPlayers())
-                            if (!player.Dead.Value && p.Id != player.Id)
+                            if (!p.Dead.Value && p.Id != player.Id)
                                 players.Add(p.Id);
 
                         EventView.Manager.Emit(new SelectLightCardTargetEvent()
@@ -508,30 +540,45 @@ namespace Assets.Noyau.Cards.controller
                     {
                         return true;
                     },
-                    effect: (player, card) =>
+                    addeffect: (player, card) =>
                     {
                         player.HasCompass.Value = true;
+                    },
+                    rmeffect: (player, card) =>
+                    {
+                        player.HasCompass.Value = false;
                     }),
+
 
                 CreateEquipmentCard("card.light.light_broche", CardType.Light, "card.light.light_broche.description",
                     condition: (player) =>
                     {
                         return true;
                     },
-                    effect: (player, card) =>
+                    addeffect: (player, card) =>
                     {
                         player.HasBroche.Value = true;
+                    },
+                    rmeffect: (player, card) =>
+                    {
+                        player.HasBroche.Value = false;
                     }),
+
 
                 CreateEquipmentCard("card.light.light_crucifix", CardType.Light, "card.light.light_crucifix.description",
                     condition: (player) =>
                     {
                         return true;
                     },
-                    effect: (player, card) =>
+                    addeffect: (player, card) =>
                     {
                         player.HasCrucifix.Value = true;
+                    },
+                    rmeffect: (player, card) =>
+                    {
+                        player.HasCrucifix.Value = false;
                     }),
+
 
                 CreateUsableCard("card.light.light_eclair", CardType.Light, "card.light.light_eclair.description", false,
                 new CardEffect("card.light.light_eclair.effect",
@@ -562,12 +609,19 @@ namespace Assets.Noyau.Cards.controller
                     {
                         return true;
                     },
-                    effect: (player, card) =>
+                    addeffect: (player, card) =>
                     {
                         player.HasSpear.Value = true;
                         if (player.Character.team == CharacterTeam.Hunter && player.Revealed.Value)
                             player.BonusAttack.Value += 2;
+                    },
+                    rmeffect: (player, card) =>
+                    {
+                        player.HasSpear.Value = false;
+                        if (player.Character.team == CharacterTeam.Hunter && player.Revealed.Value)
+                            player.BonusAttack.Value -= 2;
                     }),
+
 
                 CreateUsableCard("card.light.light_miroir", CardType.Light, "card.light.light_miroir.description", false,
                 new CardEffect("card.light.light_miroir.effect",
@@ -579,7 +633,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, card) =>
                     {
-                        EventView.Manager.Emit(new RevealCard()
+                        EventView.Manager.Emit(new RevealCardEvent()
                         {
                             PlayerId = player.Id
                         });
@@ -622,12 +676,19 @@ namespace Assets.Noyau.Cards.controller
                     {
                         return true;
                     },
-                    effect: (player, card) =>
+                    addeffect: (player, card) =>
                     {
                         player.HasToge.Value = true;
                         player.MalusAttack.Value++;
                         player.ReductionWounds.Value = 1;
+                    },
+                    rmeffect: (player, card) =>
+                    {
+                        player.HasToge.Value = false;
+                        player.MalusAttack.Value--;
+                        player.ReductionWounds.Value = 0;
                     })
+
             };
 
             /// <summary>
@@ -870,18 +931,21 @@ namespace Assets.Noyau.Cards.controller
         /// <param name="condition">Condition d'usage de la carte</param>
         /// <param name="effect">L'effet de la carte</param>
         /// <returns> Renvoie une EquipmentCard</returns>
-        public EquipmentCard CreateEquipmentCard(string cardLabel, CardType cardType, string description, EquipmentCondition condition, EquipmentEffect effect)
+        public EquipmentCard CreateEquipmentCard(string cardLabel, CardType cardType, string description, EquipmentCondition condition, EquipmentAddEffect addeffect, EquipmentRemoveEffect rmeffect)
         {
             EquipmentCard c = new EquipmentCard(cardLabel, cardType, description, cards.Count,
                 equipe: (player, card) =>
                 {
                     player.AddCard(card);
+                    if (card.condition(player))
+                        card.addEffect(player, card);
                 }, 
                 unequipe: (player, card) =>
                 {
                     player.RemoveCard(player.HasCard(card.cardLabel));
+                    card.rmEffect(player, card);
                 }, 
-                condition, effect);
+                condition, addeffect, rmeffect);
             cards.Add(c);
             return c;
         }

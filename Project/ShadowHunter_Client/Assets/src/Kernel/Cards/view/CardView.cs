@@ -54,5 +54,14 @@ namespace Assets.Noyau.Cards.view
             GCard.darknessDeck.RemoveAt(r);
             return c;
         }
+        public static Card GetCard(int idCard)
+        {
+            foreach (Card c in GCard.cards)
+                if (c.Id == idCard)
+                    return c;
+
+            return null;
+        }
+
     }
 }
