@@ -12,7 +12,7 @@ namespace Assets.Noyau.Cards.model
     public delegate void Unequipe(Player player, EquipmentCard card);
     public delegate bool EquipmentCondition(Player player);
     public delegate void EquipmentAddEffect(Player player, Card card);
-    public delegate void EquipmentRemoveEffect(Player player, Card
+    public delegate void EquipmentRemoveEffect(Player player, Card card);
 
     /// <summary>
     /// Définition d'une carte équipement
