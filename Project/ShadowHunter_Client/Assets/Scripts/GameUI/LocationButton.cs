@@ -16,6 +16,7 @@ public class LocationButton : MonoBehaviour
     public int position;
     public Position realPosition;
     public Image image;
+    private Button button;
 
     public void AddListeners()
     {
@@ -37,8 +38,27 @@ public class LocationButton : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        realPosition = GameManager.Board[position];
-        image.sprite = Resources.Load<Sprite>(locationPath + "/" + (int)realPosition);
+        Init();
     }
     
+
+
+    public void Init()
+    {
+        realPosition = GameManager.Board[position];
+        image.sprite = Resources.Load<Sprite>(locationPath + "/" + (int)realPosition);
+        button = gameObject.GetComponent<Button>();
+        OnNotification available = (sender) =>
+        {
+            button.interactable = SceneManagerComponent.boardAvailibility[(int)realPosition].Value;
+        };
+
+        listeners.Add((SceneManagerComponent.boardAvailibility[(int)realPosition], available));
+        AddListeners();
+    }
+
+    public void OnClick()
+    {
+
+    }
 }

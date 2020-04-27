@@ -6,17 +6,26 @@ using Assets.Noyau.Manager.view;
 using Assets.Noyau.Players.view;
 using UnityEngine.SceneManagement;
 using EventSystem;
+using Scripts;
+using Scripts.event_out;
 
-public class SceneManagerComponent : MonoBehaviour
+public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
 {
     //public static SceneManagerComponant Instance { get; set; }
 
     public static Setting<int> LocalPlayerId = new Setting<int>(0);
+    public static Setting<bool>[] boardAvailibility;
 
     public PlayerBarComponent PlayerBarComponent;
 
     public static void InitBeforeScene(Room room)
     {
+        boardAvailibility = new Setting<bool>[6];
+        for (int i = 0; i < boardAvailibility.Length; i++)
+        {
+            boardAvailibility[i] = new Setting<bool>(false);
+        }
+
         GameManager.Init(room.MaxNbPlayer.Value, room.RawData.Code);
         for (int i = 0; i < room.MaxNbPlayer.Value; i++)
         {
@@ -41,4 +50,21 @@ public class SceneManagerComponent : MonoBehaviour
     {
         EventView.Manager.ExecMainThreaded();
     }
+
+
+    public void OnEvent(PlayerEvent e, string[] tags = null)
+    {
+        if (e is SelectMovement sm)
+        {
+            for (int i = 0; i < boardAvailibility.Length; i++)
+            {
+                boardAvailibility[i].Value = false;
+            }
+            foreach (int pos in sm.LocationAvailable)
+            {
+                boardAvailibility[pos].Value = true;
+            }
+        }
+    }
+
 }

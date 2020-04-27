@@ -1,4 +1,5 @@
-﻿using Assets.Noyau.Players.view;
+﻿using Assets.Noyau.Manager.view;
+using Assets.Noyau.Players.view;
 using Assets.Scripts.MainMenuUI.Accounts;
 using Assets.Scripts.MainMenuUI.SearchGame;
 using EventSystem;
@@ -18,6 +19,7 @@ public class PlayerViewComponent : MonoBehaviour
     public Text playerCharacterName;
     public Image playerIcon;
     public Text playerWound;
+    public Text position;
 
     public Button revealButton;
 
@@ -74,12 +76,19 @@ public class PlayerViewComponent : MonoBehaviour
             playerWound.text = player.Wound.Value.ToString();
         };
         listeners.Add((player.Wound, playerWounds));
+
+        OnNotification positionNotification = (sender) =>
+        {
+            position.text = Language.Translate("board.position." + GameManager.Board[player.Position.Value].ToString().ToLower());
+        };
+        listeners.Add((player.Position, positionNotification));
     }
 
     public void AddListeners()
     {
         foreach (var (observed, notification) in listeners)
         {
+            Language.AddListener(notification);
             observed.AddListener(notification);
             notification(observed);
         }
@@ -89,6 +98,7 @@ public class PlayerViewComponent : MonoBehaviour
     {
         foreach (var (observed, notification) in listeners)
         {
+            Language.RemoveListener(notification);
             observed.RemoveListener(notification);
         }
     }
