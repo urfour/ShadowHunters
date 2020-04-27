@@ -28,7 +28,7 @@ public class PlayerBarComponent : MonoBehaviour
             GameObject p = Instantiate(playerViewPrefab.gameObject, this.transform);
             PlayerViewComponent pv = p.GetComponent<PlayerViewComponent>();
             pv.PlayerId = i;
-            pv.Init();
+            pv.Init(i);
         }
     }
 }
