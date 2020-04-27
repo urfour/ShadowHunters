@@ -27,6 +27,10 @@ namespace Assets.Noyau.Manager.view
 
     public static class GameManager
     {
+        private static PlayerListener playerListener = null;
+
+        public static System.Random rand;
+
         /// <summary>
         /// Propriété d'accès au joueur dont c'est le tour.
         /// </summary>
@@ -78,8 +82,12 @@ namespace Assets.Noyau.Manager.view
         /// Initialise l'ensemble du jeu.
         /// </summary>
         /// <param name="nbPlayers">Le nombre de joueurs de la partie</param>
-        public static void Init(int nbPlayers)
+        public static void Init(int nbPlayers, int randSeed)
         {
+            playerListener = new PlayerListener();
+            EventView.Manager.AddListener(playerListener, true);
+            rand = new System.Random(randSeed);
+            
             PlayerView.Init(nbPlayers);
             CardView.Init();
 
@@ -92,14 +100,13 @@ namespace Assets.Noyau.Manager.view
                 Position.Porte,
                 Position.Sanctuaire
             };
-
-            System.Random r = new System.Random();
+            
 
             int index;
 
             for (int i = 0; i < 6; i++)
             {
-                index = r.Next(0, p.Count);
+                index = rand.Next(0, p.Count);
                 Board.Add(i, p[index]);
                 p.RemoveAt(index);
             }

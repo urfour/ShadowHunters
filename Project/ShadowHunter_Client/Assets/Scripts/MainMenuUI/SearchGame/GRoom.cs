@@ -37,7 +37,17 @@ namespace Assets.Scripts.MainMenuUI.SearchGame
                 }
                 if (JoinedRoom.Code.Value == rde.RoomData.Code)
                 {
-                    JoinedRoom.ModifData(rde.RoomData);
+                    if (rde.RoomData.IsLaunched && !JoinedRoom.RawData.IsLaunched)
+                    {
+                        // lancement de la partie
+                        JoinedRoom.ModifData(rde.RoomData);
+                        SceneManagerComponent.InitBeforeScene(JoinedRoom);
+                        SceneManagerComponent.LoadScene();
+                    }
+                    else
+                    {
+                        JoinedRoom.ModifData(rde.RoomData);
+                    }
                 }
             }
             else if (e is RoomJoinedEvent rje)
