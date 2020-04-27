@@ -1,9 +1,12 @@
-﻿using System.Collections;
+﻿using Assets.Noyau.Manager.view;
+using Assets.Noyau.Players.view;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerBarComponent : MonoBehaviour
 {
+
     public PlayerViewComponent playerViewPrefab;
 
     public int NbPlayers = 4;
@@ -23,12 +26,20 @@ public class PlayerBarComponent : MonoBehaviour
     public void Init()
     {
 
-        for (int i = 0; i < NbPlayers; i++)
+        for (int i = 0; i < PlayerView.NbPlayer; i++)
         {
             GameObject p = Instantiate(playerViewPrefab.gameObject, this.transform);
             PlayerViewComponent pv = p.GetComponent<PlayerViewComponent>();
             pv.PlayerId = i;
             pv.Init(i);
+            pv.AddListeners();
         }
     }
+
+    /*
+    private void OnDestroy()
+    {
+        playerViewPrefab.GetComponent<PlayerViewComponent>().RemoveListeners();
+    }
+    */
 }

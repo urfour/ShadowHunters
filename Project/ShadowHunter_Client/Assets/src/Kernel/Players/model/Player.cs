@@ -33,7 +33,7 @@ public class Player
     /// <summary>
     /// nom du joueur
     /// </summary>
-    public string Name { get; private set; }
+    public string Name { get; set; }
     /// <summary>
     /// nombre de blessure
     /// </summary>

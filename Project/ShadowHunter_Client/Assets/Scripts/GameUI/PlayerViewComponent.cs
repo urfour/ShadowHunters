@@ -73,4 +73,9 @@ public class PlayerViewComponent : MonoBehaviour
             observed.RemoveListener(notification);
         }
     }
+
+    private void OnDestroy()
+    {
+        RemoveListeners();
+    }
 }
