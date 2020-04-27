@@ -3,7 +3,6 @@ using Assets.Noyau.Cards.model;
 using Assets.Noyau.Cards.view;
 using Assets.Noyau.event_in;
 using Assets.Noyau.Manager.view;
-using Assets.Noyau.Players.model;
 using Assets.Noyau.Players.view;
 using EventSystem;
 using Scripts;
@@ -12,10 +11,7 @@ using Scripts.event_out;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using static Assets.Noyau.Manager.view.GameManager;
 
 namespace Assets.Noyau.Players.controller
 {
@@ -403,86 +399,13 @@ namespace Assets.Noyau.Players.controller
 
                 if (lightCard.cardLabel == "card.light.light_benediction")
                 {
-                    Debug.Log("Pouvoir de light_benediction : heal");
                     playerChoosed.Healed(UnityEngine.Random.Range(1, 6));
                 }
                 else if (lightCard.cardLabel == "card.light.light_premiers_secours")
                 {
-                    Debug.Log("Pouvoir de light_premiers_secours : wound");
                     playerChoosed.Wound.Value = 7;
                 }
             }
-            /*
-            else if (e is VisionCardEffectEvent vcEffect)
-            {
-                Player playerGiving = PlayerView.GetPlayer(vcEffect.PlayerId);
-                Player playerGived = PlayerView.GetPlayer(vcEffect.TargetId);
-                UsableCard visionCard = vcEffect.VisionCard as UsableCard;
-
-                foreach (CardEffect effect in visionCard.cardEffect)
-                {
-                    if (effect.targetableCondition(playerGived))
-                        effect.effect(playerGived, visionCard);
-                }
-                
-                CharacterTeam team = playerGived.Character.team;
-
-                // Cartes applicables en fonction des équipes ?
-                if ((team == CharacterTeam.Shadow && pickedCard.visionEffect.effectOnShadow && !metaPower)
-                    || (team == CharacterTeam.Hunter && pickedCard.visionEffect.effectOnHunter)
-                    || (team == CharacterTeam.Neutral && pickedCard.visionEffect.effectOnNeutral)
-                    || (team == CharacterTeam.Shadow && !pickedCard.visionEffect.effectOnShadow && metaPower))
-                {
-                    // Cas des cartes infligeant des Blessures
-                    if (pickedCard.visionEffect.effectTakeWounds)
-                        playerGived.Wounded(pickedCard.visionEffect.nbWounds,playerGiving,false);
-
-                    // Cas des cartes soignant des Blessures
-                    else if (pickedCard.visionEffect.effectHealingOneWound)
-                    {
-                        if (playerGived.Wound.Value == 0)
-                            playerGived.Wounded(1,playerGiving,false);
-                        else
-                            playerGived.Healed(1);
-                    }
-                    // Cas des cartes volant une carte équipement ou infligeant des Blessures
-                    else if (pickedCard.visionEffect.effectGivingEquipementCard)
-                    {
-                        if (playerGived.ListCard.Count == 0)
-                        {
-                            //Debug.Log("Vous ne possédez pas de carte équipement.");
-                            playerGived.Wounded(1,playerGiving,false);
-                        }
-                        else
-                        {
-                            //Debug.Log("Voulez-vous donner une carte équipement ou subir une Blessure ?");
-
-                            EventView.Manager.Emit(new SelectGiveOrWoundEvent()
-                            {
-                                PlayerId = playerGived.Id
-                            });
-                        }
-                    }
-                }
-                // Cas des cartes applicables en fonction des points de vie
-                //else if (pickedCard.visionEffect.effectOnLowHP && CheckLowHPCharacters(playerGived.Character.characterName))
-                else if (pickedCard.visionEffect.effectOnLowHP && pickedCard.condition(playerGived))
-                            playerGived.Wounded(1,playerGiving,false);
-                else if (pickedCard.visionEffect.effectOnHighHP && pickedCard.condition(playerGived))
-                    playerGived.Wounded(2,playerGiving,false);
-
-                // Cas de la carte Vision Suprême
-                else if (pickedCard.visionEffect.effectSupremeVision)
-                {
-                    //TODO montrer la carte personnage
-                    //Debug.Log("C'est une carte Vision Suprême !");
-                }
-                else
-                {
-                    //Debug.Log("Rien ne se passe.");
-                }
-            }
-            */
             else if (e is GiveOrWoundEvent giveOrWound)
             {
                 Player player = PlayerView.GetPlayer(giveOrWound.PlayerId);
@@ -531,8 +454,12 @@ namespace Assets.Noyau.Players.controller
                 bool powerLoup = rone.PowerLoup;
 
                 if (revealed)
-                    if (card.cardLabel == "darkness_rituel")
+                {
+                    if (card.cardLabel == "card.darkness.darkness_rituel"
+                        || card.cardLabel == "card.light.light_supreme"
+                        || card.cardLabel == "card.light.light_chocolat")
                         player.Healed(player.Wound.Value);
+                }
             }
             else if (e is BobPowerEvent bpe)
             {

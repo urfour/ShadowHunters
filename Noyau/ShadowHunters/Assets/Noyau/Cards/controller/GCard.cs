@@ -1,16 +1,10 @@
 ﻿using Assets.Noyau.Cards.model;
-using Assets.Noyau.Cards.view;
 using Assets.Noyau.Manager.view;
 using EventSystem;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Scripts.event_out;
 using Assets.Noyau.Players.view;
 using Scripts.event_in;
-using UnityEngine;
 
 namespace Assets.Noyau.Cards.controller
 {
@@ -259,7 +253,7 @@ namespace Assets.Noyau.Cards.controller
                         if (lancer != 7)
                             foreach (Player p in PlayerView.GetPlayers())
                                 if (GameManager.Board[p.Position.Value] == area && !p.HasAmulet.Value)
-                                    p.Wounded(3, GameManager.PlayerTurn.Value, false);
+                                    p.Wounded(3, player, false);
                     })),
 
                 CreateEquipmentCard("card.darkness.darkness_hache", CardType.Darkness, "card.darkness.darkness_hache.description",
@@ -495,7 +489,7 @@ namespace Assets.Noyau.Cards.controller
                         List<int> players = new List<int>();
 
                         foreach (Player p in PlayerView.GetPlayers())
-                            if (!player.Dead.Value && p.Id != player.Id)
+                            if (!p.Dead.Value && p.Id != player.Id)
                                 players.Add(p.Id);
 
                         EventView.Manager.Emit(new SelectLightCardTargetEvent()
