@@ -312,7 +312,7 @@ namespace Assets.Noyau.Players.controller
             {
                 Player playerStealing = PlayerView.GetPlayer(stealTarget.PlayerId);
                 Player playerStealed = PlayerView.GetPlayer(stealTarget.PlayerStealedId);
-                Card card = playerStealed.ListCard[playerStealed.HasCard(stealTarget.CardStealedName)];
+                Card card = CardView.GetCard(stealTarget.CardId);
 
                 Debug.Log("Joueur voleur : " + playerStealing.Name);
                 Debug.Log("Joueur volé : " + playerStealed.Name);
@@ -334,7 +334,8 @@ namespace Assets.Noyau.Players.controller
             {
                 Player playerGiving = PlayerView.GetPlayer(giveCard.PlayerId);
                 Player playerGived = PlayerView.GetPlayer(giveCard.PlayerGivedId);
-                Card card = playerGiving.ListCard[playerGiving.HasCard(giveCard.CardGivedName)];
+                Card card = CardView.GetCard(giveCard.CardId);
+
 
                 Debug.Log("Joueur donneur : " + playerGiving.Name);
                 Debug.Log("Joueur receveur : " + playerGived.Name);
@@ -435,7 +436,7 @@ namespace Assets.Noyau.Players.controller
                 else
                     player.Wounded(1,player,false);
             }
-            else if (e is RevealCard reveal)
+            else if (e is RevealCardEvent reveal)
             {
                 Player p = PlayerView.GetPlayer(reveal.PlayerId);
 

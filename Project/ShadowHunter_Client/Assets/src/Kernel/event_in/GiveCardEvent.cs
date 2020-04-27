@@ -13,6 +13,6 @@ namespace Scripts.event_out
     public class GiveCardEvent : PlayerEvent
     {
         public int PlayerGivedId { get; set; }
-        public string CardGivedName { get; set; }
+        public int CardId { get; set; }
     }
 }

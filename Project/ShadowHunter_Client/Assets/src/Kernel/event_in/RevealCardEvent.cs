@@ -9,7 +9,7 @@ namespace Scripts.event_in
     /// <summary>
     /// Event qui se déclenche que le joueur appuie sur le bouton se révéler
     /// </summary>
-    public class RevealCard : PlayerEvent
+    public class RevealCardEvent : PlayerEvent
     {
     }
 }
