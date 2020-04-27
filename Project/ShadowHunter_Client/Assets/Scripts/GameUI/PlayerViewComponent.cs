@@ -42,7 +42,7 @@ public class PlayerViewComponent : MonoBehaviour
     {
         if (!player.Revealed.Value)
         {
-            EventView.Manager.Emit(new RevealCard() { PlayerId = player.Id });
+            EventView.Manager.Emit(new RevealCardEvent() { PlayerId = player.Id });
             revealButton.interactable = false;
         }
     }
