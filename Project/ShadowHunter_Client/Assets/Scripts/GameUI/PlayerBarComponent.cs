@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerBarComponent : MonoBehaviour
 {
-    public PlayerView playerViewPrefab;
+    public PlayerViewComponent playerViewPrefab;
 
     public int NbPlayers = 4;
 
@@ -26,7 +26,7 @@ public class PlayerBarComponent : MonoBehaviour
         for (int i = 0; i < NbPlayers; i++)
         {
             GameObject p = Instantiate(playerViewPrefab.gameObject, this.transform);
-            PlayerView pv = p.GetComponent<PlayerView>();
+            PlayerViewComponent pv = p.GetComponent<PlayerViewComponent>();
             pv.PlayerId = i;
             pv.Init();
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerView : MonoBehaviour
+public class PlayerViewComponent : MonoBehaviour
 {
     public int PlayerId;
 
