@@ -196,7 +196,6 @@ namespace Assets.Noyau.Players.controller
 
                 if (pickedCard is UsableCard pickedUsableCard)
                 {
-                    Debug.Log("pickedCard is UsableCard pickedUsableCard");
                     EventView.Manager.Emit(new SelectUsableCardPickedEvent(pickedUsableCard.Id, pickedUsableCard.cardType == CardType.Vision));
                 }
                 else if (pickedCard is EquipmentCard pickedEquipmentCard)
@@ -204,8 +203,6 @@ namespace Assets.Noyau.Players.controller
                     EventView.Manager.Emit(new DrawEquipmentCardEvent(pickedEquipmentCard.Id));
                     pickedEquipmentCard.equipe(player, pickedEquipmentCard);
                 }
-
-                player.PrintCards();
             }
             else if (e is UsableCardUseEvent ecue)
             {
@@ -216,7 +213,8 @@ namespace Assets.Noyau.Players.controller
 
                 UsableCard uCard = c as UsableCard;
 
-                Debug.Log("UsableCard piochée : " + uCard.cardLabel);
+                if (uCard.cardType != CardType.Vision)
+                    p2 = p1;
 
                 if (uCard.cardEffect[effect].targetableCondition(p2))
                 {
@@ -403,21 +401,18 @@ namespace Assets.Noyau.Players.controller
                 Player playerChoosed = PlayerView.GetPlayer(lcEffect.PlayerChoosenId);
                 UsableCard lightCard = lcEffect.LightCard as UsableCard;
 
-                foreach(CardEffect effect in lightCard.cardEffect)
+                if (lightCard.cardLabel == "card.light.light_benediction")
                 {
-                    if (effect.targetableCondition(playerChoosed))
-                        effect.effect(playerChoosed, lightCard);
-                }
-
-                /*if (lightCard.cardLabel == "card.light.light_benediction")
-                {
+                    Debug.Log("Pouvoir de light_benediction : heal");
                     playerChoosed.Healed(UnityEngine.Random.Range(1, 6));
                 }
                 else if (lightCard.cardLabel == "card.light.light_premiers_secours")
                 {
+                    Debug.Log("Pouvoir de light_premiers_secours : wound");
                     playerChoosed.Wound.Value = 7;
-                }*/
+                }
             }
+            /*
             else if (e is VisionCardEffectEvent vcEffect)
             {
                 Player playerGiving = PlayerView.GetPlayer(vcEffect.PlayerId);
@@ -429,7 +424,7 @@ namespace Assets.Noyau.Players.controller
                     if (effect.targetableCondition(playerGived))
                         effect.effect(playerGived, visionCard);
                 }
-                /*
+                
                 CharacterTeam team = playerGived.Character.team;
 
                 // Cartes applicables en fonction des équipes ?
@@ -485,8 +480,9 @@ namespace Assets.Noyau.Players.controller
                 else
                 {
                     //Debug.Log("Rien ne se passe.");
-                }*/
+                }
             }
+            */
             else if (e is GiveOrWoundEvent giveOrWound)
             {
                 Player player = PlayerView.GetPlayer(giveOrWound.PlayerId);
@@ -524,6 +520,19 @@ namespace Assets.Noyau.Players.controller
 
                 if (p.HasSpear.Value == true && p.Character.team == CharacterTeam.Hunter)
                     p.BonusAttack.Value += 2;
+
+                Debug.Log("Le joueur " + p.Name + " se révèle.");
+            }
+            else if (e is RevealOrNotEvent rone)
+            {
+                Player player = PlayerView.GetPlayer(rone.PlayerId);
+                Card card = rone.EffectCard;
+                bool revealed = rone.HasRevealed;
+                bool powerLoup = rone.PowerLoup;
+
+                if (revealed)
+                    if (card.cardLabel == "darkness_rituel")
+                        player.Healed(player.Wound.Value);
             }
             else if (e is BobPowerEvent bpe)
             {

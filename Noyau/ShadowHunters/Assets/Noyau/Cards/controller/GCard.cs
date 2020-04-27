@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Scripts.event_out;
 using Assets.Noyau.Players.view;
 using Scripts.event_in;
+using UnityEngine;
 
 namespace Assets.Noyau.Cards.controller
 {
@@ -95,9 +96,9 @@ namespace Assets.Noyau.Cards.controller
                         List<int> players = new List<int>();
 
                         foreach (Player p in PlayerView.GetPlayers())
-                            if (!player.Dead.Value && p.Id != player.Id)
-                                if (!player.HasAmulet.Value)
-                                    players.Add(player.Id);
+                            if (!p.Dead.Value && p.Id != player.Id)
+                                if (!p.HasAmulet.Value)
+                                    players.Add(p.Id);
 
                         EventView.Manager.Emit(new SelectPlayerTakingWoundsEvent()
                         {
@@ -154,9 +155,9 @@ namespace Assets.Noyau.Cards.controller
                         List<int> players = new List<int>();
 
                         foreach (Player p in PlayerView.GetPlayers())
-                            if (!player.Dead.Value && p.Id != player.Id)
-                                if (!player.HasAmulet.Value)
-                                    players.Add(player.Id);
+                            if (!p.Dead.Value && p.Id != player.Id)
+                                if (!p.HasAmulet.Value)
+                                    players.Add(p.Id);
 
                         EventView.Manager.Emit(new SelectPlayerTakingWoundsEvent()
                         {
@@ -179,9 +180,9 @@ namespace Assets.Noyau.Cards.controller
                         List<int> players = new List<int>();
 
                         foreach (Player p in PlayerView.GetPlayers())
-                            if (!player.Dead.Value && p.Id != player.Id)
-                                if (!player.HasAmulet.Value)
-                                    players.Add(player.Id);
+                            if (!p.Dead.Value && p.Id != player.Id)
+                                if (!p.HasAmulet.Value)
+                                    players.Add(p.Id);
 
                         EventView.Manager.Emit(new SelectPlayerTakingWoundsEvent()
                         {
@@ -204,9 +205,9 @@ namespace Assets.Noyau.Cards.controller
                         List<int> players = new List<int>();
 
                         foreach (Player p in PlayerView.GetPlayers())
-                            if (!player.Dead.Value && p.Id != player.Id)
-                                if (!player.HasAmulet.Value)
-                                    players.Add(player.Id);
+                            if (!p.Dead.Value && p.Id != player.Id)
+                                if (!p.HasAmulet.Value)
+                                    players.Add(p.Id);
 
                         EventView.Manager.Emit(new SelectPlayerTakingWoundsEvent()
                         {
@@ -267,9 +268,9 @@ namespace Assets.Noyau.Cards.controller
                         return true;
                     },
                     effect: (player, card) =>
-                {
-                    player.BonusAttack.Value++;
-                }),
+                    {
+                        player.BonusAttack.Value++;
+                    }),
 
                 CreateEquipmentCard("card.darkness.darkness_hachoir", CardType.Darkness, "card.darkness.darkness_hachoir.description",
                     condition: (player) =>
@@ -302,8 +303,8 @@ namespace Assets.Noyau.Cards.controller
                         List<int> players = new List<int>();
 
                         foreach (Player p in PlayerView.GetPlayers())
-                            if (!player.Dead.Value && p.Id != player.Id)
-                                players.Add(player.Id);
+                            if (!p.Dead.Value && p.Id != player.Id)
+                                players.Add(p.Id);
 
                         EventView.Manager.Emit(new SelectPlayerTakingWoundsEvent()
                         {
@@ -339,7 +340,9 @@ namespace Assets.Noyau.Cards.controller
                             EventView.Manager.Emit(new SelectRevealOrNotEvent()
                             {
                                 PlayerId = player.Id,
-                                EffectCard = card
+                                EffectCard = card,
+                                PowerDaniel = false,
+                                PowerLoup = false
                             });
                     })),
 
@@ -876,6 +879,8 @@ namespace Assets.Noyau.Cards.controller
                 equipe: (player, card) =>
                 {
                     player.AddCard(card);
+                    if (card.condition(player))
+                        card.effect(player, card);
                 }, 
                 unequipe: (player, card) =>
                 {

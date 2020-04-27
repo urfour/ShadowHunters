@@ -284,8 +284,6 @@ namespace Scripts
                 while (pSelect == sucpe.PlayerId)
                     pSelect = UnityEngine.Random.Range(0, PlayerView.GetPlayers().Length - 1);*/
 
-                Debug.Log("e is SelectUsableCardPickedEvent sucpe");
-
                 EventView.Manager.Emit(new UsableCardUseEvent()
                 {
                     PlayerId = sucpe.PlayerId,

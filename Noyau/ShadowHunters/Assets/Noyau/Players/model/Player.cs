@@ -190,10 +190,9 @@ public class Player
     {
         if(attacker.Character.characterName=="Charles" && isAttack)
             GameManager.HasKilled.Value=true;
-
+        Debug.Log(this.Name + " : " + damage + " dégats.");
         if (damage > 0 && !HasGuardian.Value)
         {
-
             if (ReductionWounds.Value > 0)
                 damage = (damage - ReductionWounds.Value < 0) ? 0 : damage - ReductionWounds.Value;
             
