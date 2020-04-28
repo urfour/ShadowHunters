@@ -82,6 +82,13 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
                 boardAvailibility[pos].Value = true;
             }
         }
+        else if (e is MoveOn mo)
+        {
+            for (int i = 0; i < boardAvailibility.Length; i++)
+            {
+                boardAvailibility[i].Value = false;
+            }
+        }
     }
 
 }

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Assets.Noyau.Manager.view;
 using EventSystem;
 using UnityEngine.UI;
+using Assets.Noyau.Players.view;
+using Scripts.event_in;
 
 public class LocationButton : MonoBehaviour
 {
@@ -59,6 +61,9 @@ public class LocationButton : MonoBehaviour
 
     public void OnClick()
     {
-
+        if (GameManager.PlayerTurn.Value == PlayerView.GetPlayer(SceneManagerComponent.LocalPlayerId.Value) && SceneManagerComponent.boardAvailibility[(int)realPosition - 1].Value)
+        {
+            EventView.Manager.Emit(new MoveOn() { PlayerId = SceneManagerComponent.LocalPlayerId.Value, Location=position });
+        }
     }
 }

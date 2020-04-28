@@ -22,13 +22,18 @@ namespace Assets.Noyau.Players.controller
             if (e is EndTurnEvent ete)
             {
                 if (GameManager.PlayerTurn.Value == null)
-                    GameManager.PlayerTurn.Value = PlayerView.GetPlayer(GameManager.rand.Next(0, PlayerView.NbPlayer));
-
+                {
+                    GameManager.PlayerTurn.Value = PlayerView.GetPlayer(PlayerView.NbPlayer -1);
+                    //GameManager.PlayerTurn.Value = PlayerView.GetPlayer(GameManager.rand.Next(0, PlayerView.NbPlayer));
+                }
                 else if (GameManager.PlayerTurn.Value.HasAncestral.Value) // si le joueur a utilisé le savoir ancestral, le joueur suivant reste lui
+                {
                     GameManager.PlayerTurn.Value.HasAncestral.Value = false;
-
+                }
                 else
+                {
                     GameManager.PlayerTurn.Value = PlayerView.NextPlayer(GameManager.PlayerTurn.Value);
+                }
                 
 
                 if (GameManager.PlayerTurn.Value.HasGuardian.Value)
@@ -45,6 +50,8 @@ namespace Assets.Noyau.Players.controller
             }
             else if (e is AskMovement am)
             {
+                GameManager.MovementAvailable.Value = false;
+
                 // la gestion de cet événement est uniquement fait pour le client qui l'envoie
                 if (GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId) 
                 {
@@ -140,6 +147,7 @@ namespace Assets.Noyau.Players.controller
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Sanctuaire.Id, false));
                         break;
                 }
+                GameManager.TurnEndable.Value = true;
             }
             else if (e is ForestSelectTargetEvent fste)
             {
@@ -180,6 +188,7 @@ namespace Assets.Noyau.Players.controller
             }
             else if (e is DrawCardEvent drawCard/* && GameManager.PlayerTurn.Value.Id == e.PlayerId*/)
             {
+                GameManager.TurnEndable.Value = false;
                 Player player = PlayerView.GetPlayer(drawCard.PlayerId);
                 Card pickedCard = null;
 
@@ -212,6 +221,7 @@ namespace Assets.Noyau.Players.controller
                     if (!(GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId))
                         EventView.Manager.Emit(new DrawEquipmentCardEvent(pickedEquipmentCard.Id));
                     pickedEquipmentCard.equipe(player, pickedEquipmentCard);
+                    GameManager.TurnEndable.Value = true;
                 }
             }
             else if (e is UsableCardUseEvent ecue)
@@ -234,6 +244,7 @@ namespace Assets.Noyau.Players.controller
                 else
                     Debug.Log("L'effet ne s'active pas !");
 
+                GameManager.TurnEndable.Value = true;
             }
             else if (e is AttackEvent attack)
             {

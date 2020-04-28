@@ -30,13 +30,20 @@ namespace EventSystem
         {
             foreach (OnNotification o in observers)
             {
-                if (o != null)
+                try
                 {
-                    o(this);
+                    if (o != null)
+                    {
+                        o(this);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("null observator");
+                    }
                 }
-                else
+                catch (MissingReferenceException)
                 {
-                    Debug.LogWarning("null observator");
+                    // rien à faire ou alors supprimer l'observateur de la liste
                 }
             }
         }
