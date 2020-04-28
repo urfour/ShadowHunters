@@ -38,7 +38,7 @@ namespace Assets.Noyau.Players.controller
             };
             List<Character> Shadow = new List<Character>()
             {
-                new Character("character.name.loupgarou", CharacterTeam.Shadow, 14, GGoal.ShadowGoal, GPower.Loup),
+                new Character("character.name.loup_garou", CharacterTeam.Shadow, 14, GGoal.ShadowGoal, GPower.Loup),
                 new Character("character.name.vampire", CharacterTeam.Shadow, 13, GGoal.ShadowGoal, GPower.Vampire),
                 new Character("character.name.metamorphe", CharacterTeam.Shadow, 11, GGoal.ShadowGoal, null),
             };
