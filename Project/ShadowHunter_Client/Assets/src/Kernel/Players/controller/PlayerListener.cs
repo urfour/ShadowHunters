@@ -42,6 +42,7 @@ namespace Assets.Noyau.Players.controller
                 if (GameManager.PlayerTurn.Value.HasGuardian.Value)
                     GameManager.PlayerTurn.Value.HasGuardian.Value = false;
 
+                GameManager.TurnEndable.Value = false;
                 GameManager.MovementAvailable.Value = true;
                 GameManager.StartOfTurn.Value = true;
                 /*

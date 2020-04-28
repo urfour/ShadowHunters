@@ -53,6 +53,16 @@ public class PlayerViewComponent : MonoBehaviour
         }
     }
 
+    public void DisplayCard()
+    {
+        playerIcon.gameObject.SetActive(true);
+    }
+
+    public void HideCard()
+    {
+        playerIcon.gameObject.SetActive(false);
+    }
+
     public void Attack()
     {
         if (GameManager.LocalPlayer.Value.getTargetablePlayers().Contains(player))
