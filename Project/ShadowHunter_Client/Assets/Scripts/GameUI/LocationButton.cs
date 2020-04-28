@@ -50,10 +50,10 @@ public class LocationButton : MonoBehaviour
         button = gameObject.GetComponent<Button>();
         OnNotification available = (sender) =>
         {
-            button.interactable = SceneManagerComponent.boardAvailibility[(int)realPosition].Value;
+            button.interactable = SceneManagerComponent.boardAvailibility[(int)realPosition-1].Value;
         };
 
-        listeners.Add((SceneManagerComponent.boardAvailibility[(int)realPosition], available));
+        listeners.Add((SceneManagerComponent.boardAvailibility[(int)realPosition-1], available));
         AddListeners();
     }
 

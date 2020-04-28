@@ -20,6 +20,7 @@ public class PlayerViewComponent : MonoBehaviour
     public Image playerIcon;
     public Text playerWound;
     public Text position;
+    public RectTransform turnIndicator;
 
     public Button revealButton;
 
@@ -79,9 +80,22 @@ public class PlayerViewComponent : MonoBehaviour
 
         OnNotification positionNotification = (sender) =>
         {
-            position.text = Language.Translate("board.position." + GameManager.Board[player.Position.Value].ToString().ToLower());
+            if (GameManager.Board.ContainsKey(player.Position.Value))
+            {
+                position.text = Language.Translate("board.position." + GameManager.Board[player.Position.Value].ToString().ToLower());
+            }
+            else
+            {
+                position.text = Language.Translate("board.position." + Position.None.ToString().ToLower());
+            }
         };
         listeners.Add((player.Position, positionNotification));
+
+        OnNotification turnIndicatorN = (sender) =>
+        {
+                turnIndicator.gameObject.SetActive(GameManager.PlayerTurn.Value.Id == player.Id);
+        };
+        listeners.Add((GameManager.PlayerTurn, turnIndicatorN));
     }
 
     public void AddListeners()
