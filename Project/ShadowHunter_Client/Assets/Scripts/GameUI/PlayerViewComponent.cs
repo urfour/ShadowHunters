@@ -93,7 +93,7 @@ public class PlayerViewComponent : MonoBehaviour
 
         OnNotification turnIndicatorN = (sender) =>
         {
-                turnIndicator.gameObject.SetActive(GameManager.PlayerTurn.Value.Id == player.Id);
+                turnIndicator.gameObject.SetActive(GameManager.PlayerTurn.Value == player);
         };
         listeners.Add((GameManager.PlayerTurn, turnIndicatorN));
     }

@@ -22,7 +22,7 @@ namespace Assets.Noyau.Players.controller
             if (e is EndTurnEvent ete)
             {
                 if (GameManager.PlayerTurn.Value == null)
-                    GameManager.PlayerTurn.Value = PlayerView.GetPlayer(UnityEngine.Random.Range(0, PlayerView.NbPlayer));
+                    GameManager.PlayerTurn.Value = PlayerView.GetPlayer(GameManager.rand.Next(0, PlayerView.NbPlayer));
 
                 else if (GameManager.PlayerTurn.Value.HasAncestral.Value) // si le joueur a utilisé le savoir ancestral, le joueur suivant reste lui
                     GameManager.PlayerTurn.Value.HasAncestral.Value = false;
@@ -34,16 +34,14 @@ namespace Assets.Noyau.Players.controller
                 if (GameManager.PlayerTurn.Value.HasGuardian.Value)
                     GameManager.PlayerTurn.Value.HasGuardian.Value = false;
 
-
+                GameManager.MovementAvailable.Value = true;
+                GameManager.StartOfTurn.Value = true;
+                /*
                 EventView.Manager.Emit(new SelectedNextPlayer()
                 {
                     PlayerId = GameManager.PlayerTurn.Value.Id
                 });
-            }
-            else if (e is NewTurnEvent nte)
-            {
-                GameManager.MovementAvailable.Value = true;
-                GameManager.StartOfTurn.Value = true;
+                */
             }
             else if (e is AskMovement am)
             {

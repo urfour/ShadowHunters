@@ -10,7 +10,7 @@ namespace Scripts.event_in
     /// <summary>
     /// Event d'utilisation d'une carte à usage unique
     /// </summary>
-    class UsableCardUseEvent : PlayerEvent
+    public class UsableCardUseEvent : PlayerEvent
     {
         public int Cardid { get; set; }
         public int EffectSelected { get; set; }

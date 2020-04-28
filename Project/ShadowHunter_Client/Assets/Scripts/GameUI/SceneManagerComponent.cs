@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 using EventSystem;
 using Scripts;
 using Scripts.event_out;
+using Assets.Scripts.MainMenuUI.Accounts;
+using Scripts.event_in;
 
 public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
 {
@@ -26,10 +28,24 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
             boardAvailibility[i] = new Setting<bool>(false);
         }
 
-        GameManager.Init(room.MaxNbPlayer.Value, room.RawData.Code);
+        for (int i = 0; i < room.MaxNbPlayer.Value; i++)
+        {
+            if (room.Players.Value[i] == GAccount.Instance.LoggedAccount.Login)
+            {
+                LocalPlayerId.Value = i;
+                break;
+            }
+        }
+
+        GameManager.Init(room.MaxNbPlayer.Value, room.RawData.Code, LocalPlayerId.Value);
+
         for (int i = 0; i < room.MaxNbPlayer.Value; i++)
         {
             PlayerView.GetPlayer(i).Name = room.Players.Value[i];
+        }
+        if (LocalPlayerId.Value == 0)
+        {
+            EventView.Manager.Emit(new EndTurnEvent());
         }
         //PlayerBarComponent.Init();
     }
@@ -43,6 +59,7 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
 
     private void Start()
     {
+        EventView.Manager.AddListener(this, true);
         PlayerBarComponent.Init();
     }
 
