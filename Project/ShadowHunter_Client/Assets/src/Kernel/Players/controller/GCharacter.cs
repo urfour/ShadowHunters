@@ -1,4 +1,5 @@
-﻿using Assets.Noyau.Players.model;
+﻿using Assets.Noyau.Manager.view;
+using Assets.Noyau.Players.model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,6 @@ namespace Assets.Noyau.Players.controller
     class GCharacter
     {
         public List<Character> characters = new List<Character>();
-        private Random rand = new Random();
 
         /// <summary>
         /// Fonction qui va préparer les decks des différentes équipes
@@ -94,19 +94,19 @@ namespace Assets.Noyau.Players.controller
             }
             for (int i = 0; i < nbhunter; i++)
             {
-                int r = rand.Next(0, Hunter.Count);
+                int r = GameManager.rand.Next(0, Hunter.Count);
                 characters.Add(Hunter[r]);
                 Hunter.RemoveAt(r);
             }
             for (int i = 0; i < nbshadow; i++)
             {
-                int r = rand.Next(0, Shadow.Count);
+                int r = GameManager.rand.Next(0, Shadow.Count);
                 characters.Add(Shadow[r]);
                 Shadow.RemoveAt(r);
             }
             for (int i = 0; i < nbneutral; i++)
             {
-                int r = rand.Next(0, Neutral.Count);
+                int r = GameManager.rand.Next(0, Neutral.Count);
                 characters.Add(Neutral[r]);
                 Neutral.RemoveAt(r);
             }
@@ -117,7 +117,7 @@ namespace Assets.Noyau.Players.controller
         /// </summary>
         public Character PickCharacter()
         {
-            int r = rand.Next(0, characters.Count);
+            int r = GameManager.rand.Next(0, characters.Count);
             Character c = characters[r];
             characters.RemoveAt(r);
             return c;

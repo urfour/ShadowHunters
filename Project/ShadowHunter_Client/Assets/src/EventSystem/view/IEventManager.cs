@@ -25,7 +25,7 @@ namespace EventSystem
         /// </summary>
         /// <typeparam name="T">Type d'événements écoutés par le Listener ajouté</typeparam>
         /// <param name="listener">Listener à ajouter</param>
-        void AddListener<T>(IListener<T> listener, bool MainThreaded = false) where T : Event;
+        void AddListener<T>(IListener<T> listener, bool MainThreaded = true) where T : Event;
 
         /// <summary>
         /// Enlève un Listener du controlleur.

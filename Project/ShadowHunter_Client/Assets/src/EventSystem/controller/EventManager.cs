@@ -65,7 +65,7 @@ namespace EventSystem.controller
 
         internal Mutex eventsToLaunch_Mutex = new Mutex();
 
-        public void AddListener<T>(IListener<T> listener, bool MainThreaded = false) where T : Event
+        public void AddListener<T>(IListener<T> listener, bool MainThreaded = true) where T : Event
         {
             ListenerInstance li = new ListenerInstance(listener, MainThreaded);
             AllListeners.Add(li);

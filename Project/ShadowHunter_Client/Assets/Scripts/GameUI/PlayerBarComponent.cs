@@ -14,7 +14,7 @@ public class PlayerBarComponent : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Init();
+        //Init();
     }
 
     // Update is called once per frame
@@ -25,7 +25,7 @@ public class PlayerBarComponent : MonoBehaviour
 
     public void Init()
     {
-
+        NbPlayers = PlayerView.NbPlayer;
         for (int i = 0; i < PlayerView.NbPlayer; i++)
         {
             GameObject p = Instantiate(playerViewPrefab.gameObject, this.transform);

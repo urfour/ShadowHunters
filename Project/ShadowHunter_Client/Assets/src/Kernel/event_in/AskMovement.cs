@@ -10,7 +10,7 @@ namespace Assets.Noyau.event_in
     /// <summary>
     /// Event de déplacement en début de tour.
     /// </summary>
-    class AskMovement : PlayerEvent
+    public class AskMovement : PlayerEvent
     {
     }
 }

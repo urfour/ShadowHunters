@@ -10,7 +10,8 @@ namespace Scripts.event_out
     /// Event qui se déclenche à la fin du tour d'un autre joueur
     /// annonce le prochain joueur
     /// </summary>
-    class SelectedNextPlayer : PlayerEvent
+    public class SelectedNextPlayer : PlayerEvent
     {
+
     }
 }
