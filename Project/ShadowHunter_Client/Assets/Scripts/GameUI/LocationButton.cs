@@ -10,7 +10,7 @@ using Scripts.event_in;
 public class LocationButton : MonoBehaviour
 {
     //private static Dictionary<Position, Sprite> positionRessourec = new Dictionary<Position, Sprite>();
-    private static string locationPath = "Icons/locations";
+    private static string locationPath = "Images/locations";
 
 
     private List<(ListenableObject observed, OnNotification notification)> listeners = new List<(ListenableObject observed, OnNotification notification)>();

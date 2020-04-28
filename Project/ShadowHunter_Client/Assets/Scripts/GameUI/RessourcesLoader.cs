@@ -14,10 +14,13 @@ namespace Assets.Scripts.GameUI
 
         public static Dictionary<string,Sprite> CardSprites;
         public static Dictionary<string, Sprite> CharacterSprites;
-        public static Sprite CharacterUnknownSprite;
+        //public static Sprite CharacterUnknownSprite;
 
         public static void Load()
         {
+            CardSprites = new Dictionary<string, Sprite>();
+            CharacterSprites = new Dictionary<string, Sprite>();
+
             IconResource[] cards = Resources.LoadAll<IconResource>(card_path);
             foreach (IconResource i in cards)
             {
@@ -30,9 +33,19 @@ namespace Assets.Scripts.GameUI
                     Debug.LogWarning("Card label already exists : " + i.label);
                 }
             }
-            /*
+            
             IconResource[] characters = Resources.LoadAll<IconResource>(character_path);
-            */
+            foreach (IconResource i in characters)
+            {
+                if (!CharacterSprites.ContainsKey(i.label))
+                {
+                    CharacterSprites.Add(i.label, i.sprite);
+                }
+                else
+                {
+                    Debug.LogWarning("Card label already exists : " + i.label);
+                }
+            }
         }
     }
 }

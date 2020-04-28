@@ -1,5 +1,6 @@
 ﻿using Assets.Noyau.Manager.view;
 using Assets.Noyau.Players.view;
+using Assets.Scripts.GameUI;
 using Assets.Scripts.MainMenuUI.Accounts;
 using Assets.Scripts.MainMenuUI.SearchGame;
 using EventSystem;
@@ -75,10 +76,12 @@ public class PlayerViewComponent : MonoBehaviour
             if (player.Revealed.Value || isLocalPlayer)
             {
                 playerCharacterName.text = Language.Translate(player.Character.characterName);
+                playerIcon.sprite = RessourcesLoader.CharacterSprites[player.Character.characterName];
             }
             else
             {
                 playerCharacterName.text = Language.Translate("character.name.unknown");
+                playerIcon.sprite = RessourcesLoader.CharacterSprites["character.name.unknown"];
             }
         };
         listeners.Add((player.Revealed, characterName));

@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.MainMenuUI.Accounts;
+﻿using Assets.Scripts.GameUI;
+using Assets.Scripts.MainMenuUI.Accounts;
 using Assets.Scripts.MainMenuUI.SearchGame;
 using EventSystem;
 using IO;
@@ -31,6 +32,7 @@ namespace Assets.Scripts
                 }
             }
 
+            RessourcesLoader.Load();
             EventView.Load();
             SettingManager.Load();
             Language.Init();
