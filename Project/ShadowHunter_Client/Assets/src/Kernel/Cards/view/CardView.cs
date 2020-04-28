@@ -1,5 +1,6 @@
 ﻿using Assets.Noyau.Cards.controller;
 using Assets.Noyau.Cards.model;
+using Assets.Noyau.Manager.view;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace Assets.Noyau.Cards.view
         /// </summary>
         public static void Init()
         {
-            rand = new Random();
+            rand = GameManager.rand;
             GCard = new GCard();
         }
 

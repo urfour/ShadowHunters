@@ -45,6 +45,13 @@ namespace Assets.Noyau.Players.controller
             }
             else if (e is AskMovement am)
             {
+                // la gestion de cet événement est uniquement fait pour le client qui l'envoie
+                if (GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId) 
+                {
+                    return;
+                }
+
+
                 List<int> dicesRolls = new List<int>();
 
                 int nbrolls = 1;
@@ -125,15 +132,22 @@ namespace Assets.Noyau.Players.controller
                         GameManager.PickDarknessDeck.Value = true;
                         break;
                     case Position.Foret:
-                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Foret.Id, false));
+                        if (!(GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId))
+                            EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Foret.Id, false));
                         break;
                     case Position.Sanctuaire:
-                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Sanctuaire.Id, false));
+                        if (!(GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId))
+                            EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Sanctuaire.Id, false));
                         break;
                 }
             }
             else if (e is ForestSelectTargetEvent fste)
             {
+                // la gestion de cet événement est uniquement fait pour le client qui l'envoie
+                if (GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId)
+                {
+                    return;
+                }
                 List<int> target = new List<int>();
 
                 foreach (Player p in PlayerView.GetPlayers())
@@ -190,11 +204,13 @@ namespace Assets.Noyau.Players.controller
 
                 if (pickedCard is UsableCard pickedUsableCard)
                 {
-                    EventView.Manager.Emit(new SelectUsableCardPickedEvent(pickedUsableCard.Id, pickedUsableCard.cardType == CardType.Vision));
+                    if (!(GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId))
+                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(pickedUsableCard.Id, pickedUsableCard.cardType == CardType.Vision));
                 }
                 else if (pickedCard is EquipmentCard pickedEquipmentCard)
                 {
-                    EventView.Manager.Emit(new DrawEquipmentCardEvent(pickedEquipmentCard.Id));
+                    if (!(GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId))
+                        EventView.Manager.Emit(new DrawEquipmentCardEvent(pickedEquipmentCard.Id));
                     pickedEquipmentCard.equipe(player, pickedEquipmentCard);
                 }
             }
