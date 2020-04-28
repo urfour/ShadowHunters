@@ -5,6 +5,7 @@ using Assets.Scripts.MainMenuUI.SearchGame;
 using EventSystem;
 using Lang;
 using Scripts.event_in;
+using Scripts.event_out;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,7 @@ public class PlayerViewComponent : MonoBehaviour
     public Image playerIcon;
     public Text playerWound;
     public Text position;
+    public Button attackButton;
     public RectTransform turnIndicator;
 
     public Button revealButton;
@@ -50,6 +52,14 @@ public class PlayerViewComponent : MonoBehaviour
         }
     }
 
+    public void Attack()
+    {
+        if (GameManager.LocalPlayer.Value.getTargetablePlayers().Contains(player))
+        {
+            EventView.Manager.Emit(new AttackPlayerEvent() { PlayerId=GameManager.LocalPlayer.Value.Id, PlayerAttackedId=player.Id });
+        }
+    }
+
     public void Init(int playerId)
     {
         //playerPseudo.text = GRoom.Instance.JoinedRoom.Players.Value[playerId];
@@ -57,7 +67,8 @@ public class PlayerViewComponent : MonoBehaviour
         player = PlayerView.GetPlayer(playerId);
         playerPseudo.text = player.Name;
         isLocalPlayer = player.Name == GAccount.Instance.LoggedAccount.Login;
-        revealButton.interactable = isLocalPlayer;
+        revealButton.gameObject.SetActive(isLocalPlayer);
+        attackButton.gameObject.SetActive(!isLocalPlayer);
 
         OnNotification characterName = (sender) =>
         {
@@ -96,6 +107,21 @@ public class PlayerViewComponent : MonoBehaviour
                 turnIndicator.gameObject.SetActive(GameManager.PlayerTurn.Value == player);
         };
         listeners.Add((GameManager.PlayerTurn, turnIndicatorN));
+
+
+        if (!isLocalPlayer)
+        {
+            OnNotification attackAvailable = (sender) =>
+            {
+                attackButton.interactable = GameManager.LocalPlayer.Value.getTargetablePlayers().Contains(player);
+            };
+
+            listeners.Add((player.Dead, attackAvailable));
+            listeners.Add((player.Position, attackAvailable));
+            listeners.Add((GameManager.LocalPlayer.Value.Dead, attackAvailable));
+            listeners.Add((GameManager.LocalPlayer.Value.Position, attackAvailable));
+            listeners.Add((GameManager.LocalPlayer.Value.HasRevolver, attackAvailable));
+        }
     }
 
     public void AddListeners()
