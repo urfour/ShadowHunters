@@ -21,6 +21,9 @@ namespace Assets.Noyau.Players.controller
         {
             if (e is EndTurnEvent ete)
             {
+
+                GameManager.AttackAvailable.Value = false;
+
                 if (GameManager.PlayerTurn.Value == null)
                 {
                     GameManager.PlayerTurn.Value = PlayerView.GetPlayer(PlayerView.NbPlayer -1);
@@ -148,6 +151,7 @@ namespace Assets.Noyau.Players.controller
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Sanctuaire.Id, false));
                         break;
                 }
+                GameManager.AttackAvailable.Value = true;
                 GameManager.TurnEndable.Value = true;
             }
             else if (e is ForestSelectTargetEvent fste)
@@ -325,7 +329,7 @@ namespace Assets.Noyau.Players.controller
 
                 Debug.Log("Le lancer vaut : " + lancer);
 
-                if (lancer != 0)
+                if (lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value != 0)
                 {
                     Debug.Log("Wounds avant : " + playerAttacked.Wound.Value);
                     playerAttacked.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
@@ -333,6 +337,8 @@ namespace Assets.Noyau.Players.controller
                     Debug.Log("Vie total : " + playerAttacked.Character.characterHP);
                     Debug.Log("Mort ? " + playerAttacked.Dead.Value);
                 }
+
+                GameManager.AttackAvailable.Value = false;
             }
             else if (e is StealCardEvent stealTarget)
             {
