@@ -94,8 +94,13 @@ namespace Assets.Noyau.Players.controller
                     }
                     if (!availableDestination.Contains(tmpavailableDestination) && GameManager.PlayerTurn.Value.Position.Value != tmpavailableDestination)
                     {
-                        availableDestination.Add(tmpavailableDestination);
+                        if (tmpavailableDestination != -1)
+                            availableDestination.Add(tmpavailableDestination);
                         nbrolls--;
+                    }
+                    else if (GameManager.PlayerTurn.Value.Position.Value == tmpavailableDestination)
+                    {
+                        availableDestination.Clear();
                     }
                 }
                 availableDestination.Remove(GameManager.PlayerTurn.Value.Position.Value);
