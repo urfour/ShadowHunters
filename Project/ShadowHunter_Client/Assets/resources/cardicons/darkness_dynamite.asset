@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41e381b97effcdc498dced6cf938e971, type: 3}
+  m_Name: darkness_dynamite
+  m_EditorClassIdentifier: 
+  label: card.darkness.darkness_dynamite
+  sprite: {fileID: 21300000, guid: f2f08c274c3da0f4bb62b63466c89c5e, type: 3}
