@@ -17,7 +17,13 @@ Computer Science Licence of the University of Strasbourg, France.
 
 .. toctree::
    :maxdepth: 2
-   :caption: How to play?
+   :caption: Design
 
-   page3
-   page4
+   globalui   
+   gameui
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Network
+
+   database
