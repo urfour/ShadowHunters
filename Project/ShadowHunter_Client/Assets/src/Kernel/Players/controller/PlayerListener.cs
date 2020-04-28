@@ -119,6 +119,7 @@ namespace Assets.Noyau.Players.controller
 
                 EventView.Manager.Emit(new SelectMovement()
                 {
+                    PlayerId = GameManager.PlayerTurn.Value.Id,
                     LocationAvailable = availableDestination.ToArray()
                 });
             }

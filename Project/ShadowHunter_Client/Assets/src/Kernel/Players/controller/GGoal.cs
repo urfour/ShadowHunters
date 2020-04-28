@@ -66,7 +66,6 @@ namespace Assets.Noyau.Players.controller
                         if (p.Character.team.Equals(CharacterTeam.Hunter) && !p.Dead.Value)
                         {
                             HunterAlive = true;
-                            break;
                         }
                         if (p.Character.team.Equals(CharacterTeam.Neutral) && p.Dead.Value)
                         {
@@ -100,7 +99,7 @@ namespace Assets.Noyau.Players.controller
             (
                 checkWinning: (owner) =>
                 {
-                    if(!owner.Dead.Value)
+                    if(!owner.Dead.Value && !owner.HasWon.Value)
                     {
                         foreach (Player p in PlayerView.GetPlayers())
                         {
@@ -113,7 +112,10 @@ namespace Assets.Noyau.Players.controller
                 {
                     foreach (Player p in PlayerView.GetPlayers())
                     {
-                        p.HasWon.AddListener((sender) => { owner.Character.goal.checkWinning(owner); });
+                        if (p.Id != owner.Id)
+                        {
+                            p.HasWon.AddListener((sender) => { owner.Character.goal.checkWinning(owner); });
+                        }
                     }
                 }
             );
@@ -148,13 +150,12 @@ namespace Assets.Noyau.Players.controller
                     int nbDead=0;
                     foreach (Player p in PlayerView.GetPlayers())
                     {
-                        if (!p.Dead.Value)
+                        if (p.Dead.Value)
                         {
                             nbDead++;
                         }
-                        
                     }
-                    if(nbDead>=3 && GameManager.HasKilled.Value)
+                    if(nbDead>3 && GameManager.HasKilled.Value)
                         owner.HasWon.Value=true;
                 },
                 setWinningListeners: (owner) =>
@@ -183,7 +184,6 @@ namespace Assets.Noyau.Players.controller
                         if (p.Character.team.Equals(CharacterTeam.Shadow) && !p.Dead.Value)
                         {
                             ShadowAlive = true;
-                            break;
                         }
                         if (p.Dead.Value)
                         {

@@ -116,7 +116,10 @@ namespace Assets.Noyau.Manager.view
                 Board.Add(i, p[index]);
                 p.RemoveAt(index);
             }
-            
+
+            foreach (Player player in PlayerView.GetPlayers())
+                player.Character.goal.setWinningListeners(player);
+
         }
     }
 }

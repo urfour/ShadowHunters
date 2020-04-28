@@ -188,8 +188,8 @@ public class Player
     /// <param name="isAttack">Booléen si c'est une attaque ou des dégats infligés par une carte à effet</param>
     public virtual int Wounded(int damage, Player attacker, bool isAttack)
     {
-        if(attacker.Character.characterName=="Charles" && isAttack)
-            GameManager.HasKilled.Value=true;
+        if (attacker.Character.characterName == "character.name.charles" && isAttack)
+                GameManager.HasKilled.Value=true;
 
         if (damage > 0 && !HasGuardian.Value)
         {
