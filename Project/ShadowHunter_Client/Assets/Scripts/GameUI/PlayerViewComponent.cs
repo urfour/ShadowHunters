@@ -113,7 +113,9 @@ public class PlayerViewComponent : MonoBehaviour
         {
             OnNotification attackAvailable = (sender) =>
             {
-                attackButton.interactable = GameManager.LocalPlayer.Value.getTargetablePlayers().Contains(player);
+                attackButton.interactable = GameManager.PlayerTurn.Value == GameManager.LocalPlayer.Value 
+                                            && GameManager.AttackAvailable.Value
+                                            && GameManager.LocalPlayer.Value.getTargetablePlayers().Contains(player);
             };
 
             listeners.Add((player.Dead, attackAvailable));
@@ -121,6 +123,8 @@ public class PlayerViewComponent : MonoBehaviour
             listeners.Add((GameManager.LocalPlayer.Value.Dead, attackAvailable));
             listeners.Add((GameManager.LocalPlayer.Value.Position, attackAvailable));
             listeners.Add((GameManager.LocalPlayer.Value.HasRevolver, attackAvailable));
+            listeners.Add((GameManager.PlayerTurn, attackAvailable));
+            listeners.Add((GameManager.AttackAvailable, attackAvailable));
         }
     }
 
