@@ -1,0 +1,8 @@
+Pour pouvoir générer la documentation, il faut :
+
+- installer python3
+- installer sphinx avec son gestionnaire de paquets favori
+- tapez "pip -m install sphinx sphinx_csharp sphinx_rtd_theme"
+- aller dans le dossier "docs" contenant la documentation
+- modifier les fichiers .rst (reStructuredText)
+- une fois modifiés, tapez "make html" et vous aurez un dossier _build de fait
