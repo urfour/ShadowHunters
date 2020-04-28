@@ -45,6 +45,9 @@ namespace Assets.Noyau.Players.controller
                 GameManager.TurnEndable.Value = false;
                 GameManager.MovementAvailable.Value = true;
                 GameManager.StartOfTurn.Value = true;
+                GameManager.PickDarknessDeck.Value = false;
+                GameManager.PickLightnessDeck.Value = false;
+                GameManager.PickVisionDeck.Value = false;
                 /*
                 EventView.Manager.Emit(new SelectedNextPlayer()
                 {

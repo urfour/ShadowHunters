@@ -86,12 +86,12 @@ public class PlayerViewComponent : MonoBehaviour
             if (player.Revealed.Value || isLocalPlayer)
             {
                 playerCharacterName.text = Language.Translate(player.Character.characterName);
-                playerIcon.sprite = RessourcesLoader.CharacterSprites[player.Character.characterName];
+                playerIcon.sprite = ResourceLoader.CharacterSprites[player.Character.characterName];
             }
             else
             {
                 playerCharacterName.text = Language.Translate("character.name.unknown");
-                playerIcon.sprite = RessourcesLoader.CharacterSprites["character.name.unknown"];
+                playerIcon.sprite = ResourceLoader.CharacterSprites["character.name.unknown"];
             }
         };
         listeners.Add((player.Revealed, characterName));

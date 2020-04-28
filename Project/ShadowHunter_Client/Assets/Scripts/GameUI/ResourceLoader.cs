@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.GameUI
 {
-    class RessourcesLoader
+    class ResourceLoader
     {
         private static string card_path = "cardicons";
         private static string character_path = "charactericons";

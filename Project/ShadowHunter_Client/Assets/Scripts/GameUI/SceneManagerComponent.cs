@@ -10,6 +10,9 @@ using Scripts;
 using Scripts.event_out;
 using Assets.Scripts.MainMenuUI.Accounts;
 using Scripts.event_in;
+using UnityEngine.UI;
+using System.Collections.Generic;
+using Assets.Noyau.Cards.controller;
 
 public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
 {
@@ -19,6 +22,12 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     public static Setting<bool>[] boardAvailibility;
 
     public PlayerBarComponent PlayerBarComponent;
+
+    private List<(ListenableObject observed, OnNotification notification)> listeners = new List<(ListenableObject observed, OnNotification notification)>();
+
+    public Button visionPickButton;
+    public Button LightnessPickButton;
+    public Button DarknessPickButton;
 
     public static void InitBeforeScene(Room room)
     {
@@ -61,6 +70,60 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     {
         EventView.Manager.AddListener(this, true);
         PlayerBarComponent.Init();
+
+        OnNotification visionPick = (sender) =>
+        {
+            visionPickButton.gameObject.SetActive(GameManager.PlayerTurn.Value == GameManager.LocalPlayer.Value && GameManager.PickVisionDeck.Value);
+        };
+
+        listeners.Add((GameManager.PlayerTurn, visionPick));
+        listeners.Add((GameManager.PickVisionDeck, visionPick));
+
+        OnNotification lightnessPick = (sender) =>
+        {
+            LightnessPickButton.gameObject.SetActive(GameManager.PlayerTurn.Value == GameManager.LocalPlayer.Value && GameManager.PickLightnessDeck.Value);
+        };
+
+        listeners.Add((GameManager.PlayerTurn, lightnessPick));
+        listeners.Add((GameManager.PickLightnessDeck, lightnessPick));
+
+        OnNotification darknessPick = (sender) =>
+        {
+            DarknessPickButton.gameObject.SetActive(GameManager.PlayerTurn.Value == GameManager.LocalPlayer.Value && GameManager.PickDarknessDeck.Value);
+        };
+
+        listeners.Add((GameManager.PlayerTurn, darknessPick));
+        listeners.Add((GameManager.PickDarknessDeck, darknessPick));
+
+        AddListeners();
+    }
+
+
+    public void VisionPick()
+    {
+        if (GameManager.PlayerTurn.Value == GameManager.LocalPlayer.Value && GameManager.PickVisionDeck.Value)
+        {
+            EventView.Manager.Emit(new DrawCardEvent() { PlayerId = GameManager.LocalPlayer.Value.Id, SelectedCardType = CardType.Vision });
+        }
+    }
+    public void LightnessPick()
+    {
+        if (GameManager.PlayerTurn.Value == GameManager.LocalPlayer.Value && GameManager.PickLightnessDeck.Value)
+        {
+            EventView.Manager.Emit(new DrawCardEvent() { PlayerId = GameManager.LocalPlayer.Value.Id, SelectedCardType = CardType.Light });
+        }
+    }
+    public void DarknessPick()
+    {
+        if (GameManager.PlayerTurn.Value == GameManager.LocalPlayer.Value && GameManager.PickDarknessDeck.Value)
+        {
+            EventView.Manager.Emit(new DrawCardEvent() { PlayerId = GameManager.LocalPlayer.Value.Id, SelectedCardType = CardType.Darkness });
+        }
+    }
+
+    private void OnDestroy()
+    {
+        RemoveListeners();
     }
 
     private void Update()
@@ -68,6 +131,7 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
         EventView.Manager.ExecMainThreaded();
     }
 
+    
 
     public void OnEvent(PlayerEvent e, string[] tags = null)
     {
@@ -88,6 +152,24 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
             {
                 boardAvailibility[i].Value = false;
             }
+        }
+    }
+
+
+    public void AddListeners()
+    {
+        foreach (var (observed, notification) in listeners)
+        {
+            observed.AddListener(notification);
+            notification(observed);
+        }
+    }
+
+    public void RemoveListeners()
+    {
+        foreach (var (observed, notification) in listeners)
+        {
+            observed.RemoveListener(notification);
         }
     }
 

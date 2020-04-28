@@ -32,7 +32,7 @@ namespace Assets.Scripts
                 }
             }
 
-            RessourcesLoader.Load();
+            ResourceLoader.Load();
             EventView.Load();
             SettingManager.Load();
             Language.Init();
