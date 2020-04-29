@@ -13,6 +13,8 @@ using Scripts.event_in;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using Assets.Noyau.Cards.controller;
+using Assets.Noyau.Cards.view;
+using Assets.Noyau.Cards.model;
 
 public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
 {
@@ -28,6 +30,8 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     public Button visionPickButton;
     public Button LightnessPickButton;
     public Button DarknessPickButton;
+
+    public CardDisplayer cardDisplayer;
 
     public static void InitBeforeScene(Room room)
     {
@@ -152,6 +156,14 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
             {
                 boardAvailibility[i].Value = false;
             }
+        }
+        else if (e is SelectUsableCardPickedEvent selectUsable)
+        {
+            cardDisplayer.DisplayUsableCard((UsableCard)CardView.GetCard(selectUsable.CardId), PlayerView.GetPlayer(selectUsable.PlayerId));
+        }
+        else if (e is DrawEquipmentCardEvent equipmentCardEvent)
+        {
+            cardDisplayer.Display(CardView.GetCard(equipmentCardEvent.CardId), PlayerView.GetPlayer(equipmentCardEvent.PlayerId));
         }
     }
 

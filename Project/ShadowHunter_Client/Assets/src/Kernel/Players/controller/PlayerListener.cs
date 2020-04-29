@@ -197,7 +197,12 @@ namespace Assets.Noyau.Players.controller
                 });
             }
             else if (e is DrawCardEvent drawCard/* && GameManager.PlayerTurn.Value.Id == e.PlayerId*/)
-            {
+            {                
+                // la gestion de cet événement est uniquement fait pour le client qui l'envoie
+                if (GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId)
+                {
+                    return;
+                }
                 GameManager.TurnEndable.Value = false;
                 Player player = PlayerView.GetPlayer(drawCard.PlayerId);
                 Card pickedCard = null;
