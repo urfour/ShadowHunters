@@ -7342,12 +7342,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NotLogged: {fileID: 2019970511}
-  Logged: {fileID: 1189497699}
+  Logged: {fileID: 347820404}
   interactableOnLoggedOnly:
-  - {fileID: 1675184705}
   - {fileID: 347820404}
   activeOnLoggedOnly:
-  - {fileID: 1189497699}
   - {fileID: 1614017244}
 --- !u!114 &771781590
 MonoBehaviour:

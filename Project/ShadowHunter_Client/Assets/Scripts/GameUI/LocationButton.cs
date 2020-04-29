@@ -52,16 +52,16 @@ public class LocationButton : MonoBehaviour
         button = gameObject.GetComponent<Button>();
         OnNotification available = (sender) =>
         {
-            button.interactable = SceneManagerComponent.boardAvailibility[(int)realPosition-1].Value;
+            button.interactable = SceneManagerComponent.boardAvailibility[position].Value;
         };
 
-        listeners.Add((SceneManagerComponent.boardAvailibility[(int)realPosition-1], available));
+        listeners.Add((SceneManagerComponent.boardAvailibility[position], available));
         AddListeners();
     }
 
     public void OnClick()
     {
-        if (GameManager.PlayerTurn.Value == PlayerView.GetPlayer(SceneManagerComponent.LocalPlayerId.Value) && SceneManagerComponent.boardAvailibility[(int)realPosition - 1].Value)
+        if (GameManager.PlayerTurn.Value == PlayerView.GetPlayer(SceneManagerComponent.LocalPlayerId.Value) && SceneManagerComponent.boardAvailibility[position].Value)
         {
             EventView.Manager.Emit(new MoveOn() { PlayerId = SceneManagerComponent.LocalPlayerId.Value, Location=position });
         }
