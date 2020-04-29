@@ -723,7 +723,7 @@ namespace Assets.Noyau.Cards.controller
                         player.Wounded(2, player, false);
                     })),
 
-                CreateUsableCard("card.vision.vision_cupide", CardType.Vision, "card.vision.vision_cupide.description", false,
+                CreateVisionCard("card.vision.vision_cupide", CardType.Vision, "card.vision.vision_cupide.description", false,
                 new CardEffect("card.vision.vision_cupide.effect.give",
                     targetableCondition: (player, owner) =>
                     {
@@ -762,7 +762,7 @@ namespace Assets.Noyau.Cards.controller
                     })),
 
 
-                CreateUsableCard("card.vision.vision_cupide", CardType.Vision, "card.vision.vision_cupide.description", false,
+                CreateVisionCard("card.vision.vision_cupide", CardType.Vision, "card.vision.vision_cupide.description", false,
                 new CardEffect("card.vision.vision_cupide.effect.give",
                     targetableCondition: (player, owner) =>
                     {
@@ -800,7 +800,7 @@ namespace Assets.Noyau.Cards.controller
                         player.Wounded(1,player,false);
                     })),
 
-                CreateUsableCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
+                CreateVisionCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
                 new CardEffect("card.vision.vision_enivrante.effect.give",
                     targetableCondition: (player, owner) =>
                     {
@@ -841,7 +841,7 @@ namespace Assets.Noyau.Cards.controller
                     })),
 
 
-                CreateUsableCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
+                CreateVisionCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
                 new CardEffect("card.vision.vision_enivrante.effect.give",
                     targetableCondition: (player, owner) =>
                     {
@@ -881,7 +881,7 @@ namespace Assets.Noyau.Cards.controller
                         player.Wounded(1,player,false);
                     })),
 
-                CreateUsableCard("card.vision.vision_furtive", CardType.Vision, "card.vision.vision_furtive.description", false,
+                CreateVisionCard("card.vision.vision_furtive", CardType.Vision, "card.vision.vision_furtive.description", false,
                 new CardEffect("card.vision.vision_furtive.effect.give",
                     targetableCondition: (player, owner) =>
                     {
@@ -920,7 +920,7 @@ namespace Assets.Noyau.Cards.controller
                     })),
 
 
-                CreateUsableCard("card.vision.vision_furtive", CardType.Vision, "card.vision.vision_furtive.description", false,
+                CreateVisionCard("card.vision.vision_furtive", CardType.Vision, "card.vision.vision_furtive.description", false,
                 new CardEffect("card.vision.vision_furtive.effect.give",
                     targetableCondition: (player, owner) =>
                     {
@@ -958,7 +958,7 @@ namespace Assets.Noyau.Cards.controller
                         player.Wounded(1,player,false);
                     })),
 
-                CreateUsableCard("card.vision.vision_divine", CardType.Vision, "card.vision.vision_divine.description", false,
+                CreateVisionCard("card.vision.vision_divine", CardType.Vision, "card.vision.vision_divine.description", false,
                 new CardEffect("card.vision.vision_divine.effect.wound",
                     targetableCondition: (player, owner) =>
                     {
@@ -985,7 +985,7 @@ namespace Assets.Noyau.Cards.controller
                     })),
 
 
-                CreateUsableCard("card.vision.vision_divine", CardType.Vision, "card.vision.vision_divine.description", false,
+                CreateVisionCard("card.vision.vision_divine", CardType.Vision, "card.vision.vision_divine.description", false,
                 new CardEffect("card.vision.vision_divine.effect.wound",
                     targetableCondition: (player, owner) =>
                     {
@@ -1175,7 +1175,7 @@ namespace Assets.Noyau.Cards.controller
             List<CardEffect> effects = new List<CardEffect>(cardEffect);
             effects.Add(new CardEffect(cardLabel + ".nothing_happen",
                 effect: (target, card) => { },
-                targetableCondition: (target, owner) => { return !effects[0].targetableCondition(target) || target.Character.characterName.Equals("character.name.metamorphe"); }
+                targetableCondition: (target, owner) => { return (!effects[0].targetableCondition(target) || target.Character.characterName.Equals("character.name.metamorphe") && owner == target); }
                 ));
 
             UsableCard auxilaire = CreateUsableCard(cardLabel, cardType, description, canDismiss, effects.ToArray());
