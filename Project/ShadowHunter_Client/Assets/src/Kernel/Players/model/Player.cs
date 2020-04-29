@@ -191,7 +191,7 @@ public class Player
         if (attacker.Character.characterName == "character.name.charles" && isAttack)
                 GameManager.HasKilled.Value=true;
 
-        if (damage > 0 && !HasGuardian.Value)
+        if (damage > 0 && (!HasGuardian.Value || !isAttack))
         {
 
             if (ReductionWounds.Value > 0)

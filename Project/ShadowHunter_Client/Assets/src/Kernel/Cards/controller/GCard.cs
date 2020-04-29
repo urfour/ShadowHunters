@@ -1030,13 +1030,23 @@ namespace Assets.Noyau.Cards.controller
             return c;
         }
 
-
+        /// <summary>
+        /// Créé deux carte vision :
+        ///     Celle que pioche le joueur courant
+        ///     Celle qui est envoyé par la première au joueur ciblé.
+        /// </summary>
+        /// <param name="cardLabel"></param>
+        /// <param name="cardType"></param>
+        /// <param name="description"></param>
+        /// <param name="canDismiss"></param>
+        /// <param name="cardEffect"></param>
+        /// <returns>La carte vision à envoyer au joueur qui a pioché</returns>
         public UsableCard CreateVisionCard(string cardLabel, CardType cardType, string description, bool canDismiss, params CardEffect[] cardEffect)
         {
             List<CardEffect> effects = new List<CardEffect>(cardEffect);
             effects.Add(new CardEffect(cardLabel + ".nothing_happen",
                 effect: (target, player, card) => { },
-                targetableCondition: (target, owner) => { return (!effects[0].targetableCondition(target) || target.Character.characterName.Equals("character.name.metamorphe")) && owner == target && !target.Dead.Value; }
+                targetableCondition: (target, owner) => { return ((!effects[0].targetableCondition(target, owner) || target.Character.characterName.Equals("character.name.metamorphe")) && owner == target && !target.Dead.Value); }
                 ));
             int id = cards.Count;
             UsableCard auxilaire = new UsableCard(cardLabel, cardType, description, id, canDismiss, effects.ToArray());
@@ -1044,7 +1054,7 @@ namespace Assets.Noyau.Cards.controller
 
             id = cards.Count;
             UsableCard vision = new UsableCard(cardLabel, cardType, description, id, canDismiss,
-                new CardEffect("card.vision.effect.send&" + cardLabel,
+                new CardEffect("card.vision.effect.send.&" + cardLabel,
                 effect: (target, player, card) =>
                 {
                     EventView.Manager.Emit(new SelectUsableCardPickedEvent(auxilaire.Id, true, target.Id));

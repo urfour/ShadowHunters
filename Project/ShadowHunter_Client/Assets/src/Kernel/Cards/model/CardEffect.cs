@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Assets.Noyau.Cards.model
 {
-    public delegate void Effect(Player target, Player owner = null, UsableCard card = null);
-    public delegate bool PlayerTargetable(Player target, Player owner = null);
+    public delegate void Effect(Player target, Player owner, UsableCard card);
+    public delegate bool PlayerTargetable(Player target, Player owner);
 
     /// <summary>
     /// Définition de l'effet d'une carte et de la cible.

@@ -81,6 +81,16 @@ public class PlayerViewComponent : MonoBehaviour
         revealButton.gameObject.SetActive(isLocalPlayer);
         attackButton.gameObject.SetActive(!isLocalPlayer);
 
+        if (isLocalPlayer)
+        {
+            OnNotification revealNotification = (sender) =>
+            {
+                revealButton.gameObject.SetActive(player.Revealed.Value);
+            };
+            listeners.Add((player.Revealed, revealNotification));
+        }
+
+
         OnNotification characterName = (sender) =>
         {
             if (player.Revealed.Value || isLocalPlayer)
