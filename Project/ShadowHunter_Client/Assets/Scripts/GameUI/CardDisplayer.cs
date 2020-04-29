@@ -27,7 +27,15 @@ public class CardDisplayer : MonoBehaviour
         Clear();
         this.card = card;
         playerDisplayer.text = player.Name;
-        cardImage.sprite = ResourceLoader.CardSprites[card.cardLabel];
+        if (ResourceLoader.CardSprites.ContainsKey(card.cardLabel))
+        {
+            cardImage.sprite = ResourceLoader.CardSprites[card.cardLabel];
+        }
+        else
+        {
+            cardImage.sprite = null;
+            Debug.LogWarning("Unknown card label : " + card.cardLabel);
+        }
         DismissButton.gameObject.SetActive(true);
         gameObject.SetActive(true);
     }
@@ -37,7 +45,7 @@ public class CardDisplayer : MonoBehaviour
     {
         CardEffect ce = ((UsableCard)card).cardEffect[choices[index].ceIndex];
         Player p = choices[index].player;
-        if (ce.targetableCondition(p))
+        if (ce.targetableCondition == null || ce.targetableCondition(p))
         {
             EventView.Manager.Emit(new UsableCardUseEvent(card.Id, choices[index].ceIndex, p.Id));
         }
@@ -63,12 +71,31 @@ public class CardDisplayer : MonoBehaviour
         else
         {
             this.card = card;
-            cardImage.sprite = ResourceLoader.CardSprites[card.cardLabel];
+            if (ResourceLoader.CardSprites.ContainsKey(card.cardLabel))
+            {
+                cardImage.sprite = ResourceLoader.CardSprites[card.cardLabel];
+            }
+            else
+            {
+                cardImage.sprite = null;
+                Debug.LogWarning("Unknown card label : " + card.cardLabel);
+            }
             for (int i = 0; i < card.cardEffect.Length; i++)
             {
                 CardEffect ce = card.cardEffect[i];
-                foreach (Player p in PlayerView.GetPlayers())
+                if (ce.targetableCondition == null)
                 {
+                    choices.Add((i, player));
+                    GameObject choice = Instantiate(choicePrefab.gameObject, ChoiceContent);
+                    CardChoiceDisplayer ccd = choice.GetComponent<CardChoiceDisplayer>();
+                    ccd.Display(player, ce);
+                    int index = choices.Count - 1;
+                    ccd.button.onClick.AddListener(delegate () { ChoiceSelected(index); });
+                }
+                else
+                {
+                    foreach (Player p in PlayerView.GetPlayers())
+                    {
                         if (ce.targetableCondition(p))
                         {
                             choices.Add((i, p));
@@ -78,7 +105,9 @@ public class CardDisplayer : MonoBehaviour
                             int index = choices.Count - 1;
                             ccd.button.onClick.AddListener(delegate () { ChoiceSelected(index); });
                         }
+                    }
                 }
+
             }
         }
 

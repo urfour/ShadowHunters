@@ -251,7 +251,7 @@ namespace Assets.Noyau.Players.controller
                 if (uCard.cardType != CardType.Vision)
                     p2 = p1;
 
-                if (uCard.cardEffect[effect].targetableCondition(p2))
+                if (uCard.cardEffect[effect].targetableCondition == null || uCard.cardEffect[effect].targetableCondition(p2))
                 {
                     Debug.Log("L'effet s'active !");
                     uCard.cardEffect[effect].effect(p2, uCard);
