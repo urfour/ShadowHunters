@@ -1042,9 +1042,26 @@ namespace Assets.Noyau.Cards.controller
         public UsableCard CreateVisionCard(string cardLabel, CardType cardType, string description, bool canDismiss, params CardEffect[] cardEffect)
         {
             List<CardEffect> effects = new List<CardEffect>(cardEffect);
+            int effectscount = effects.Count;
             effects.Add(new CardEffect(cardLabel + ".nothing_happen",
                 effect: (target, player, card) => { },
-                targetableCondition: (target, owner) => { return ((!effects[0].targetableCondition(target, owner) || target.Character.characterName.Equals("character.name.metamorphe")) && owner == target && !target.Dead.Value); }
+                targetableCondition: (target, owner) => 
+                {
+                    bool nothing_available = true;
+                    for (int i = 0; i < effectscount; i++)
+                    {
+                        if ((!effects[0].targetableCondition(target, owner) || target.Character.characterName.Equals("character.name.metamorphe")) && owner == target && !target.Dead.Value)
+                        {
+
+                        }
+                        else
+                        {
+                            nothing_available = false;
+                            break;
+                        }
+                    }
+                    return nothing_available;
+                }
                 ));
             int id = cards.Count;
             UsableCard auxilaire = new UsableCard(cardLabel, cardType, description, id, canDismiss, effects.ToArray());
