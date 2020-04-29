@@ -65,8 +65,12 @@ namespace Assets.Noyau.Cards.controller
                         c.equipe(owner, c);
                         c.unequipe(target, c);
                     },
-                    targetableCondition: null
-                ));
+                    targetableCondition: (player, owner) =>
+                    {
+                        return player != owner
+                            && !player.Dead.Value
+                            && player.ListCard.Count > 0;
+                    }));
 
 
             /// <summary>
