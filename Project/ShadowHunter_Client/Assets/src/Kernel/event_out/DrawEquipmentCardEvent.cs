@@ -14,5 +14,10 @@ namespace Scripts.event_out
         {
             this.CardId = id;
         }
+
+        public DrawEquipmentCardEvent()
+        {
+
+        }
     }
 }

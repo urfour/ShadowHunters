@@ -248,9 +248,10 @@ namespace Assets.Noyau.Players.controller
                 Player p2 = PlayerView.GetPlayer(ecue.PlayerSelected);
 
                 UsableCard uCard = c as UsableCard;
-
+                /*
                 if (uCard.cardType != CardType.Vision)
                     p2 = p1;
+                */
 
                 if (uCard.cardEffect[effect].targetableCondition == null || uCard.cardEffect[effect].targetableCondition(p2, p1))
                 {
@@ -325,6 +326,10 @@ namespace Assets.Noyau.Players.controller
             }
             else if (e is AttackPlayerEvent attackPlayer)
             {
+                GameManager.PickVisionDeck.Value = false;
+                GameManager.PickLightnessDeck.Value = false;
+                GameManager.PickDarknessDeck.Value = false;
+
                 Player playerAttacking = PlayerView.GetPlayer(attackPlayer.PlayerId);
                 Player playerAttacked = PlayerView.GetPlayer(attackPlayer.PlayerAttackedId);
 
@@ -334,9 +339,9 @@ namespace Assets.Noyau.Players.controller
                 int lancer = 0;
 
                 if (playerAttacking.HasSaber.Value)
-                    lancer = UnityEngine.Random.Range(1, 4);
+                    lancer = GameManager.rand.Next(1, 4);
                 else
-                    lancer = Math.Abs(UnityEngine.Random.Range(1, 6) - UnityEngine.Random.Range(1, 4));
+                    lancer = Math.Abs(GameManager.rand.Next(1, 6) - GameManager.rand.Next(1, 4));
 
                 Debug.Log("Le lancer vaut : " + lancer);
 

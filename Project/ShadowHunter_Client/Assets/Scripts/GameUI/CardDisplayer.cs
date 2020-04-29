@@ -49,7 +49,7 @@ public class CardDisplayer : MonoBehaviour
         Player p = choices[index].player;
         if (ce.targetableCondition == null || ce.targetableCondition(p, player))
         {
-            EventView.Manager.Emit(new UsableCardUseEvent(card.Id, choices[index].ceIndex, p.Id));
+            EventView.Manager.Emit(new UsableCardUseEvent(card.Id, choices[index].ceIndex, p.Id, player.Id));
             gameObject.SetActive(false);
         }
     }

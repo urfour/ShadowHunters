@@ -16,11 +16,12 @@ namespace Scripts.event_in
         public int EffectSelected { get; set; }
         public int PlayerSelected { get; set; }
 
-        public UsableCardUseEvent(int card_id, int effect_selected, int player_selected)
+        public UsableCardUseEvent(int card_id, int effect_selected, int player_selected, int playerId)
         {
             this.Cardid = card_id;
             this.EffectSelected = effect_selected;
             this.PlayerSelected = player_selected;
+            this.PlayerId = playerId;
         }
 
         public UsableCardUseEvent()
