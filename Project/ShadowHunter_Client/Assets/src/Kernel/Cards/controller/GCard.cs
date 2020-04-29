@@ -978,7 +978,7 @@ namespace Assets.Noyau.Cards.controller
 
             UsableCard auxilaire = CreateUsableCard(cardLabel, cardType, description, canDismiss, effects.ToArray());
             int id = cards.Count;
-            UsableCard vision = CreateUsableCard(cardLabel, cardType, description, canDismiss,
+            UsableCard vision = CreateUsableCard(cardLabel + ".select_target", cardType, description, canDismiss,
                 new CardEffect("card.vision.effect.send&" + cardLabel,
                 effect: (target, card) =>
                 {
