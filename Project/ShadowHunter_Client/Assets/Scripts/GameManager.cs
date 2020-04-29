@@ -56,6 +56,10 @@ namespace Assets.Scripts
 
         private void Start()
         {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.quitting += OnApplicationQuit;
+#endif
+            DontDestroyOnLoad(gameObject);
             foreach(GameObject o in forceStartCall)
             {
                 o.SetActive(true);

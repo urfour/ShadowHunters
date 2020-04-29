@@ -7345,6 +7345,7 @@ MonoBehaviour:
   Logged: {fileID: 347820404}
   interactableOnLoggedOnly:
   - {fileID: 347820404}
+  - {fileID: 1675184705}
   activeOnLoggedOnly:
   - {fileID: 1614017244}
 --- !u!114 &771781590

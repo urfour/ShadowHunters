@@ -14,7 +14,7 @@ namespace Assets.Scripts.MainMenuUI.Accounts
         public static GAccount Instance { get; private set; } = null;
 
         public Dictionary<string, Account> Accounts { get; private set; } = new Dictionary<string, Account>();
-        public Account LoggedAccount { get; private set; } = null;
+        public Account LoggedAccount { get; set; } = null;
 
         public ListenableObject AssignChange { get; private set; } = new ListenableObject();
 

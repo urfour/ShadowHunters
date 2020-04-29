@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using Assets.Noyau.Cards.controller;
 using Assets.Noyau.Cards.view;
 using Assets.Noyau.Cards.model;
+using Assets.src.Kernel.event_in;
 
 public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
 {
@@ -129,12 +130,7 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     {
         RemoveListeners();
     }
-
-    private void Update()
-    {
-        EventView.Manager.ExecMainThreaded();
-    }
-
+    
     
 
     public void OnEvent(PlayerEvent e, string[] tags = null)
@@ -185,4 +181,10 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
         }
     }
 
+
+    public void ReturnToMenu()
+    {
+        EventView.Manager.Emit(new PlayerLeaveEvent(GameManager.LocalPlayer.Value.Id));
+        SceneManager.LoadScene(0);
+    }
 }

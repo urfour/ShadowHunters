@@ -1,6 +1,8 @@
-﻿using EventSystem;
+﻿using Assets.Scripts.MainMenuUI.Accounts;
+using EventSystem;
 using Kernel.Settings;
 using Network.events;
+using ServerInterface.AuthEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,9 +44,20 @@ namespace Network.model
 
         public void Stop()
         {
-            Stream.Close();
-            TcpClient.Close();
-            ListenThread.Join();
+            if (GAccount.Instance.LoggedAccount == null)
+            {
+                Random rand = new Random();
+                GAccount.Instance.LoggedAccount = new Account() { Login=rand.Next(0, 1000000000).ToString() };
+            }
+            Send(new NetworkDisconnectedEvent(GAccount.Instance.LoggedAccount));
+            //Stream.Close();
+            //TcpClient.Close();
+            if (!ListenThread.Join(5000))
+            {
+                Logger.Error("Unable to join listening thread");
+                Stream.Close();
+                TcpClient.Close();
+            }
             Logger.Info("Client stopped");
         }
 
@@ -67,13 +80,22 @@ namespace Network.model
                         Logger.Comment("[CLIENT " + TcpClient.Client.RemoteEndPoint + " ] : " + data);
                         Event e = Event.Deserialize(data, true);
                         Logger.Comment("" + e);
-                        if (e != null) EventView.Manager.Emit(e, "network.emitted");
+                        if (e != null)
+                        {
+                            if (e is NetworkDisconnectedEvent nsd && (nsd.Account.Login == GAccount.Instance.LoggedAccount.Login))
+                            {
+                                Logger.Info("[CLIENT " + TcpClient.Client.RemoteEndPoint + "] : Disconnected");
+                                Stream.Close();
+                                TcpClient.Close();
+                                return;
+                            }
+                            EventView.Manager.Emit(e, "network.emitted");
+                        }
                     }
                     data = msgs[msgs.Length-1];
                 }
 
                 Logger.Info("[CLIENT " + TcpClient.Client.RemoteEndPoint + "] : Disconnected");
-                TcpClient.Close();
             }
             catch (Exception e)
             {
@@ -82,6 +104,7 @@ namespace Network.model
             }
             finally
             {
+                Stream.Close();
                 TcpClient.Close();
             }
         }
