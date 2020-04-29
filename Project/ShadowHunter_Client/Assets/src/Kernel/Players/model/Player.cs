@@ -177,6 +177,7 @@ public class Player
             }
         });
         
+        
         //players.Add(this);
     }
 
