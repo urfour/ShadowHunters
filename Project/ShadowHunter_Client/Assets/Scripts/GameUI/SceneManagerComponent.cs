@@ -16,6 +16,7 @@ using Assets.Noyau.Cards.controller;
 using Assets.Noyau.Cards.view;
 using Assets.Noyau.Cards.model;
 using Assets.src.Kernel.event_in;
+using ServerInterface.RoomEvents;
 
 public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
 {
@@ -185,6 +186,8 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     public void ReturnToMenu()
     {
         EventView.Manager.Emit(new PlayerLeaveEvent(GameManager.LocalPlayer.Value.Id));
+        EventView.Manager.Emit(new LeaveRoomEvent());
+        GameManager.Clean();
         SceneManager.LoadScene(0);
     }
 }

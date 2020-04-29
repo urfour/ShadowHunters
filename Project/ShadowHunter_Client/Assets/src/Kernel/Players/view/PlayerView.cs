@@ -22,6 +22,12 @@ namespace Assets.Noyau.Players.view
             gPlayer = new GPlayer(nbPlayers);
         }
 
+        public static void Clean()
+        {
+            gPlayer = null;
+            NbPlayer = -1;
+        }
+
         /// <summary>
         /// Fonction qui renvoie le joueur en fonction de son Id.
         /// </summary>
