@@ -203,10 +203,7 @@ namespace Assets.Noyau.Players.controller
                 GameManager.PickLightnessDeck.Value = false;
                 GameManager.PickVisionDeck.Value = false;
 
-                if (GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId)
-                {
-                    return;
-                }
+
                 GameManager.TurnEndable.Value = false;
                 Player player = PlayerView.GetPlayer(drawCard.PlayerId);
                 Card pickedCard = null;
@@ -304,9 +301,9 @@ namespace Assets.Noyau.Players.controller
                         int lancer = 0;
 
                         if (player.HasSaber.Value)
-                            lancer = UnityEngine.Random.Range(1, 4);
+                            lancer = GameManager.rand.Next(1, 4);
                         else
-                            lancer = Math.Abs(UnityEngine.Random.Range(1, 6) - UnityEngine.Random.Range(1, 4));
+                            lancer = Math.Abs(GameManager.rand.Next(1, 6) - GameManager.rand.Next(1, 4));
 
                         Debug.Log("On attaque tout le monde !");
 
