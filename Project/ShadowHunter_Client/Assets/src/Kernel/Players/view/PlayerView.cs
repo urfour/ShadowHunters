@@ -20,6 +20,13 @@ namespace Assets.Noyau.Players.view
         {
             NbPlayer = nbPlayers;
             gPlayer = new GPlayer(nbPlayers);
+
+
+            foreach (Player p in GetPlayers())
+            {
+                p.Character.goal.setWinningListeners(p);
+                p.Character.power.addListeners(p);
+            }
         }
 
         public static void Clean()
