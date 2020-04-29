@@ -1,5 +1,0 @@
-======
-Server
-======
-
-ceci est un serveur
