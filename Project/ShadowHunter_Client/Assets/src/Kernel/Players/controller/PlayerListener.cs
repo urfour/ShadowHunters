@@ -26,8 +26,8 @@ namespace Assets.Noyau.Players.controller
 
                 if (GameManager.PlayerTurn.Value == null)
                 {
-                    GameManager.PlayerTurn.Value = PlayerView.GetPlayer(PlayerView.NbPlayer -1);
-                    //GameManager.PlayerTurn.Value = PlayerView.GetPlayer(GameManager.rand.Next(0, PlayerView.NbPlayer));
+                    //GameManager.PlayerTurn.Value = PlayerView.GetPlayer(PlayerView.NbPlayer -1);
+                    GameManager.PlayerTurn.Value = PlayerView.GetPlayer(GameManager.rand.Next(0, PlayerView.NbPlayer));
                 }
                 else if (GameManager.PlayerTurn.Value.HasAncestral.Value) // si le joueur a utilisé le savoir ancestral, le joueur suivant reste lui
                 {
@@ -149,11 +149,11 @@ namespace Assets.Noyau.Players.controller
                         break;
                     case Position.Foret:
                         if (!(GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId))
-                            EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Foret.Id, false));
+                            EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Foret.Id, false, e.PlayerId));
                         break;
                     case Position.Sanctuaire:
                         if (!(GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId))
-                            EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Sanctuaire.Id, false));
+                            EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Sanctuaire.Id, false, e.PlayerId));
                         break;
                 }
                 GameManager.AttackAvailable.Value = true;
@@ -229,7 +229,7 @@ namespace Assets.Noyau.Players.controller
                 if (pickedCard is UsableCard pickedUsableCard)
                 {
                     if (!(GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId))
-                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(pickedUsableCard.Id, pickedUsableCard.cardType == CardType.Vision));
+                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(pickedUsableCard.Id, pickedUsableCard.cardType == CardType.Vision, e.PlayerId));
                 }
                 else if (pickedCard is EquipmentCard pickedEquipmentCard)
                 {

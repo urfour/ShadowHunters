@@ -38,7 +38,7 @@ namespace Assets.Noyau.Cards.controller
                             PlayerId = target.Id
                         });
                     },
-                    targetableCondition: (target) =>
+                    targetableCondition: (target, owner) =>
                     {
                         return true;
                     }
@@ -81,7 +81,7 @@ namespace Assets.Noyau.Cards.controller
             {
                 CreateUsableCard("card.darkness.darkness_araignee", CardType.Darkness, "card.darkness.darkness_araignee.description", false,
                 new CardEffect("card.darkness.darkness_araignee.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return true;
                     },
@@ -106,7 +106,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_banane", CardType.Darkness, "card.darkness.darkness_banane.description", false,
                 new CardEffect("card.darkness.darkness_banane.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return true;
                     },
@@ -140,7 +140,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_chauve_souris", CardType.Darkness, "card.darkness.darkness_chauve_souris.description", false,
                 new CardEffect("card.darkness.darkness_chauve_souris.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return true;
                     },
@@ -165,7 +165,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_chauve_souris", CardType.Darkness, "card.darkness.darkness_chauve_souris.description", false,
                 new CardEffect("card.darkness.darkness_chauve_souris.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return true;
                     },
@@ -190,7 +190,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_chauve_souris", CardType.Darkness, "card.darkness.darkness_chauve_souris.description", false,
                 new CardEffect("card.darkness.darkness_chauve_souris.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return true;
                     },
@@ -215,7 +215,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_dynamite", CardType.Darkness, "card.darkness.darkness_dynamite.description", false,
                 new CardEffect("card.darkness.darkness_dynamite.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return true;
                     },
@@ -303,7 +303,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_poupee", CardType.Darkness, "card.darkness.darkness_poupee.description", false,
                 new CardEffect("card.darkness.darkness_poupee.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return true;
                     },
@@ -342,7 +342,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_rituel", CardType.Darkness, "card.darkness.darkness_rituel.description", false,
                 new CardEffect("card.darkness.darkness_rituel.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return true;
                     },
@@ -377,7 +377,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_succube", CardType.Darkness, "card.darkness.darkness_succube.description", false,
                 new CardEffect("card.darkness.darkness_succube.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return true;
                     },
@@ -403,7 +403,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.darkness.darkness_succube", CardType.Darkness, "card.darkness.darkness_succube.description", false,
                 new CardEffect("card.darkness.darkness_succube.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return true;
                     },
@@ -465,7 +465,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.light.light_ange_gardien", CardType.Light, "card.light.light_ange_gardien.description", false,
                 new CardEffect("card.light.light_ange_gardien.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return true;
                     },
@@ -476,7 +476,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.light.light_supreme", CardType.Light, "card.light.light_supreme.description", false,
                 new CardEffect("card.light.light_supreme.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.team == CharacterTeam.Hunter;
                     },
@@ -494,7 +494,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.light.light_chocolat", CardType.Light, "card.light.light_chocolat.description", false,
                 new CardEffect("card.light.light_chocolat.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.characterName == "character.name.allie"
                                 || player.Character.characterName == "character.name.emi"
@@ -515,7 +515,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.light.light_benediction", CardType.Light, "card.light.light_benediction.description", false,
                 new CardEffect("card.light.light_benediction.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return true;
                     },
@@ -582,7 +582,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.light.light_eclair", CardType.Light, "card.light.light_eclair.description", false,
                 new CardEffect("card.light.light_eclair.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return true;
                     },
@@ -595,7 +595,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.light.light_eau_benite", CardType.Light, "card.light.light_eau_benite.description", false,
                 new CardEffect("card.light.light_eau_benite.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return true;
                     },
@@ -625,7 +625,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.light.light_miroir", CardType.Light, "card.light.light_miroir.description", false,
                 new CardEffect("card.light.light_miroir.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return !player.Revealed.Value
                             && player.Character.team == CharacterTeam.Shadow
@@ -641,7 +641,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.light.light_premiers_secours", CardType.Light, "card.light.light_premiers_secours.description", false,
                 new CardEffect("card.light.light_premiers_secours.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return true;
                     },
@@ -662,7 +662,7 @@ namespace Assets.Noyau.Cards.controller
 
                 CreateUsableCard("card.light.light_savoir", CardType.Light, "card.light.light_savoir.description", false,
                 new CardEffect("card.light.light_savoir.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return true;
                     },
@@ -697,9 +697,9 @@ namespace Assets.Noyau.Cards.controller
             /// <returns> Renvoie une liste de Card</returns>
             visionDeck = new List<Card>()
             {
-                CreateUsableCard("card.vision.vision_destructrice", CardType.Vision, "card.vision.vision_destructrice.description", false,
+                CreateVisionCard("card.vision.vision_destructrice", CardType.Vision, "card.vision.vision_destructrice.description", false,
                 new CardEffect("card.vision.vision_destructrice.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.characterHP >= 12;
                     },
@@ -708,9 +708,9 @@ namespace Assets.Noyau.Cards.controller
                         player.Wounded(1, player, false);
                     })),
 
-                CreateUsableCard("card.vision.vision_clairvoyante", CardType.Vision, "card.vision.vision_clairvoyante.description", false,
+                CreateVisionCard("card.vision.vision_clairvoyante", CardType.Vision, "card.vision.vision_clairvoyante.description", false,
                 new CardEffect("card.vision.vision_clairvoyante.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.characterHP <= 11;
                     },
@@ -719,9 +719,9 @@ namespace Assets.Noyau.Cards.controller
                         player.Wounded(2, player, false);
                     })),
 
-                CreateUsableCard("card.vision.vision_cupide", CardType.Vision, "card.vision.vision_cupide.description", false,
+                CreateVisionCard("card.vision.vision_cupide", CardType.Vision, "card.vision.vision_cupide.description", false,
                 new CardEffect("card.vision.vision_cupide.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.team == CharacterTeam.Neutral
                             || player.Character.team == CharacterTeam.Shadow;
@@ -734,9 +734,9 @@ namespace Assets.Noyau.Cards.controller
                         });
                     })),
 
-                CreateUsableCard("card.vision.vision_cupide", CardType.Vision, "card.vision.vision_cupide.description", false,
+                CreateVisionCard("card.vision.vision_cupide", CardType.Vision, "card.vision.vision_cupide.description", false,
                 new CardEffect("card.vision.vision_cupide.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.team == CharacterTeam.Neutral
                             || player.Character.team == CharacterTeam.Shadow;
@@ -749,9 +749,9 @@ namespace Assets.Noyau.Cards.controller
                         });
                     })),
 
-                CreateUsableCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
+                CreateVisionCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
                 new CardEffect("card.vision.vision_enivrante.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.team == CharacterTeam.Neutral
                             || player.Character.team == CharacterTeam.Hunter;
@@ -764,9 +764,9 @@ namespace Assets.Noyau.Cards.controller
                         });
                     })),
 
-                CreateUsableCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
+                CreateVisionCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
                 new CardEffect("card.vision.vision_enivrante.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.team == CharacterTeam.Neutral
                             || player.Character.team == CharacterTeam.Hunter;
@@ -779,9 +779,9 @@ namespace Assets.Noyau.Cards.controller
                         });
                     })),
 
-                CreateUsableCard("card.vision.vision_furtive", CardType.Vision, "card.vision.vision_furtive.description", false,
+                CreateVisionCard("card.vision.vision_furtive", CardType.Vision, "card.vision.vision_furtive.description", false,
                 new CardEffect("card.vision.vision_furtive.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.team == CharacterTeam.Shadow
                             || player.Character.team == CharacterTeam.Hunter;
@@ -794,9 +794,9 @@ namespace Assets.Noyau.Cards.controller
                         });
                     })),
 
-                CreateUsableCard("card.vision.vision_furtive", CardType.Vision, "card.vision.vision_furtive.description", false,
+                CreateVisionCard("card.vision.vision_furtive", CardType.Vision, "card.vision.vision_furtive.description", false,
                 new CardEffect("card.vision.vision_furtive.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.team == CharacterTeam.Shadow
                             || player.Character.team == CharacterTeam.Hunter;
@@ -809,9 +809,9 @@ namespace Assets.Noyau.Cards.controller
                         });
                     })),
 
-                CreateUsableCard("card.vision.vision_divine", CardType.Vision, "card.vision.vision_divine.description", false,
+                CreateVisionCard("card.vision.vision_divine", CardType.Vision, "card.vision.vision_divine.description", false,
                 new CardEffect("card.vision.vision_divine.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.team == CharacterTeam.Hunter;
                     },
@@ -823,9 +823,9 @@ namespace Assets.Noyau.Cards.controller
                             player.Healed(1);
                     })),
 
-                CreateUsableCard("card.vision.vision_divine", CardType.Vision, "card.vision.vision_divine.description", false,
+                CreateVisionCard("card.vision.vision_divine", CardType.Vision, "card.vision.vision_divine.description", false,
                 new CardEffect("card.vision.vision_divine.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.team == CharacterTeam.Hunter;
                     },
@@ -837,9 +837,9 @@ namespace Assets.Noyau.Cards.controller
                             player.Healed(1);
                     })),
 
-                CreateUsableCard("card.vision.vision_lugubre", CardType.Vision, "card.vision.vision_lugubre.description", false,
+                CreateVisionCard("card.vision.vision_lugubre", CardType.Vision, "card.vision.vision_lugubre.description", false,
                 new CardEffect("card.vision.vision_lugubre.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.team == CharacterTeam.Shadow;
                     },
@@ -851,9 +851,9 @@ namespace Assets.Noyau.Cards.controller
                             player.Healed(1);
                     })),
 
-                CreateUsableCard("card.vision.vision_reconfortante", CardType.Vision, "card.vision.vision_reconfortante.description", false,
+                CreateVisionCard("card.vision.vision_reconfortante", CardType.Vision, "card.vision.vision_reconfortante.description", false,
                 new CardEffect("card.vision.vision_reconfortante.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.team == CharacterTeam.Neutral;
                     },
@@ -865,9 +865,9 @@ namespace Assets.Noyau.Cards.controller
                             player.Healed(1);
                     })),
 
-                CreateUsableCard("card.vision.vision_foudroyante", CardType.Vision, "card.vision.vision_foudroyante.description", false,
+                CreateVisionCard("card.vision.vision_foudroyante", CardType.Vision, "card.vision.vision_foudroyante.description", false,
                 new CardEffect("card.vision.vision_foudroyante.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.team == CharacterTeam.Shadow;
                     },
@@ -876,9 +876,9 @@ namespace Assets.Noyau.Cards.controller
                         player.Wounded(1, player, false);
                     })),
 
-                CreateUsableCard("card.vision.vision_mortifere", CardType.Vision, "card.vision.vision_mortifere.description", false,
+                CreateVisionCard("card.vision.vision_mortifere", CardType.Vision, "card.vision.vision_mortifere.description", false,
                 new CardEffect("card.vision.vision_mortifere.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.team == CharacterTeam.Hunter;
                     },
@@ -887,9 +887,9 @@ namespace Assets.Noyau.Cards.controller
                         player.Wounded(1, player, false);
                     })),
 
-                CreateUsableCard("card.vision.vision_mortifere", CardType.Vision, "card.vision.vision_mortifere.description", false,
+                CreateVisionCard("card.vision.vision_mortifere", CardType.Vision, "card.vision.vision_mortifere.description", false,
                 new CardEffect("card.vision.vision_mortifere.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.team == CharacterTeam.Hunter;
                     },
@@ -898,9 +898,9 @@ namespace Assets.Noyau.Cards.controller
                         player.Wounded(1, player, false);
                     })),
 
-                CreateUsableCard("card.vision.vision_purificatrice", CardType.Vision, "card.vision.vision_purificatrice.description", false,
+                CreateVisionCard("card.vision.vision_purificatrice", CardType.Vision, "card.vision.vision_purificatrice.description", false,
                 new CardEffect("card.vision.vision_purificatrice.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return player.Character.team == CharacterTeam.Shadow;
                     },
@@ -909,9 +909,9 @@ namespace Assets.Noyau.Cards.controller
                         player.Wounded(2, player, false);
                     })),
 
-                CreateUsableCard("card.vision.vision_supreme", CardType.Vision, "card.vision.vision_supreme.description", false,
+                CreateVisionCard("card.vision.vision_supreme", CardType.Vision, "card.vision.vision_supreme.description", false,
                 new CardEffect("card.vision.vision_supreme.effect",
-                    targetableCondition: (player) =>
+                    targetableCondition: (player, owner) =>
                     {
                         return true;
                     },
@@ -965,6 +965,32 @@ namespace Assets.Noyau.Cards.controller
             UsableCard c = new UsableCard(cardLabel, cardType, description, id, canDismiss, cardEffect);
             cards.Add(c);
             return c;
+        }
+
+
+        public UsableCard CreateVisionCard(string cardLabel, CardType cardType, string description, bool canDismiss, params CardEffect[] cardEffect)
+        {
+            List<CardEffect> effects = new List<CardEffect>(cardEffect);
+            effects.Add(new CardEffect(cardLabel + ".nothing_happen",
+                effect: (target, card) => { },
+                targetableCondition: (target, owner) => { return !effects[0].targetableCondition(target); }
+                ));
+
+            UsableCard auxilaire = CreateUsableCard(cardLabel, cardType, description, canDismiss, effects.ToArray());
+            int id = cards.Count;
+            UsableCard vision = CreateUsableCard(cardLabel, cardType, description, canDismiss,
+                new CardEffect("card.vision.effect.send&" + cardLabel,
+                effect: (target, card) =>
+                {
+                    EventView.Manager.Emit(new SelectUsableCardPickedEvent(auxilaire.Id, true, target.Id));
+                },
+                targetableCondition: (target, owner) =>
+                {
+                    return target != owner;
+                }
+                ));
+            cards.Add(vision);
+            return vision;
         }
     }
 }

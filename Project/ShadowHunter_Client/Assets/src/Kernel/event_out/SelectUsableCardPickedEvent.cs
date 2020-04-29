@@ -15,10 +15,11 @@ namespace Scripts.event_out
         public int CardId { get; set; }
         public bool IsHidden { get; set; }
 
-        public SelectUsableCardPickedEvent(int cardId, bool isHidden)
+        public SelectUsableCardPickedEvent(int cardId, bool isHidden, int playerId)
         {
             CardId = cardId;
             IsHidden = isHidden;
+            this.PlayerId = playerId;
         }
 
         public SelectUsableCardPickedEvent()

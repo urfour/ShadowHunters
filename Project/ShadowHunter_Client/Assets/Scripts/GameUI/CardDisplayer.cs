@@ -62,7 +62,7 @@ public class CardDisplayer : MonoBehaviour
     {
         Clear();
         playerDisplayer.text = player.Name;
-        DismissButton.gameObject.SetActive(card.canDismiss || GameManager.PlayerTurn.Value != player);
+        DismissButton.gameObject.SetActive(card.canDismiss || GameManager.LocalPlayer.Value != player);
 
         if (card.cardType == CardType.Vision)
         {
