@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Assets.src.Kernel.event_in
 {
-    class PlayerLeaveEvent : PlayerEvent
+    public class PlayerLeaveEvent : PlayerEvent
     {
 
         public PlayerLeaveEvent()
