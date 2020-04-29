@@ -1047,6 +1047,7 @@ namespace Assets.Noyau.Cards.controller
                 ));
             int id = cards.Count;
             UsableCard auxilaire = new UsableCard(cardLabel, cardType, description, id, canDismiss, effects.ToArray());
+            cards.Add(auxilaire);
 
             id = cards.Count;
             UsableCard vision = new UsableCard(cardLabel, cardType, description, id, canDismiss,

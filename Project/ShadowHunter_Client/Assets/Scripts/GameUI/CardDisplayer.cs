@@ -47,7 +47,7 @@ public class CardDisplayer : MonoBehaviour
     {
         CardEffect ce = ((UsableCard)card).cardEffect[choices[index].ceIndex];
         Player p = choices[index].player;
-        if (ce.targetableCondition == null || ce.targetableCondition(p, player))
+        if (ce.targetableCondition == null || ce.targetableCondition(p, player) && GameManager.LocalPlayer.Value == player)
         {
             EventView.Manager.Emit(new UsableCardUseEvent(card.Id, choices[index].ceIndex, p.Id, player.Id));
             gameObject.SetActive(false);
@@ -108,6 +108,7 @@ public class CardDisplayer : MonoBehaviour
                             ccd.Display(p, ce);
                             int index = choices.Count - 1;
                             ccd.button.onClick.AddListener(delegate () { ChoiceSelected(index); });
+                            ccd.button.interactable = GameManager.LocalPlayer.Value == player;
                         }
                     }
                 }
