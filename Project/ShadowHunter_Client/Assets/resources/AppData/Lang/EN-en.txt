@@ -1,0 +1,128 @@
+mainmenu.homepage;Home page
+mainmenu.tutorial;Tutorial
+mainmenu.hostgame;Host a room
+mainmenu.searchgame;Join a room
+mainmenu.community;Community
+mainmenu.settings;Settings
+mainmenu.host.chat.placeholder;...
+mainmenu.host.chat;Chat
+mainmenu.host.title;Create a room
+mainmenu.host.setting;Game settings
+mainmenu.settings.title;Settings
+mainmenu.application_quit;Leave the game
+settings.audio;Audio
+settings.audio.music;Music
+settings.audio.effect;Sound effects
+settings.display;Display
+settings.display.em_multiplier;Font size
+settings.display.em;Font size
+settings.display.corps_em_multiplier;Font size
+settings.display.subtitle_em_multiplier;Font size
+settings.display.title_em_multiplier;Font size
+settings.display.title_color;Titles color
+settings.display.title_text_color;Titles text color
+settings.display.subtitle_color;Subtitles color
+settings.display.subtitle_text_color;Subtitles text color
+settings.display.corps_color;Body color
+settings.display.corps_text_color;Body text color
+settings.display.title_theme;Titles themes
+settings.display.subtitle_theme;Subtitles themes
+settings.display.corps_theme;Body theme
+mainmenu.auth.signin.title;Sign in
+mainmenu.auth.login.title;Log in
+mainmenu.auth.password;Password
+mainmenu.auth.signin.button;Sign in
+mainmenu.auth.login;Username
+mainmenu.auth.login.button;Log in
+mainmenu.auth.password.confirm;Password confirm
+mainmenu.authpage;Authentification
+mainmenu.accountpage;Profile
+settings.game;Game settings
+settings.game.name;Game name
+host.game_settings.name;Game name
+host.game_settings.isprivate;Private game
+host.game_settings.password;Game password
+host.game_settings.create;Create a room
+host.game_settings.nb_players;Number of players
+settings.general;General settings
+lang;English
+settings.general.language;Language
+mainmenu.joined_room;Game room
+mainmenu.waitingroom.start;Start
+mainmenu.waitingroom.title;Game room
+mainmenu.searchgame.title;Search a room
+mainmenu.searchgame.join_by_code;Join a room by code:
+message.auth.invalid.valid;Ok
+message.auth.invalid.title;Invalid authentification
+message.room.invalid.valid;Ok
+message.room.invalid.title;Invalid action
+message.auth.invalid.login.login_invalid;Incorrect username
+message.auth.invalid.login.password_invalid;Incorrect password
+message.auth.invalid.signin.login_unavailable&1;Username &1 is unavailable, please choose another one
+;
+message.auth.invalid.already_logged;You are already connected
+message.auth.invalid.account_already_online;This account is already connected
+message.server.valid;Ok
+message.server.title;Server message
+message.network.error.global&3;Type: &1\nMessage: &2\nStackTrace: &3
+message.room.invalid.join.please_leave_your_room_before;Please leave your room before joining another one.
+message.room.invalid.room_code_dont_exist&1;Room &1 does not exist
+character.name.unknown;Unknown
+character.name.allie;Allie
+character.name.bob;Bob
+character.name.charles;Charles
+character.name.daniel;Daniel
+character.name.emi;Emi
+character.name.georges;Georges
+character.name.franklin;Franklin
+character.name.loup_garou;Werewolf
+character.name.vampire;Vampire
+character.name.metamorphe;Unknown
+board.position.none;
+board.position.antre;Hermit's Cabin
+board.position.porte;Underworld Gate
+board.position.monastere;Church
+board.position.cimetiere;Cemetery
+board.position.foret;Weird Woods
+board.position.sanctuaire;Erstwhile Altar
+card.darkness.darkness_araignee;Bloodthirsty Spider
+card.darkness.darkness_banane;Banana Peel
+card.darkness.darkness_chauve_souris;Vampire Bat
+card.darkness.darkness_dynamite;Dynamite
+card.darkness.darkness_hache;Rusted Broad Axe
+card.darkness.darkness_hachoir;Butcher Knife
+card.darkness.darkness_mitrailleuse;Machine Gun
+card.darkness.darkness_poupee;Spiritual Doll
+card.darkness.darkness_revolver;Darkness Revolver
+card.darkness.darkness_rituel;Diabolic Ritual
+card.darkness.darkness_sabre;Masamune
+card.darkness.darkness_succube;Moody Goblin
+card.darkness.darkness_tronconneuse;Chainsaw
+card.light.light_amulette;Talisman
+card.light.light_ange_gardien;Guardian Angel
+card.light.light_supreme;Advent
+card.light.light_chocolat;Chocolate
+card.light.light_benediction;Blessing
+card.light.light_boussole;Mystic Compass
+card.light.light_broche;Fortune Brooch
+card.light.light_crucifix;Silver Rosary
+card.light.light_eclair;Flare of Judgement 
+card.light.light_eau_benite;Holy Water of Healing
+card.light.light_lance;Spear of Longinus
+card.light.light_miroir;Disenchant Mirror
+card.light.light_premiers_secours;First Aid
+card.light.light_savoir;Concealed Knowledge
+card.light.light_toge;Holy Robe
+card.vision.vision_destructrice;Tough Lesson
+card.vision.vision_clairvoyante;Bully
+card.vision.vision_cupide;Greed
+card.vision.vision_enivrante;Blackmail
+card.vision.vision_furtive;Anger
+card.vision.vision_divine;Aid
+card.vision.vision_lugubre;Huddle
+card.vision.vision_reconfortante;
+card.vision.vision_foudroyante;Spell
+card.vision.vision_mortifere;Slap
+card.vision.vision_purificatrice;Exorcism
+card.vision.vision_supreme;Prediction
+gamescene.carddisplay.dismiss;Dismiss
