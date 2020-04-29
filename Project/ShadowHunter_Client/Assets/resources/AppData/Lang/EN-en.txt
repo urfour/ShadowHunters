@@ -125,4 +125,6 @@ card.vision.vision_foudroyante;Spell
 card.vision.vision_mortifere;Slap
 card.vision.vision_purificatrice;Exorcism
 card.vision.vision_supreme;Prediction
+game.player.action.move;Move
+game.player.action.end_turn;End turn
 gamescene.carddisplay.dismiss;Dismiss

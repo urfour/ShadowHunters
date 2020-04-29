@@ -280,7 +280,7 @@ namespace Assets.Noyau.Cards.controller
                     targetableCondition: (player, owner) =>
                     {
                         return player == owner
-                            && player.Revealed.Value;
+                            && player.Revealed.Value && player.Character.team == CharacterTeam.Shadow;
                     },
                     effect: (player, owner, card) =>
                     {
@@ -298,6 +298,16 @@ namespace Assets.Noyau.Cards.controller
 
                         if (player.HasSpear.Value == true && player.Character.team == CharacterTeam.Hunter)
                             player.BonusAttack.Value += 2;
+                    }),
+                new CardEffect("card.darkness.darkness_rituel.nothing_happen",
+                    // on peut ne rien faire uniquement si on n'est pas un Shadow qui s'est révélé
+                    targetableCondition: (player, owner) =>
+                    {
+                        return player == owner
+                            && !(player.Revealed.Value && player.Character.team == CharacterTeam.Shadow);
+                    },
+                    effect: (player, owner, card) =>
+                    {
                     })),
 
                 CreateEquipmentCard("card.darkness.darkness_sabre", CardType.Darkness, "card.darkness.darkness_sabre.description",
@@ -435,21 +445,12 @@ namespace Assets.Noyau.Cards.controller
                     {
                         player.Healed(player.Wound.Value);
                     }),
-                new CardEffect("card.light.light_chocolat.effect",
+                new CardEffect("card.light.light_chocolat.nothing_happen",
                     targetableCondition: (player, owner) =>
                     {
-                        return player == owner
-                            && (player.Character.characterName == "character.name.allie"
-                            || player.Character.characterName == "character.name.emi"
-                            || player.Character.characterName == "character.name.metamorphe")
-                            && !player.Revealed.Value;
+                        return true;
                     },
-                    effect: (player, owner, card) =>
-                    {
-                        player.Revealed.Value = true;
-
-                        if (player.HasSpear.Value == true && player.Character.team == CharacterTeam.Hunter)
-                            player.BonusAttack.Value += 2;
+                    effect: (player, owner, card) =>{
                     })),
 
                 CreateUsableCard("card.light.light_benediction", CardType.Light, "card.light.light_benediction.description", false,
@@ -644,6 +645,18 @@ namespace Assets.Noyau.Cards.controller
                     })),
 
                 CreateVisionCard("card.vision.vision_cupide", CardType.Vision, "card.vision.vision_cupide.description", false,
+                new CardEffect("card.vision.vision_cupide.effect.wound",
+                    targetableCondition: (player, owner) =>
+                    {
+                        return (player.Character.team == CharacterTeam.Neutral
+                            || player.Character.team == CharacterTeam.Shadow)
+                            && player.ListCard.Count == 0
+                            && player == owner;
+                    },
+                    effect: (player, owner, card) =>
+                    {
+                        player.Wounded(1,player,false);
+                    }),
                 new CardEffect("card.vision.vision_cupide.effect.give",
                     targetableCondition: (player, owner) =>
                     {
@@ -658,7 +671,9 @@ namespace Assets.Noyau.Cards.controller
 
                         c.equipe(owner, c);
                         c.unequipe(player, c);
-                    }),
+                    })),
+
+                CreateVisionCard("card.vision.vision_cupide", CardType.Vision, "card.vision.vision_cupide.description", false,
                 new CardEffect("card.vision.vision_cupide.effect.wound",
                     targetableCondition: (player, owner) =>
                     {
@@ -670,10 +685,7 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         player.Wounded(1,player,false);
-                    })),
-
-
-                CreateVisionCard("card.vision.vision_cupide", CardType.Vision, "card.vision.vision_cupide.description", false,
+                    }),
                 new CardEffect("card.vision.vision_cupide.effect.give",
                     targetableCondition: (player, owner) =>
                     {
@@ -687,21 +699,22 @@ namespace Assets.Noyau.Cards.controller
                         EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
                         c.equipe(player, c);
                         c.unequipe(owner, c);
-                    }),
-                new CardEffect("card.vision.vision_cupide.effect.wound",
+                    })),
+
+                CreateVisionCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
+                new CardEffect("card.vision.vision_enivrante.effect.wound",
                     targetableCondition: (player, owner) =>
                     {
                         return (player.Character.team == CharacterTeam.Neutral
-                            || player.Character.team == CharacterTeam.Shadow)
+                            || player.Character.team == CharacterTeam.Hunter
+                            || player.Character.characterName == "character.name.metamorphe")
                             && player.ListCard.Count == 0
                             && player == owner;
                     },
                     effect: (player, owner, card) =>
                     {
                         player.Wounded(1,player,false);
-                    })),
-
-                CreateVisionCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
+                    }),
                 new CardEffect("card.vision.vision_enivrante.effect.give",
                     targetableCondition: (player, owner) =>
                     {
@@ -716,7 +729,9 @@ namespace Assets.Noyau.Cards.controller
                         EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
                         c.equipe(player, c);
                         c.unequipe(owner, c);
-                    }),
+                    })),
+
+                CreateVisionCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
                 new CardEffect("card.vision.vision_enivrante.effect.wound",
                     targetableCondition: (player, owner) =>
                     {
@@ -729,10 +744,7 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         player.Wounded(1,player,false);
-                    })),
-
-
-                CreateVisionCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
+                    }),
                 new CardEffect("card.vision.vision_enivrante.effect.give",
                     targetableCondition: (player, owner) =>
                     {
@@ -747,22 +759,21 @@ namespace Assets.Noyau.Cards.controller
                         EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
                         c.equipe(player, c);
                         c.unequipe(owner, c);
-                    }),
-                new CardEffect("card.vision.vision_enivrante.effect.wound",
+                    })),
+
+                CreateVisionCard("card.vision.vision_furtive", CardType.Vision, "card.vision.vision_furtive.description", false,
+                new CardEffect("card.vision.vision_furtive.effect.wound",
                     targetableCondition: (player, owner) =>
                     {
-                        return (player.Character.team == CharacterTeam.Neutral
-                            || player.Character.team == CharacterTeam.Hunter
-                            || player.Character.characterName == "character.name.metamorphe")
+                        return (player.Character.team == CharacterTeam.Shadow
+                            || player.Character.team == CharacterTeam.Hunter)
                             && player.ListCard.Count == 0
                             && player == owner;
                     },
                     effect: (player, owner, card) =>
                     {
                         player.Wounded(1,player,false);
-                    })),
-
-                CreateVisionCard("card.vision.vision_furtive", CardType.Vision, "card.vision.vision_furtive.description", false,
+                    }),
                 new CardEffect("card.vision.vision_furtive.effect.give",
                     targetableCondition: (player, owner) =>
                     {
@@ -776,7 +787,9 @@ namespace Assets.Noyau.Cards.controller
                         EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
                         c.equipe(player, c);
                         c.unequipe(owner, c);
-                    }),
+                    })),
+
+                CreateVisionCard("card.vision.vision_furtive", CardType.Vision, "card.vision.vision_furtive.description", false,
                 new CardEffect("card.vision.vision_furtive.effect.wound",
                     targetableCondition: (player, owner) =>
                     {
@@ -788,10 +801,7 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         player.Wounded(1,player,false);
-                    })),
-
-
-                CreateVisionCard("card.vision.vision_furtive", CardType.Vision, "card.vision.vision_furtive.description", false,
+                    }),
                 new CardEffect("card.vision.vision_furtive.effect.give",
                     targetableCondition: (player, owner) =>
                     {
@@ -805,18 +815,6 @@ namespace Assets.Noyau.Cards.controller
                         EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
                         c.equipe(player, c);
                         c.unequipe(owner, c);
-                    }),
-                new CardEffect("card.vision.vision_furtive.effect.wound",
-                    targetableCondition: (player, owner) =>
-                    {
-                        return (player.Character.team == CharacterTeam.Shadow
-                            || player.Character.team == CharacterTeam.Hunter)
-                            && player.ListCard.Count == 0
-                            && player == owner;
-                    },
-                    effect: (player, owner, card) =>
-                    {
-                        player.Wounded(1,player,false);
                     })),
 
                 CreateVisionCard("card.vision.vision_divine", CardType.Vision, "card.vision.vision_divine.description", false,
