@@ -85,7 +85,7 @@ public class PlayerViewComponent : MonoBehaviour
         {
             OnNotification revealNotification = (sender) =>
             {
-                revealButton.gameObject.SetActive(player.Revealed.Value);
+                revealButton.gameObject.SetActive(!player.Revealed.Value);
             };
             listeners.Add((player.Revealed, revealNotification));
         }
