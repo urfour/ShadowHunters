@@ -12,6 +12,6 @@ namespace Scripts.event_out
     /// </summary>
     public class SelectStealCardEvent : PlayerEvent
     {
-        public (Card equipment, Player owner)[] PossiblePlayerTargetId { get; set; } 
+        public (int equipment, int owner)[] PossiblePlayerTargetId { get; set; } 
     }
 }
