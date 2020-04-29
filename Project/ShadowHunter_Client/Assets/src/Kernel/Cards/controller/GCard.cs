@@ -1025,14 +1025,7 @@ namespace Assets.Noyau.Cards.controller
         public UsableCard CreateUsableCard(string cardLabel, CardType cardType, string description, bool canDismiss, params CardEffect[] cardEffect)
         {
             int id = cards.Count;
-
-            List<CardEffect> effects = new List<CardEffect>(cardEffect);
-            effects.Add(new CardEffect(cardLabel + ".nothing_happen",
-                effect: (target, player, card) => { },
-                targetableCondition: (target, owner) => { return !effects[0].targetableCondition(target) && !target.Dead.Value; }
-                ));
-            
-            UsableCard c = new UsableCard(cardLabel, cardType, description, id, canDismiss, effects.ToArray());
+            UsableCard c = new UsableCard(cardLabel, cardType, description, id, canDismiss, cardEffect);
             cards.Add(c);
             return c;
         }
