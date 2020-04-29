@@ -197,8 +197,12 @@ namespace Assets.Noyau.Players.controller
                 });
             }
             else if (e is DrawCardEvent drawCard/* && GameManager.PlayerTurn.Value.Id == e.PlayerId*/)
-            {                
+            {
                 // la gestion de cet événement est uniquement fait pour le client qui l'envoie
+                GameManager.PickDarknessDeck.Value = false;
+                GameManager.PickLightnessDeck.Value = false;
+                GameManager.PickVisionDeck.Value = false;
+
                 if (GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId)
                 {
                     return;
