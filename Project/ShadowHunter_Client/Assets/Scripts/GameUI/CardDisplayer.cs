@@ -21,10 +21,12 @@ public class CardDisplayer : MonoBehaviour
 
     private List<(int ceIndex, Player player)> choices = new List<(int, Player)>();
     private Card card;
+    private Player player;
 
     public void Display(Card card, Player player)
     {
         Clear();
+        this.player = player;
         this.card = card;
         playerDisplayer.text = player.Name;
         if (ResourceLoader.CardSprites.ContainsKey(card.cardLabel))
@@ -45,11 +47,11 @@ public class CardDisplayer : MonoBehaviour
     {
         CardEffect ce = ((UsableCard)card).cardEffect[choices[index].ceIndex];
         Player p = choices[index].player;
-        if (ce.targetableCondition == null || ce.targetableCondition(p))
+        if (ce.targetableCondition == null || ce.targetableCondition(p, player))
         {
             EventView.Manager.Emit(new UsableCardUseEvent(card.Id, choices[index].ceIndex, p.Id));
+            gameObject.SetActive(false);
         }
-        gameObject.SetActive(false);
     }
 
 
@@ -61,7 +63,8 @@ public class CardDisplayer : MonoBehaviour
     public void DisplayUsableCard(UsableCard card, Player player)
     {
         Clear();
-        playerDisplayer.text = player.Name + " cardLabel:" + card.cardLabel + " target:" + player;
+        this.player = player;
+        playerDisplayer.text = player.Name + " cardLabel:" + card.cardLabel;
         DismissButton.gameObject.SetActive(card.canDismiss || GameManager.LocalPlayer.Value != player);
 
         if (card.cardType == CardType.Vision && GameManager.LocalPlayer.Value != player)
@@ -91,12 +94,13 @@ public class CardDisplayer : MonoBehaviour
                     ccd.Display(player, ce);
                     int index = choices.Count - 1;
                     ccd.button.onClick.AddListener(delegate () { ChoiceSelected(index); });
+                    ccd.button.interactable = GameManager.LocalPlayer.Value == player;
                 }
                 else
                 {
                     foreach (Player p in PlayerView.GetPlayers())
                     {
-                        if (ce.targetableCondition(p))
+                        if (ce.targetableCondition(p, player))
                         {
                             choices.Add((i, p));
                             GameObject choice = Instantiate(choicePrefab.gameObject, ChoiceContent);
