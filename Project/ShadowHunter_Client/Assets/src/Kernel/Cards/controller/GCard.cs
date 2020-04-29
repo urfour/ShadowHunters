@@ -1025,7 +1025,14 @@ namespace Assets.Noyau.Cards.controller
         public UsableCard CreateUsableCard(string cardLabel, CardType cardType, string description, bool canDismiss, params CardEffect[] cardEffect)
         {
             int id = cards.Count;
-            UsableCard c = new UsableCard(cardLabel, cardType, description, id, canDismiss, cardEffect);
+
+            List<CardEffect> effects = new List<CardEffect>(cardEffect);
+            effects.Add(new CardEffect(cardLabel + ".nothing_happen",
+                effect: (target, player, card) => { },
+                targetableCondition: (target, owner) => { return !effects[0].targetableCondition(target) && !target.Dead.Value; }
+                ));
+            
+            UsableCard c = new UsableCard(cardLabel, cardType, description, id, canDismiss, effects.ToArray());
             cards.Add(c);
             return c;
         }
@@ -1038,10 +1045,11 @@ namespace Assets.Noyau.Cards.controller
                 effect: (target, player, card) => { },
                 targetableCondition: (target, owner) => { return (!effects[0].targetableCondition(target) || target.Character.characterName.Equals("character.name.metamorphe")) && owner == target && !target.Dead.Value; }
                 ));
-
-            UsableCard auxilaire = CreateUsableCard(cardLabel, cardType, description, canDismiss, effects.ToArray());
             int id = cards.Count;
-            UsableCard vision = CreateUsableCard(cardLabel, cardType, description, canDismiss,
+            UsableCard auxilaire = new UsableCard(cardLabel, cardType, description, id, canDismiss, effects.ToArray());
+
+            id = cards.Count;
+            UsableCard vision = new UsableCard(cardLabel, cardType, description, id, canDismiss,
                 new CardEffect("card.vision.effect.send&" + cardLabel,
                 effect: (target, player, card) =>
                 {

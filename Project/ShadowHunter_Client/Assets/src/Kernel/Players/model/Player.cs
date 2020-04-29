@@ -283,7 +283,7 @@ public class Player
             {
                 posP2 = player.Position.Value;
                 if (((posP1 % 2 == 0 && (posP2 == posP1 || posP2 == posP1 + 1))
-                    || (posP2 % 2 == 1 && (posP2 == posP1 || posP2 == posP1 - 1)))
+                    || (posP1 % 2 == 1 && (posP2 == posP1 || posP2 == posP1 - 1)))
                     ^ this.HasRevolver.Value)
                     tps.Add(player);
             }
