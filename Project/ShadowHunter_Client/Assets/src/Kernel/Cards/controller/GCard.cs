@@ -30,17 +30,25 @@ namespace Assets.Noyau.Cards.controller
             /// </summary>
             /// <returns> Renvoie un UsableCard</returns>
             Foret = CreateUsableCard("card.location.foret", CardType.Location, "card.location.foret.description", true,
-                new CardEffect("card.location.foret.effect",
+                new CardEffect("card.location.foret.effect.wound",
                     effect : (target, owner, card) =>
                     {
-                        EventView.Manager.Emit(new SelectForestPowerEvent()
-                        {
-                            PlayerId = target.Id
-                        });
+                        target.Wounded(2, owner, false);
                     },
                     targetableCondition: (target, owner) =>
                     {
-                        return true;
+                        return !target.HasBroche.Value
+                                && !target.Dead.Value;
+                    }
+                ),
+                new CardEffect("card.location.foret.effect.heal",
+                    effect: (target, owner, card) =>
+                    {
+                        target.Healed(1);
+                    },
+                    targetableCondition: (target, owner) =>
+                    {
+                        return !target.Dead.Value;
                     }
                 ));
 
@@ -52,22 +60,10 @@ namespace Assets.Noyau.Cards.controller
                 new CardEffect("card.location.sanctuaire.effect",
                     effect: (target, owner, card) =>
                     {
-                        List<(int equipment, int owner)> equipments = new List<(int equipment, int owner)>();
+                        EquipmentCard c = target.ListCard[GameManager.rand.Next(0, target.ListCard.Count - 1)] as EquipmentCard;
 
-                        foreach (Player p in PlayerView.GetPlayers())
-                            if (!p.Dead.Value && p.Id != target.Id && p.ListCard.Count > 0)
-                                foreach (Card c in p.ListCard)
-                                    if (c is EquipmentCard)
-                                        equipments.Add((c.Id, p.Id));
-
-                        if (equipments.Count != 0)
-                        {
-                            EventView.Manager.Emit(new SelectStealCardEvent()
-                            {
-                                PlayerId = target.Id,
-                                PossiblePlayerTargetId = equipments.ToArray()
-                            });
-                        }
+                        c.equipe(owner, c);
+                        c.unequipe(target, c);
                     },
                     targetableCondition: null
                 ));
@@ -89,14 +85,8 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EventView.Manager.Emit(new TakingWoundsEffectEvent()
-                        {
-                            PlayerId = player.Id,
-                            PlayerAttackedId = player.Id,
-                            IsPuppet = false,
-                            NbWoundsTaken = 2,
-                            NbWoundsSelfHealed = -2
-                        });
+                        player.Wounded(2,owner,false);
+                        owner.Wounded(2,owner,false);
                     })),
 
                 CreateUsableCard("card.darkness.darkness_banane", CardType.Darkness, "card.darkness.darkness_banane.description", false,
@@ -109,12 +99,9 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EventView.Manager.Emit(new GiveCardEvent()
-                        {
-                            PlayerId = owner.Id,
-                            PlayerGivedId = player.Id,
-                            CardId = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)].Id
-                        });
+                        EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
+                        c.equipe(player, c);
+                        c.unequipe(owner, c);
                     }),
                 new CardEffect("card.darkness.darkness_banane.effect.wound",
                     targetableCondition: (player, owner) =>
@@ -138,14 +125,8 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EventView.Manager.Emit(new TakingWoundsEffectEvent()
-                        {
-                            PlayerId = player.Id,
-                            PlayerAttackedId = player.Id,
-                            IsPuppet = false,
-                            NbWoundsTaken = 2,
-                            NbWoundsSelfHealed = 1
-                        });
+                        player.Wounded(2, owner, false);
+                        owner.Healed(1);
                     })),
 
                 CreateUsableCard("card.darkness.darkness_chauve_souris", CardType.Darkness, "card.darkness.darkness_chauve_souris.description", false,
@@ -158,14 +139,8 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EventView.Manager.Emit(new TakingWoundsEffectEvent()
-                        {
-                            PlayerId = player.Id,
-                            PlayerAttackedId = player.Id,
-                            IsPuppet = false,
-                            NbWoundsTaken = 2,
-                            NbWoundsSelfHealed = 1
-                        });
+                        player.Wounded(2, owner, false);
+                        owner.Healed(1);
                     })),
 
                 CreateUsableCard("card.darkness.darkness_chauve_souris", CardType.Darkness, "card.darkness.darkness_chauve_souris.description", false,
@@ -178,14 +153,8 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EventView.Manager.Emit(new TakingWoundsEffectEvent()
-                        {
-                            PlayerId = player.Id,
-                            PlayerAttackedId = player.Id,
-                            IsPuppet = false,
-                            NbWoundsTaken = 2,
-                            NbWoundsSelfHealed = 1
-                        });
+                        player.Wounded(2, owner, false);
+                        owner.Healed(1);
                     })),
 
                 CreateUsableCard("card.darkness.darkness_dynamite", CardType.Darkness, "card.darkness.darkness_dynamite.description", false,
@@ -285,14 +254,10 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EventView.Manager.Emit(new TakingWoundsEffectEvent()
-                        {
-                            PlayerId = player.Id,
-                            PlayerAttackedId = player.Id,
-                            IsPuppet = true,
-                            NbWoundsTaken = 3,
-                            NbWoundsSelfHealed = 0
-                        });
+                        if (GameManager.rand.Next(1, 6) <= 4)
+                            player.Wounded(3,owner,false);
+                        else
+                            owner.Wounded(3,owner,false);
                     })),
 
                 CreateEquipmentCard("card.darkness.darkness_revolver", CardType.Darkness, "card.darkness.darkness_revolver.description",
@@ -329,11 +294,10 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        
-                        EventView.Manager.Emit(new RevealCardEvent()
-                        {
-                            PlayerId = player.Id
-                        });
+                        player.Revealed.Value = true;
+
+                        if (player.HasSpear.Value == true && player.Character.team == CharacterTeam.Hunter)
+                            player.BonusAttack.Value += 2;
                     })),
 
                 CreateEquipmentCard("card.darkness.darkness_sabre", CardType.Darkness, "card.darkness.darkness_sabre.description",
@@ -361,12 +325,10 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EventView.Manager.Emit(new StealCardEvent()
-                        {
-                            PlayerId = owner.Id,
-                            PlayerStealedId = player.Id,
-                            CardId = player.ListCard[GameManager.rand.Next(0, player.ListCard.Count-1)].Id
-                        });
+                        EquipmentCard c = player.ListCard[GameManager.rand.Next(0, player.ListCard.Count-1)] as EquipmentCard;
+
+                        c.equipe(owner, c);
+                        c.unequipe(player, c);
                     })),
 
                 CreateUsableCard("card.darkness.darkness_succube", CardType.Darkness, "card.darkness.darkness_succube.description", false,
@@ -379,12 +341,10 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EventView.Manager.Emit(new StealCardEvent()
-                        {
-                            PlayerId = owner.Id,
-                            PlayerStealedId = player.Id,
-                            CardId = player.ListCard[GameManager.rand.Next(0, player.ListCard.Count-1)].Id
-                        });
+                        EquipmentCard c = player.ListCard[GameManager.rand.Next(0, player.ListCard.Count-1)] as EquipmentCard;
+
+                        c.equipe(owner, c);
+                        c.unequipe(player, c);
                     })),
 
                 CreateEquipmentCard("card.darkness.darkness_tronconneuse", CardType.Darkness, "card.darkness.darkness_tronconneuse.description",
@@ -455,10 +415,10 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EventView.Manager.Emit(new RevealCardEvent()
-                        {
-                            PlayerId = player.Id
-                        });
+                        player.Revealed.Value = true;
+
+                        if (player.HasSpear.Value == true && player.Character.team == CharacterTeam.Hunter)
+                            player.BonusAttack.Value += 2;
                     })),
 
                 CreateUsableCard("card.light.light_chocolat", CardType.Light, "card.light.light_chocolat.description", false,
@@ -486,10 +446,10 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EventView.Manager.Emit(new RevealCardEvent()
-                        {
-                            PlayerId = player.Id
-                        });
+                        player.Revealed.Value = true;
+
+                        if (player.HasSpear.Value == true && player.Character.team == CharacterTeam.Hunter)
+                            player.BonusAttack.Value += 2;
                     })),
 
                 CreateUsableCard("card.light.light_benediction", CardType.Light, "card.light.light_benediction.description", false,
@@ -501,12 +461,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EventView.Manager.Emit(new LightCardEffectEvent()
-                        {
-                            PlayerId = owner.Id,
-                            PlayerChoosenId = player.Id,
-                            LightCard = card
-                        });
+                        player.Healed(GameManager.rand.Next(1, 6));
                     })),
 
                 CreateEquipmentCard("card.light.light_boussole", CardType.Light, "card.light.light_boussole.description",
@@ -608,10 +563,10 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EventView.Manager.Emit(new RevealCardEvent()
-                        {
-                            PlayerId = player.Id
-                        });
+                        player.Revealed.Value = true;
+
+                        if (player.HasSpear.Value == true && player.Character.team == CharacterTeam.Hunter)
+                            player.BonusAttack.Value += 2;
                     })),
 
                 CreateUsableCard("card.light.light_premiers_secours", CardType.Light, "card.light.light_premiers_secours.description", false,
@@ -622,12 +577,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EventView.Manager.Emit(new LightCardEffectEvent()
-                        {
-                            PlayerId = owner.Id,
-                            PlayerChoosenId = player.Id,
-                            LightCard = card
-                        });
+                        player.Wound.Value = 7;
                     })),
 
                 CreateUsableCard("card.light.light_savoir", CardType.Light, "card.light.light_savoir.description", false,
@@ -704,19 +654,10 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        List<int> choices = new List<int>();
-                        foreach (Player p in PlayerView.GetPlayers())
-                            if (!p.Dead.Value && p.Id != player.Id)
-                                choices.Add(p.Id);
+                        EquipmentCard c = player.ListCard[GameManager.rand.Next(0, player.ListCard.Count - 1)] as EquipmentCard;
 
-                        if (choices.Count != 0)
-                        {
-                            EventView.Manager.Emit(new SelectGiveCardEvent()
-                            {
-                                PlayerId = player.Id,
-                                PossibleTargetId = choices.ToArray()
-                            });
-                        }
+                        c.equipe(owner, c);
+                        c.unequipe(player, c);
                     }),
                 new CardEffect("card.vision.vision_cupide.effect.wound",
                     targetableCondition: (player, owner) =>
@@ -743,19 +684,9 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        List<int> choices = new List<int>();
-                        foreach (Player p in PlayerView.GetPlayers())
-                            if (!p.Dead.Value && p.Id != player.Id)
-                                choices.Add(p.Id);
-
-                        if (choices.Count != 0)
-                        {
-                            EventView.Manager.Emit(new SelectGiveCardEvent()
-                            {
-                                PlayerId = player.Id,
-                                PossibleTargetId = choices.ToArray()
-                            });
-                        }
+                        EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
+                        c.equipe(player, c);
+                        c.unequipe(owner, c);
                     }),
                 new CardEffect("card.vision.vision_cupide.effect.wound",
                     targetableCondition: (player, owner) =>
@@ -782,19 +713,9 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        List<int> choices = new List<int>();
-                        foreach (Player p in PlayerView.GetPlayers())
-                            if (!p.Dead.Value && p.Id != player.Id)
-                                choices.Add(p.Id);
-
-                        if (choices.Count != 0)
-                        {
-                            EventView.Manager.Emit(new SelectGiveCardEvent()
-                            {
-                                PlayerId = player.Id,
-                                PossibleTargetId = choices.ToArray()
-                            });
-                        }
+                        EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
+                        c.equipe(player, c);
+                        c.unequipe(owner, c);
                     }),
                 new CardEffect("card.vision.vision_enivrante.effect.wound",
                     targetableCondition: (player, owner) =>
@@ -823,19 +744,9 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        List<int> choices = new List<int>();
-                        foreach (Player p in PlayerView.GetPlayers())
-                            if (!p.Dead.Value && p.Id != player.Id)
-                                choices.Add(p.Id);
-
-                        if (choices.Count != 0)
-                        {
-                            EventView.Manager.Emit(new SelectGiveCardEvent()
-                            {
-                                PlayerId = player.Id,
-                                PossibleTargetId = choices.ToArray()
-                            });
-                        }
+                        EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
+                        c.equipe(player, c);
+                        c.unequipe(owner, c);
                     }),
                 new CardEffect("card.vision.vision_enivrante.effect.wound",
                     targetableCondition: (player, owner) =>
@@ -862,19 +773,9 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        List<int> choices = new List<int>();
-                        foreach (Player p in PlayerView.GetPlayers())
-                            if (!p.Dead.Value && p.Id != player.Id)
-                                choices.Add(p.Id);
-
-                        if (choices.Count != 0)
-                        {
-                            EventView.Manager.Emit(new SelectGiveCardEvent()
-                            {
-                                PlayerId = player.Id,
-                                PossibleTargetId = choices.ToArray()
-                            });
-                        }
+                        EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
+                        c.equipe(player, c);
+                        c.unequipe(owner, c);
                     }),
                 new CardEffect("card.vision.vision_furtive.effect.wound",
                     targetableCondition: (player, owner) =>
@@ -901,19 +802,9 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        List<int> choices = new List<int>();
-                        foreach (Player p in PlayerView.GetPlayers())
-                            if (!p.Dead.Value && p.Id != player.Id)
-                                choices.Add(p.Id);
-
-                        if (choices.Count != 0)
-                        {
-                            EventView.Manager.Emit(new SelectGiveCardEvent()
-                            {
-                                PlayerId = player.Id,
-                                PossibleTargetId = choices.ToArray()
-                            });
-                        }
+                        EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
+                        c.equipe(player, c);
+                        c.unequipe(owner, c);
                     }),
                 new CardEffect("card.vision.vision_furtive.effect.wound",
                     targetableCondition: (player, owner) =>
@@ -1145,7 +1036,7 @@ namespace Assets.Noyau.Cards.controller
             List<CardEffect> effects = new List<CardEffect>(cardEffect);
             effects.Add(new CardEffect(cardLabel + ".nothing_happen",
                 effect: (target, player, card) => { },
-                targetableCondition: (target, owner) => { return (!effects[0].targetableCondition(target) || target.Character.characterName.Equals("character.name.metamorphe") && owner == target && !target.Dead.Value); }
+                targetableCondition: (target, owner) => { return (!effects[0].targetableCondition(target) || target.Character.characterName.Equals("character.name.metamorphe")) && owner == target && !target.Dead.Value; }
                 ));
 
             UsableCard auxilaire = CreateUsableCard(cardLabel, cardType, description, canDismiss, effects.ToArray());
