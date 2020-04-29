@@ -61,10 +61,10 @@ public class CardDisplayer : MonoBehaviour
     public void DisplayUsableCard(UsableCard card, Player player)
     {
         Clear();
-        playerDisplayer.text = player.Name;
+        playerDisplayer.text = player.Name + " cardLabel:" + card.cardLabel + " target:" + player;
         DismissButton.gameObject.SetActive(card.canDismiss || GameManager.LocalPlayer.Value != player);
 
-        if (card.cardType == CardType.Vision)
+        if (card.cardType == CardType.Vision && GameManager.LocalPlayer.Value != player)
         {
             cardImage.sprite = ResourceLoader.CardSprites["card.vision"];
         }
@@ -107,7 +107,6 @@ public class CardDisplayer : MonoBehaviour
                         }
                     }
                 }
-
             }
         }
 
