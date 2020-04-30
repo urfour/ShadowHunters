@@ -407,6 +407,17 @@ namespace Assets.Noyau.Cards.controller
                     })),
 
                 CreateUsableCard("card.light.light_supreme", CardType.Light, "card.light.light_supreme.description", false,
+                new CardEffect("card.light.light_supreme.reveal",
+                    targetableCondition: (player, owner) =>
+                    {
+                        return player == owner
+                            && player.Character.team == CharacterTeam.Hunter
+                            && !player.Revealed.Value;
+                    },
+                    effect: (player, owner, card) =>
+                    {
+                        player.Healed(player.Wound.Value);
+                    }),
                 new CardEffect("card.light.light_supreme.effect",
                     targetableCondition: (player, owner) =>
                     {
@@ -418,19 +429,14 @@ namespace Assets.Noyau.Cards.controller
                     {
                         player.Healed(player.Wound.Value);
                     }),
-                new CardEffect("card.light.light_supreme.effect",
+                new CardEffect("card.light.light_supreme.nothing_happen",
                     targetableCondition: (player, owner) =>
                     {
                         return player == owner
-                            && player.Character.team == CharacterTeam.Hunter
-                            && !player.Revealed.Value;
+                            && !player.Dead.Value;
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Revealed.Value = true;
-
-                        if (player.HasSpear.Value == true && player.Character.team == CharacterTeam.Hunter)
-                            player.BonusAttack.Value += 2;
                     })),
 
                 CreateUsableCard("card.light.light_chocolat", CardType.Light, "card.light.light_chocolat.description", false,
