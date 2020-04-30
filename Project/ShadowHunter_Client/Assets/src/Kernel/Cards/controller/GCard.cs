@@ -299,9 +299,7 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         player.Revealed.Value = true;
-
-                        if (player.HasSpear.Value == true && player.Character.team == CharacterTeam.Hunter)
-                            player.BonusAttack.Value += 2;
+                        player.Healed(player.Wound.Value);
                     }),
                 new CardEffect("card.darkness.darkness_rituel.nothing_happen",
                     // on peut ne rien faire uniquement si on n'est pas un Shadow qui s'est révélé
@@ -564,7 +562,7 @@ namespace Assets.Noyau.Cards.controller
                         return player == owner
                             && !player.Revealed.Value
                             && player.Character.team == CharacterTeam.Shadow
-                            && player.Character.characterName != "Metamorphe";
+                            && player.Character.characterName != "character.name.metamorphe";
                     },
                     effect: (player, owner, card) =>
                     {
@@ -572,6 +570,17 @@ namespace Assets.Noyau.Cards.controller
 
                         if (player.HasSpear.Value == true && player.Character.team == CharacterTeam.Hunter)
                             player.BonusAttack.Value += 2;
+                    }),
+                new CardEffect("card.light.light_miroir.nothing_happen",
+                    targetableCondition: (player, owner) =>
+                    {
+                        return player == owner
+                            && (player.Revealed.Value
+                            || player.Character.team != CharacterTeam.Shadow
+                            || player.Character.characterName == "character.name.metamorphe");
+                    },
+                    effect: (player, owner, card) =>
+                    {
                     })),
 
                 CreateUsableCard("card.light.light_premiers_secours", CardType.Light, "card.light.light_premiers_secours.description", false,
