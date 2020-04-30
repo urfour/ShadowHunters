@@ -12,21 +12,20 @@ namespace Assets.Noyau.Cards.view
     public static class CardView
     {
         public static GCard GCard;
-        private static Random rand;
+        //private static Random rand;
 
         /// <summary>
         /// Initialise toute les cartes du jeu.
         /// </summary>
         public static void Init()
         {
-            rand = GameManager.rand;
+            //rand = GameManager.rand;
             GCard = new GCard();
         }
 
         public static void Clean()
         {
             GCard = null;
-            rand = null;
         }
 
         /// <summary>
@@ -34,7 +33,7 @@ namespace Assets.Noyau.Cards.view
         /// </summary>
         public static Card PickVision()
         {
-            int r = rand.Next(0, GCard.visionDeck.Count);
+            int r = GameManager.rand.Next(0, GCard.visionDeck.Count);
             Card c = GCard.visionDeck[r];
             GCard.visionDeck.RemoveAt(r);
             return c;
@@ -45,7 +44,7 @@ namespace Assets.Noyau.Cards.view
         /// </summary>
         public static Card PickLight()
         {
-            int r = rand.Next(0, GCard.lightDeck.Count);
+            int r = GameManager.rand.Next(0, GCard.lightDeck.Count);
             Card c = GCard.lightDeck[r];
             GCard.lightDeck.RemoveAt(r);
             return c;
@@ -56,7 +55,7 @@ namespace Assets.Noyau.Cards.view
         /// </summary>
         public static Card PickDarkness()
         {
-            int r = rand.Next(0, GCard.darknessDeck.Count);
+            int r = GameManager.rand.Next(0, GCard.darknessDeck.Count);
             Card c = GCard.darknessDeck[r];
             GCard.darknessDeck.RemoveAt(r);
             return c;
