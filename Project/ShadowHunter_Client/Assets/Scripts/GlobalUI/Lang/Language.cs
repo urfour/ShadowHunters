@@ -97,13 +97,13 @@ namespace Lang
                     for (int i = 1; i < targs.Length; i++)
                     {
                         int index = int.Parse(""+ targs[i][0]);
-                        if (index > 0 && index < targs.Length)
+                        if (index > 0 && index < args.Length)
                         {
                             tmp += args[index] + targs[i].Substring(1);
                         }
                         else
                         {
-                            tmp += "[INALID ARG INDEX : " + index + "]";
+                            tmp += "[INVALID ARG INDEX : " + index + "]";
                         }
                     }
                     return tmp;
