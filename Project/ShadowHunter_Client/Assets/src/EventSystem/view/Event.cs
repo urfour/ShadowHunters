@@ -17,9 +17,12 @@ namespace EventSystem
     public abstract class Event
     {
 
+        public string StackTrace { get; set; }
+        public bool AlreadyEmitted { get; set; } = false;
+
         public Event()
         {
-
+            StackTrace = Environment.StackTrace;
         }
 
         /// <summary>

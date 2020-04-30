@@ -87,27 +87,24 @@ namespace Lang
                 {
                     Translations.Add(label, label);
                     Save();
-                    return Translations[label];
+                    //return Translations[label];
                 }
-                else
+                string tlabel = Translations[label];
+                string[] targs = tlabel.Split('&');
+                string tmp = targs[0];
+                for (int i = 1; i < targs.Length; i++)
                 {
-                    string tlabel = Translations[label];
-                    string[] targs = tlabel.Split('&');
-                    string tmp = targs[0];
-                    for (int i = 1; i < targs.Length; i++)
+                    int index = int.Parse(""+ targs[i][0]);
+                    if (index > 0 && index < args.Length)
                     {
-                        int index = int.Parse(""+ targs[i][0]);
-                        if (index > 0 && index < targs.Length)
-                        {
-                            tmp += args[index] + targs[i].Substring(1);
-                        }
-                        else
-                        {
-                            tmp += "[INALID ARG INDEX : " + index + "]";
-                        }
+                        tmp += args[index] + targs[i].Substring(1);
                     }
-                    return tmp;
+                    else
+                    {
+                        tmp += "[INVALID ARG INDEX : " + index + "]";
+                    }
                 }
+                return tmp;
             }
             else
             {
