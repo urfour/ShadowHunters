@@ -341,6 +341,17 @@ namespace Assets.Noyau.Cards.controller
 
                         c.equipe(owner, c);
                         c.unequipe(player, c);
+                    }),
+                new CardEffect("card.darkness.darkness_succube.nothing_happen",
+                    targetableCondition: (player, owner) =>
+                    {
+                        foreach (Player p in PlayerView.GetPlayers())
+                            if (p.ListCard.Count > 0)
+                                return false;
+                        return true;
+                    },
+                    effect: (player, owner, card) =>
+                    {
                     })),
 
                 CreateUsableCard("card.darkness.darkness_succube", CardType.Darkness, "card.darkness.darkness_succube.description", false,
@@ -357,6 +368,17 @@ namespace Assets.Noyau.Cards.controller
 
                         c.equipe(owner, c);
                         c.unequipe(player, c);
+                    }),
+                new CardEffect("card.darkness.darkness_succube.nothing_happen",
+                    targetableCondition: (player, owner) =>
+                    {
+                        foreach (Player p in PlayerView.GetPlayers())
+                            if (p.ListCard.Count > 0)
+                                return false;
+                        return true;
+                    },
+                    effect: (player, owner, card) =>
+                    {
                     })),
 
                 CreateEquipmentCard("card.darkness.darkness_tronconneuse", CardType.Darkness, "card.darkness.darkness_tronconneuse.description",
