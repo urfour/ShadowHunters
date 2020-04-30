@@ -31,7 +31,22 @@ namespace Assets.Noyau.Manager.view
         private static PlayerListener playerListener = null;
         private static DisconnectionListener disconnectionListener = null;
 
-        public static System.Random rand;
+        private static System.Random Rand;
+        private static int nbRandCall = 0;
+
+        public static System.Random rand
+        {
+            get
+            {
+                nbRandCall++;
+                Logger.Comment("rand call " + nbRandCall + " \n" + Environment.StackTrace);
+                return Rand;
+            }
+            set
+            {
+                Rand = value;
+            }
+        }
 
         public static Setting<Player> LocalPlayer { get; private set; } = new Setting<Player>(null);
 

@@ -160,6 +160,7 @@ namespace Assets.Noyau.Players.controller
                         break;
                 }
             }
+            /*
             else if (e is ForestSelectTargetEvent fste)
             {
                 // la gestion de cet événement est uniquement fait pour le client qui l'envoie
@@ -197,6 +198,7 @@ namespace Assets.Noyau.Players.controller
                     NbWoundsSelfHealed = 0
                 });
             }
+            */
             else if (e is DrawCardEvent drawCard/* && GameManager.PlayerTurn.Value.Id == e.PlayerId*/)
             {
                 // la gestion de cet événement est uniquement fait pour le client qui l'envoie
@@ -268,6 +270,7 @@ namespace Assets.Noyau.Players.controller
                     Debug.Log("L'effet ne s'active pas !");
 
             }
+            /*
             else if (e is AttackEvent attack)
             {
                 Debug.Log("ID attaquant : " + attack.PlayerId);
@@ -329,6 +332,7 @@ namespace Assets.Noyau.Players.controller
                     Debug.Log("Il n'y a personne à attaquer !");
                 }
             }
+            */
             else if (e is AttackPlayerEvent attackPlayer)
             {
                 GameManager.PickVisionDeck.Value = false;
@@ -361,6 +365,7 @@ namespace Assets.Noyau.Players.controller
 
                 GameManager.AttackAvailable.Value = false;
             }
+            /*
             else if (e is StealCardEvent stealTarget)
             {
                 Player playerStealing = PlayerView.GetPlayer(stealTarget.PlayerId);
@@ -404,6 +409,8 @@ namespace Assets.Noyau.Players.controller
                     playerGived.PrintCards();
                 }
             }
+            */
+            /*
             else if (e is TakingWoundsEffectEvent takingWounds)
             {
                 Player playerAttacking = PlayerView.GetPlayer(takingWounds.PlayerId);
@@ -445,6 +452,8 @@ namespace Assets.Noyau.Players.controller
                 Debug.Log("Blessure " + playerAttacking.Name + " après : " + playerAttacking.Wound.Value);
                 Debug.Log("Blessure " + playerAttacked.Name + " après : " + playerAttacked.Wound.Value);
             }
+            */
+            /*
             else if (e is LightCardEffectEvent lcEffect)
             {
                 Player player = PlayerView.GetPlayer(lcEffect.PlayerId);
@@ -489,6 +498,7 @@ namespace Assets.Noyau.Players.controller
                 else
                     player.Wounded(1,player,false);
             }
+            */
             else if (e is RevealCardEvent reveal)
             {
                 Player p = PlayerView.GetPlayer(reveal.PlayerId);
@@ -515,6 +525,7 @@ namespace Assets.Noyau.Players.controller
                         player.Healed(player.Wound.Value);
                 }
             }
+            /*
             else if (e is BobPowerEvent bpe)
             {
                 bool UsePower = bpe.UsePower;
@@ -536,6 +547,7 @@ namespace Assets.Noyau.Players.controller
                     });
                 }
             }
+            
             else if (e is TestEvent te)
             {
 
@@ -562,6 +574,7 @@ namespace Assets.Noyau.Players.controller
                 else
                     Debug.Log("Pas de joueur à blesser.");
             }
+            */
         }
     }
 }
