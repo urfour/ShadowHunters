@@ -77,7 +77,7 @@ This is where the different classes in the Model folder are instanciated.
 Model
 =====
 
-This is the part where every part of the character is defined.
+This is where every part of the character is defined.
 
 .. class:: Character
 
