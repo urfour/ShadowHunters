@@ -9,6 +9,44 @@ The server will transfer game events between the clients, and will receive authe
 Accounts
 ========
 
+.. namespace:: ServerInterface.Accounts
+
+.. class:: GAccount
+
+    .. inherits:: IListener<AuthEvent>
+
+	Class used to listen for incoming AuthEvents, and to manage authentification.
+
+    .. property :: public static GAccounts Instance { get; set; }
+	
+	Instanciate the account manager.
+
+    .. property :: public Dictionary<Account, Client> ConnectedAccounts { get; set; }
+	
+	Dictionnary used to associate each connected Account to a Client.
+
+    .. method :: public void OnEvent(AuthEvent e, string[] tags = null)
+    
+	Method controlling the behavior of the server depending on the received AuthEvent.
+
+    .. method :: public void OnClientDisconnect(Client c)
+    
+	Remove the account of the disconnected client from the list of all ConnectedAccounts.
+
+    .. method :: private byte Authentify(string login, string password)
+    
+	Asks the database if the given login/password pair match an existing user. Returns 0 if they match, 1 if the password is invalid, and 2 if they do not match at all.
+
+    .. method :: private bool CreateAccount(SignInEvent sie)
+    
+	Asks the database to create a new account from the login and password stored in the SignInEvent. Returns true if the account has been create, false otherwise.
+
+    .. method :: public static void Init()
+    
+	Initialize the Account manager.
+
+
+
 EventSystem
 ===========
 
