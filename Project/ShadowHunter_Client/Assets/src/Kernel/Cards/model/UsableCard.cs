@@ -11,7 +11,7 @@ namespace Assets.Noyau.Cards.model
     {
         public readonly CardEffect[] cardEffect;
         public readonly bool canDismiss;
-        public readonly bool hidenChoices = false;
+        public readonly bool hiddenChoices = false;
 
         /// <summary>
         /// Définition d'une carte à usage unique
@@ -32,12 +32,12 @@ namespace Assets.Noyau.Cards.model
 
 
 
-        public UsableCard(string cardLabel, CardType cardType, string description, int id, bool canDismiss, bool hidenChoices, params CardEffect[] cardEffect) :
+        public UsableCard(string cardLabel, CardType cardType, string description, int id, bool canDismiss, bool hiddenChoices, params CardEffect[] cardEffect) :
             base(cardLabel, cardType, description, id)
         {
             this.cardEffect = cardEffect;
             this.canDismiss = canDismiss;
-            this.hidenChoices = hidenChoices;
+            this.hiddenChoices = hiddenChoices;
         }
     }
 }
