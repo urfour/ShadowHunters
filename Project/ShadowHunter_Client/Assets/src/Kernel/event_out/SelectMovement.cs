@@ -12,6 +12,6 @@ namespace Scripts.event_out
     /// </summary>
     public class SelectMovement : PlayerEvent
     {
-        public int[] LocationAvailable;
+        public int[] LocationAvailable { get; set; }
     }
 }
