@@ -18,6 +18,7 @@ namespace EventSystem
     {
 
         public string StackTrace { get; set; }
+        public bool AlreadyEmitted { get; set; } = false;
 
         public Event()
         {
