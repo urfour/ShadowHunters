@@ -100,14 +100,7 @@ namespace EventSystem.controller
 
         public void Emit(Event e, params string[] tags)
         {
-            if (e.AlreadyEmitted)
-            {
-                Logger.Warning("Event Already Emitted\n" + e.Serialize() + "\n" + Environment.StackTrace);
-            }
-            else
-            {
-                e.AlreadyEmitted = true;
-            }
+
             if (!Listeners.ContainsKey(e.GetType())) // si c'est la première fois qu'un type d'event est envoyé, on recherche tous les listeners existant qui lisent ce type d'event
             {
                 List<ListenerInstance> matchListeners = new List<ListenerInstance>(); // liste de tous les listeners qui écoutent un type assignable au type de 'e'
@@ -143,6 +136,15 @@ namespace EventSystem.controller
                 {
                     l.OnEvent(e, tags);
                 }
+            }
+
+            if (e.AlreadyEmitted)
+            {
+                Logger.Warning("Event Already Emitted\n" + e.Serialize() + "\n" + Environment.StackTrace);
+            }
+            else
+            {
+                e.AlreadyEmitted = true;
             }
         }
 

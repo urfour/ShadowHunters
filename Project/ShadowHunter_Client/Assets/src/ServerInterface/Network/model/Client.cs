@@ -25,7 +25,7 @@ namespace Network.model
             
             ListenThread = new Thread(new ThreadStart(Listen));
             ListenThread.Start();
-            EventView.Manager.AddListener(this);
+            EventView.Manager.AddListener(this, false);
         }
 
         private void Send(string data)
