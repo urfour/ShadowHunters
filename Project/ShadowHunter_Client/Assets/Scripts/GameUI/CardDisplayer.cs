@@ -83,32 +83,35 @@ public class CardDisplayer : MonoBehaviour
                 cardImage.sprite = null;
                 Debug.LogWarning("Unknown card label : " + card.cardLabel);
             }
-            for (int i = 0; i < card.cardEffect.Length; i++)
+            if (!card.hidenChoices || GameManager.LocalPlayer.Value == player)
             {
-                CardEffect ce = card.cardEffect[i];
-                if (ce.targetableCondition == null)
+                for (int i = 0; i < card.cardEffect.Length; i++)
                 {
-                    choices.Add((i, player));
-                    GameObject choice = Instantiate(choicePrefab.gameObject, ChoiceContent);
-                    CardChoiceDisplayer ccd = choice.GetComponent<CardChoiceDisplayer>();
-                    ccd.Display(player, ce);
-                    int index = choices.Count - 1;
-                    ccd.button.onClick.AddListener(delegate () { ChoiceSelected(index); });
-                    ccd.button.interactable = GameManager.LocalPlayer.Value == player;
-                }
-                else
-                {
-                    foreach (Player p in PlayerView.GetPlayers())
+                    CardEffect ce = card.cardEffect[i];
+                    if (ce.targetableCondition == null)
                     {
-                        if (ce.targetableCondition(p, player))
+                        choices.Add((i, player));
+                        GameObject choice = Instantiate(choicePrefab.gameObject, ChoiceContent);
+                        CardChoiceDisplayer ccd = choice.GetComponent<CardChoiceDisplayer>();
+                        ccd.Display(player, ce);
+                        int index = choices.Count - 1;
+                        ccd.button.onClick.AddListener(delegate () { ChoiceSelected(index); });
+                        ccd.button.interactable = GameManager.LocalPlayer.Value == player;
+                    }
+                    else
+                    {
+                        foreach (Player p in PlayerView.GetPlayers())
                         {
-                            choices.Add((i, p));
-                            GameObject choice = Instantiate(choicePrefab.gameObject, ChoiceContent);
-                            CardChoiceDisplayer ccd = choice.GetComponent<CardChoiceDisplayer>();
-                            ccd.Display(p, ce);
-                            int index = choices.Count - 1;
-                            ccd.button.onClick.AddListener(delegate () { ChoiceSelected(index); });
-                            ccd.button.interactable = GameManager.LocalPlayer.Value == player;
+                            if (ce.targetableCondition(p, player))
+                            {
+                                choices.Add((i, p));
+                                GameObject choice = Instantiate(choicePrefab.gameObject, ChoiceContent);
+                                CardChoiceDisplayer ccd = choice.GetComponent<CardChoiceDisplayer>();
+                                ccd.Display(p, ce);
+                                int index = choices.Count - 1;
+                                ccd.button.onClick.AddListener(delegate () { ChoiceSelected(index); });
+                                ccd.button.interactable = GameManager.LocalPlayer.Value == player;
+                            }
                         }
                     }
                 }
