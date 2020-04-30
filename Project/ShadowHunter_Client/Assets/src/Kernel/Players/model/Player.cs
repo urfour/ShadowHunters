@@ -140,11 +140,19 @@ public class Player
     /// <summary>
     /// Id du joueur qui m'a attaqué en dernier (Loup-garou)
     /// </summary>
-    public Setting<int> OnAttacked { get; private set; } = new Setting<int>(-1);
+    public Setting<int> OnAttackedAttacker { get; private set; } = new Setting<int>(-1);
+    /// <summary>
+    /// Si le joueur se fait attaquer (Loup-garou)
+    /// </summary>
+    public Setting<bool> OnAttacked { get; private set; } = new Setting<bool>(false);
+    /// <summary>
+    /// Si le joueur attaque (Charles)
+    /// </summary>       
+    public Setting<bool> OnAttacking { get; private set; } = new Setting<bool>(false);
     /// <summary>
     /// Id du joueur que j'ai attaqué en dernier (Charles)
-    /// </summary>
-    public Setting<int> OnAttacking { get; private set; } = new Setting<int>(-1);
+    /// </summary>    
+    public Setting<int> OnAttackingPlayer { get; private set; } = new Setting<int>(-1);
     /// <summary>
     /// Nombre de dommage reçu
     /// </summary>
@@ -190,7 +198,17 @@ public class Player
     public virtual int Wounded(int damage, Player attacker, bool isAttack)
     {
         if (attacker.Character.characterName == "character.name.charles" && isAttack)
-                GameManager.HasKilled.Value=true;
+        {
+            attacker.OnAttacking.Value = true;
+            attacker.OnAttackingPlayer.Value = this.Id;
+        }
+
+        if (this.Character.characterName == "character.name.loup_garou")
+        {
+            this.OnAttacked.Value = true;
+            this.OnAttackedAttacker.Value = attacker.Id;
+        }
+
 
         if (damage > 0 && (!HasGuardian.Value || !isAttack))
         {
@@ -203,6 +221,10 @@ public class Player
                 attacker.DamageDealed.Value = damage;
             
             this.Wound.Value += damage;
+
+            if (attacker.Character.characterName == "character.name.charles" && isAttack && this.Dead.Value)
+                GameManager.HasKilled.Value = true;
+
             return damage;
         }
         return 0;

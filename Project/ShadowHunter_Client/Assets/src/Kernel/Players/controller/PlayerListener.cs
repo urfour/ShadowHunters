@@ -345,25 +345,36 @@ namespace Assets.Noyau.Players.controller
                 Debug.Log("Joueur attaquant : " + playerAttacking.Name);
                 Debug.Log("Joueur attaqué : " + playerAttacked.Name);
 
-                int lancer = 0;
 
-                if (playerAttacking.HasSaber.Value)
-                    lancer = GameManager.rand.Next(1, 4);
-                else
-                    lancer = Math.Abs(GameManager.rand.Next(1, 6) - GameManager.rand.Next(1, 4));
-
-                Debug.Log("Le lancer vaut : " + lancer);
-
-                if (lancer != 0)
+                if (attackPlayer.PowerFranklin)
                 {
-                    Debug.Log("Wounds avant : " + playerAttacked.Wound.Value);
-                    playerAttacked.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
-                    Debug.Log("Wounds après : " + playerAttacked.Wound.Value);
-                    Debug.Log("Vie total : " + playerAttacked.Character.characterHP);
-                    Debug.Log("Mort ? " + playerAttacked.Dead.Value);
+                    playerAttacked.Wounded(GameManager.rand.Next(0, 6), playerAttacking, true);
                 }
+                else if (attackPlayer.PowerGeorges)
+                {
+                    playerAttacked.Wounded(GameManager.rand.Next(0, 4), playerAttacking, true);
+                }
+                else
+                {
+                    int lancer = 0;
 
-                GameManager.AttackAvailable.Value = false;
+                    if (playerAttacking.HasSaber.Value)
+                        lancer = GameManager.rand.Next(1, 4);
+                    else
+                        lancer = Math.Abs(GameManager.rand.Next(1, 6) - GameManager.rand.Next(1, 4));
+
+                    Debug.Log("Le lancer vaut : " + lancer);
+
+                    if (lancer != 0)
+                    {
+                        Debug.Log("Wounds avant : " + playerAttacked.Wound.Value);
+                        playerAttacked.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
+                        Debug.Log("Wounds après : " + playerAttacked.Wound.Value);
+                        Debug.Log("Vie total : " + playerAttacked.Character.characterHP);
+                        Debug.Log("Mort ? " + playerAttacked.Dead.Value);
+                    }
+                    GameManager.AttackAvailable.Value = false;
+                }
             }
             /*
             else if (e is StealCardEvent stealTarget)
@@ -536,14 +547,15 @@ namespace Assets.Noyau.Players.controller
                     Player Bob = PlayerView.GetPlayer(BobId);
 
                     // On commence par annuler les dommages que la cible a subit
-                    Player cible = PlayerView.GetPlayer(Bob.OnAttacking.Value);
+                    Player cible = PlayerView.GetPlayer(Bob.OnAttackingPlayer.Value);
+
                     cible.Healed(Bob.DamageDealed.Value);
 
                     // On lui vole ensuite un équipement
                     EventView.Manager.Emit(new SelectStealCardFromPlayerEvent()
                     {
                         PlayerId = BobId,
-                        PlayerStealedId = Bob.OnAttacking.Value
+                        PlayerStealedId = Bob.OnAttackingPlayer.Value
                     });
                 }
             }
