@@ -83,7 +83,7 @@ public class CardDisplayer : MonoBehaviour
                 cardImage.sprite = null;
                 Debug.LogWarning("Unknown card label : " + card.cardLabel);
             }
-            if (!card.hidenChoices || GameManager.LocalPlayer.Value == player)
+            if (!card.hiddenChoices || GameManager.LocalPlayer.Value == player)
             {
                 for (int i = 0; i < card.cardEffect.Length; i++)
                 {
