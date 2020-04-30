@@ -131,6 +131,9 @@ namespace Assets.Noyau.Players.controller
                 Player currentPlayer = PlayerView.GetPlayer(mo.PlayerId);
                 currentPlayer.Position.Value = mo.Location;
 
+                GameManager.AttackAvailable.Value = true;
+                GameManager.TurnEndable.Value = true;
+
                 switch (GameManager.Board[currentPlayer.Position.Value])
                 {
                     case Position.Antre:
@@ -156,8 +159,6 @@ namespace Assets.Noyau.Players.controller
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Sanctuaire.Id, false, e.PlayerId));
                         break;
                 }
-                GameManager.AttackAvailable.Value = true;
-                GameManager.TurnEndable.Value = true;
             }
             else if (e is ForestSelectTargetEvent fste)
             {
@@ -229,6 +230,10 @@ namespace Assets.Noyau.Players.controller
 
                 if (pickedCard is UsableCard pickedUsableCard)
                 {
+                    if (!pickedUsableCard.canDismiss)
+                    {
+                        GameManager.TurnEndable.Value = false;
+                    }
                     if (!(GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId))
                         EventView.Manager.Emit(new SelectUsableCardPickedEvent(pickedUsableCard.Id, pickedUsableCard.cardType == CardType.Vision, e.PlayerId));
                 }
@@ -242,6 +247,7 @@ namespace Assets.Noyau.Players.controller
             }
             else if (e is UsableCardUseEvent ecue)
             {
+                GameManager.TurnEndable.Value = true;
                 Card c = CardView.GCard.cards[ecue.Cardid];
                 int effect = ecue.EffectSelected;
                 Player p1 = PlayerView.GetPlayer(ecue.PlayerId);
@@ -261,7 +267,6 @@ namespace Assets.Noyau.Players.controller
                 else
                     Debug.Log("L'effet ne s'active pas !");
 
-                GameManager.TurnEndable.Value = true;
             }
             else if (e is AttackEvent attack)
             {
