@@ -64,7 +64,7 @@ public class CardDisplayer : MonoBehaviour
     {
         Clear();
         this.player = player;
-        playerDisplayer.text = player.Name + " cardLabel:" + card.cardLabel;
+        playerDisplayer.text = player.Name;
         DismissButton.gameObject.SetActive(card.canDismiss || GameManager.LocalPlayer.Value != player);
 
         if (card.cardType == CardType.Vision && GameManager.LocalPlayer.Value != player)
