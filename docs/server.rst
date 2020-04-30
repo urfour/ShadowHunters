@@ -9,7 +9,7 @@ The server will transfer game events between the clients, and will receive authe
 Accounts
 ========
 
-.. namespace:: ServerInterface.Accounts
+.. namespace:: Accounts
 
 .. class:: GAccount
 
@@ -64,6 +64,46 @@ Properties
 
 Rooms
 =====
+
+.. namespace:: Rooms
+
+.. class:: GRooms
+
+    .. inherits:: IListener<RoomEvent>
+
+	Class used to listen for incoming RoomEvents, and to manage authentification.
+
+    .. property :: public static GRoom Instance { get; set; }
+	
+	Instanciates the room manager.
+
+    .. property :: public Dictionary<int, Room> Rooms { get; set; }
+	
+	Dictionnary used to associate their code to each Room.
+
+    .. method :: public void OnEvent(RoomEvent e, string[] tags = null)
+    
+	Method controlling the behavior of the server depending on the received RoomEvent.
+
+    .. method :: public static void Init()
+    
+	Initializes the Account manager.
+
+    .. method :: public void AddClient(Client c)
+    
+	Adds a client to the Global Room and adds a listener waiting for the disconnection of this user
+
+    .. method :: public void RemoveClient(Client c)
+    
+	Removes the client from the Global Room.
+
+    .. method :: public void OnClientDisconnect(Client c)
+    
+	Removes the client and his account from his room.
+
+    .. method :: public void RemovePlayerFromRoom(Client c, RoomData r, bool notifyClient = true, string leaveMessage = null)
+    
+	Removes a Client from a Room.
 
 ServerInterface
 ================
