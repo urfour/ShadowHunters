@@ -18,6 +18,10 @@ public class GlobalApplicationFunction : MonoBehaviour
 
     public void ApplicationQuit()
     {
+    #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+    #else
         Application.Quit();
+    #endif
     }
 }

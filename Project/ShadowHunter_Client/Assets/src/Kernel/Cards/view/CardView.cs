@@ -23,6 +23,12 @@ namespace Assets.Noyau.Cards.view
             GCard = new GCard();
         }
 
+        public static void Clean()
+        {
+            GCard = null;
+            rand = null;
+        }
+
         /// <summary>
         /// Fonction qui permet de piocher une carte Vision.
         /// </summary>

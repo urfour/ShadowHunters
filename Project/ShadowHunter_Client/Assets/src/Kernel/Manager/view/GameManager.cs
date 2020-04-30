@@ -1,6 +1,7 @@
 ﻿using Assets.Noyau.Cards.view;
 using Assets.Noyau.Players.controller;
 using Assets.Noyau.Players.view;
+using Assets.src.Kernel.Players.controller;
 using EventSystem;
 using Kernel.Settings;
 using Scripts;
@@ -28,6 +29,7 @@ namespace Assets.Noyau.Manager.view
     public static class GameManager
     {
         private static PlayerListener playerListener = null;
+        private static DisconnectionListener disconnectionListener = null;
 
         public static System.Random rand;
 
@@ -87,7 +89,10 @@ namespace Assets.Noyau.Manager.view
         public static void Init(int nbPlayers, int randSeed, int localPlayer = -1)
         {
             playerListener = new PlayerListener();
+            disconnectionListener = new DisconnectionListener();
             EventView.Manager.AddListener(playerListener, true);
+            EventView.Manager.AddListener(disconnectionListener);
+
             rand = new System.Random(randSeed);
             
             PlayerView.Init(nbPlayers);
@@ -120,6 +125,15 @@ namespace Assets.Noyau.Manager.view
             foreach (Player player in PlayerView.GetPlayers())
                 player.Character.goal.setWinningListeners(player);
 
+        }
+
+        public static void Clean()
+        {
+            EventView.Manager.RemoveListener(playerListener);
+            EventView.Manager.RemoveListener(disconnectionListener);
+            PlayerView.Clean();
+            CardView.Clean();
+            rand = null;
         }
     }
 }

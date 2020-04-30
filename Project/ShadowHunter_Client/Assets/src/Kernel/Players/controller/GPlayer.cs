@@ -28,11 +28,6 @@ namespace Assets.Noyau.Players.controller
                 Players[i] = new Player(i, characters.PickCharacter());
             }
 
-            /*foreach (Player p in Players)
-            {
-                p.Character.goal.setWinningListeners(p);
-                p.Character.power.addListeners(p);
-            }*/
         }
         
     }
