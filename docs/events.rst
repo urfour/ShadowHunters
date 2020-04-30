@@ -358,9 +358,9 @@ events_out
 
       Array of Id's possible targets.
 
-   .. property:: public int TargetID { get; set; } = -1;
+   .. property:: public int TargetID { get; set; }
 
-      Id of a specific target.
+      Initialised at -1, Id of a specific target.
 
    .. property:: public bool IsPuppet { get; set; }
 
@@ -378,17 +378,17 @@ events_out
 
    Event that allow the player to choose to reveal his character.
 
-   .. property:: public Card EffectCard { get; set; } = null;
+   .. property:: public Card EffectCard { get; set; }
 
-      The card that forces the player to reveal himself.
+      Initialised at null, the card that forces the player to reveal himself.
 
-   .. property:: public bool PowerDaniel { get; set; } = false;
+   .. property:: public bool PowerDaniel { get; set; }
 
-      Boolean if the power of Daniel is used.
+      Initialised at false, boolean if the power of Daniel is used.
 
-   .. property:: public bool PowerLoup { get; set; } = false;
+   .. property:: public bool PowerLoup { get; set; }
 
-      Boolean if the power of Werewolf is used.
+      Initialised at false ,boolean if the power of Werewolf is used.
 
 .. class:: SelectStealCardEvent
 
