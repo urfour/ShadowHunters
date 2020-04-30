@@ -135,10 +135,123 @@ View
 
     .. method :: public void Notify()
     
-	 
+Controller
+----------
+
+
+.. class:: ListenerInstance
+
+	Internal class
+
+    .. property :: public Type Type { get; set; }
+	
+	
+
+    .. property :: public object Listener { get; set; }
+	
+	
+
+    .. property :: bool MainThreaded { get; set; }
+	
+	
+
+    .. method :: public ListenerInstance(object listener, bool mainThreaded = false)
+    
+    
+
+    .. method :: public void OnEvent(Event e, string[] tags = null)
+    
+    
+
+.. class:: WaitingLaunchEvent
+
+	Internal class
+
+    .. property :: public ListenerInstance Listener { get; set; }
+	
+	
+
+    .. property :: public Event Event { get; set; }
+	
+	
+
+    .. property :: public string[] Tags { get; set; }
+	
+	
+
+    .. method :: public WaitingLaunchEvent(ListenerInstance listener, Event e, string[] tags)
+    
+    
+
+.. class:: EventManager
+
+    .. inherits:: IEventManager
+
+	
+
+    .. property :: internal Dictionary<Type, List<ListenerInstance>> Listeners { get; set; }
+	
+	Dictionnary that contains all listeners for every subtype of IEvent.
+
+    .. property :: public Event Event { get; set; }
+	
+	
+
+    .. property :: internal List<ListenerInstance> AllListeners { get; set; }
+	
+	
+
+    .. property :: internal Queue<WaitingLaunchEvent> EventsToLaunch { get; set; }
+	
+	
+
+    .. property :: Log Log { get; set; }
+	
+	Prints messages.
+
+    .. property :: Log LogWarning { get; set; }
+	
+	Prints warnings.
+
+    .. property :: Log LogError { get; set; }
+	
+	Prints errors. If defined, catches exceptions directly causes by the transmission of an event to a listener. Else, an exception will be raised with the error message.
+
+    .. method :: void Emit(Event e, params string[] tags)
+    
+	Sends a signal to all IListeners added to this IEventManager instance.
+
+    .. method :: void AddListener<T>(IListener<T> listener, bool MainThreaded)
+    
+	Adds a Listener of T to the list of listeners. T inherits Event.
+
+    .. method :: void RemoveListener<T>(IListener<T> listener)
+    
+	Removes a Listener of T from the list of listeners. T inherits Event.
+
+    .. method :: public void ExecMainThreaded()
+    
 
 IO
 ==
+
+.. class:: IOSystem
+
+    .. method:: public static bool FileExists(string path)
+    
+    .. method:: public static bool DirectoryExists(string path)
+    
+    .. method:: public static void CreateFile(string path, string[] allLines = null, bool deletePrevious = false)
+    
+    .. method:: public static FileStream CreateFile(string path, bool deletePrevious = false)
+    
+    .. method:: public static void DeleteFile(string path)
+    
+    .. method:: public static string GetFullPath(string path)
+    
+    .. method:: public static string[] GetAllFileNames(string directory, bool with_extension = false)
+    
+    .. method:: public static string[] GetAllLines(string path)
 
 Log
 ===
