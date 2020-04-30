@@ -70,6 +70,17 @@ namespace Assets.Noyau.Cards.controller
                         return player != owner
                             && !player.Dead.Value
                             && player.ListCard.Count > 0;
+                    }),
+                new CardEffect("card.location.sanctuaire.nothing_happen",
+                    targetableCondition: (player, owner) =>
+                    {
+                        foreach (Player p in PlayerView.GetPlayers())
+                            if (p.ListCard.Count > 0)
+                                return false;
+                        return true;
+                    },
+                    effect: (player, owner, card) =>
+                    {
                     }));
 
 
