@@ -242,7 +242,7 @@ namespace Assets.Noyau.Players.controller
                 else if (pickedCard is EquipmentCard pickedEquipmentCard)
                 {
                     if (!(GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId))
-                        EventView.Manager.Emit(new DrawEquipmentCardEvent(pickedEquipmentCard.Id));
+                        EventView.Manager.Emit(new DrawEquipmentCardEvent(player.Id, pickedEquipmentCard.Id));
                     pickedEquipmentCard.equipe(player, pickedEquipmentCard);
                     GameManager.TurnEndable.Value = true;
                 }

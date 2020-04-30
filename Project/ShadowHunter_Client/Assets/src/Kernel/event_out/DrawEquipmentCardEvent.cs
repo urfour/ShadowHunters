@@ -10,6 +10,12 @@ namespace Scripts.event_out
     {
         public int CardId { get; set; }
 
+        public DrawEquipmentCardEvent(int playerId, int cardId)
+        {
+            this.PlayerId = playerId;
+            this.CardId = cardId;
+        }
+
         public DrawEquipmentCardEvent(int id)
         {
             this.CardId = id;
