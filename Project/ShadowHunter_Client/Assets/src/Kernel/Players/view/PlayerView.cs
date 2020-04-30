@@ -24,8 +24,10 @@ namespace Assets.Noyau.Players.view
 
             foreach (Player p in GetPlayers())
             {
+                if (p.Character.goal != null)
                 p.Character.goal.setWinningListeners(p);
-                p.Character.power.addListeners(p);
+                if (p.Character.power != null)
+                    p.Character.power.addListeners(p);
             }
         }
 
