@@ -259,6 +259,90 @@ Log
 Network
 =======
 
+model
+~~~~~
+
+.. namespace:: Network.model
+
+.. class:: Client
+
+    .. inherits:: ListenableObject
+    
+    Gets the TCP connection from a Server.Accept() and manage the sending/receiving of events.
+
+    .. property:: private TcpClient TcpClient { get; set; }
+    
+	TCPClient of the client.
+
+    .. property:: private Thread ListenThread { get; set; }
+    
+	
+
+    .. property:: private NetworkStream Stream { get; set; }
+    
+	Stream on which data will be sent for this client.
+
+    .. property:: public ListenableObject OnDisconnect { get; set; }
+    
+	Listener waiting for this client to disconnect.
+
+    .. property:: public static List<OnNotification> OnConnect { get; set; }
+    
+	
+
+    .. property:: public Room Room { get; set; }
+    
+	Room in which this client is.
+
+    .. property:: public Account Account { get; set; }
+    
+	Account associated with this client.
+	
+    .. method:: public void JoinRoom(Room new_room)
+    
+    Add this client to a Room.
+	
+    .. method:: public void LeaveRoom()
+    
+    Removes this client from this Room.
+    
+    .. method:: public void Stop()
+    
+    Closes the connection with the client.
+    
+    .. method:: public void Send(string data)
+    
+    Sends a string to the client.
+    
+    .. method:: public void Send(Event e)
+    
+    Sends an event to this client.
+    
+    .. method:: private void Listen()
+    
+    Listens incoming messages from the Client, and tries to serialize them into an Event. If it works, the event will sent in the IEventMAnager; else, it will be transmitted to the client's room.
+
+
+controller
+~~~~~~~~~~~
+
+.. namespace:: Network.controller
+
+.. class:: GClient
+
+    .. property:: public static GClient Instance { get; set; }
+    
+    Instance of the client manager
+    
+    .. property:: private Dictionary<string, Client> ConnectedClients { get; set; }
+    
+	Dictionnary associating a string to a Client.
+	
+
+
+
+
+
 Properties
 ==========
 
