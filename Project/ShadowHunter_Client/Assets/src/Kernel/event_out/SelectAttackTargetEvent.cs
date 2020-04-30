@@ -18,5 +18,22 @@ namespace Scripts.event_out
         public bool PowerGeorges { get; set; } = false;
         public bool PowerLoup { get; set; } = false;
         public bool PowerCharles { get; set; } = false;
+
+        public SelectAttackTargetEvent(int playerId, int[] possibleTargetId, int targetID, bool powerFranklin, bool powerGeorges,
+            bool powerLoup, bool powerCharles) : base()
+        {
+            this.PlayerId = playerId;
+            this.PossibleTargetId = possibleTargetId;
+            this.TargetID = targetID;
+            this.PowerFranklin = powerFranklin;
+            this.PowerGeorges = powerGeorges;
+            this.PowerLoup = powerLoup;
+            this.PowerCharles = powerCharles;
+        }
+
+        public SelectAttackTargetEvent() : base()
+        {
+
+        }
     }
 }

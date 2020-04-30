@@ -15,5 +15,15 @@ namespace Scripts.event_out
     public class DrawCardEvent : PlayerEvent
     {
         public CardType SelectedCardType { get; set; }
+
+        public DrawCardEvent(int playerId, CardType selectedCardType) : base()
+        {
+            this.PlayerId = playerId;
+            this.SelectedCardType = selectedCardType;
+        }
+
+        public DrawCardEvent() : base()
+        {
+        }
     }
 }

@@ -12,5 +12,16 @@ namespace Scripts.event_in
     public class MoveOn : PlayerEvent
     {
         public int Location { get; set; }
+
+        public MoveOn(int playerId, int location) : base()
+        {
+            this.PlayerId = playerId;
+            this.Location = location;
+        }
+
+        public MoveOn() : base()
+        {
+
+        }
     }
 }

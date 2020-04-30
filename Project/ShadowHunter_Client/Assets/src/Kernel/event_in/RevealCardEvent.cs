@@ -11,5 +11,13 @@ namespace Scripts.event_in
     /// </summary>
     public class RevealCardEvent : PlayerEvent
     {
+        public RevealCardEvent(int playerId) : base()
+        {
+            this.PlayerId = playerId;
+        }
+
+        public RevealCardEvent() : base()
+        {
+        }
     }
 }

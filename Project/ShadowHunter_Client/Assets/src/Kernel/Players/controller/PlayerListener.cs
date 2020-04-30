@@ -354,7 +354,7 @@ namespace Assets.Noyau.Players.controller
 
                 Debug.Log("Le lancer vaut : " + lancer);
 
-                if (lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value != 0)
+                if (lancer != 0)
                 {
                     Debug.Log("Wounds avant : " + playerAttacked.Wound.Value);
                     playerAttacked.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);

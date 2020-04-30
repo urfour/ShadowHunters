@@ -16,5 +16,16 @@ namespace Scripts.event_out
     public class SelectVisionTargetEvent : PlayerEvent
     {
         public int cardId;
+
+        public SelectVisionTargetEvent(int playerId, int cardId) : base()
+        {
+            this.PlayerId = playerId;
+            this.cardId = cardId;
+        }
+
+        public SelectVisionTargetEvent() : base()
+        {
+
+        }
     }
 }

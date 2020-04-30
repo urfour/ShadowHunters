@@ -13,5 +13,14 @@ namespace Scripts.event_out
     /// </summary>
     public class SelectBobPowerEvent : PlayerEvent
     {
+        public SelectBobPowerEvent(int playerId) : base()
+        {
+            this.PlayerId = playerId;
+        }
+
+        public SelectBobPowerEvent() : base()
+        {
+
+        }
     }
 }

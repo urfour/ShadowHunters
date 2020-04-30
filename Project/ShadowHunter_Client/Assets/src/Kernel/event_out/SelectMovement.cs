@@ -13,5 +13,16 @@ namespace Scripts.event_out
     public class SelectMovement : PlayerEvent
     {
         public int[] LocationAvailable { get; set; }
+
+        public SelectMovement(int playerId, int[] locationAvailable) : base()
+        {
+            this.PlayerId = playerId;
+            this.LocationAvailable = locationAvailable;
+        }
+
+        public SelectMovement() : base()
+        {
+
+        }
     }
 }

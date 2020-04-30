@@ -17,5 +17,20 @@ namespace Scripts.event_out
         public bool PowerGeorges { get; set; }
         public bool PowerLoup { get; set; }
         public bool PowerCharles { get; set; }
+
+        public AttackPlayerEvent(int playerId, int playerAttackedId, bool powerF, bool powerG, bool powerL, bool powerC) : base()
+        {
+            this.PlayerId = playerId;
+            this.PlayerAttackedId = playerAttackedId;
+            this.PowerFranklin = powerF;
+            this.PowerGeorges = powerG;
+            this.PowerLoup = powerL;
+            this.PowerCharles = powerC;
+        }
+
+        public AttackPlayerEvent() : base()
+        {
+
+        }
     }
 }

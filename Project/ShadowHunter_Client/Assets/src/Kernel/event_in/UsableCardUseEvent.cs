@@ -16,7 +16,7 @@ namespace Scripts.event_in
         public int EffectSelected { get; set; }
         public int PlayerSelected { get; set; }
 
-        public UsableCardUseEvent(int card_id, int effect_selected, int player_selected, int playerId)
+        public UsableCardUseEvent(int card_id, int effect_selected, int player_selected, int playerId) : base()
         {
             this.Cardid = card_id;
             this.EffectSelected = effect_selected;
@@ -24,7 +24,7 @@ namespace Scripts.event_in
             this.PlayerId = playerId;
         }
 
-        public UsableCardUseEvent()
+        public UsableCardUseEvent() : base()
         {
 
         }

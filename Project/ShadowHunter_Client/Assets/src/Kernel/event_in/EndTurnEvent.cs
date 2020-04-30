@@ -11,5 +11,13 @@ namespace Scripts.event_in
     /// </summary>
     public class EndTurnEvent : PlayerEvent
     {
+        public EndTurnEvent(int playerId) : base()
+        {
+            this.PlayerId = playerId;
+        }
+
+        public EndTurnEvent() : base()
+        {
+        }
     }
 }

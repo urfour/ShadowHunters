@@ -17,5 +17,18 @@ namespace Scripts.event_out
         public Card EffectCard { get; set; } = null;
         public bool PowerDaniel { get; set; } = false;
         public bool PowerLoup { get; set; } = false;
+
+        public SelectRevealOrNotEvent(int playerId, Card effectCard, bool powerDaniel, bool powerLoup) : base()
+        {
+            this.PlayerId = playerId;
+            this.EffectCard = effectCard;
+            this.PowerDaniel = powerDaniel;
+            this.PowerLoup = powerLoup;
+        }
+
+        public SelectRevealOrNotEvent() : base()
+        {
+
+        }
     }
 }

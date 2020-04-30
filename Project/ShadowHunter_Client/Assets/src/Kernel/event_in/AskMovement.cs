@@ -12,5 +12,14 @@ namespace Assets.Noyau.event_in
     /// </summary>
     public class AskMovement : PlayerEvent
     {
+        public AskMovement(int playerId) : base()
+        {
+            this.PlayerId = playerId;
+        }
+
+        public AskMovement() : base()
+        {
+
+        }
     }
 }

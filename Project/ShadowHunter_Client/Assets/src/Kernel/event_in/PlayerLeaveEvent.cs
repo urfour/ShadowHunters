@@ -10,12 +10,12 @@ namespace Assets.src.Kernel.event_in
     public class PlayerLeaveEvent : PlayerEvent
     {
 
-        public PlayerLeaveEvent()
+        public PlayerLeaveEvent() : base()
         {
 
         }
 
-        public PlayerLeaveEvent(int playerId)
+        public PlayerLeaveEvent(int playerId) : base()
         {
             this.PlayerId = playerId;
         }
