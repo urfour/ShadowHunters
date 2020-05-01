@@ -103,7 +103,7 @@ namespace Assets.Noyau.Players.controller
         /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
         /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
         /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
-        public static Power Emi = new Power
+        /*public static Power Emi = new Power
             (
             power: (owner) =>
             {
@@ -140,7 +140,7 @@ namespace Assets.Noyau.Players.controller
                     owner.CanUsePower.Value = available;
                 }
             }
-            );
+            );*/
 
         //SHADOWS
 

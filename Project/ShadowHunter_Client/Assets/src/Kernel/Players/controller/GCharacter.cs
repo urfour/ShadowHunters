@@ -32,7 +32,7 @@ namespace Assets.Noyau.Players.controller
 
             List<Character> Hunter = new List<Character>()
             {
-                new Character("character.name.emi", CharacterTeam.Hunter, 10, GGoal.HunterGoal, GPower.Emi),
+                new Character("character.name.emi", CharacterTeam.Hunter, 10, GGoal.HunterGoal, null),
                 new Character("character.name.georges", CharacterTeam.Hunter, 14, GGoal.HunterGoal, GPower.George),
                 new Character("character.name.franklin", CharacterTeam.Hunter, 12, GGoal.HunterGoal, GPower.Franklin),
             };
