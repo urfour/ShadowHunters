@@ -370,10 +370,6 @@ namespace Assets.Noyau.Players.controller
                 {
                     playerAttacked.Wounded(GameManager.rand.Next(0, 4), playerAttacking, true);
                 }
-                else if (attackPlayer.PowerLoup)
-                {
-                    playerAttacked.OnAttacked.Value = true;
-                }
                 else
                 {
                     int lancer = 0;

@@ -139,33 +139,55 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
-                EventView.Manager.Emit(new AttackPlayerEvent() { PlayerId = owner.Id, PlayerAttackedId = owner.OnAttackedAttacker.Value, PowerLoup = true, });
-                // empêche le spam du pouvoir
-                owner.CanUsePower.Value = false;
+                if (owner.CanUsePower.Value)
+                {
+                    owner.CanUsePower.Value = false;
+                    EventView.Manager.Emit(new AttackPlayerEvent() { PlayerId = owner.Id, PlayerAttackedId = owner.OnAttackedBy.Value, PowerLoup = true, });
+                }
             },
             addListeners: (owner) =>
             {
-                owner.OnAttacked.AddListener((sender) => { owner.Character.power.availability(owner); });
+                owner.OnAttackedBy.AddListener((sender) => { owner.Character.power.availability(owner); });
                 owner.Revealed.AddListener((sender) => { owner.Character.power.availability(owner); });
                 GameManager.StartOfTurn.AddListener((sender) => { owner.Character.power.availability(owner); });
             },
             availability: (owner) =>
             {
+                if (GameManager.StartOfTurn.Value)
+                {
+                    if (owner.OnAttackedBy.Value != -1)
+                    {
+                        owner.OnAttackedBy.Value = -1;
+                    }
+                    if (owner.CanUsePower.Value != false)
+                    {
+                        owner.CanUsePower.Value = false;
+                    }
+                }
+                else
+                {
+                    if (owner.OnAttackedBy.Value != -1 && owner.CanUsePower.Value == false)
+                    {
+                        owner.CanUsePower.Value = true;
+                    }
+                }
+                /*
                 // Si le joueur attaquant met fin à son tour, dès le début du suivant on coupe le pouvoir
                 if (GameManager.StartOfTurn.Value)
                 {
                     if (owner.CanUsePower.Value)
                         owner.CanUsePower.Value = false;
 
-                    if (owner.OnAttacked.Value)
-                        owner.OnAttacked.Value = false;
+                    if (owner.OnAttackedBy.Value)
+                        owner.OnAttackedBy.Value = false;
                 }
                 // Si la raison de l'appel vient de OnAttacked (donc pas start)
-                else if (owner.OnAttacked.Value && owner.Revealed.Value)
+                else if (owner.OnAttackedBy.Value && owner.Revealed.Value)
                 {
                     owner.CanUsePower.Value = true;
-                    owner.OnAttacked.Value = false;
+                    owner.OnAttackedBy.Value = false;
                 }
+                */
             }
             );
 
