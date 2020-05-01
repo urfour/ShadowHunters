@@ -44,9 +44,17 @@ namespace EventSystem
             }
             else
             {
-                XmlSerializer serializer = new XmlSerializer(t);
-                //StreamReader file = new StreamReader(path);
-                return (Event)serializer.Deserialize(new StringReader(data));
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(t);
+                    //StreamReader file = new StreamReader(path);
+                    return (Event)serializer.Deserialize(new StringReader(data));
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                    Logger.Error("[Event XML] : \n" + data);
+                }
             }
             return null;
         }
