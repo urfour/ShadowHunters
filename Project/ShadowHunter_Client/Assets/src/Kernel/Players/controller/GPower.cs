@@ -30,7 +30,10 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
-                EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.GeorgesPower.Id, false, owner.Id));
+                if (GameManager.LocalPlayer.Value == owner)
+                {
+                    EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.GeorgesPower.Id, false, owner.Id));
+                }
                 owner.PowerUsed.Value = true;
             },
             addListeners: (owner) =>
@@ -61,7 +64,10 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
-                EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.FranklinPower.Id, false, owner.Id));
+                if (GameManager.LocalPlayer.Value == owner)
+                {
+                    EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.FranklinPower.Id, false, owner.Id));
+                }
                 owner.PowerUsed.Value = true;
             },
             addListeners: (owner) =>
@@ -142,7 +148,10 @@ namespace Assets.Noyau.Players.controller
                 if (owner.CanUsePower.Value)
                 {
                     owner.CanUsePower.Value = false;
-                    EventView.Manager.Emit(new AttackPlayerEvent() { PlayerId = owner.Id, PlayerAttackedId = owner.OnAttackedBy.Value, PowerLoup = true, });
+                    if (GameManager.LocalPlayer.Value == owner)
+                    {
+                        EventView.Manager.Emit(new AttackPlayerEvent() { PlayerId = owner.Id, PlayerAttackedId = owner.OnAttackedBy.Value, PowerLoup = true, });
+                    }
                 }
             },
             addListeners: (owner) =>
@@ -153,24 +162,28 @@ namespace Assets.Noyau.Players.controller
             },
             availability: (owner) =>
             {
-                if (GameManager.StartOfTurn.Value)
+                if (owner.Revealed.Value)
                 {
-                    if (owner.OnAttackedBy.Value != -1)
+                    if (GameManager.StartOfTurn.Value)
                     {
-                        owner.OnAttackedBy.Value = -1;
+                        if (owner.OnAttackedBy.Value != -1)
+                        {
+                            owner.OnAttackedBy.Value = -1;
+                        }
+                        if (owner.CanUsePower.Value != false)
+                        {
+                            owner.CanUsePower.Value = false;
+                        }
                     }
-                    if (owner.CanUsePower.Value != false)
+                    else
                     {
-                        owner.CanUsePower.Value = false;
+                        if (owner.OnAttackedBy.Value != -1 && owner.CanUsePower.Value == false)
+                        {
+                            owner.CanUsePower.Value = true;
+                        }
                     }
                 }
-                else
-                {
-                    if (owner.OnAttackedBy.Value != -1 && owner.CanUsePower.Value == false)
-                    {
-                        owner.CanUsePower.Value = true;
-                    }
-                }
+
                 /*
                 // Si le joueur attaquant met fin à son tour, dès le début du suivant on coupe le pouvoir
                 if (GameManager.StartOfTurn.Value)
@@ -274,7 +287,10 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
-                EventView.Manager.Emit(new SelectBobPowerEvent() { PlayerId = owner.Id});
+                if (GameManager.LocalPlayer.Value == owner)
+                {
+                    EventView.Manager.Emit(new SelectBobPowerEvent() { PlayerId = owner.Id });
+                }
             },
             addListeners: (owner) =>
             {
@@ -300,7 +316,10 @@ namespace Assets.Noyau.Players.controller
             power: (owner) =>
             {
                 owner.Wounded(2, owner, false);
-                EventView.Manager.Emit(new SelectAttackTargetEvent() { PlayerId = owner.Id, TargetID = owner.OnAttackingPlayer.Value, });
+                if (GameManager.LocalPlayer.Value == owner)
+                {
+                    EventView.Manager.Emit(new SelectAttackTargetEvent() { PlayerId = owner.Id, TargetID = owner.OnAttackingPlayer.Value, });
+                }
                 // empêche le spam du pouvoir
                 owner.CanUsePower.Value = false;
             },
