@@ -180,7 +180,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        int lancer = UnityEngine.Random.Range(1, 6) + UnityEngine.Random.Range(1, 4);
+                        int lancer = GameManager.rand.Next(1, 6) + GameManager.rand.Next(1, 4);
                         Position area = Position.None;
 
                         switch (lancer)
@@ -692,7 +692,7 @@ namespace Assets.Noyau.Cards.controller
             visionDeck = new List<Card>()
             {
                 CreateVisionCard("card.vision.vision_destructrice", CardType.Vision, "card.vision.vision_destructrice.description", false,
-                new CardEffect("card.vision.vision_destructrice.effect.args.wound&1",
+                new CardEffect("card.vision.vision_destructrice.effect.args.wound&2",
                     targetableCondition: (player, owner) =>
                     {
                         return (player.Character.characterHP >= 12
@@ -701,11 +701,11 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(1, player, false);
+                        player.Wounded(2, player, false);
                     })),
 
                 CreateVisionCard("card.vision.vision_clairvoyante", CardType.Vision, "card.vision.vision_clairvoyante.description", false,
-                new CardEffect("card.vision.vision_clairvoyante.effect.args.wound&2",
+                new CardEffect("card.vision.vision_clairvoyante.effect.args.wound&1",
                     targetableCondition: (player, owner) =>
                     {
                         return (player.Character.characterHP <= 11
@@ -714,7 +714,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(2, player, false);
+                        player.Wounded(1, player, false);
                     })),
 
                 CreateVisionCard("card.vision.vision_cupide", CardType.Vision, "card.vision.vision_cupide.description", false,
