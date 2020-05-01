@@ -58,6 +58,7 @@ namespace Assets.Noyau.Players.controller
             }
             else if (e is AskMovement am)
             {
+                GameManager.StartOfTurn.Value = true;
                 GameManager.MovementAvailable.Value = false;
 
                 // la gestion de cet événement est uniquement fait pour le client qui l'envoie
