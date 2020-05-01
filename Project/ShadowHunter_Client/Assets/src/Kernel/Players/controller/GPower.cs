@@ -321,6 +321,7 @@ namespace Assets.Noyau.Players.controller
                     EventView.Manager.Emit(new AttackPlayerEvent() { PlayerId = owner.Id, PlayerAttackedId = owner.OnAttackingPlayer.Value, PowerCharles = true, });
                 }
                 // empêche le spam du pouvoir
+                owner.OnAttacking.Value = false;
                 owner.CanUsePower.Value = false;
             },
             addListeners: (owner) =>
