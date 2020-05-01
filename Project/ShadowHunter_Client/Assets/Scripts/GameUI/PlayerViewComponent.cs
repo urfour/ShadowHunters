@@ -55,13 +55,15 @@ public class PlayerViewComponent : MonoBehaviour
 
     public void DisplayCard()
     {
-        playerIcon.gameObject.SetActive(true);
+        //playerIcon.gameObject.SetActive(true);
+        SceneManagerComponent.Instance.cardDisplayer.DisplayPlayer(this.player);
     }
-
+    /*
     public void HideCard()
     {
         playerIcon.gameObject.SetActive(false);
     }
+    */
 
     public void Attack()
     {
