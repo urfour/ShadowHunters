@@ -132,7 +132,8 @@ namespace Assets.Noyau.Players.controller
                 currentPlayer.Position.Value = mo.Location;
 
                 GameManager.AttackAvailable.Value = true;
-                if (!currentPlayer.HasSaber.Value)
+
+                if (!currentPlayer.HasSaber.Value || currentPlayer.getTargetablePlayers().Count == 0)
                     GameManager.TurnEndable.Value = true;
 
                 switch (GameManager.Board[currentPlayer.Position.Value])
