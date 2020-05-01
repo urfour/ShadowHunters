@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Assets.src.Kernel.event_in
 {
-    class PowerUseEvent : PlayerEvent
+    public class PowerUseEvent : PlayerEvent
     {
 
         public PowerUseEvent(int playerId) : base(playerId)

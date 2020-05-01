@@ -149,6 +149,10 @@ public class CardDisplayer : MonoBehaviour
                 Debug.LogWarning("Unknown card label : " + player.Character.characterName);
             }
         }
+        else
+        {
+            cardImage.sprite = ResourceLoader.CharacterSprites["character.name.unknown"];
+        }
         foreach (Card c in player.ListCard)
         {
             GameObject equipment = Instantiate(characterEquipmentDisplayerPrefab.gameObject, ChoiceContent);
