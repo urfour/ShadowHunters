@@ -376,6 +376,7 @@ namespace Assets.Noyau.Players.controller
                 else
                 {
                     int lancer = 0;
+                    int damages = 0;
 
                     if (playerAttacking.HasSaber.Value)
                         lancer = GameManager.rand.Next(1, 4);
@@ -383,23 +384,63 @@ namespace Assets.Noyau.Players.controller
                         lancer = Math.Abs(GameManager.rand.Next(1, 6) - GameManager.rand.Next(1, 4));
 
                     Debug.Log("Le lancer vaut : " + lancer);
-                    
-                    if (playerAttacking.HasGatling.Value)
+
+                    if (playerAttacking.Character.characterName.Equals("character.name.bob"))
                     {
-                        foreach (Player p in playerAttacking.getTargetablePlayers())
+                        if (playerAttacked.HasGuardian.Value)
+                            damages = 0;
+                        else if (lancer > 0)
+                            damages = Mathf.Max(0, (lancer - playerAttacked.ReductionWounds.Value < 0) ? 0 : lancer - playerAttacked.ReductionWounds.Value
+                                                + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value);
+
+                        if (damages >= 2)
                         {
-                            p.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
+                            // Cas Gatling à considérer quand on aura la foi
+                            playerAttacking.OnAttackingPlayer.Value = playerAttacking.Id;
+                            playerAttacked.OnAttackedBy.Value = playerAttacking.Id;
+                            playerAttacking.DamageDealed.Value = damages;
+                            // activer l'effet
+
+                        }
+                        else
+                        {
+                            if (playerAttacking.HasGatling.Value)
+                            {
+                                foreach (Player p in playerAttacking.getTargetablePlayers())
+                                {
+                                    p.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
+                                }
+                            }
+                            else
+                            {
+                                Logger.Info("Wounds avant : " + playerAttacked.Wound.Value);
+                                playerAttacked.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
+                                Logger.Info("Wounds après : " + playerAttacked.Wound.Value);
+                                Logger.Info("Vie total : " + playerAttacked.Character.characterHP);
+                                Logger.Info("Mort ? " + playerAttacked.Dead.Value);
+                            }
                         }
                     }
+
                     else
                     {
-                        Logger.Info("Wounds avant : " + playerAttacked.Wound.Value);
-                        playerAttacked.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
-                        Logger.Info("Wounds après : " + playerAttacked.Wound.Value);
-                        Logger.Info("Vie total : " + playerAttacked.Character.characterHP);
-                        Logger.Info("Mort ? " + playerAttacked.Dead.Value);
-                    }
+                        if (playerAttacking.HasGatling.Value)
+                        {
+                            foreach (Player p in playerAttacking.getTargetablePlayers())
+                            {
+                                p.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
+                            }
+                        }
+                        else
+                        {
+                            Logger.Info("Wounds avant : " + playerAttacked.Wound.Value);
+                            playerAttacked.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
+                            Logger.Info("Wounds après : " + playerAttacked.Wound.Value);
+                            Logger.Info("Vie total : " + playerAttacked.Character.characterHP);
+                            Logger.Info("Mort ? " + playerAttacked.Dead.Value);
+                        }
 
+                    }
                     GameManager.TurnEndable.Value = true;
 
                     GameManager.AttackAvailable.Value = false;

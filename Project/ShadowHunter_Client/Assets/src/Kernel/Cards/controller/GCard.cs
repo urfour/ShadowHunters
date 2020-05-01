@@ -25,6 +25,7 @@ namespace Assets.Noyau.Cards.controller
 
         public UsableCard GeorgesPower;
         public UsableCard FranklinPower;
+        public UsableCard BobPower;
 
         public GCard()
         {
@@ -108,6 +109,29 @@ namespace Assets.Noyau.Cards.controller
                     {
                         int lancer = GameManager.rand.Next(1, 6);
                         player.Wounded(lancer, owner, false);
+                    }));
+
+            BobPower = CreateUsableCard("character.name.bob", CardType.Darkness, "character.name.bob.description", false,
+                new CardEffect("character.name.bob.power.steal",
+                    targetableCondition: (player, owner) =>
+                    {
+                        return player != owner && !player.Dead.Value && owner.OnAttacking.Value && player.ListCard.Count > 0;
+                    },
+                    effect: (target, owner, card) =>
+                    {
+                        EquipmentCard c = target.ListCard[GameManager.rand.Next(0, target.ListCard.Count - 1)] as EquipmentCard;
+
+                        c.equipe(owner, c);
+                        c.unequipe(target, c);
+                    }),
+                new CardEffect("character.name.bob.power.attack",
+                    targetableCondition: (player, owner) =>
+                    {
+                        return player != owner && !player.Dead.Value && owner.OnAttacking.Value;
+                    },
+                    effect: (target, owner, card) =>
+                    {
+                        target.Wounded(owner.DamageDealed.Value, owner, true);
                     }));
 
             /// <summary>

@@ -289,7 +289,7 @@ namespace Assets.Noyau.Players.controller
             {
                 if (GameManager.LocalPlayer.Value == owner)
                 {
-                    EventView.Manager.Emit(new SelectBobPowerEvent() { PlayerId = owner.Id });
+                    EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.BobPower.Id, false, owner.Id));
                 }
             },
             addListeners: (owner) =>
