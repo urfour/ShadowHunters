@@ -132,7 +132,8 @@ namespace Assets.Noyau.Players.controller
                 currentPlayer.Position.Value = mo.Location;
 
                 GameManager.AttackAvailable.Value = true;
-                GameManager.TurnEndable.Value = true;
+                if (!currentPlayer.HasSaber.Value)
+                    GameManager.TurnEndable.Value = true;
 
                 switch (GameManager.Board[currentPlayer.Position.Value])
                 {
@@ -244,16 +245,19 @@ namespace Assets.Noyau.Players.controller
                     if (!(GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId))
                         EventView.Manager.Emit(new DrawEquipmentCardEvent(player.Id, pickedEquipmentCard.Id));
                     pickedEquipmentCard.equipe(player, pickedEquipmentCard);
-                    GameManager.TurnEndable.Value = true;
+                    if(!player.HasSaber.Value)
+                        GameManager.TurnEndable.Value = true;
                 }
             }
             else if (e is UsableCardUseEvent ecue)
             {
-                GameManager.TurnEndable.Value = true;
                 Card c = CardView.GCard.cards[ecue.Cardid];
                 int effect = ecue.EffectSelected;
                 Player p1 = PlayerView.GetPlayer(ecue.PlayerId);
                 Player p2 = PlayerView.GetPlayer(ecue.PlayerSelected);
+
+                if(!p1.HasSaber.Value)
+                    GameManager.TurnEndable.Value = true;
 
                 UsableCard uCard = c as UsableCard;
                 /*
@@ -367,12 +371,26 @@ namespace Assets.Noyau.Players.controller
 
                     if (lancer != 0)
                     {
-                        Debug.Log("Wounds avant : " + playerAttacked.Wound.Value);
-                        playerAttacked.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
-                        Debug.Log("Wounds après : " + playerAttacked.Wound.Value);
-                        Debug.Log("Vie total : " + playerAttacked.Character.characterHP);
-                        Debug.Log("Mort ? " + playerAttacked.Dead.Value);
+                        if (playerAttacking.HasGatling.Value)
+                        {
+                            foreach (Player p in playerAttacking.getTargetablePlayers())
+                            {
+                                p.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
+                            }
+                        }
+                        else
+                        {
+                            Logger.Info("Wounds avant : " + playerAttacked.Wound.Value);
+                            playerAttacked.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
+                            Logger.Info("Wounds après : " + playerAttacked.Wound.Value);
+                            Logger.Info("Vie total : " + playerAttacked.Character.characterHP);
+                            Logger.Info("Mort ? " + playerAttacked.Dead.Value);
+                        }
                     }
+
+                    if (playerAttacking.HasSaber.Value)
+                        GameManager.TurnEndable.Value = true;
+
                     GameManager.AttackAvailable.Value = false;
                 }
             }
