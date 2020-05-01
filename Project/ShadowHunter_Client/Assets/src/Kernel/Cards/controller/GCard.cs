@@ -23,6 +23,9 @@ namespace Assets.Noyau.Cards.controller
         public UsableCard Foret;
         public UsableCard Sanctuaire;
 
+        public UsableCard GeorgesPower;
+        public UsableCard FranklinPower;
+
         public GCard()
         {
             /// <summary>
@@ -83,6 +86,29 @@ namespace Assets.Noyau.Cards.controller
                     {
                     }));
 
+            GeorgesPower = CreateUsableCard("character.name.georges", CardType.Light, "character.name.georges.description", false,
+                new CardEffect("character.name.georges.power",
+                    targetableCondition: (player, owner) =>
+                    {
+                        return player != owner && !player.Dead.Value;
+                    },
+                    effect: (player, owner, card) =>
+                    {
+                        int lancer = GameManager.rand.Next(1, 4);
+                        player.Wounded(lancer, owner, false);
+                    }));
+
+            FranklinPower = CreateUsableCard("character.name.franklin", CardType.Light, "character.name.franklin.description", false,
+                new CardEffect("character.name.franklin.power",
+                    targetableCondition: (player, owner) =>
+                    {
+                        return player != owner && !player.Dead.Value;
+                    },
+                    effect: (player, owner, card) =>
+                    {
+                        int lancer = GameManager.rand.Next(1, 6);
+                        player.Wounded(lancer, owner, false);
+                    }));
 
             /// <summary>
             /// Fonction qui va instancier les cartes ténèbres avec leur pouvoirs.

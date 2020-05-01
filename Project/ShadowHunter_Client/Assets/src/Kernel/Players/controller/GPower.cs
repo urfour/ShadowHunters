@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assets.Noyau.Cards.view;
 
 namespace Assets.Noyau.Players.controller
 {
@@ -29,16 +30,7 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
-                // lorsque le pouvoir est lancé
-                List<int> targatable = new List<int>();
-                foreach (Player p in PlayerView.GetPlayers())
-                {
-                    if (!p.Dead.Value && p != owner)
-                    {
-                        targatable.Add(p.Id);
-                    }
-                }
-                EventView.Manager.Emit(new SelectAttackTargetEvent() { PlayerId = owner.Id, PossibleTargetId = targatable.ToArray(), PowerGeorges = true, });
+                EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.GeorgesPower.Id, false, owner.Id));
                 owner.PowerUsed.Value = true;
             },
             addListeners: (owner) =>
@@ -68,16 +60,7 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
-                // lorsque le pouvoir est lancé
-                List<int> targatable = new List<int>();
-                foreach (Player p in PlayerView.GetPlayers())
-                {
-                    if (!p.Dead.Value && p != owner)
-                    {
-                        targatable.Add(p.Id);
-                    }
-                }
-                EventView.Manager.Emit(new SelectAttackTargetEvent() { PlayerId = owner.Id, PossibleTargetId = targatable.ToArray(), PowerFranklin = true, });
+                EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.FranklinPower.Id, false, owner.Id));
                 owner.PowerUsed.Value = true;
             },
             addListeners: (owner) =>
