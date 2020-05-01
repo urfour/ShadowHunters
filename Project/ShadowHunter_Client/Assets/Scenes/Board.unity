@@ -2070,7 +2070,8 @@ MonoBehaviour:
   cardImage: {fileID: 12753048}
   ChoiceContent: {fileID: 1189195960}
   DismissButton: {fileID: 897343502}
-  characterEquipmentDisplayerPrefab: {fileID: 0}
+  characterEquipmentDisplayerPrefab: {fileID: 7106373442318138080, guid: f878a524115f20a4783257f7140d21e8,
+    type: 3}
   choicePrefab: {fileID: 1561682503679468385, guid: d63347b563e10f1428e5467f520e92f7,
     type: 3}
 --- !u!1 &1003145507
