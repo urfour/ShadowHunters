@@ -16,7 +16,7 @@ namespace Scripts
 
         }
 
-        public PlayerEvent(int PlayerId) : base();
+        public PlayerEvent(int PlayerId) : base()
         {
             this.PlayerId = PlayerId;
         }

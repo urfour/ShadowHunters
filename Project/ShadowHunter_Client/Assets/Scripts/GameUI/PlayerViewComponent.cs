@@ -28,6 +28,7 @@ public class PlayerViewComponent : MonoBehaviour
 
     public Button revealButton;
     public Button powerButton;
+    public Text infoDisplayer;
 
     private Player player;
 
@@ -170,6 +171,17 @@ public class PlayerViewComponent : MonoBehaviour
         };
 
         listeners.Add((player.CanUsePower, powerAvailable));
+
+
+        OnNotification notifIsDead = (sender) =>
+        {
+            if (player.Dead.Value)
+            {
+                infoDisplayer.text = Language.Translate("character.info.dead");
+            }
+        };
+
+        listeners.Add((player.Dead, notifIsDead));
     }
 
     public void AddListeners()
