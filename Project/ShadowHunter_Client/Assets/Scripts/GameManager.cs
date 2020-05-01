@@ -82,7 +82,14 @@ namespace Assets.Scripts
     {
         public void OnEvent(EventSystem.Event e, string[] tags = null)
         {
-            Debug.Log(e.GetType().FullName + "\n\n" + e.Serialize());
+            if (tags != null)
+            {
+                Debug.Log(e.GetType().FullName + " [tags=" + tags[0] +"]\n\n" + e.Serialize());
+            }
+            else
+            {
+                Debug.Log(e.GetType().FullName + " [tag=null]\n\n" + e.Serialize());
+            }
         }
     }
 }

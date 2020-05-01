@@ -109,6 +109,9 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     {
         if (GameManager.PlayerTurn.Value == GameManager.LocalPlayer.Value && GameManager.PickVisionDeck.Value)
         {
+            GameManager.PickDarknessDeck.Value = false;
+            GameManager.PickLightnessDeck.Value = false;
+            GameManager.PickVisionDeck.Value = false;
             EventView.Manager.Emit(new DrawCardEvent() { PlayerId = GameManager.LocalPlayer.Value.Id, SelectedCardType = CardType.Vision });
         }
     }
@@ -116,6 +119,9 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     {
         if (GameManager.PlayerTurn.Value == GameManager.LocalPlayer.Value && GameManager.PickLightnessDeck.Value)
         {
+            GameManager.PickDarknessDeck.Value = false;
+            GameManager.PickLightnessDeck.Value = false;
+            GameManager.PickVisionDeck.Value = false;
             EventView.Manager.Emit(new DrawCardEvent() { PlayerId = GameManager.LocalPlayer.Value.Id, SelectedCardType = CardType.Light });
         }
     }
@@ -123,6 +129,9 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     {
         if (GameManager.PlayerTurn.Value == GameManager.LocalPlayer.Value && GameManager.PickDarknessDeck.Value)
         {
+            GameManager.PickDarknessDeck.Value = false;
+            GameManager.PickLightnessDeck.Value = false;
+            GameManager.PickVisionDeck.Value = false;
             EventView.Manager.Emit(new DrawCardEvent() { PlayerId = GameManager.LocalPlayer.Value.Id, SelectedCardType = CardType.Darkness });
         }
     }
