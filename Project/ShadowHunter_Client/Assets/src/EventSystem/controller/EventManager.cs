@@ -152,13 +152,19 @@ namespace EventSystem.controller
         {
             if (EventsToLaunch.Count > 0)
             {
-                eventsToLaunch_Mutex.WaitOne();
-                while (EventsToLaunch.Count > 0)
+                if (eventsToLaunch_Mutex.WaitOne(100))
                 {
-                    WaitingLaunchEvent e = EventsToLaunch.Dequeue();
-                    e.Listener.OnEvent(e.Event, e.Tags);
+                    while (EventsToLaunch.Count > 0)
+                    {
+                        WaitingLaunchEvent e = EventsToLaunch.Dequeue();
+                        e.Listener.OnEvent(e.Event, e.Tags);
+                    }
+                    eventsToLaunch_Mutex.ReleaseMutex();
                 }
-                eventsToLaunch_Mutex.ReleaseMutex();
+                else
+                {
+                    Logger.Warning("EventManager.ExecMainThreaded() : TimeOut");
+                }
             }
         }
     }

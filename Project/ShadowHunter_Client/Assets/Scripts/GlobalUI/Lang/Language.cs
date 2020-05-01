@@ -79,41 +79,49 @@ namespace Lang
         
         public string GetText(string label)
         {
-            string[] args = label.Split('&');
-            if (args.Length > 1)
+            try
             {
-                label = args[0] + "&" + (args.Length - 1);
-                if (!Translations.ContainsKey(label))
+                string[] args = label.Split('&');
+                if (args.Length > 1)
                 {
-                    Translations.Add(label, label);
-                    Save();
-                    //return Translations[label];
+                    label = args[0] + "&" + (args.Length - 1);
+                    if (!Translations.ContainsKey(label))
+                    {
+                        Translations.Add(label, label);
+                        //Save();
+                        //return Translations[label];
+                    }
+                    string tlabel = Translations[label];
+                    string[] targs = tlabel.Split('&');
+                    string tmp = targs[0];
+                    for (int i = 1; i < targs.Length; i++)
+                    {
+                        int index = int.Parse("" + targs[i][0]);
+                        if (index > 0 && index < args.Length)
+                        {
+                            tmp += args[index] + targs[i].Substring(1);
+                        }
+                        else
+                        {
+                            tmp += "[INVALID ARG INDEX : " + index + "]";
+                        }
+                    }
+                    return tmp;
                 }
-                string tlabel = Translations[label];
-                string[] targs = tlabel.Split('&');
-                string tmp = targs[0];
-                for (int i = 1; i < targs.Length; i++)
+                else
                 {
-                    int index = int.Parse(""+ targs[i][0]);
-                    if (index > 0 && index < args.Length)
+                    if (!Translations.ContainsKey(args[0]))
                     {
-                        tmp += args[index] + targs[i].Substring(1);
+                        Translations.Add(label, label);
+                        //Save();
                     }
-                    else
-                    {
-                        tmp += "[INVALID ARG INDEX : " + index + "]";
-                    }
+                    return Translations[label];
                 }
-                return tmp;
             }
-            else
+            catch (Exception e)
             {
-                if (!Translations.ContainsKey(args[0]))
-                {
-                    Translations.Add(label, label);
-                    Save();
-                }
-                return Translations[label];
+                Logger.Error(e);
+                return "[LABEL ERROR]";
             }
         }
 
