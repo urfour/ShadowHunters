@@ -1162,7 +1162,8 @@ namespace Assets.Noyau.Cards.controller
                 },
                 targetableCondition: (target, owner) =>
                 {
-                    return target != owner;
+                    return target != owner
+                        && !target.Dead.Value;
                 }
                 ));
             cards.Add(vision);
