@@ -26,6 +26,7 @@ public class PlayerViewComponent : MonoBehaviour
     public RectTransform turnIndicator;
 
     public Button revealButton;
+    public Button powerButton;
 
     private Player player;
 
@@ -70,6 +71,14 @@ public class PlayerViewComponent : MonoBehaviour
         if (GameManager.LocalPlayer.Value.getTargetablePlayers().Contains(player))
         {
             EventView.Manager.Emit(new AttackPlayerEvent() { PlayerId=GameManager.LocalPlayer.Value.Id, PlayerAttackedId=player.Id });
+        }
+    }
+
+    public void Power()
+    {
+        if (GameManager.LocalPlayer.Value == player && player.CanUsePower.Value)
+        {
+            player.Character.power.power(player);
         }
     }
 
@@ -151,6 +160,14 @@ public class PlayerViewComponent : MonoBehaviour
             listeners.Add((GameManager.PlayerTurn, attackAvailable));
             listeners.Add((GameManager.AttackAvailable, attackAvailable));
         }
+
+
+        OnNotification powerAvailable = (sender) =>
+        {
+            powerButton.gameObject.SetActive(player.CanUsePower.Value);
+        };
+
+        listeners.Add((player.CanUsePower, powerAvailable));
     }
 
     public void AddListeners()

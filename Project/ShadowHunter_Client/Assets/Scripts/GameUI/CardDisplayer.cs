@@ -139,7 +139,7 @@ public class CardDisplayer : MonoBehaviour
 
         if (player.Revealed.Value || player == GameManager.LocalPlayer.Value)
         {
-            if (ResourceLoader.CardSprites.ContainsKey(card.cardLabel))
+            if (ResourceLoader.CardSprites.ContainsKey(player.Character.characterName))
             {
                 cardImage.sprite = ResourceLoader.CardSprites[player.Character.characterName];
             }
