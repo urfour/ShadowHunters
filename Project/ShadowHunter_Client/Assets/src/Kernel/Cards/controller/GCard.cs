@@ -1102,6 +1102,7 @@ namespace Assets.Noyau.Cards.controller
         /// <param name="cardType">Type de la carte</param>
         /// <param name="description">Sa description</param>
         /// <param name="canDismiss">Booléen pour dire si la carte peut être défaussée</param>
+        /// <param name="hiddenChoices">Booléen pour dire si le choix peut être dissimulé</param>
         /// <param name="cardEffect">Tableau d'effets de la carte</param>
         /// <returns> Renvoie une EquipmentCard</returns>
         public UsableCard CreateUsableCard(string cardLabel, CardType cardType, string description, bool canDismiss, bool hiddenChoices, params CardEffect[] cardEffect)
