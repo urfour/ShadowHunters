@@ -34,6 +34,13 @@ public class PlayerBarComponent : MonoBehaviour
             pv.Init(i);
             pv.AddListeners();
         }
+
+        float width = 0;
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            width += (transform.GetChild(i) as RectTransform).sizeDelta.x + 50;
+        }
+        (this.transform as RectTransform).sizeDelta = new Vector2(width, (this.transform as RectTransform).sizeDelta.y);
     }
 
     /*
