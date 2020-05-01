@@ -148,16 +148,16 @@ public class CardDisplayer : MonoBehaviour
                 cardImage.sprite = null;
                 Debug.LogWarning("Unknown card label : " + player.Character.characterName);
             }
-
-            foreach (Card c in player.ListCard)
-            {
-                GameObject equipment = Instantiate(characterEquipmentDisplayerPrefab.gameObject, ChoiceContent);
-                CharacterEquipmentDisplayer ccd = equipment.GetComponent<CharacterEquipmentDisplayer>();
-                ccd.Display((EquipmentCard)c);
-                ccd.button.onClick.AddListener(delegate () { this.Display(c, player); });
-                ccd.button.interactable = true;
-            }
         }
+        foreach (Card c in player.ListCard)
+        {
+            GameObject equipment = Instantiate(characterEquipmentDisplayerPrefab.gameObject, ChoiceContent);
+            CharacterEquipmentDisplayer ccd = equipment.GetComponent<CharacterEquipmentDisplayer>();
+            ccd.Display((EquipmentCard)c);
+            ccd.button.onClick.AddListener(delegate () { this.Display(c, player); });
+            ccd.button.interactable = true;
+        }
+        gameObject.SetActive(true);
     }
 
     public void Clear()
