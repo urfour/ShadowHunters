@@ -1135,7 +1135,7 @@ namespace Assets.Noyau.Cards.controller
                     bool nothing_available = true;
                     for (int i = 0; i < effectscount; i++)
                     {
-                        if ((!effects[0].targetableCondition(target, owner) || target.Character.characterName.Equals("character.name.metamorphe")) && owner == target && !target.Dead.Value)
+                        if ((!effects[i].targetableCondition(target, owner) || target.Character.characterName.Equals("character.name.metamorphe")) && owner == target && !target.Dead.Value)
                         {
 
                         }
