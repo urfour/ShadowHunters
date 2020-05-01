@@ -16,13 +16,14 @@ namespace EventSystem
     [Serializable]
     public abstract class Event
     {
+        public static bool StackTraceEnable { get; set; } = false;
 
         public string StackTrace { get; set; }
         public bool AlreadyEmitted { get; set; } = false;
 
         public Event()
         {
-            StackTrace = Environment.StackTrace;
+            if (StackTraceEnable) StackTrace = Environment.StackTrace;
         }
 
         /// <summary>
