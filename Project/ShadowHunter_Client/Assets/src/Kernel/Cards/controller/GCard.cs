@@ -127,7 +127,8 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         player.Wounded(2,owner,false);
-                        owner.Wounded(2,owner,false);
+                        if (!owner.HasAmulet.Value)
+                            owner.Wounded(2,owner,false);
                     })),
 
                 CreateUsableCard("card.darkness.darkness_banane", CardType.Darkness, "card.darkness.darkness_banane.description", false,
