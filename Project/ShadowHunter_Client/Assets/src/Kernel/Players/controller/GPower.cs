@@ -139,7 +139,7 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
-                EventView.Manager.Emit(new SelectAttackTargetEvent() { PlayerId = owner.Id, TargetID = owner.OnAttackedAttacker.Value, PowerLoup = true, });
+                EventView.Manager.Emit(new AttackPlayerEvent() { PlayerId = owner.Id, PlayerAttackedId = owner.OnAttackedAttacker.Value, PowerLoup = true, });
                 // empêche le spam du pouvoir
                 owner.CanUsePower.Value = false;
             },
