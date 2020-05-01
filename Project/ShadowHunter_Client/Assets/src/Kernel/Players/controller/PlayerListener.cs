@@ -115,6 +115,15 @@ namespace Assets.Noyau.Players.controller
                     {
                         if (tmpavailableDestination != -1)
                             availableDestination.Add(tmpavailableDestination);
+
+                        if (GameManager.PlayerTurn.Value.Name.Equals("character.name.emi") && GameManager.PlayerTurn.Value.Revealed.Value)
+                        {
+                            if (GameManager.PlayerTurn.Value.Position.Value % 2 == 0)
+                                availableDestination.Add(GameManager.PlayerTurn.Value.Position.Value + 1);
+                            else
+                                availableDestination.Add(GameManager.PlayerTurn.Value.Position.Value - 1);
+                        }
+
                         nbrolls--;
                     }
                 }
@@ -389,8 +398,7 @@ namespace Assets.Noyau.Players.controller
                         }
                     }
 
-                    if (playerAttacking.HasSaber.Value)
-                        GameManager.TurnEndable.Value = true;
+                    GameManager.TurnEndable.Value = true;
 
                     GameManager.AttackAvailable.Value = false;
                 }

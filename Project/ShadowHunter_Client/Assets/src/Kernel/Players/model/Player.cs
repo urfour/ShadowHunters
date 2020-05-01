@@ -184,8 +184,14 @@ public class Player
                 this.Dead.Value = true;
             }
         });
-        
-        
+
+        Dead.AddListener((sender) =>
+        {
+            if (!this.Revealed.Value)
+                this.Revealed.Value = true;
+        });
+
+
         //players.Add(this);
     }
 
