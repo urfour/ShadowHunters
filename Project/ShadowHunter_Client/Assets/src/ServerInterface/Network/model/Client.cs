@@ -30,9 +30,11 @@ namespace Network.model
 
         private void Send(string data)
         {
+            Logger.Info("[CLIENT] : Start Send Event (" + data.Length + ")");
             byte[] buffer = SettingManager.Encoder.Value.GetBytes(data + '\0');
 
             NetworkStream stream = TcpClient.GetStream();
+            stream.WriteTimeout = 2000;
             stream.Write(buffer, 0, buffer.Length);
             Logger.Info("[CLIENT] : Send : " + data);
         }
