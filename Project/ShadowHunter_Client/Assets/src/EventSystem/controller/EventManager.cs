@@ -157,7 +157,9 @@ namespace EventSystem.controller
                     while (EventsToLaunch.Count > 0)
                     {
                         WaitingLaunchEvent e = EventsToLaunch.Dequeue();
+                        Logger.Info("[EVENTMANAGER] - " + e.Listener.GetType().Name + ".OnEvent(" + e.Event.GetType().Name + ") : Start");
                         e.Listener.OnEvent(e.Event, e.Tags);
+                        Logger.Info("[EVENTMANAGER] - " + e.Listener.GetType().Name + ".OnEvent(" + e.Event.GetType().Name + ") : End");
                     }
                     eventsToLaunch_Mutex.ReleaseMutex();
                 }
