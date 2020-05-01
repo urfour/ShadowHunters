@@ -2011,7 +2011,7 @@ RectTransform:
   - {fileID: 329965264}
   - {fileID: 897343500}
   m_Father: {fileID: 1003145511}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2070,6 +2070,7 @@ MonoBehaviour:
   cardImage: {fileID: 12753048}
   ChoiceContent: {fileID: 1189195960}
   DismissButton: {fileID: 897343502}
+  characterEquipmentDisplayerPrefab: {fileID: 0}
   choicePrefab: {fileID: 1561682503679468385, guid: d63347b563e10f1428e5467f520e92f7,
     type: 3}
 --- !u!1 &1003145507
@@ -2169,8 +2170,8 @@ RectTransform:
   - {fileID: 1021857163}
   - {fileID: 1291809260}
   - {fileID: 1246541370}
-  - {fileID: 999653976}
   - {fileID: 1659796287}
+  - {fileID: 999653976}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3187,7 +3188,7 @@ RectTransform:
   m_Children:
   - {fileID: 932197852}
   m_Father: {fileID: 1003145511}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.3203567}

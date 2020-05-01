@@ -15,4 +15,5 @@ public class CardChoiceDisplayer : MonoBehaviour
         target.text = p.Name;
         description.text = Language.Translate(cardEffect.description);
     }
+    
 }

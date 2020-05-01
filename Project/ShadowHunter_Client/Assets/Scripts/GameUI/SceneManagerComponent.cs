@@ -25,6 +25,8 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     public static Setting<int> LocalPlayerId = new Setting<int>(0);
     public static Setting<bool>[] boardAvailibility;
 
+    public static SceneManagerComponent Instance { get; set; }
+
     public PlayerBarComponent PlayerBarComponent;
 
     private List<(ListenableObject observed, OnNotification notification)> listeners = new List<(ListenableObject observed, OnNotification notification)>();
@@ -74,6 +76,7 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
 
     private void Start()
     {
+        Instance = this;
         EventView.Manager.AddListener(this, true);
         PlayerBarComponent.Init();
 

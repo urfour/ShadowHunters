@@ -17,6 +17,7 @@ public class CardDisplayer : MonoBehaviour
     public RectTransform ChoiceContent;
     public Button DismissButton;
 
+    public CharacterEquipmentDisplayer characterEquipmentDisplayerPrefab;
     public CardChoiceDisplayer choicePrefab;
 
     private List<(int ceIndex, Player player)> choices = new List<(int, Player)>();
@@ -127,6 +128,36 @@ public class CardDisplayer : MonoBehaviour
         choicesheigh += (ChoiceContent.childCount - 1) * ChoiceContent.GetComponent<VerticalLayoutGroup>().spacing;
         ChoiceContent.sizeDelta = new Vector2(ChoiceContent.sizeDelta.x, choicesheigh);
         gameObject.SetActive(true);
+    }
+
+    public void DisplayPlayer(Player player)
+    {
+        Clear();
+        this.player = player;
+        playerDisplayer.text = player.Name;
+        DismissButton.gameObject.SetActive(true);
+
+        if (player.Revealed.Value || player == GameManager.LocalPlayer.Value)
+        {
+            if (ResourceLoader.CardSprites.ContainsKey(card.cardLabel))
+            {
+                cardImage.sprite = ResourceLoader.CardSprites[player.Character.characterName];
+            }
+            else
+            {
+                cardImage.sprite = null;
+                Debug.LogWarning("Unknown card label : " + player.Character.characterName);
+            }
+
+            foreach (Card c in player.ListCard)
+            {
+                GameObject equipment = Instantiate(characterEquipmentDisplayerPrefab.gameObject, ChoiceContent);
+                CharacterEquipmentDisplayer ccd = equipment.GetComponent<CharacterEquipmentDisplayer>();
+                ccd.Display((EquipmentCard)c);
+                ccd.button.onClick.AddListener(delegate () { this.Display(c, player); });
+                ccd.button.interactable = true;
+            }
+        }
     }
 
     public void Clear()
