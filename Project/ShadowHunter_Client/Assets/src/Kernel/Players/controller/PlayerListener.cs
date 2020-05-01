@@ -267,7 +267,7 @@ namespace Assets.Noyau.Players.controller
                 Player p1 = PlayerView.GetPlayer(ecue.PlayerId);
                 Player p2 = PlayerView.GetPlayer(ecue.PlayerSelected);
 
-                if(!p1.HasSaber.Value)
+                if(!p1.HasSaber.Value || p1 != GameManager.PlayerTurn.Value)
                     GameManager.TurnEndable.Value = true;
 
                 UsableCard uCard = c as UsableCard;
