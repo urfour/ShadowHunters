@@ -138,12 +138,12 @@ public class Player
     /// </summary>
     public Setting<bool> PowerUsed { get; private set; } = new Setting<bool>(false);
     /// <summary>
-    /// Id du joueur qui m'a attaqué en dernier (Loup-garou)
+    /// Id du joueur qui m'a attaqué en dernier
     /// </summary>
     public Setting<int> OnAttackedBy { get; private set; } = new Setting<int>(-1);
     /*
     /// <summary>
-    /// Si le joueur se fait attaquer (Loup-garou)
+    /// Si le joueur se fait attaquer
     /// </summary>
     public Setting<bool> OnAttacked { get; private set; } = new Setting<bool>(false);
     /// <summary>
@@ -152,7 +152,7 @@ public class Player
     /// </summary>       
     public Setting<bool> OnAttacking { get; private set; } = new Setting<bool>(false);
     /// <summary>
-    /// Id du joueur que j'ai attaqué en dernier (Charles)
+    /// Id du joueur que j'ai attaqué en dernier
     /// </summary>    
     public Setting<int> OnAttackingPlayer { get; private set; } = new Setting<int>(-1);
     /// <summary>
