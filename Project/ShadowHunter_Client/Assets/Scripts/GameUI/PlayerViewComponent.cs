@@ -3,6 +3,7 @@ using Assets.Noyau.Players.view;
 using Assets.Scripts.GameUI;
 using Assets.Scripts.MainMenuUI.Accounts;
 using Assets.Scripts.MainMenuUI.SearchGame;
+using Assets.src.Kernel.event_in;
 using EventSystem;
 using Lang;
 using Scripts.event_in;
@@ -27,6 +28,7 @@ public class PlayerViewComponent : MonoBehaviour
 
     public Button revealButton;
     public Button powerButton;
+    public Text infoDisplayer;
 
     private Player player;
 
@@ -78,7 +80,8 @@ public class PlayerViewComponent : MonoBehaviour
     {
         if (GameManager.LocalPlayer.Value == player && player.CanUsePower.Value)
         {
-            player.Character.power.power(player);
+            //player.Character.power.power(player);
+            EventView.Manager.Emit(new PowerUseEvent(player.Id));
         }
     }
 
@@ -164,10 +167,21 @@ public class PlayerViewComponent : MonoBehaviour
 
         OnNotification powerAvailable = (sender) =>
         {
-            powerButton.gameObject.SetActive(player.CanUsePower.Value);
+            powerButton.gameObject.SetActive(GameManager.LocalPlayer.Value == player && player.CanUsePower.Value);
         };
 
         listeners.Add((player.CanUsePower, powerAvailable));
+
+
+        OnNotification notifIsDead = (sender) =>
+        {
+            if (player.Dead.Value)
+            {
+                infoDisplayer.text = Language.Translate("character.info.dead");
+            }
+        };
+
+        listeners.Add((player.Dead, notifIsDead));
     }
 
     public void AddListeners()

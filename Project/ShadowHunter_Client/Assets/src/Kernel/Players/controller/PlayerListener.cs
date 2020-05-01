@@ -4,6 +4,7 @@ using Assets.Noyau.Cards.view;
 using Assets.Noyau.event_in;
 using Assets.Noyau.Manager.view;
 using Assets.Noyau.Players.view;
+using Assets.src.Kernel.event_in;
 using EventSystem;
 using Scripts;
 using Scripts.event_in;
@@ -561,6 +562,14 @@ namespace Assets.Noyau.Players.controller
                         || card.cardLabel == "card.light.light_supreme"
                         || card.cardLabel == "card.light.light_chocolat")
                         player.Healed(player.Wound.Value);
+                }
+            }
+            else if (e is PowerUseEvent pue)
+            {
+                Player p = PlayerView.GetPlayer(pue.PlayerId);
+                if (p.CanUsePower.Value)
+                {
+                    p.Character.power.power(p);
                 }
             }
             /*
