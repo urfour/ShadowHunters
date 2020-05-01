@@ -38,6 +38,7 @@ namespace Assets.Noyau.Players.controller
                 // initialisation des listeners qui appeleront availability
                 GameManager.StartOfTurn.AddListener((sender) => { owner.Character.power.availability(owner); });
                 owner.Revealed.AddListener((sender) => { owner.Character.power.availability(owner); });
+                owner.PowerUsed.AddListener((sender) => { owner.Character.power.availability(owner); });
             },
             availability: (owner) =>
             {
@@ -68,6 +69,7 @@ namespace Assets.Noyau.Players.controller
                 // initialisation des listeners qui appeleront availability
                 GameManager.StartOfTurn.AddListener((sender) => { owner.Character.power.availability(owner); });
                 owner.Revealed.AddListener((sender) => { owner.Character.power.availability(owner); });
+                owner.PowerUsed.AddListener((sender) => { owner.Character.power.availability(owner); });
             },
             availability: (owner) =>
             {
