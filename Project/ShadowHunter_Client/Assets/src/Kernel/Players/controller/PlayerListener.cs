@@ -268,8 +268,11 @@ namespace Assets.Noyau.Players.controller
                 Player p1 = PlayerView.GetPlayer(ecue.PlayerId);
                 Player p2 = PlayerView.GetPlayer(ecue.PlayerSelected);
 
-                if(!p1.HasSaber.Value || p1 != GameManager.PlayerTurn.Value || (p1.HasSaber.Value && p1.getTargetablePlayers().Count == 0))
-                    GameManager.TurnEndable.Value = true;
+                if (!GameManager.StartOfTurn.Value)
+                {
+                    if (!p1.HasSaber.Value || p1 != GameManager.PlayerTurn.Value || (p1.HasSaber.Value && p1.getTargetablePlayers().Count == 0))
+                        GameManager.TurnEndable.Value = true;
+                }
 
                 UsableCard uCard = c as UsableCard;
                 /*
@@ -380,24 +383,21 @@ namespace Assets.Noyau.Players.controller
                         lancer = Math.Abs(GameManager.rand.Next(1, 6) - GameManager.rand.Next(1, 4));
 
                     Debug.Log("Le lancer vaut : " + lancer);
-
-                    if (lancer != 0)
+                    
+                    if (playerAttacking.HasGatling.Value)
                     {
-                        if (playerAttacking.HasGatling.Value)
+                        foreach (Player p in playerAttacking.getTargetablePlayers())
                         {
-                            foreach (Player p in playerAttacking.getTargetablePlayers())
-                            {
-                                p.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
-                            }
+                            p.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
                         }
-                        else
-                        {
-                            Logger.Info("Wounds avant : " + playerAttacked.Wound.Value);
-                            playerAttacked.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
-                            Logger.Info("Wounds après : " + playerAttacked.Wound.Value);
-                            Logger.Info("Vie total : " + playerAttacked.Character.characterHP);
-                            Logger.Info("Mort ? " + playerAttacked.Dead.Value);
-                        }
+                    }
+                    else
+                    {
+                        Logger.Info("Wounds avant : " + playerAttacked.Wound.Value);
+                        playerAttacked.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
+                        Logger.Info("Wounds après : " + playerAttacked.Wound.Value);
+                        Logger.Info("Vie total : " + playerAttacked.Character.characterHP);
+                        Logger.Info("Mort ? " + playerAttacked.Dead.Value);
                     }
 
                     GameManager.TurnEndable.Value = true;
