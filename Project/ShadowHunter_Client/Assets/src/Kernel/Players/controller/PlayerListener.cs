@@ -257,7 +257,7 @@ namespace Assets.Noyau.Players.controller
                     if (!(GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId))
                         EventView.Manager.Emit(new DrawEquipmentCardEvent(player.Id, pickedEquipmentCard.Id));
                     pickedEquipmentCard.equipe(player, pickedEquipmentCard);
-                    if(!player.HasSaber.Value)
+                    if(!player.HasSaber.Value || (player.HasSaber.Value && player.getTargetablePlayers().Count == 0))
                         GameManager.TurnEndable.Value = true;
                 }
             }
