@@ -24,7 +24,7 @@ namespace Kernel.Settings
         public Setting<double> UI_TextBaseEm { get; set; } = new Setting<double>(14);
         public Setting<string> UI_TextBaseFont { get; set; } = new Setting<string>("Consola");
 
-        public Setting<string> UI_Lang { get; set; } = new Setting<string>("Label-label");
+        public Setting<string> UI_Lang { get; set; } = new Setting<string>("FR-fr");
 
         public Setting<double> UI_MusicVolume { get; set; } = new Setting<double>(0.5);
         public Setting<double> UI_EffectVolume { get; set; } = new Setting<double>(0.5);

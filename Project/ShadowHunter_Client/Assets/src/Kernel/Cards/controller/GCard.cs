@@ -115,7 +115,7 @@ namespace Assets.Noyau.Cards.controller
                 new CardEffect("character.name.bob.power.steal",
                     targetableCondition: (player, owner) =>
                     {
-                        return player != owner && !player.Dead.Value && owner.Id == player.OnAttackedBy.Value && player.ListCard.Count > 0;
+                        return player != owner && !player.Dead.Value && player.Id == owner.OnAttackingPlayer.Value && player.ListCard.Count > 0;
                     },
                     effect: (target, owner, card) =>
                     {
