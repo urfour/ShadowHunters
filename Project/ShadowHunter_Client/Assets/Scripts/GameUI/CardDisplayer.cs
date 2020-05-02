@@ -181,14 +181,14 @@ public class CardDisplayer : MonoBehaviour
             Clear();
             this.player = player;
             playerDisplayer.text = player.Name;
-            if (ResourceLoader.CardSprites.ContainsKey(card.cardLabel))
+            if (ResourceLoader.CardSprites.ContainsKey(cardLabel))
             {
-                cardImage.sprite = ResourceLoader.CardSprites[card.cardLabel];
+                cardImage.sprite = ResourceLoader.CardSprites[cardLabel];
             }
             else
             {
                 cardImage.sprite = null;
-                Debug.LogWarning("Unknown card label : " + card.cardLabel);
+                Debug.LogWarning("Unknown card label : " + cardLabel);
             }
             DismissButton.gameObject.SetActive(true);
             gameObject.SetActive(true);
