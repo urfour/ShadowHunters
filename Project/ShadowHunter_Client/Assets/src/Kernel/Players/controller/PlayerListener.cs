@@ -119,7 +119,7 @@ namespace Assets.Noyau.Players.controller
                         {
                             availableDestination.Add(tmpavailableDestination);
 
-                            if (GameManager.PlayerTurn.Value.Character.characterName.Equals("character.name.emi") && GameManager.PlayerTurn.Value.Revealed.Value)
+                            if (GameManager.PlayerTurn.Value.Character.characterName.Equals("character.name.emi") && GameManager.PlayerTurn.Value.Revealed.Value && GameManager.PlayerTurn.Value.Position.Value != -1)
                             {
                                 if (GameManager.PlayerTurn.Value.Position.Value % 2 == 0)
                                     availableDestination.Add(GameManager.PlayerTurn.Value.Position.Value + 1);
