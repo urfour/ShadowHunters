@@ -1104,9 +1104,9 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        if (GameManager.LocalPlayer.Value == player)
+                        if (GameManager.LocalPlayer.Value == owner)
                         {
-                            EventView.Manager.Emit(new ShowCharacterCardEvent(player.Character.characterName, player.Id));
+                            EventView.Manager.Emit(new ShowCharacterCardEvent(player.Character.characterName, owner.Id));
                         }
                     }))
             };

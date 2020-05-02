@@ -153,7 +153,7 @@ card.darkness.darkness_araignee.effect.args.wound_wound&2;Deal &1 Wounds and tak
 card.darkness.darkness_banane.effect.give;Give equipment card
 card.darkness.darkness_banane.effect.args.wound&1;Take &1 Wound
 card.darkness.darkness_chauve_souris.effect.args.wound_heal&2;Deal &1 Wounds and heal &2 Wounds
-card.darkness.darkness_dynamite.effect.args.wound_position;Activate card effect
+card.darkness.darkness_dynamite.effect.args.wound_position&1;Activate card effect
 card.darkness.darkness_poupee.effect.args.wound&1;Deal or take &1 Wounds
 card.darkness.darkness_rituel.effect.args.heal;Heal all your Wounds
 card.darkness.darkness_rituel.effect.reveal;Reveal
