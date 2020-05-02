@@ -49,6 +49,7 @@ namespace Assets.Noyau.Players.controller
                 GameManager.PickDarknessDeck.Value = false;
                 GameManager.PickLightnessDeck.Value = false;
                 GameManager.PickVisionDeck.Value = false;
+                GameManager.WaitingPlayer.Value = GameManager.PlayerTurn.Value;
                 /*
                 EventView.Manager.Emit(new SelectedNextPlayer()
                 {
@@ -222,6 +223,7 @@ namespace Assets.Noyau.Players.controller
 
                 GameManager.TurnEndable.Value = false;
                 Player player = PlayerView.GetPlayer(drawCard.PlayerId);
+                GameManager.WaitingPlayer.Value = player;
                 Card pickedCard = null;
 
                 Debug.Log("Joueur qui pioche : " + player.Name);
@@ -255,10 +257,15 @@ namespace Assets.Noyau.Players.controller
                 else if (pickedCard is EquipmentCard pickedEquipmentCard)
                 {
                     if (!(GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId))
+                    {
                         EventView.Manager.Emit(new DrawEquipmentCardEvent(player.Id, pickedEquipmentCard.Id));
+                    }
                     pickedEquipmentCard.equipe(player, pickedEquipmentCard);
                     if(!player.HasSaber.Value || (player.HasSaber.Value && player.getTargetablePlayers().Count == 0))
+                    {
                         GameManager.TurnEndable.Value = true;
+                        GameManager.WaitingPlayer.Value = null;
+                    }
                 }
             }
             else if (e is UsableCardUseEvent ecue)
@@ -271,7 +278,10 @@ namespace Assets.Noyau.Players.controller
                 if (!GameManager.StartOfTurn.Value)
                 {
                     if (!p1.HasSaber.Value || p1 != GameManager.PlayerTurn.Value || (p1.HasSaber.Value && p1.getTargetablePlayers().Count == 0))
+                    {
                         GameManager.TurnEndable.Value = true;
+                        GameManager.WaitingPlayer.Value = null;
+                    }
                 }
 
                 UsableCard uCard = c as UsableCard;
@@ -462,6 +472,7 @@ namespace Assets.Noyau.Players.controller
 
                     }
                     GameManager.TurnEndable.Value = true;
+                    GameManager.WaitingPlayer.Value = null;
 
                     GameManager.AttackAvailable.Value = false;
                 }

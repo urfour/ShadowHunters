@@ -5,6 +5,7 @@ using Assets.src.Kernel.Players.controller;
 using EventSystem;
 using Kernel.Settings;
 using Scripts;
+using Scripts.event_in;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,6 +91,9 @@ namespace Assets.Noyau.Manager.view
 
         public static Setting<bool> TurnEndable { get; private set; } = new Setting<bool>(false);
 
+
+        public static Setting<Player> WaitingPlayer { get; private set; } = new Setting<Player>();
+
         public static int PlayerAttackedByBob = -1;
         public static int DamageDoneByBob = -1;
         /// <summary>
@@ -151,6 +155,18 @@ namespace Assets.Noyau.Manager.view
                     }
                 };
                 player.HasWon.AddListener(gameEnded);
+
+                OnNotification playerDisconnect = (sender) =>
+                {
+                    if (GameManager.PlayerTurn.Value == player && GameManager.LocalPlayer.Value == PlayerView.NextPlayer(player))
+                    {
+                        EventView.Manager.Emit(new EndTurnEvent(player.Id));
+                    }
+                    else if (GameManager.WaitingPlayer.Value == player)
+                    {
+                        GameManager.TurnEndable.Value = true;
+                    }
+                };
             }
         }
 

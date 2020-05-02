@@ -241,10 +241,7 @@ public class Player
 
                 }
             }
-
-
         });
-
 
         //players.Add(this);
     }
@@ -378,4 +375,5 @@ public class Player
 
         return tps;
     }
+    
 }   
