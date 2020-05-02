@@ -17,6 +17,7 @@ namespace Assets.src.Kernel.Players.controller
             {
                 if (p.Name == e.Account.Login)
                 {
+                    p.Disconnected.Value = true;
                     p.Dead.Value = true;
                     break;
                 }

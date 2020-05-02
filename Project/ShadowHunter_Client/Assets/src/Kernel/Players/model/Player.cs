@@ -164,6 +164,8 @@ public class Player
     /// Nombre de dommage infligé pour la dernière fois en attaquant
     /// </summary>
     public Setting<int> DamageDealed { get; private set; } = new Setting<int>(-1);
+
+    public Setting<bool> Disconnected { get; private set; } = new Setting<int>(false);
  
     ///private static List<Player> players = new List<Player>();
 
@@ -193,6 +195,22 @@ public class Player
             if (!this.Revealed.Value)
                 this.Revealed.Value = true;
             Player playerAttacking = PlayerView.GetPlayer(this.OnAttackedBy.Value);
+            if (this.Disconnected.Value)
+            {
+                EquipmentCard card;
+                for (int i = this.ListCard.Count - 1; i >= 0; i--)
+                {
+                    card = this.ListCard[i] as EquipmentCard;
+
+                    if (this.ListCard[i].cardType == CardType.Darkness)
+                        CardView.GCard.darknessDiscard.Add(this.ListCard[i]);
+                    else
+                        CardView.GCard.lightDiscard.Add(this.ListCard[i]);
+
+                    card.unequipe(this, card);
+
+                }
+            }
             if (playerAttacking.HasCrucifix.Value && this.ListCard.Count > 0)
             {
                 for (int i = this.ListCard.Count - 1; i >= 0; i--)
@@ -213,12 +231,13 @@ public class Player
                 for (int i = this.ListCard.Count - 1; i >= 0; i--)
                 {
                     card = this.ListCard[i] as EquipmentCard;
-                    card.unequipe(this, card);
 
                     if (this.ListCard[i].cardType == CardType.Darkness)
                         CardView.GCard.darknessDiscard.Add(this.ListCard[i]);
                     else
                         CardView.GCard.lightDiscard.Add(this.ListCard[i]);
+
+                    card.unequipe(this, card);
 
                 }
             }
