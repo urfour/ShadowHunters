@@ -412,6 +412,7 @@ namespace Assets.Noyau.Players.controller
                         if (damages >= 2)
                         {
                             // Cas Gatling à considérer quand on aura la foi
+                            damages += playerAttacked.ReductionWounds.Value;
                             playerAttacking.OnAttackingPlayer.Value = playerAttacking.Id;
                             playerAttacked.OnAttackedBy.Value = playerAttacking.Id;
                             playerAttacking.DamageDealed.Value = damages;
