@@ -208,7 +208,7 @@ namespace Assets.Noyau.Cards.controller
                     targetableCondition: (player, owner) =>
                     {
                         return player != owner
-                            && !player.Dead.Value
+                            && !player.Dead.Value;
                     },
                     effect: (player, owner, card) =>
                     {
@@ -222,7 +222,7 @@ namespace Assets.Noyau.Cards.controller
                     targetableCondition: (player, owner) =>
                     {
                         return player != owner
-                            && !player.Dead.Value
+                            && !player.Dead.Value;
                     },
                     effect: (player, owner, card) =>
                     {
