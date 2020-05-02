@@ -159,10 +159,11 @@ namespace Assets.Noyau.Players.controller
                 owner.OnAttackedBy.AddListener((sender) => { owner.Character.power.availability(owner); });
                 owner.Revealed.AddListener((sender) => { owner.Character.power.availability(owner); });
                 GameManager.StartOfTurn.AddListener((sender) => { owner.Character.power.availability(owner); });
+                owner.Dead.AddListener((sender) => { owner.Character.power.availability(owner); });
             },
             availability: (owner) =>
             {
-                if (owner.Revealed.Value)
+                if (owner.Revealed.Value && !owner.Dead.Value)
                 {
                     if (GameManager.StartOfTurn.Value)
                     {
