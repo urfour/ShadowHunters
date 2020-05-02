@@ -28,12 +28,17 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     public static SceneManagerComponent Instance { get; set; }
 
     public PlayerBarComponent PlayerBarComponent;
+    public EndGameScreen EndGameScreen;
 
     private List<(ListenableObject observed, OnNotification notification)> listeners = new List<(ListenableObject observed, OnNotification notification)>();
 
     public Button visionPickButton;
     public Button LightnessPickButton;
     public Button DarknessPickButton;
+
+    public Color ShadowColor;
+    public Color HunterColor;
+    public Color NeutralColor;
 
     public CardDisplayer cardDisplayer;
 

@@ -97,6 +97,8 @@ namespace Assets.Noyau.Manager.view
         /// </summary>
         public static Dictionary<int, Position> Board { get; private set; } = new Dictionary<int, Position>();
 
+        public static Setting<bool> GameEnded { get; private set; } = new Setting<bool>(false);
+
         /// <summary>
         /// Initialise l'ensemble du jeu.
         /// </summary>
