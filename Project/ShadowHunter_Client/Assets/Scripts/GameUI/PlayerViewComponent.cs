@@ -26,6 +26,9 @@ public class PlayerViewComponent : MonoBehaviour
     public Button attackButton;
     public RectTransform turnIndicator;
 
+    public Image characterIcon;
+    public Text characterTotalHealth;
+
     public Button revealButton;
     public Button powerButton;
     public Text infoDisplayer;
@@ -104,6 +107,22 @@ public class PlayerViewComponent : MonoBehaviour
             listeners.Add((player.Revealed, revealNotification));
         }
 
+        switch (player.Character.team)
+        {
+            case CharacterTeam.Hunter:
+                characterIcon.color = SceneManagerComponent.Instance.HunterColor;
+                break;
+            case CharacterTeam.Shadow:
+                characterIcon.color = SceneManagerComponent.Instance.ShadowColor;
+                break;
+            case CharacterTeam.Neutral:
+                characterIcon.color = SceneManagerComponent.Instance.NeutralColor;
+                break;
+            default:
+                Logger.Warning("Invalid character type : " + player.Character.team);
+                break;
+        }
+
 
         OnNotification characterName = (sender) =>
         {
@@ -111,11 +130,13 @@ public class PlayerViewComponent : MonoBehaviour
             {
                 playerCharacterName.text = Language.Translate(player.Character.characterName);
                 playerIcon.sprite = ResourceLoader.CharacterSprites[player.Character.characterName];
+                characterIcon.gameObject.SetActive(true);
             }
             else
             {
                 playerCharacterName.text = Language.Translate("character.name.unknown");
                 playerIcon.sprite = ResourceLoader.CharacterSprites["character.name.unknown"];
+                characterIcon.gameObject.SetActive(false);
             }
         };
         listeners.Add((player.Revealed, characterName));
