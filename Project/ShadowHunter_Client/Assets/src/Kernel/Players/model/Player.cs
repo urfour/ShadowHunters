@@ -7,6 +7,7 @@ using EventSystem;
 using UnityEngine;
 using Assets.Noyau.Players.view;
 using Assets.Noyau.Manager.view;
+using Assets.Noyau.Cards.view;
 using Kernel.Settings;
 
 public enum PlayerNames
@@ -191,6 +192,35 @@ public class Player
         {
             if (!this.Revealed.Value)
                 this.Revealed.Value = true;
+            Player playerAttacking = PlayerView.GetPlayer(this.OnAttackedBy.Value);
+            if (playerAttacking.HasCrucifix.Value && this.ListCard.Count > 0)
+            {
+                for (int i = this.ListCard.Count - 1; i >= 0; i--)
+                {
+                    EquipmentCard c = this.ListCard[i] as EquipmentCard;
+                    c.equipe(playerAttacking, c);
+                    c.unequipe(playerAttacking, c);
+                }
+            }
+            else if (this.ListCard.Count > 0)
+            {
+                EquipmentCard c = playerAttacking.ListCard[GameManager.rand.Next(0, playerAttacking.ListCard.Count - 1)] as EquipmentCard;
+
+                c.equipe(playerAttacking, c);
+                c.unequipe(playerAttacking, c);
+
+                // on défausse toutes les autres cartes
+                for (int i = this.ListCard.Count - 1; i >= 0; i--)
+                {
+                    if (this.ListCard[i].cardType == CardType.Darkness)
+                        CardView.GCard.darknessDiscard.Add(this.ListCard[i]);
+                    else
+                        CardView.GCard.lightDiscard.Add(this.ListCard[i]);
+
+                }
+            }
+
+
         });
 
 
