@@ -38,5 +38,6 @@ public enum CharacterTeam
 {
     Shadow,
     Hunter,
-    Neutral
+    Neutral,
+    None,
 }

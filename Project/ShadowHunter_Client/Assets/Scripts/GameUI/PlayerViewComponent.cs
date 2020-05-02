@@ -28,6 +28,7 @@ public class PlayerViewComponent : MonoBehaviour
 
     public Image characterIcon;
     public Text characterTotalHealth;
+    public RectTransform rememberDisplayer;
 
     public Button revealButton;
     public Button powerButton;
@@ -132,6 +133,7 @@ public class PlayerViewComponent : MonoBehaviour
                 playerCharacterName.text = Language.Translate(player.Character.characterName);
                 playerIcon.sprite = ResourceLoader.CharacterSprites[player.Character.characterName];
                 characterIcon.gameObject.SetActive(true);
+                rememberDisplayer.gameObject.SetActive(false);
             }
             else
             {
@@ -172,9 +174,10 @@ public class PlayerViewComponent : MonoBehaviour
         {
             OnNotification attackAvailable = (sender) =>
             {
-                attackButton.interactable = GameManager.PlayerTurn.Value == GameManager.LocalPlayer.Value 
+                attackButton.gameObject.SetActive(
+                                            GameManager.PlayerTurn.Value == GameManager.LocalPlayer.Value
                                             && GameManager.AttackAvailable.Value
-                                            && GameManager.LocalPlayer.Value.getTargetablePlayers().Contains(player);
+                                            && GameManager.LocalPlayer.Value.getTargetablePlayers().Contains(player));
             };
 
             listeners.Add((player.Dead, attackAvailable));
