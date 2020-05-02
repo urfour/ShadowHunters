@@ -13,6 +13,7 @@ public class RoomBarComponent : MonoBehaviour
     public Text nbPlayers;
 
     private Room displayed;
+    private int displayedcode;
     private Dictionary<ListenableObject, OnNotification> notifications = new Dictionary<ListenableObject, OnNotification>();
 
     // Use this for initialization
@@ -27,6 +28,7 @@ public class RoomBarComponent : MonoBehaviour
         StopListen();
         notifications.Clear();
         displayed = r;
+        displayedcode = r.RawData.Code;
         /*
         notifications.Add(displayed.Name, (sender) =>
         {
@@ -69,7 +71,7 @@ public class RoomBarComponent : MonoBehaviour
     public void JoinButtonClick()
     {
         print("joinbuttonclick : " + displayed.Name.Value);
-        EventView.Manager.Emit(new JoinRoomEvent() { RoomData = displayed.RawData });
+        EventView.Manager.Emit(new JoinRoomEvent() { RoomData = new RoomData() { Code = displayedcode } });
     }
 
     private void OnEnable()
