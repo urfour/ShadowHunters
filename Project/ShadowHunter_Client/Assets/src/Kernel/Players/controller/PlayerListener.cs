@@ -373,6 +373,22 @@ namespace Assets.Noyau.Players.controller
                 {
                     playerAttacked.Wounded(GameManager.rand.Next(0, 4), playerAttacking, true);
                 }
+                else if (attackPlayer.PowerCharles)
+                {
+                    int lancer = 0;
+                    if (playerAttacking.HasSaber.Value)
+                        lancer = GameManager.rand.Next(1, 4);
+                    else
+                        lancer = Math.Abs(GameManager.rand.Next(1, 6) - GameManager.rand.Next(1, 4));
+
+                    Debug.Log("Le lancer vaut : " + lancer);
+
+                    Logger.Info("Wounds avant : " + playerAttacked.Wound.Value);
+                    playerAttacked.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, false);
+                    Logger.Info("Wounds après : " + playerAttacked.Wound.Value);
+                    Logger.Info("Vie total : " + playerAttacked.Character.characterHP);
+                    Logger.Info("Mort ? " + playerAttacked.Dead.Value);
+                }
                 else
                 {
                     int lancer = 0;
