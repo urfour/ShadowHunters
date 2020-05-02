@@ -121,10 +121,8 @@ namespace Assets.Noyau.Players.controller
 
                             if (GameManager.PlayerTurn.Value.Character.characterName.Equals("character.name.emi") && GameManager.PlayerTurn.Value.Revealed.Value && GameManager.PlayerTurn.Value.Position.Value != -1)
                             {
-                                if (GameManager.PlayerTurn.Value.Position.Value % 2 == 0)
-                                    availableDestination.Add(GameManager.PlayerTurn.Value.Position.Value + 1);
-                                else
-                                    availableDestination.Add(GameManager.PlayerTurn.Value.Position.Value - 1);
+                                availableDestination.Add((GameManager.PlayerTurn.Value.Position.Value + 7) % 6);
+                                availableDestination.Add((GameManager.PlayerTurn.Value.Position.Value + 5) % 6);
                             }
 
                             nbrolls--;
