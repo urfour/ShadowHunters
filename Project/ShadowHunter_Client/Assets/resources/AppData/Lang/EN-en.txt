@@ -10,6 +10,12 @@ mainmenu.host.title;Create a room
 mainmenu.host.setting;Game settings
 mainmenu.settings.title;Settings
 mainmenu.application_quit;Leave the game
+mainmenu.hostgame.gamename.placeholder;Room name
+mainmenu.auth.login.login.placeholder;Username
+mainmenu.auth.register.login.placeholder;Username
+mainmenu.auth.login.password.placeholder;Password
+mainmenu.auth.register.password.placeholder;Password
+mainmenu.auth.register.confirm_password.placeholder;Password
 settings.audio;Audio
 settings.audio.music;Music
 settings.audio.effect;Sound effects
@@ -135,3 +141,75 @@ game.end.lose;Defeat
 game.end.win;Victory
 gamescene.endscreen.exit;Leave the game
 character.info.dead;Dead
+card.location.foret.effect.args.wound&1;Take &1 Wounds
+card.location.foret.effect.args.heal&1;Heal &1 Wound
+card.location.sanctuaire.effect.steal;Steal equipment card
+card.location.sanctuaire.nothing_happen;Nothing happens
+character.name.georges.power;Activate Georges' power
+character.name.franklin.power;Activate Franklin's power
+character.name.bob.power.steal;Steal equipment card
+character.name.bob.power.attack;Attack player
+card.darkness.darkness_araignee.effect.args.wound_wound&2;Deal &1 Wounds and take &1 Wounds
+card.darkness.darkness_banane.effect.give;Give equipment card
+card.darkness.darkness_banane.effect.args.wound&1;Take &1 Wound
+card.darkness.darkness_chauve_souris.effect.args.wound_heal&2;Deal &1 Wounds and heal &2 Wounds
+card.darkness.darkness_dynamite.effect.args.wound_position;Activate card effect
+card.darkness.darkness_poupee.effect.args.wound&1;Deal or take &1 Wounds
+card.darkness.darkness_rituel.effect.args.heal;Heal all your Wounds
+card.darkness.darkness_rituel.effect.reveal;Reveal
+card.darkness.darkness_rituel.nothing_happen;Nothing happens
+card.darkness.darkness_succube.effect.steal;Steal equipment card
+card.darkness.darkness_succube.nothing_happen;Nothing happens
+card.light.light_ange_gardien.effect.get_item;Activate card power
+card.light.light_supreme.effect.reveal;Reveal
+card.light.light_supreme.effect.args.heal;Heal all your Wounds
+card.light.light_supreme.nothing_happen;Nothing happens
+card.light.light_chocolat.effect.args.reveal_heal;Reveal and heal all your Wounds
+card.light.light_chocolat.effect.args.heal;Heal all your Wounds
+card.light.light_chocolat.nothing_happen;Nothing happens
+card.light.light_benediction.effect.args.heal;Heal a random number of Wounds
+card.light.light_eclair.effect.args.wound_all&1;Deal 2 Wounds to every player
+card.light.light_eau_benite.effect.args.heal&1;Heal &1 Wounds
+card.light.light_miroir.effect.reveal;Reveal
+card.light.light_miroir.nothing_happen;Nothing happens
+card.light.light_premiers_secours.effect.args.wound_at&1;Define number of Wounds to&1
+card.light.light_savoir.effect.get_item;Activate card power
+card.vision.effect.send.card.vision.vision_destructrice;Send card
+card.vision.vision_destructrice.effect.args.wound&1;Take &1 Wounds
+card.vision.vision_destructrice.nothing_happen;Nothing happens
+card.vision.effect.send.card.vision.vision_clairvoyante;Send card
+card.vision.vision_clairvoyante.effect.args.wound&1;Take &1 Wound
+card.vision.vision_cupide.effect.args.wound&1;Take &1 Wound
+card.vision.vision_cupide.effect.give;Give equipment card
+card.vision.vision_cupide.nothing_happen;Nothing happens
+card.vision.effect.send.card.vision.vision_cupide;Send card
+card.vision.vision_enivrante.effect.args.wound&1;Take 1 Wound
+card.vision.vision_enivrante.effect.give;Give equipment card
+card.vision.vision_enivrante.nothing_happen;Nothing happens
+card.vision.effect.send.card.vision.vision_enivrante;Send card
+card.vision.vision_furtive.effect.args.wound&1;Take &1 Wound
+card.vision.vision_furtive.effect.give;Give equipment card
+card.vision.vision_furtive.nothing_happen;Nothing happens
+card.vision.effect.send.card.vision.vision_furtive;Send card
+card.vision.vision_divine.effect.args.wound&1;Take &1 Wound
+card.vision.vision_divine.effect.args.heal&1;Heal &1 Wound
+card.vision.vision_divine.nothing_happen;Nothing happens
+card.vision.effect.send.card.vision.vision_divine;Send card
+card.vision.vision_lugubre.effect.args.heal&1;Heal &1 Wound
+card.vision.vision_lugubre.nothing_happen;Nothing happens
+card.vision.effect.send.card.vision.vision_lugubre;Send card
+card.vision.vision_reconfortante.effect.args.wound&1;Take &1 Wound
+card.vision.vision_reconfortante.effect.args.heal&1;Heal &1 Wound
+card.vision.vision_reconfortante.nothing_happen;Nothing happens
+card.vision.effect.send.card.vision.vision_réconfortante;Send card
+card.vision.vision_foudroyante.effect.args.wound&1;Take &1 Wound
+card.vision.vision_foudroyante.nothing_happen;Nothing happens
+card.vision.effect.send.card.vision.vision_foudroyante;Send card
+card.vision.vision_mortifere.effect.args.wound&1;Take &1 Wound
+card.vision.vision_mortifere.nothing_happen;Nothing happens
+card.vision.effect.send.card.vision.vision_mortifere;Send card
+card.vision.vision_purificatrice.effect.args.wound&2;Take &1 Wounds
+card.vision.vision_purificatrice.nothing_happen;Nothing happens
+card.vision.effect.send.card.vision.vision_purificatrice;Send card
+card.vision.vision_supreme.effect.show_card;Show character card
+card.vision.effect.send.card.vision.vision_supreme;Send card
