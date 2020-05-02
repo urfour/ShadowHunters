@@ -121,10 +121,8 @@ namespace Assets.Noyau.Players.controller
 
                             if (GameManager.PlayerTurn.Value.Character.characterName.Equals("character.name.emi") && GameManager.PlayerTurn.Value.Revealed.Value && GameManager.PlayerTurn.Value.Position.Value != -1)
                             {
-                                if (GameManager.PlayerTurn.Value.Position.Value % 2 == 0)
-                                    availableDestination.Add(GameManager.PlayerTurn.Value.Position.Value + 1);
-                                else
-                                    availableDestination.Add(GameManager.PlayerTurn.Value.Position.Value - 1);
+                                availableDestination.Add((GameManager.PlayerTurn.Value.Position.Value + 7) % 6);
+                                availableDestination.Add((GameManager.PlayerTurn.Value.Position.Value + 5) % 6);
                             }
 
                             nbrolls--;
@@ -366,8 +364,11 @@ namespace Assets.Noyau.Players.controller
                 Debug.Log("Joueur attaquant : " + playerAttacking.Name);
                 Debug.Log("Joueur attaqué : " + playerAttacked.Name);
 
-
-                if (attackPlayer.PowerFranklin)
+                if (attackPlayer.PowerLoup)
+                {
+                    playerAttacked.Wounded(Math.Abs(GameManager.rand.Next(1, 6) - GameManager.rand.Next(1, 4)), playerAttacking, true);
+                }
+                else if (attackPlayer.PowerFranklin)
                 {
                     playerAttacked.Wounded(GameManager.rand.Next(0, 6), playerAttacking, true);
                 }
