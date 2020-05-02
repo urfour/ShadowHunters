@@ -9,6 +9,7 @@ using Assets.Noyau.Players.view;
 using Assets.Noyau.Manager.view;
 using EventSystem;
 using Scripts.event_in;
+using System;
 
 public class CardDisplayer : MonoBehaviour
 {
@@ -171,5 +172,26 @@ public class CardDisplayer : MonoBehaviour
             Destroy(ChoiceContent.GetChild(i).gameObject);
         }
         choices.Clear();
+    }
+
+    internal void Display(string cardLabel, Player player)
+    {
+        if (GameManager.LocalPlayer.Value == player)
+        {
+            Clear();
+            this.player = player;
+            playerDisplayer.text = player.Name;
+            if (ResourceLoader.CardSprites.ContainsKey(card.cardLabel))
+            {
+                cardImage.sprite = ResourceLoader.CardSprites[card.cardLabel];
+            }
+            else
+            {
+                cardImage.sprite = null;
+                Debug.LogWarning("Unknown card label : " + card.cardLabel);
+            }
+            DismissButton.gameObject.SetActive(true);
+            gameObject.SetActive(true);
+        }
     }
 }

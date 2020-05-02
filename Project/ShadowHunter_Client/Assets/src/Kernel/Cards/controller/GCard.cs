@@ -350,7 +350,7 @@ namespace Assets.Noyau.Cards.controller
 
 
                 CreateUsableCard("card.darkness.darkness_rituel", CardType.Darkness, "card.darkness.darkness_rituel.description", false, true,
-                new CardEffect("card.darkness.darkness_rituel.effect.args.heal&max",
+                new CardEffect("card.darkness.darkness_rituel.effect.args.heal",
                     targetableCondition: (player, owner) =>
                     {
                         return player == owner
@@ -1104,7 +1104,10 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        // Montrer la carte au joueur
+                        if (GameManager.LocalPlayer.Value == player)
+                        {
+                            EventView.Manager.Emit(new ShowCharacterCardEvent(player.Character.characterName, owner.Id));
+                        }
                     }))
             };
         }

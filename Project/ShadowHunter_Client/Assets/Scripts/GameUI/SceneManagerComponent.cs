@@ -181,6 +181,10 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
         {
             cardDisplayer.Display(CardView.GetCard(equipmentCardEvent.CardId), PlayerView.GetPlayer(equipmentCardEvent.PlayerId));
         }
+        else if (e is ShowCharacterCardEvent showCard)
+        {
+            cardDisplayer.Display(showCard.CardLabel, PlayerView.GetPlayer(showCard.PlayerId));
+        }
     }
 
 
