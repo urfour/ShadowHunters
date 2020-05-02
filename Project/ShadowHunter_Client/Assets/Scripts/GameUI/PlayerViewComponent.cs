@@ -123,6 +123,7 @@ public class PlayerViewComponent : MonoBehaviour
                 break;
         }
 
+        characterTotalHealth.text = player.Character.characterHP.ToString();
 
         OnNotification characterName = (sender) =>
         {

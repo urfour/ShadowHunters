@@ -764,6 +764,8 @@ MonoBehaviour:
   position: {fileID: 923088974235603657}
   attackButton: {fileID: 1465074696227721506}
   turnIndicator: {fileID: 6093410847085504044}
+  characterIcon: {fileID: 5627990210407697240}
+  characterTotalHealth: {fileID: 1623864896566084065}
   revealButton: {fileID: 4638955494616904385}
   powerButton: {fileID: 3811689605378302978}
   infoDisplayer: {fileID: 2359204482196567522}
