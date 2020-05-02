@@ -209,7 +209,7 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     public void ReturnToMenu()
     {
         EventView.Manager.Emit(new PlayerLeaveEvent(GameManager.LocalPlayer.Value.Id));
-        EventView.Manager.Emit(new LeaveRoomEvent());
+        EventView.Manager.Emit(new LeaveRoomEvent() { RoomData = new RoomData() { Code = GRoom.Instance.JoinedRoom.RawData.Code } });
         GameManager.Clean();
         SceneManager.LoadScene(0);
     }
