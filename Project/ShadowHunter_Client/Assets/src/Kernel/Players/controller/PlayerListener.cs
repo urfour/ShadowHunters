@@ -366,8 +366,11 @@ namespace Assets.Noyau.Players.controller
                 Debug.Log("Joueur attaquant : " + playerAttacking.Name);
                 Debug.Log("Joueur attaqué : " + playerAttacked.Name);
 
-
-                if (attackPlayer.PowerFranklin)
+                if (attackPlayer.PowerLoup)
+                {
+                    playerAttacked.Wounded(Math.Abs(GameManager.rand.Next(1, 6) - GameManager.rand.Next(1, 4)), playerAttacking, true);
+                }
+                else if (attackPlayer.PowerFranklin)
                 {
                     playerAttacked.Wounded(GameManager.rand.Next(0, 6), playerAttacking, true);
                 }
