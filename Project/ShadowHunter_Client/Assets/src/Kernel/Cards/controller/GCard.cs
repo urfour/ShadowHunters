@@ -535,7 +535,7 @@ namespace Assets.Noyau.Cards.controller
                     })),
 
                 CreateUsableCard("card.light.light_chocolat", CardType.Light, "card.light.light_chocolat.description", false, true,
-                new CardEffect("card.light.light_chocolat.effect.args.reveal_heal&max",
+                new CardEffect("card.light.light_chocolat.effect.args.reveal_heal",
                     targetableCondition: (player, owner) =>
                     {
                         return player == owner
@@ -549,7 +549,7 @@ namespace Assets.Noyau.Cards.controller
                         player.Revealed.Value = true;
                         player.Healed(player.Wound.Value);
                     }),
-                new CardEffect("card.light.light_chocolat.effect.args.heal&max",
+                new CardEffect("card.light.light_chocolat.effect.args.heal",
                     targetableCondition: (player, owner) =>
                     {
                         return player == owner
@@ -575,7 +575,7 @@ namespace Assets.Noyau.Cards.controller
                     })),
 
                 CreateUsableCard("card.light.light_benediction", CardType.Light, "card.light.light_benediction.description", false,
-                new CardEffect("card.light.light_benediction.effect.args.heal&random",
+                new CardEffect("card.light.light_benediction.effect.args.heal",
                     targetableCondition: (player, owner) =>
                     {
                         return player != owner

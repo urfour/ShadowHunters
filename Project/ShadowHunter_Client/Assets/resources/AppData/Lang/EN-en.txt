@@ -172,44 +172,33 @@ card.light.light_eclair.effect.args.wound_all&1;Deal 2 Wounds to every player
 card.light.light_eau_benite.effect.args.heal&1;Heal &1 Wounds
 card.light.light_miroir.effect.reveal;Reveal
 card.light.light_miroir.nothing_happen;Nothing happens
-card.light.light_premiers_secours.effect.args.wound_at&1;Define number of Wounds to&1
+card.light.light_premiers_secours.effect.args.wound_at&1;Define number of Wounds to &1
 card.light.light_savoir.effect.get_item;Activate card power
-card.vision.effect.send.card.vision.vision_destructrice;Send card
+card.vision.effect.send.&1;Send card
 card.vision.vision_destructrice.effect.args.wound&1;Take &1 Wounds
 card.vision.vision_destructrice.nothing_happen;Nothing happens
-card.vision.effect.send.card.vision.vision_clairvoyante;Send card
 card.vision.vision_clairvoyante.effect.args.wound&1;Take &1 Wound
 card.vision.vision_cupide.effect.args.wound&1;Take &1 Wound
 card.vision.vision_cupide.effect.give;Give equipment card
 card.vision.vision_cupide.nothing_happen;Nothing happens
-card.vision.effect.send.card.vision.vision_cupide;Send card
 card.vision.vision_enivrante.effect.args.wound&1;Take 1 Wound
 card.vision.vision_enivrante.effect.give;Give equipment card
 card.vision.vision_enivrante.nothing_happen;Nothing happens
-card.vision.effect.send.card.vision.vision_enivrante;Send card
 card.vision.vision_furtive.effect.args.wound&1;Take &1 Wound
 card.vision.vision_furtive.effect.give;Give equipment card
 card.vision.vision_furtive.nothing_happen;Nothing happens
-card.vision.effect.send.card.vision.vision_furtive;Send card
 card.vision.vision_divine.effect.args.wound&1;Take &1 Wound
 card.vision.vision_divine.effect.args.heal&1;Heal &1 Wound
 card.vision.vision_divine.nothing_happen;Nothing happens
-card.vision.effect.send.card.vision.vision_divine;Send card
 card.vision.vision_lugubre.effect.args.heal&1;Heal &1 Wound
 card.vision.vision_lugubre.nothing_happen;Nothing happens
-card.vision.effect.send.card.vision.vision_lugubre;Send card
 card.vision.vision_reconfortante.effect.args.wound&1;Take &1 Wound
 card.vision.vision_reconfortante.effect.args.heal&1;Heal &1 Wound
 card.vision.vision_reconfortante.nothing_happen;Nothing happens
-card.vision.effect.send.card.vision.vision_réconfortante;Send card
 card.vision.vision_foudroyante.effect.args.wound&1;Take &1 Wound
 card.vision.vision_foudroyante.nothing_happen;Nothing happens
-card.vision.effect.send.card.vision.vision_foudroyante;Send card
 card.vision.vision_mortifere.effect.args.wound&1;Take &1 Wound
 card.vision.vision_mortifere.nothing_happen;Nothing happens
-card.vision.effect.send.card.vision.vision_mortifere;Send card
-card.vision.vision_purificatrice.effect.args.wound&2;Take &1 Wounds
+card.vision.vision_purificatrice.effect.args.wound&1;Take &1 Wounds
 card.vision.vision_purificatrice.nothing_happen;Nothing happens
-card.vision.effect.send.card.vision.vision_purificatrice;Send card
 card.vision.vision_supreme.effect.show_card;Show character card
-card.vision.effect.send.card.vision.vision_supreme;Send card
