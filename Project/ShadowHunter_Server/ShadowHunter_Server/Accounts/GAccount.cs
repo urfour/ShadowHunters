@@ -17,8 +17,8 @@ namespace ShadowHunter_Server.Accounts
 
         public static GAccount Instance { get; private set; } = null;
 
-        public Dictionary<Account, Client> ConnectedAccounts { get; private set; } = 
-            new Dictionary<Account, Client>();
+        public Dictionary<string, Client> ConnectedAccounts { get; private set; } = 
+            new Dictionary<string, Client>();
         public Mutex accounts_mutex = new Mutex();
 
         /*private Dictionary<string, Account> logins { get; set; } =
@@ -56,14 +56,14 @@ namespace ShadowHunter_Server.Accounts
 
                         // si les identifiants sont valides
                         case 0:
-                            if (ConnectedAccounts.ContainsKey(lie.Account))
+                            if (ConnectedAccounts.ContainsKey(lie.Account.Login))
                             {
                                 e.GetSender().Send(new AuthInvalidEvent() { Msg = "message.auth.invalid.account_already_online" });
                             }
                             else
                             {
                                 lie.Account.IsLogged = true;
-                                ConnectedAccounts.Add(lie.Account, e.GetSender());
+                                ConnectedAccounts.Add(lie.Account.Login, e.GetSender());
                                 e.GetSender().Account = lie.Account;
                                 e.GetSender().Send(new AssingAccountEvent(lie.Account));
                                 GRoom.Instance.AddClient(e.GetSender());
@@ -81,7 +81,7 @@ namespace ShadowHunter_Server.Accounts
                 if (e.GetSender().Account != null)
                 {
                     e.GetSender().Account.IsLogged = false;
-                    ConnectedAccounts.Remove(e.GetSender().Account);
+                    ConnectedAccounts.Remove(e.GetSender().Account.Login);
                     e.GetSender().Account = null;
                 }
                 e.GetSender().Send(new AssingAccountEvent(null));
@@ -115,7 +115,7 @@ namespace ShadowHunter_Server.Accounts
                                 IsLogged = true
                             };
 
-                            ConnectedAccounts.Add(a, e.GetSender());
+                            ConnectedAccounts.Add(a.Login, e.GetSender());
                             e.GetSender().Account = a;
                             e.GetSender().Send(new AssingAccountEvent(a));
                             GRoom.Instance.AddClient(e.GetSender());
@@ -137,7 +137,7 @@ namespace ShadowHunter_Server.Accounts
                     compte.Login = aae.Login;
                     compte.IsLogged = false;
                     // on vérifie que le compte n'est pas déjà connecté
-                    if (ConnectedAccounts.ContainsKey(compte)) compte.IsLogged = true;
+                    if (ConnectedAccounts.ContainsKey(compte.Login)) compte.IsLogged = true;
                     e.GetSender().Send(new AccountDataEvent() { Account = compte });
                 }
             }
@@ -147,10 +147,10 @@ namespace ShadowHunter_Server.Accounts
 
         public void OnClientDisconnect(Client c)
         {
-            if (c.Account != null && ConnectedAccounts.ContainsKey(c.Account))
+            if (c.Account != null && ConnectedAccounts.ContainsKey(c.Account.Login))
             {
                 c.Account.IsLogged = false;
-                ConnectedAccounts.Remove(c.Account);
+                ConnectedAccounts.Remove(c.Account.Login);
             }
         }
 

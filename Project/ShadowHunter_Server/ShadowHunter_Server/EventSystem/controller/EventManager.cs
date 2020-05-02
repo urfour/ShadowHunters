@@ -55,6 +55,8 @@ namespace EventSystem.controller
          */
         internal List<ListenerInstance> AllListeners { get; set; } = new List<ListenerInstance>();
 
+        internal Mutex listenersMutex = new Mutex();
+
         internal Queue<WaitingLaunchEvent> EventsToLaunch { get; private set; } = new Queue<WaitingLaunchEvent>();
 
 
@@ -99,6 +101,7 @@ namespace EventSystem.controller
 
         public void Emit(Event e, params string[] tags)
         {
+            listenersMutex.WaitOne();
             if (!Listeners.ContainsKey(e.GetType())) // si c'est la première fois qu'un type d'event est envoyé, on recherche tous les listeners existant qui lisent ce type d'event
             {
                 List<ListenerInstance> matchListeners = new List<ListenerInstance>(); // liste de tous les listeners qui écoutent un type assignable au type de 'e'
@@ -116,8 +119,10 @@ namespace EventSystem.controller
                 Listeners.Add(e.GetType(), matchListeners);
             }
 
+
             // récupération de la liste des listeners qui écoutent le type de l'evenement, puis appel de la fonction OnEvent(e) pour tous ces listeners
             List<ListenerInstance> listeners = Listeners[e.GetType()];
+            listenersMutex.ReleaseMutex();
             if (listeners.Count == 0)
             {
                 Logger.Warning("Empty listeners list : " + e.GetType());
