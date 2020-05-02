@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 1788898172757599633}
   - component: {fileID: 7391141630042853915}
   - component: {fileID: 906695406328997317}
+  - component: {fileID: 5279212054555838802}
   m_Layer: 5
   m_Name: playerEndBar
   m_TagString: Untagged
@@ -230,6 +231,21 @@ MonoBehaviour:
   PlayerRoll: {fileID: 5325368492309016093}
   WinOrNot: {fileID: 6323490228761837588}
   DisplayCard: {fileID: 7391141630042853915}
+--- !u!114 &5279212054555838802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2590310484624409754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e984706f0d06b3a4a907cb9689323db7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  elemClass: 1
+  elemType: 4
+  emMultiplier: 1
 --- !u!1 &3186491986385622119
 GameObject:
   m_ObjectHideFlags: 0
