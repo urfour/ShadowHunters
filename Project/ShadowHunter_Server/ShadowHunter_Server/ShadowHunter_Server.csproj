@@ -61,6 +61,7 @@
     <Compile Include="Log\Log.cs" />
     <Compile Include="Network\controller\GClient.cs" />
     <Compile Include="Network\controller\Room.cs" />
+    <Compile Include="Network\events\NetworkDisconnectedEvent.cs" />
     <Compile Include="Network\events\ServerOnlyEvent.cs" />
     <Compile Include="Network\model\Client.cs" />
     <Compile Include="Network\model\Server.cs" />

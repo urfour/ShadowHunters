@@ -86,18 +86,19 @@ namespace Network.model
         public void Send(string data)
         {
             byte[] buffer = SettingManager.Encoder.Value.GetBytes(data + '\0');
-
             send_Mutex.WaitOne();
             NetworkStream stream = TcpClient.GetStream();
             stream.Write(buffer, 0, buffer.Length);
-            send_Mutex.ReleaseMutex();
             Logger.Info("[CLIENT] : Send : " + data);
+            send_Mutex.ReleaseMutex();
+            
         }
 
         public void Send(Event e)
         {
             Send(e.Serialize());
         }
+
         /// <summary>
         /// écoute les messages du client, tente de sérialiser en Event. Si la sérialisation fonctionne : envoie l'event dans l'IEventManager; sinon : transmet le message dans la room du client
         /// </summary>
@@ -126,6 +127,15 @@ namespace Network.model
                             {
                                 ((ServerOnlyEvent)e).SetSender(this);
                                 EventView.Manager.Emit(e, "network.emitted");
+                                if (e is NetworkDisconnectedEvent nsd)
+                                {
+                                    if (Room != null)
+                                    {
+                                        Room.BroadCast(this, msgs[j]);
+                                    }
+                                    nsd.GetSender().Send(nsd);
+                                    return;
+                                }
                             }
                             else if (Room != null)
                             {
@@ -136,7 +146,6 @@ namespace Network.model
                     data = msgs[msgs.Length - 1];
                 }
             }
-
             catch (IOException e)
             {
                 Logger.Error(e);

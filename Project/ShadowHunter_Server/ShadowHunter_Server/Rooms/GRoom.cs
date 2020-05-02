@@ -13,13 +13,13 @@ using System.Threading;
 
 namespace ShadowHunter_Server.Rooms
 {
-     public class GRoom : IListener<RoomEvent>
+    public class GRoom : IListener<RoomEvent>
     {
         public static GRoom Instance { get; private set; } = null;
 
         public Room Global = new Room();
 
-        public Dictionary<int, Room> Rooms { get; private set; } 
+        public Dictionary<int, Room> Rooms { get; private set; }
             = new Dictionary<int, Room>();
         private Mutex Rooms_Mutex = new Mutex();
 
@@ -34,33 +34,26 @@ namespace ShadowHunter_Server.Rooms
 
             if (e is CreateRoomEvent cre)
             {
-                if (cre.RoomData.MaxNbPlayer < 4 || cre.RoomData.MaxNbPlayer > 8)
+                //Room room = Rooms[cre.RoomData.Code];
+                RoomData r = cre.RoomData;
+                int code = rand.Next(10000, 100000);
+                int whilesafe = 100000;
+                while (Rooms.ContainsKey(code) && whilesafe > 0)
                 {
-                    e.GetSender().Send(new RoomFailureEvent() { Msg = "message.room.invalid.bad_MaxNbPlayer&" + cre.RoomData.Code });
+                    code = rand.Next(10000, 100000);
+                    whilesafe--;
                 }
-                else
-                {
-                    //Room room = Rooms[cre.RoomData.Code];
-                    RoomData r = cre.RoomData;
-                    int code = rand.Next(10000, 100000);
-                    int whilesafe = 100000;
-                    while (Rooms.ContainsKey(code) && whilesafe > 0)
-                    {
-                        code = rand.Next(10000, 100000);
-                        whilesafe--;
-                    }
-                    r.Code = code;
-                    r.CurrentNbPlayer = 1;
-                    r.Players = new string[r.MaxNbPlayer];
-                    r.ReadyPlayers = new bool[r.MaxNbPlayer];
-                    r.Players[0] = cre.GetSender().Account.Login;
-                    //r.Host = GAccount.Instance.LoggedAccount.Login;
-                    Room room = new Room(r);
-                    Rooms.Add(code, room);
-                    Global.BroadCast(null, new RoomDataEvent() { RoomData = r });
-                    e.GetSender().JoinRoom(room);
-                    e.GetSender().Send(new RoomJoinedEvent() { RoomData = r });
-                }
+                r.Code = code;
+                r.CurrentNbPlayer = 1;
+                r.Players = new string[r.MaxNbPlayer];
+                r.ReadyPlayers = new bool[r.MaxNbPlayer];
+                r.Players[0] = cre.GetSender().Account.Login;
+                //r.Host = GAccount.Instance.LoggedAccount.Login;
+                Room room = new Room(r);
+                Rooms.Add(code, room);
+                Global.BroadCast(null, new RoomDataEvent() { RoomData = r });
+                e.GetSender().JoinRoom(room);
+                e.GetSender().Send(new RoomJoinedEvent() { RoomData = r });
             }
             else if (e is JoinRoomEvent jre)
             {
@@ -72,10 +65,8 @@ namespace ShadowHunter_Server.Rooms
                     r.RoomData_Mutex.WaitOne();
                     if (e.GetSender().Room != null)
                     {
-                        e.GetSender().Send(new RoomFailureEvent() { Msg="message.room.invalid.join.please_leave_your_room_before"});
+                        e.GetSender().Send(new RoomFailureEvent() { Msg = "message.room.invalid.join.please_leave_your_room_before" });
                     }
-
-
                     else
                     {
                         if (r.Data.CurrentNbPlayer < r.Data.MaxNbPlayer)
@@ -157,7 +148,7 @@ namespace ShadowHunter_Server.Rooms
                     room.RoomData_Mutex.WaitOne();
                     RoomData r = room.Data;
                     bool ready = true;
-                    for (int i = 0; (i < r.CurrentNbPlayer) && (i>=4); i++)
+                    for (int i = 0; i < r.MaxNbPlayer; i++)
                     {
                         if (!r.ReadyPlayers[i])
                         {
@@ -178,101 +169,6 @@ namespace ShadowHunter_Server.Rooms
                 }
             }
 
-            if (e is KickRoomEvent kre)
-            {
-                Rooms_Mutex.WaitOne();
-                // on ne peut pas expulser un joueur qui n'est pas dans la salle
-                // précisée
-
-                if (!Rooms[kre.RoomData.Code].Data.Players.Contains(kre.Kicked.Login))
-                {
-                    Rooms_Mutex.ReleaseMutex();
-                    kre.GetSender().Send(new RoomFailureEvent()
-                        { Msg = "message.room.invalid.kicked_player_not_in_room&" + kre.RoomData.Code });
-
-                }
-
-                // seul l'hôte de la salle peut kick un autre joueur
-                else if (Rooms[kre.RoomData.Code].Data.Players[0] != kre.GetSender().Account.Login)
-                {
-                    Rooms_Mutex.ReleaseMutex();
-                    kre.GetSender().Send(new RoomFailureEvent()
-                        { Msg = "message.room.invalid.can_only_kick_if_host&" + kre.RoomData.Code });
-
-                }
-
-                // un joueur ne peut pas s'expulser lui-même
-                else if (kre.GetSender().Account == kre.Kicked)
-                {
-                    Rooms_Mutex.ReleaseMutex();
-                    kre.GetSender().Send(new RoomFailureEvent()
-                        { Msg = "message.room.invalid.cant_kick_yourself&" + kre.RoomData.Code });
-                }
-
-                // un joueur ne peut qu'expulser des membres de sa
-                // propre salle 
-                else if (!Rooms[kre.RoomData.Code].Data.Players.ToList().
-                    Contains(kre.GetSender().Account.Login))
-                {
-                    Rooms_Mutex.ReleaseMutex();
-                    kre.GetSender().Send(new RoomFailureEvent()
-                        { Msg = "message.room.invalid.can_only_kick_in_own_room&" + kre.RoomData.Code });
-                }
-
-                else
-                {
-                    GAccount.Instance.accounts_mutex.WaitOne();
-                    RemovePlayerFromRoom(GAccount.Instance.ConnectedAccounts[kre.Kicked], kre.RoomData);
-                    Global.BroadCast(null, new RoomDataEvent() { RoomData = Rooms[kre.RoomData.Code].Data });
-                    Rooms_Mutex.ReleaseMutex();
-                    GAccount.Instance.accounts_mutex.ReleaseMutex();
-                }
-            }
-
-            if (e is ModifyRoomEvent mre)
-            {
-                Rooms_Mutex.WaitOne();
-                // seul l'hôte peut modifier la salle
-                if (Rooms[mre.RoomData.Code].Data.Players[0] != mre.GetSender().Account.Login)
-                {
-                    Rooms_Mutex.ReleaseMutex();
-                    e.GetSender().Send(new RoomFailureEvent() { Msg = "message.room.invalid.can_only_modify_if_host&" + mre.RoomData.Code });
-                }
-
-                else
-                {
-                    Rooms[mre.RoomData.Code].RoomData_Mutex.WaitOne();
-
-                    if(mre.RoomData.MaxNbPlayer > 8 || mre.RoomData.MaxNbPlayer < 4)
-                    {
-                        Rooms[mre.RoomData.Code].RoomData_Mutex.ReleaseMutex();
-                        Rooms_Mutex.ReleaseMutex();
-                        e.GetSender().Send(new RoomFailureEvent() { Msg = "message.room.invalid.bad_MaxNbPlayer&" + mre.RoomData.Code });
-                    }
-
-                    else
-                    {
-                        Rooms[mre.RoomData.Code].Data.Name = mre.RoomData.Name;
-                        Rooms[mre.RoomData.Code].Data.HasPassword = mre.RoomData.HasPassword;
-                        Rooms[mre.RoomData.Code].Data.Password = mre.RoomData.Password;
-
-                        /* on doit passer une variable intermédiaire pour redimensionner
-                         * une propriété de tableau */
-                        Rooms[mre.RoomData.Code].Data.MaxNbPlayer = mre.RoomData.MaxNbPlayer;
-                        string[] tempPlayers = Rooms[mre.RoomData.Code].Data.Players;
-                        Array.Resize(ref tempPlayers, mre.RoomData.MaxNbPlayer);
-                        Rooms[mre.RoomData.Code].Data.Players = tempPlayers;
-                        bool[] tempsReadyPlayers = Rooms[mre.RoomData.Code].Data.ReadyPlayers;
-                        Array.Resize(ref tempsReadyPlayers, mre.RoomData.MaxNbPlayer);
-                        Rooms[mre.RoomData.Code].Data.ReadyPlayers = tempsReadyPlayers;
-
-                        Global.BroadCast(null, new RoomDataEvent() { RoomData = Rooms[mre.RoomData.Code].Data });
-
-                        Rooms[mre.RoomData.Code].RoomData_Mutex.ReleaseMutex();
-                        Rooms_Mutex.ReleaseMutex();
-                    }
-                }
-            }
 
         }
 
@@ -322,6 +218,7 @@ namespace ShadowHunter_Server.Rooms
 
         public void RemovePlayerFromRoom(Client c, RoomData r, bool notifyClient = true, string leaveMessage = null)
         {
+            if (r == null) return;
             Rooms_Mutex.WaitOne();
             if (!Rooms.ContainsKey(r.Code))
             {
