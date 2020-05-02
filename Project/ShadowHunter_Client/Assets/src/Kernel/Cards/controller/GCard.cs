@@ -153,12 +153,12 @@ namespace Assets.Noyau.Cards.controller
                     targetableCondition: (player, owner) =>
                     {
                         return player != owner
-                            && !player.Dead.Value
-                            && !player.HasAmulet.Value;
+                            && !player.Dead.Value;
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(2,owner,false);
+                        if (!player.HasAmulet.Value)
+                            player.Wounded(2,owner,false);
                         if (!owner.HasAmulet.Value)
                             owner.Wounded(2,owner,false);
                     })),
@@ -194,12 +194,12 @@ namespace Assets.Noyau.Cards.controller
                     targetableCondition: (player, owner) =>
                     {
                         return player != owner
-                            && !player.Dead.Value
-                            && !player.HasAmulet.Value;
+                            && !player.Dead.Value;
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(2, owner, false);
+                        if (!player.HasAmulet.Value)
+                            player.Wounded(2, owner, false);
                         owner.Healed(1);
                     })),
 
@@ -209,11 +209,11 @@ namespace Assets.Noyau.Cards.controller
                     {
                         return player != owner
                             && !player.Dead.Value
-                            && !player.HasAmulet.Value;
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(2, owner, false);
+                        if (!player.HasAmulet.Value)
+                            player.Wounded(2, owner, false);
                         owner.Healed(1);
                     })),
 
@@ -223,11 +223,11 @@ namespace Assets.Noyau.Cards.controller
                     {
                         return player != owner
                             && !player.Dead.Value
-                            && !player.HasAmulet.Value;
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(2, owner, false);
+                        if (!player.HasAmulet.Value)
+                            player.Wounded(2, owner, false);
                         owner.Healed(1);
                     })),
 
