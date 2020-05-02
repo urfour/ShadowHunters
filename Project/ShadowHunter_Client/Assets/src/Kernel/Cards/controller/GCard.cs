@@ -1106,7 +1106,7 @@ namespace Assets.Noyau.Cards.controller
                     {
                         if (GameManager.LocalPlayer.Value == player)
                         {
-                            EventView.Manager.Emit(new ShowCharacterCardEvent(player.Character.characterName, owner.Id));
+                            EventView.Manager.Emit(new ShowCharacterCardEvent(player.Character.characterName, player.Id));
                         }
                     }))
             };
