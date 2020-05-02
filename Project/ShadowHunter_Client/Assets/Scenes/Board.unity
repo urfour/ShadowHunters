@@ -1874,9 +1874,9 @@ MonoBehaviour:
   visionPickButton: {fileID: 1291809261}
   LightnessPickButton: {fileID: 1021857164}
   DarknessPickButton: {fileID: 1246541371}
-  ShadowColor: {r: 0.8018868, g: 0.13238695, b: 0.13238695, a: 1}
-  HunterColor: {r: 0.10234957, g: 0.62415934, b: 0.8679245, a: 1}
-  NeutralColor: {r: 1, g: 0.7260429, b: 0.023584902, a: 1}
+  ShadowColor: {r: 0.90588236, g: 0.29803923, b: 0.23529412, a: 1}
+  HunterColor: {r: 0.20392157, g: 0.59607846, b: 0.85882354, a: 1}
+  NeutralColor: {r: 0.95686275, g: 0.8156863, b: 0.24705882, a: 1}
   cardDisplayer: {fileID: 999653979}
 --- !u!1 &656369798
 GameObject:
