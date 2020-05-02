@@ -128,3 +128,10 @@ card.vision.vision_supreme;Prediction
 game.player.action.move;Move
 game.player.action.end_turn;End turn
 gamescene.carddisplay.dismiss;Dismiss
+character.team.shadow;Shadow
+character.team.hunter;Hunter
+character.team.neutral;Neutral
+game.end.lose;Defeat
+game.end.win;Victory
+gamescene.endscreen.exit;Leave the game
+character.info.dead;Dead
