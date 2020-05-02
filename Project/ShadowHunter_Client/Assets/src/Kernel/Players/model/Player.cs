@@ -165,7 +165,7 @@ public class Player
     /// </summary>
     public Setting<int> DamageDealed { get; private set; } = new Setting<int>(-1);
 
-    public Setting<bool> Disconnected { get; private set; } = new Setting<int>(false);
+    public Setting<bool> Disconnected { get; private set; } = new Setting<bool>(false);
  
     ///private static List<Player> players = new List<Player>();
 
