@@ -228,8 +228,8 @@ public class Player
             if (ReductionWounds.Value > 0)
                 damage = (damage - ReductionWounds.Value < 0) ? 0 : damage - ReductionWounds.Value;
             
-            //si c'est une attaque pour les pouvoirs du Vampire et Bob
-            if(isAttack)
+            //si c'est une attaque pour les pouvoirs du Vampire
+            if (isAttack && attacker.Character.characterName == "character.name.vampire")
                 attacker.DamageDealed.Value = damage;
             
             this.Wound.Value += damage;
