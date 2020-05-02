@@ -116,17 +116,19 @@ namespace Assets.Noyau.Players.controller
                     if (!availableDestination.Contains(tmpavailableDestination) && GameManager.PlayerTurn.Value.Position.Value != tmpavailableDestination)
                     {
                         if (tmpavailableDestination != -1)
+                        {
                             availableDestination.Add(tmpavailableDestination);
 
-                        if (GameManager.PlayerTurn.Value.Character.characterName.Equals("character.name.emi") && GameManager.PlayerTurn.Value.Revealed.Value)
-                        {
-                            if (GameManager.PlayerTurn.Value.Position.Value % 2 == 0)
-                                availableDestination.Add(GameManager.PlayerTurn.Value.Position.Value + 1);
-                            else
-                                availableDestination.Add(GameManager.PlayerTurn.Value.Position.Value - 1);
-                        }
+                            if (GameManager.PlayerTurn.Value.Character.characterName.Equals("character.name.emi") && GameManager.PlayerTurn.Value.Revealed.Value)
+                            {
+                                if (GameManager.PlayerTurn.Value.Position.Value % 2 == 0)
+                                    availableDestination.Add(GameManager.PlayerTurn.Value.Position.Value + 1);
+                                else
+                                    availableDestination.Add(GameManager.PlayerTurn.Value.Position.Value - 1);
+                            }
 
-                        nbrolls--;
+                            nbrolls--;
+                        }
                     }
                 }
                 availableDestination.Remove(GameManager.PlayerTurn.Value.Position.Value);
