@@ -20,6 +20,10 @@ namespace Assets.Noyau.Cards.controller
         public List<Card> lightDeck;
         public List<Card> darknessDeck;
 
+        public List<Card> visionDiscard;
+        public List<Card> lightDiscard;
+        public List<Card> darknessDiscard;
+
         public UsableCard Foret;
         public UsableCard Sanctuaire;
 
@@ -133,6 +137,10 @@ namespace Assets.Noyau.Cards.controller
                     {
                         target.Wounded(owner.DamageDealed.Value, owner, true);
                     }));
+
+            darknessDiscard = new List<Card>();
+            lightDiscard = new List<Card>();
+            visionDiscard = new List<Card>();
 
             /// <summary>
             /// Fonction qui va instancier les cartes ténèbres avec leur pouvoirs.

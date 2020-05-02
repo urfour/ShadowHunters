@@ -33,9 +33,16 @@ namespace Assets.Noyau.Cards.view
         /// </summary>
         public static Card PickVision()
         {
+            if (GCard.visionDeck.Count == 0)
+            {
+                GCard.visionDeck = GCard.visionDiscard;
+                GCard.visionDiscard.Clear();
+            }
+
             int r = GameManager.rand.Next(0, GCard.visionDeck.Count);
             Card c = GCard.visionDeck[r];
             GCard.visionDeck.RemoveAt(r);
+            GCard.visionDiscard.Add(c);
             return c;
         }
 
@@ -44,9 +51,19 @@ namespace Assets.Noyau.Cards.view
         /// </summary>
         public static Card PickLight()
         {
+            if (GCard.lightDeck.Count == 0)
+            {
+                GCard.lightDeck = GCard.lightDiscard;
+                GCard.lightDiscard.Clear();
+            }
+
             int r = GameManager.rand.Next(0, GCard.lightDeck.Count);
             Card c = GCard.lightDeck[r];
             GCard.lightDeck.RemoveAt(r);
+            if (c is UsableCard)
+            {
+                GCard.lightDiscard.Add(c);
+            }
             return c;
         }
 
@@ -55,9 +72,19 @@ namespace Assets.Noyau.Cards.view
         /// </summary>
         public static Card PickDarkness()
         {
+            if (GCard.darknessDeck.Count == 0)
+            {
+                GCard.darknessDeck = GCard.darknessDiscard;
+                GCard.darknessDiscard.Clear();
+            }
+
             int r = GameManager.rand.Next(0, GCard.darknessDeck.Count);
             Card c = GCard.darknessDeck[r];
             GCard.darknessDeck.RemoveAt(r);
+            if (c is UsableCard)
+            {
+                GCard.darknessDiscard.Add(c);
+            }
             return c;
         }
         public static Card GetCard(int idCard)
