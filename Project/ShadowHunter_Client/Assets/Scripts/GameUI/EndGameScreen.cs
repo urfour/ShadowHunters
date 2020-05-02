@@ -50,7 +50,7 @@ public class EndGameScreen : MonoBehaviour
         };
 
         listeners.Add((GameManager.GameEnded, activation));
-        listeners.Add((GameManager.LocalPlayer, local));
+        listeners.Add((GameManager.LocalPlayer.Value.HasWon, local));
         AddListeners();
     }
 

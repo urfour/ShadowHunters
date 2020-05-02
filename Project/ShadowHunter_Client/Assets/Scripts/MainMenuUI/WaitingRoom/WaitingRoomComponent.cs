@@ -91,11 +91,11 @@ class WaitingRoomComponent : MonoBehaviour
     public void ExitRoomButtonClick()
     {
         //Debug.Log("Exit " + GRoom.Instance.JoinedRoom.Name);
-        EventView.Manager.Emit(new LeaveRoomEvent() { RoomData = GRoom.Instance.JoinedRoom.RawData });
+        EventView.Manager.Emit(new LeaveRoomEvent() { RoomData = new RoomData() { Code = GRoom.Instance.JoinedRoom.RawData.Code } });
     }
 
     public void StartGameButtonClick()
     {
-        EventView.Manager.Emit(new StartGameEvent() { RoomData = GRoom.Instance.JoinedRoom.RawData });
+        EventView.Manager.Emit(new StartGameEvent() { RoomData = new RoomData() { Code = GRoom.Instance.JoinedRoom.RawData.Code } });
     }
 }
