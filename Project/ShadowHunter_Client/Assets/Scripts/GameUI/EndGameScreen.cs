@@ -17,7 +17,7 @@ public class EndGameScreen : MonoBehaviour
 
     private List<(ListenableObject observed, OnNotification notification)> listeners = new List<(ListenableObject observed, OnNotification notification)>();
 
-    public void Start()
+    public void Init()
     {
         foreach (Player p in PlayerView.GetPlayers())
         {

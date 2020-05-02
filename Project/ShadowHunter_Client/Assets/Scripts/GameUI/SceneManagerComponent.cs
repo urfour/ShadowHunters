@@ -110,6 +110,8 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
         listeners.Add((GameManager.PickDarknessDeck, darknessPick));
 
         AddListeners();
+
+        EndGameScreen.Init();
     }
 
 
