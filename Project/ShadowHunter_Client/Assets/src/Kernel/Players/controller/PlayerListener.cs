@@ -413,7 +413,7 @@ namespace Assets.Noyau.Players.controller
                         {
                             // Cas Gatling à considérer quand on aura la foi
                             damages += playerAttacked.ReductionWounds.Value;
-                            playerAttacking.OnAttackingPlayer.Value = playerAttacking.Id;
+                            playerAttacking.OnAttackingPlayer.Value = playerAttacked.Id;
                             playerAttacked.OnAttackedBy.Value = playerAttacking.Id;
                             playerAttacking.DamageDealed.Value = damages;
                             // activer l'effet
