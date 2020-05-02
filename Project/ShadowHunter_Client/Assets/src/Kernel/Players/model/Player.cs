@@ -197,21 +197,24 @@ public class Player
             {
                 for (int i = this.ListCard.Count - 1; i >= 0; i--)
                 {
-                    EquipmentCard c = this.ListCard[i] as EquipmentCard;
-                    c.equipe(playerAttacking, c);
-                    c.unequipe(playerAttacking, c);
+                    EquipmentCard card = this.ListCard[i] as EquipmentCard;
+                    card.equipe(playerAttacking, card);
+                    card.unequipe(this, card);
                 }
             }
             else if (this.ListCard.Count > 0)
             {
-                EquipmentCard c = playerAttacking.ListCard[GameManager.rand.Next(0, playerAttacking.ListCard.Count - 1)] as EquipmentCard;
+                EquipmentCard card = this.ListCard[GameManager.rand.Next(0, this.ListCard.Count - 1)] as EquipmentCard;
 
-                c.equipe(playerAttacking, c);
-                c.unequipe(playerAttacking, c);
+                card.equipe(playerAttacking, card);
+                card.unequipe(this, card);
 
                 // on défausse toutes les autres cartes
                 for (int i = this.ListCard.Count - 1; i >= 0; i--)
                 {
+                    card = this.ListCard[i] as EquipmentCard;
+                    card.unequipe(this, card);
+
                     if (this.ListCard[i].cardType == CardType.Darkness)
                         CardView.GCard.darknessDiscard.Add(this.ListCard[i]);
                     else
