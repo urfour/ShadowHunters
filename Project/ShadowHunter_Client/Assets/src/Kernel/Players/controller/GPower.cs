@@ -163,6 +163,9 @@ namespace Assets.Noyau.Players.controller
             },
             availability: (owner) =>
             {
+                if (owner.Dead.Value)
+                    owner.CanUsePower.Value = false;
+
                 if (owner.Revealed.Value && !owner.Dead.Value)
                 {
                     if (GameManager.StartOfTurn.Value)
