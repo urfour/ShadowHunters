@@ -139,9 +139,19 @@ namespace Assets.Noyau.Manager.view
                 p.RemoveAt(index);
             }
 
-            foreach (Player player in PlayerView.GetPlayers())
-                player.Character.goal.setWinningListeners(player);
 
+            foreach (Player player in PlayerView.GetPlayers())
+            {
+                player.Character.goal.setWinningListeners(player);
+                OnNotification gameEnded = (sender) =>
+                {
+                    if (player.HasWon.Value && !GameEnded.Value)
+                    {
+                        GameEnded.Value = true;
+                    }
+                };
+                player.HasWon.AddListener(gameEnded);
+            }
         }
 
         public static void Clean()
