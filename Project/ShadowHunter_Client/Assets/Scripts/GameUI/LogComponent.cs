@@ -41,6 +41,6 @@ public class LogComponent : MonoBehaviour
         choicesheigh += (content.childCount - 1) * content.GetComponent<VerticalLayoutGroup>().spacing;
         content.sizeDelta = new Vector2(content.sizeDelta.x, choicesheigh);
 
-        content.localPosition = new Vector3(content.localPosition.x, (-choicesheigh/2) + viewMask.sizeDelta.y, content.localPosition.z);
+        content.localPosition = new Vector3(content.localPosition.x, (choicesheigh/2f) - (viewMask.sizeDelta.y/2f), content.localPosition.z);
     }
 }
