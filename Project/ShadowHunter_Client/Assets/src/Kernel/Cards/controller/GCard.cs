@@ -519,7 +519,7 @@ namespace Assets.Noyau.Cards.controller
                         player.Revealed.Value = true;
                         player.Healed(player.Wound.Value);
                     }),
-                new CardEffect("card.light.light_supreme.effect.args.heal&max",
+                new CardEffect("card.light.light_supreme.effect.args.heal",
                     targetableCondition: (player, owner) =>
                     {
                         return player == owner
