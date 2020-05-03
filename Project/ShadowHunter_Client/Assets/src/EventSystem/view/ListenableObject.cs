@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Log;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace EventSystem
     public class ListenableObject
     {
         private List<OnNotification> observers = new List<OnNotification>();
+        public List<(KernelLogType, string)> Messages { get; private set; }
 
         public virtual void AddListener(OnNotification listener)
         {

@@ -203,3 +203,6 @@ card.vision.vision_mortifere.nothing_happen;Nothing happens
 card.vision.vision_purificatrice.effect.args.wound&1;Take &1 Wounds
 card.vision.vision_purificatrice.nothing_happen;Nothing happens
 card.vision.vision_supreme.effect.show_card;Show character card
+card.type.vision;Hermit
+card.type.darkness;Darkness
+card.type.light;Light
