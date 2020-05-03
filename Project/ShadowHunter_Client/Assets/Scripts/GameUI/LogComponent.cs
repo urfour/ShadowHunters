@@ -10,6 +10,14 @@ public class LogComponent : MonoBehaviour
     public LogBarComponent prefab;
     private int index = 0;
 
+    private void Start()
+    {
+        KernelLog.Instance.AddListener((sender) =>
+        {
+            this.Refresh();
+        });
+    }
+
     public void Refresh()
     {
         for (int i = index; i < KernelLog.Instance.Messages.Count; i++)
