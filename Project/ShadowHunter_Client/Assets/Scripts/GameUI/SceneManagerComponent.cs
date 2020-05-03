@@ -149,6 +149,7 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     private void OnDestroy()
     {
         RemoveListeners();
+        EventView.Manager.RemoveListener(this);
     }
     
     
