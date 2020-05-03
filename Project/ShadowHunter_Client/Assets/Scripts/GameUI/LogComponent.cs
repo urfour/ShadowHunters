@@ -28,6 +28,7 @@ public class LogComponent : MonoBehaviour
 
             logComponent.Display(KernelLog.Instance.Messages[i].msg, KernelLog.Instance.Messages[i].type);
         }
+        index = KernelLog.Instance.Messages.Count;
 
         index = KernelLog.Instance.Messages.Count;
 
