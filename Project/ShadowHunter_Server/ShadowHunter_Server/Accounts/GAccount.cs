@@ -164,7 +164,7 @@ namespace ShadowHunter_Server.Accounts
         //              n'existe pas
         private byte Authentify(string login, string password)
         {
-            string connectionString = @"DataSource=..\..\database.db; Version=3;";
+            string connectionString = @"DataSource=../../database.db; Version=3;";
             int myUserId = -1;
 
             using (SQLiteConnection conn = new SQLiteConnection(connectionString))
