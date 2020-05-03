@@ -4,6 +4,7 @@ using Assets.Noyau.Players.view;
 using Assets.src.Kernel.Players.controller;
 using EventSystem;
 using Kernel.Settings;
+using Log;
 using Scripts;
 using Scripts.event_in;
 using System;
@@ -109,6 +110,7 @@ namespace Assets.Noyau.Manager.view
         /// <param name="nbPlayers">Le nombre de joueurs de la partie</param>
         public static void Init(int nbPlayers, int randSeed, int localPlayer = -1)
         {
+            new KernelLog();
             playerListener = new PlayerListener();
             disconnectionListener = new DisconnectionListener();
             EventView.Manager.AddListener(playerListener, true);
