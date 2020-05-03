@@ -196,7 +196,7 @@ public class Player
 
         Revealed.AddListener((sender) =>
         {
-            if (this.Revealed.Value)
+            if (this.Revealed.Value && !this.Dead.Value)
             {
                 KernelLog.Instance.Reveal(this);
             }
@@ -317,6 +317,7 @@ public class Player
 
             return damage;
         }
+        KernelLog.Instance.AttackFailed(attacker, this);
         return 0;
     }
 

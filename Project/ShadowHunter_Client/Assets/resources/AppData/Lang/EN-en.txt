@@ -179,6 +179,7 @@ card.vision.effect.send.&1;Send card
 card.vision.vision_destructrice.effect.args.wound&1;Take &1 Wounds
 card.vision.vision_destructrice.nothing_happen;Nothing happens
 card.vision.vision_clairvoyante.effect.args.wound&1;Take &1 Wound
+card.vision.vision_clairvoyante.nothing_happen;Nothing happens
 card.vision.vision_cupide.effect.args.wound&1;Take &1 Wound
 card.vision.vision_cupide.effect.give;Give equipment card
 card.vision.vision_cupide.nothing_happen;Nothing happens
@@ -221,3 +222,4 @@ kernel.log.die.args.playername_charactername&2;&1 dies and was playing &2.
 kernel.log.nothinghappen;Nothing happens.
 kernel.log.giveequipement.args.playergiver_playergiven_playergiven_cardgiven&3;&1 gives card &2 to &3.
 kernel.log.stealequipement.args.playerthief_playerstolen_cardgiven&3;&1 steals card &2 to &3.
+kernel.log.attackfailed.args.attackername_attackedname&2;&1 tried to attack &2 but failed.

@@ -21,6 +21,7 @@ namespace Log
         DEALWOUNDS,
         HEALWOUNDS,
         ATTACK,
+        ATTACKFAILED,
         REVEAL,
         USEPOWER,
         DIE
@@ -92,6 +93,11 @@ namespace Log
         public void Attack(Player attackerPlayer, Player attackedPlayer, int wounds)
         {
             Messages.Add((KernelLogType.ATTACK, "kernel.log.attack.args.attackername_attackedname_wounds&" + attackerPlayer.Name + "&" + attackedPlayer.Name + "&" + wounds));
+            Notify();
+        }
+        public void AttackFailed(Player attackerPlayer, Player attackedPlayer)
+        {
+            Messages.Add((KernelLogType.ATTACKFAILED, "kernel.log.attackfailed.args.attackername_attackedname&" + attackerPlayer.Name + "&" + attackedPlayer.Name));
             Notify();
         }
         public void Reveal(Player player)
