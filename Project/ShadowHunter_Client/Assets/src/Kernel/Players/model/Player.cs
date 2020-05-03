@@ -192,6 +192,7 @@ public class Player
 
         Dead.AddListener((sender) =>
         {
+            if (this.Disconnected.Value) return;
             if (!this.Revealed.Value)
                 this.Revealed.Value = true;
             Player playerAttacking = PlayerView.GetPlayer(this.OnAttackedBy.Value);
