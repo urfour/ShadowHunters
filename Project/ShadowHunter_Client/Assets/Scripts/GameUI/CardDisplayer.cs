@@ -28,6 +28,7 @@ public class CardDisplayer : MonoBehaviour
     public void Display(Card card, Player player)
     {
         Clear();
+        AudioManager.Instance.PlayAsync("game.action.draw", true, false);
         this.player = player;
         this.card = card;
         playerDisplayer.text = player.Name;
@@ -65,6 +66,7 @@ public class CardDisplayer : MonoBehaviour
     public void DisplayUsableCard(UsableCard card, Player player)
     {
         Clear();
+        AudioManager.Instance.PlayAsync("game.action.draw", true, false);
         this.player = player;
         playerDisplayer.text = player.Name;
         DismissButton.gameObject.SetActive(card.canDismiss || GameManager.LocalPlayer.Value != player);
@@ -134,6 +136,7 @@ public class CardDisplayer : MonoBehaviour
     public void DisplayPlayer(Player player)
     {
         Clear();
+        AudioManager.Instance.PlayAsync("game.action.draw", true, false);
         this.player = player;
         playerDisplayer.text = player.Name;
         DismissButton.gameObject.SetActive(true);
@@ -179,6 +182,7 @@ public class CardDisplayer : MonoBehaviour
         if (GameManager.LocalPlayer.Value == player)
         {
             Clear();
+            AudioManager.Instance.PlayAsync("game.action.draw", true, false);
             this.player = player;
             playerDisplayer.text = player.Name;
             if (ResourceLoader.CardSprites.ContainsKey(cardLabel))
