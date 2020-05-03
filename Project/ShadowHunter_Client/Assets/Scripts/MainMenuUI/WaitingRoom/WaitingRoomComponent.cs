@@ -12,6 +12,7 @@ class WaitingRoomComponent : MonoBehaviour
     public PlayerDisplayComponent playerPrefab;
     public Button startGame;
     public Text roomCode;
+    public Text roomName;
 
     private OnNotification notification;
 
@@ -51,6 +52,7 @@ class WaitingRoomComponent : MonoBehaviour
             }
             if (r.Players.Value != null)
             {
+                roomName.text = r.Name.Value;
                 roomCode.text = "#" + r.Code.Value;
                 for (int i = 0; i < r.CurrentNbPlayer.Value; i++)
                 {

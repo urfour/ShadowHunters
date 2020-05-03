@@ -398,7 +398,6 @@ GameObject:
   - component: {fileID: 27153301}
   - component: {fileID: 27153300}
   - component: {fileID: 27153299}
-  - component: {fileID: 27153298}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -425,19 +424,6 @@ RectTransform:
   m_AnchoredPosition: {x: 15, y: 0}
   m_SizeDelta: {x: -40, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &27153298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 27153296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8678cff7dfc1459409ba1002d60288ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  label: mainmenu.waitingroom.title
 --- !u!114 &27153299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11631,6 +11617,7 @@ MonoBehaviour:
     type: 3}
   startGame: {fileID: 2024480857}
   roomCode: {fileID: 2036070309}
+  roomName: {fileID: 27153300}
 --- !u!1 &1281281488
 GameObject:
   m_ObjectHideFlags: 0
