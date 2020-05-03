@@ -180,6 +180,20 @@ namespace Assets.Noyau.Manager.view
             EventView.Manager.RemoveListener(disconnectionListener);
             PlayerView.Clean();
             CardView.Clean();
+            Board.Clear();
+            LocalPlayer = new Setting<Player>(null);
+            PlayerTurn = new Setting<Player>(null);
+            StartOfTurn = new Setting<bool>(true);
+            MovementAvailable = new Setting<bool>(false);
+            AttackAvailable = new Setting<bool>(false);
+            PickVisionDeck = new Setting<bool>(false);
+            PickLightnessDeck = new Setting<bool>(false);
+            PickDarknessDeck = new Setting<bool>(false);
+            HasKilled = new Setting<bool>(false);
+            TurnEndable = new Setting<bool>(false);
+            WaitingPlayer = new Setting<Player>();
+            GameEnded = new Setting<bool>(false);
+
             rand = null;
         }
     }
