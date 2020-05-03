@@ -35,6 +35,7 @@ public class PlayerViewComponent : MonoBehaviour
     public Text infoDisplayer;
 
     private int lastWoundsValue = 0;
+    private bool alreadyStandingMusic = false;
 
     private Player player;
 
@@ -131,6 +132,32 @@ public class PlayerViewComponent : MonoBehaviour
 
         characterTotalHealth.text = player.Character.characterHP.ToString();
 
+        if (player == GameManager.LocalPlayer.Value && player.Character.team != CharacterTeam.Neutral)
+        {
+            OnNotification execLastStanding = (sender) =>
+            {
+                if (alreadyStandingMusic) return;
+                int nbinteam = 0;
+                foreach (Player p in PlayerView.GetPlayers())
+                {
+                    if (p.Character.team == player.Character.team && !p.Dead.Value)
+                    {
+                        nbinteam++;
+                    }
+                }
+                if (nbinteam == 1)
+                {
+                    AudioManager.Instance.Play("game.music.laststanding");
+                    alreadyStandingMusic = true;
+                }
+            };
+
+            foreach (Player p in PlayerView.GetPlayers())
+            {
+                listeners.Add((p.Dead, execLastStanding));
+            }
+        }
+
         OnNotification characterName = (sender) =>
         {
             if (player.Revealed.Value || isLocalPlayer)
@@ -176,6 +203,7 @@ public class PlayerViewComponent : MonoBehaviour
             if (GameManager.Board.ContainsKey(player.Position.Value))
             {
                 position.text = Language.Translate("board.position." + GameManager.Board[player.Position.Value].ToString().ToLower());
+                AudioManager.Instance.PlayAsync("game.action." + GameManager.Board[player.Position.Value].ToString().ToLower(), true, false);
             }
             else
             {
