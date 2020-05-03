@@ -53,7 +53,7 @@ public class PlayerViewComponent : MonoBehaviour
 
     public void Reveal()
     {
-        if (!player.Revealed.Value)
+        if (!player.Revealed.Value && player.Revealable.Value)
         {
             EventView.Manager.Emit(new RevealCardEvent() { PlayerId = player.Id });
             revealButton.interactable = false;
@@ -107,6 +107,8 @@ public class PlayerViewComponent : MonoBehaviour
             };
             listeners.Add((player.Revealed, revealNotification));
         }
+
+        revealButton.interactable = player.Revealable.Value;
 
         switch (player.Character.team)
         {

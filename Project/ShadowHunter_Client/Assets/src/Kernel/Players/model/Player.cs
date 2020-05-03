@@ -166,6 +166,7 @@ public class Player
     public Setting<int> DamageDealed { get; private set; } = new Setting<int>(-1);
 
     public Setting<bool> Disconnected { get; private set; } = new Setting<bool>(false);
+    public Setting<bool> Revealable { get; private set; } = new Setting<bool>(true);
  
     ///private static List<Player> players = new List<Player>();
 
@@ -180,6 +181,8 @@ public class Player
         this.Name = ((PlayerNames)id).ToString();
         this.ListCard = new List<Card>();
         this.Character = c;
+        if (this.Character.characterName == "character.name.daniel")
+            this.Revealable.Value = false;
 
         // add death logic
         Wound.AddListener((sender) =>
@@ -192,7 +195,12 @@ public class Player
 
         Dead.AddListener((sender) =>
         {
-            if (this.Disconnected.Value) return;
+            if (this.Disconnected.Value)
+            {
+                if (!this.Revealed.Value)
+                    this.Revealed.Value = true;
+                return;
+            }
             if (!this.Revealed.Value)
                 this.Revealed.Value = true;
             Player playerAttacking = PlayerView.GetPlayer(this.OnAttackedBy.Value);

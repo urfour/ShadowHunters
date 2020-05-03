@@ -74,7 +74,7 @@ message.server.title;Server message
 message.network.error.global&3;Type: &1\nMessage: &2\nStackTrace: &3
 message.room.invalid.join.please_leave_your_room_before;Please leave your room before joining another one.
 message.room.invalid.room_code_dont_exist&1;Room &1 does not exist
-character.name.unknown;Unknown
+character.name.unknown;???
 character.name.allie;Allie
 character.name.bob;Bob
 character.name.charles;Charles
