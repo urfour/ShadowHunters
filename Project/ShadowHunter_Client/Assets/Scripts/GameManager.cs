@@ -56,28 +56,13 @@ namespace Assets.Scripts
 
         private void Start()
         {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.quitting += OnApplicationQuit;
-#endif
-            DontDestroyOnLoad(gameObject);
             foreach(GameObject o in forceStartCall)
             {
                 o.SetActive(true);
             }
         }
 
-        private void OnApplicationQuit()
-        {
-            Logger.Info("[START]\tSaving SettingManager");
-            SettingManager.Save();
-            Logger.Info("[END]  \tSaving SettingManager");
-            Logger.Info("[START]\tLanguage Save");
-            Language.Instance.Save();
-            Logger.Info("[END]  \tLanguage Save");
-            Logger.Info("[START]\tNetwork Disconnect");
-            ServerInterface.Network.NetworkView.Disconnect();
-            Logger.Info("[END]  \tNetwork Disconnect");
-        }
+
 
         private void Update()
         {

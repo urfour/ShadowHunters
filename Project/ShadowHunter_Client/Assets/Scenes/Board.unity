@@ -1785,6 +1785,7 @@ GameObject:
   - component: {fileID: 569584309}
   - component: {fileID: 569584308}
   - component: {fileID: 569584311}
+  - component: {fileID: 569584312}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1878,6 +1879,18 @@ MonoBehaviour:
   HunterColor: {r: 0.20392157, g: 0.59607846, b: 0.85882354, a: 1}
   NeutralColor: {r: 0.95686275, g: 0.8156863, b: 0.24705882, a: 1}
   cardDisplayer: {fileID: 999653979}
+--- !u!114 &569584312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 569584307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 381a7ecbdca04704ebb2aae38f2e05bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &637194936
 GameObject:
   m_ObjectHideFlags: 0
