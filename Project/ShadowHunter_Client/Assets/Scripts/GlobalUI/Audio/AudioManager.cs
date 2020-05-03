@@ -9,6 +9,10 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance { get; private set; } = null;
 
     private static Dictionary<string, AudioClip> sources = new Dictionary<string, AudioClip>();
+
+
+    private Dictionary<string, AudioAsyncComponent> auxiliaires = new Dictionary<string, AudioAsyncComponent>();
+
     private static string source_path = "audio";
 
     private AudioSource AudioSource;
@@ -35,6 +39,8 @@ public class AudioManager : MonoBehaviour
             }
             Play(MainMenuMusique.clip);
             DontDestroyOnLoad(gameObject);
+
+
         }
         else
         {
@@ -60,8 +66,18 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void PlayAsync(string soundLabel)
+    public void PlayAsync(string soundLabel, bool isEffect = true, bool stopable = false)
     {
-
+        if (sources.ContainsKey(soundLabel))
+        {
+            GameObject aux = new GameObject();
+            aux.AddComponent<AudioSource>();
+            AudioAsyncComponent aac = aux.AddComponent<AudioAsyncComponent>();
+            aac.Play(sources[soundLabel], isEffect);
+            if (stopable && !auxiliaires.ContainsKey(soundLabel))
+            {
+                auxiliaires.Add(soundLabel, aac);
+            }
+        }
     }
 }
