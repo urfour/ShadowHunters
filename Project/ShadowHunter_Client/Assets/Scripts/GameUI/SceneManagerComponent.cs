@@ -177,6 +177,7 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
         {
             cardDisplayer.Display(showCard.CardLabel, PlayerView.GetPlayer(showCard.PlayerId));
         }
+        AudioManager.Instance.Play("game.music.main");
     }
 
     private void Update()

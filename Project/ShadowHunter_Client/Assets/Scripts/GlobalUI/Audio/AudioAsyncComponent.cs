@@ -5,7 +5,7 @@ using Kernel.Settings;
 
 public class AudioAsyncComponent : MonoBehaviour
 {
-    AudioSource source;
+    public AudioSource source;
 
     OnNotification volumeListener;
     ListenableObject listened;
@@ -35,8 +35,14 @@ public class AudioAsyncComponent : MonoBehaviour
 
         source.clip = clip;
         source.Play();
+        Invoke("DestroyAudio", clip.length + 1);
     }
 
+
+    private void DestroyAudio()
+    {
+
+    }
     private void OnDestroy()
     {
         listened.RemoveListener(volumeListener);

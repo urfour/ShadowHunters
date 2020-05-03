@@ -146,6 +146,10 @@ public class PlayerViewComponent : MonoBehaviour
                 playerIcon.sprite = ResourceLoader.CharacterSprites["character.name.unknown"];
                 characterIcon.gameObject.SetActive(false);
             }
+            if (player.Revealed.Value)
+            {
+                AudioManager.Instance.PlayAsync("game.action.reveal", true, false);
+            }
         };
         listeners.Add((player.Revealed, characterName));
 

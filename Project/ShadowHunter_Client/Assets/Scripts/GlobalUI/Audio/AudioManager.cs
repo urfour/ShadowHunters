@@ -92,6 +92,7 @@ public class AudioManager : MonoBehaviour
         if (sources.ContainsKey(soundLabel))
         {
             GameObject aux = new GameObject();
+            aux.transform.SetParent(transform);
             aux.AddComponent<AudioSource>();
             AudioAsyncComponent aac = aux.AddComponent<AudioAsyncComponent>();
             aac.Play(sources[soundLabel], isEffect);
@@ -104,6 +105,7 @@ public class AudioManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        listened.RemoveListener(volumeListener);
+        if (listened != null)
+            listened.RemoveListener(volumeListener);
     }
 }
