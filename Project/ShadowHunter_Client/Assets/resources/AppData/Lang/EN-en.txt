@@ -206,3 +206,14 @@ card.vision.vision_supreme.effect.show_card;Show character card
 card.type.vision;Hermit
 card.type.darkness;Darkness
 card.type.light;Light
+kernel.log.startturn.args.playername&1;&1 starts a new turn.
+kernel.log.moveon.args.position&2;&1 moves on &2.
+kernel.log.drawcard.args.playername_cardlabel&2;&1 draws the card &2.
+kernel.log.dealwounds.args.playername_wounds&2;&1 takes &2 Wounds.
+kernel.log.drawcard.args.playername&1;&1 draws a Hermit card.
+kernel.log.givevision.args.playersender_playerreceiver&2;&1 gives the Hermit card to &2.
+kernel.log.healwounds.args.playername_wounds&2;&1 heals &2 Wounds.
+kernel.log.attack.args.attackername_attackedname_wounds&3;&1 attacks &2 and deals &3 Wounds.
+kernel.log.reveal.args.playername&2;&1 reveals and is &2!
+kernel.log.usepower.args.playername&1;&1 uses his power!
+kernel.log.die.args.playername&1;&1 dies!

@@ -26,9 +26,8 @@ public class LogComponent : MonoBehaviour
             LogBarComponent logComponent = log.GetComponent<LogBarComponent>();
 
             logComponent.Display(KernelLog.Instance.Messages[i].msg, KernelLog.Instance.Messages[i].type);
-
-
         }
+        index = KernelLog.Instance.Messages.Count;
 
         float choicesheigh = 0;
         for (int i = 0; i < content.childCount; i++)
