@@ -62,6 +62,7 @@ message.auth.invalid.valid;Ok
 message.auth.invalid.title;Invalid authentification
 message.room.invalid.valid;Ok
 message.room.invalid.title;Invalid action
+message.room.invalid.join.you_are_already_in_this_room;You are already in this room!
 message.auth.invalid.login.login_invalid;Incorrect username
 message.auth.invalid.login.password_invalid;Incorrect password
 message.auth.invalid.signin.login_unavailable&1;Username &1 is unavailable, please choose another one

@@ -429,7 +429,6 @@ namespace Assets.Noyau.Players.controller
                             playerAttacking.OnAttackingPlayer.Value = playerAttacked.Id;
                             playerAttacked.OnAttackedBy.Value = playerAttacking.Id;
                             playerAttacking.DamageDealed.Value = damages;
-                            // activer l'effet
 
                         }
                         else
