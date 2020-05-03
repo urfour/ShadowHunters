@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using EventSystem;
+using Kernel.Settings;
 
 [RequireComponent(typeof(AudioSource))]
 public class AudioManager : MonoBehaviour
@@ -16,6 +18,10 @@ public class AudioManager : MonoBehaviour
     private static string source_path = "audio";
 
     private AudioSource AudioSource;
+    private OnNotification volumeListener;
+    private ListenableObject listened;
+
+    public ListenableObject OnPlayedClipEnd = new ListenableObject();
 
     public AudioResource MainMenuMusique;
 
@@ -40,11 +46,26 @@ public class AudioManager : MonoBehaviour
             Play(MainMenuMusique.clip);
             DontDestroyOnLoad(gameObject);
 
+            volumeListener = (sender) =>
+            {
+                AudioSource.volume = (float)SettingManager.Settings.UI_MusicVolume.Value;
+            };
+            listened = SettingManager.Settings.UI_MusicVolume;
 
+            listened.AddListener(volumeListener);
+            volumeListener(listened);
         }
         else
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (!AudioSource.isPlaying)
+        {
+            OnPlayedClipEnd.Notify();
         }
     }
 
@@ -79,5 +100,10 @@ public class AudioManager : MonoBehaviour
                 auxiliaires.Add(soundLabel, aac);
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        listened.RemoveListener(volumeListener);
     }
 }
