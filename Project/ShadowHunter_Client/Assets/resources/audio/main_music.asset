@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7afe3fac877dfb74ea1b9dc9bd6fa7d4, type: 3}
   m_Name: main_music
   m_EditorClassIdentifier: 
-  label: 
-  clip: {fileID: 0}
+  label: game.music.main
+  clip: {fileID: 8300000, guid: 664a396210363084fb4f8611a1027b95, type: 3}

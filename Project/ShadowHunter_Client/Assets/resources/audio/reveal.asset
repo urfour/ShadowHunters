@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7afe3fac877dfb74ea1b9dc9bd6fa7d4, type: 3}
   m_Name: reveal
   m_EditorClassIdentifier: 
-  label: 
-  clip: {fileID: 0}
+  label: game.action.reveal
+  clip: {fileID: 8300000, guid: f5e1ff4ef97966042abaa9e63edb0268, type: 3}

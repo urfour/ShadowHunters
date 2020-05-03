@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7afe3fac877dfb74ea1b9dc9bd6fa7d4, type: 3}
   m_Name: last_standing
   m_EditorClassIdentifier: 
-  label: 
-  clip: {fileID: 0}
+  label: game.music.laststanding
+  clip: {fileID: 8300000, guid: 836ed80303d2ff9468b34c7875cdb027, type: 3}

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7afe3fac877dfb74ea1b9dc9bd6fa7d4, type: 3}
   m_Name: attack
   m_EditorClassIdentifier: 
-  label: 
-  clip: {fileID: 0}
+  label: game.action.attack
+  clip: {fileID: 8300000, guid: b59d1ec2629f66d468e80e415a55448a, type: 3}

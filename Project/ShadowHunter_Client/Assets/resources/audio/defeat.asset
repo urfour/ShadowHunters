@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7afe3fac877dfb74ea1b9dc9bd6fa7d4, type: 3}
   m_Name: defeat
   m_EditorClassIdentifier: 
-  label: 
-  clip: {fileID: 0}
+  label: game.music.defeat
+  clip: {fileID: 8300000, guid: 3070ba1116b52e544904ac39b7e743e1, type: 3}

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7afe3fac877dfb74ea1b9dc9bd6fa7d4, type: 3}
   m_Name: deal_wounds
   m_EditorClassIdentifier: 
-  label: 
-  clip: {fileID: 0}
+  label: game.action.dealwound
+  clip: {fileID: 8300000, guid: e7af760f98f5aa641af3e52775f172d4, type: 3}
