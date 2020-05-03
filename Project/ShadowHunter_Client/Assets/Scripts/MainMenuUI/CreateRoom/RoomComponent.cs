@@ -52,6 +52,12 @@ class RoomComponent : MonoBehaviour, IListener<RoomEvent>
             RefreshSearchRoom();
         };
         GRoom.Instance.AddListener(gRoomNotification);
+
+        if (GRoom.Instance.JoinedRoom.RawData != null)
+        {
+            Logger.Info("LeaveRoom on RoomComponent.Start()");
+            EventView.Manager.Emit(new LeaveRoomEvent() { RoomData = new RoomData() { Code = GRoom.Instance.JoinedRoom.RawData.Code } });
+        }
     }
 
     private void OnDestroy()
