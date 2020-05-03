@@ -35,7 +35,7 @@ namespace Assets.Noyau.Cards.view
         {
             if (GCard.visionDeck.Count == 0)
             {
-                GCard.visionDeck = GCard.visionDiscard;
+                GCard.visionDeck.AddRange(GCard.visionDiscard);
                 GCard.visionDiscard.Clear();
             }
 
@@ -53,7 +53,7 @@ namespace Assets.Noyau.Cards.view
         {
             if (GCard.lightDeck.Count == 0)
             {
-                GCard.lightDeck = GCard.lightDiscard;
+                GCard.lightDeck.AddRange(GCard.lightDiscard);
                 GCard.lightDiscard.Clear();
             }
 
@@ -74,7 +74,7 @@ namespace Assets.Noyau.Cards.view
         {
             if (GCard.darknessDeck.Count == 0)
             {
-                GCard.darknessDeck = GCard.darknessDiscard;
+                GCard.darknessDeck.AddRange(GCard.darknessDiscard);
                 GCard.darknessDiscard.Clear();
             }
 
