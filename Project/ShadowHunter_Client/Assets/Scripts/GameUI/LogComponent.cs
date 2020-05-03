@@ -8,6 +8,7 @@ public class LogComponent : MonoBehaviour
 {
     public RectTransform content;
     public LogBarComponent prefab;
+    public RectTransform viewMask;
     private int index = 0;
 
     private void Start()
@@ -29,6 +30,8 @@ public class LogComponent : MonoBehaviour
         }
         index = KernelLog.Instance.Messages.Count;
 
+        index = KernelLog.Instance.Messages.Count;
+
         float choicesheigh = 0;
         for (int i = 0; i < content.childCount; i++)
         {
@@ -37,5 +40,7 @@ public class LogComponent : MonoBehaviour
         }
         choicesheigh += (content.childCount - 1) * content.GetComponent<VerticalLayoutGroup>().spacing;
         content.sizeDelta = new Vector2(content.sizeDelta.x, choicesheigh);
+
+        content.localPosition = new Vector3(content.localPosition.x, (-choicesheigh/2) + viewMask.sizeDelta.y, content.localPosition.z);
     }
 }
