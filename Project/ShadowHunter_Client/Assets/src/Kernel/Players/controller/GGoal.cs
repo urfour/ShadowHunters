@@ -23,7 +23,7 @@ namespace Assets.Noyau.Players.controller
             (
                 checkWinning: (owner) =>
                 {
-                    if (owner.HasWon.Value) return;
+                    if (owner.HasWon.Value || GameManager.GameEnded.Value) return;
                     bool shadowAlive = false;
                     foreach (Player p in PlayerView.GetPlayers())
                     {
@@ -60,7 +60,7 @@ namespace Assets.Noyau.Players.controller
             (
                 checkWinning: (owner) =>
                 {
-                    if (owner.HasWon.Value) return;
+                    if (owner.HasWon.Value || GameManager.GameEnded.Value) return;
                     bool HunterAlive = false;
                     int nbNeutralDead = 0;
                     foreach (Player p in PlayerView.GetPlayers())
@@ -101,7 +101,7 @@ namespace Assets.Noyau.Players.controller
             (
                 checkWinning: (owner) =>
                 {
-                    if (owner.HasWon.Value) return;
+                    if (owner.HasWon.Value || GameManager.GameEnded.Value) return;
                     if (!owner.Dead.Value && !owner.HasWon.Value)
                     {
                         foreach (Player p in PlayerView.GetPlayers())
@@ -132,7 +132,7 @@ namespace Assets.Noyau.Players.controller
             (
                 checkWinning: (owner) =>
                 {
-                    if (owner.HasWon.Value) return;
+                    if (owner.HasWon.Value || GameManager.GameEnded.Value) return;
                     if (owner.NbEquipment.Value >= 5)
                         owner.HasWon.Value=true;
                 },
@@ -151,7 +151,7 @@ namespace Assets.Noyau.Players.controller
             (
                 checkWinning: (owner) =>
                 {
-                    if (owner.HasWon.Value) return;
+                    if (owner.HasWon.Value || GameManager.GameEnded.Value) return;
                     int nbDead=0;
                     foreach (Player p in PlayerView.GetPlayers())
                     {
@@ -182,7 +182,7 @@ namespace Assets.Noyau.Players.controller
             (
                 checkWinning: (owner) =>
                 {
-                    if (owner.HasWon.Value) return;
+                    if (owner.HasWon.Value || GameManager.GameEnded.Value) return;
                     bool ShadowAlive = false;
                     int nbDead = 0;
                     foreach (Player p in PlayerView.GetPlayers())

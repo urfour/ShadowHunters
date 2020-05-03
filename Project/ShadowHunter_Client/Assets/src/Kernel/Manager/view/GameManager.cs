@@ -153,6 +153,10 @@ namespace Assets.Noyau.Manager.view
                 {
                     if (player.HasWon.Value && !GameEnded.Value)
                     {
+                        foreach(Player pl in PlayerView.GetPlayers())
+                        {
+                            pl.Character.goal.checkWinning(pl);
+                        }
                         GameEnded.Value = true;
                     }
                 };
