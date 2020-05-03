@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Assets.Noyau.Cards.view;
+using Log;
 
 namespace Assets.Noyau.Players.controller
 {
@@ -30,6 +31,7 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
+                KernelLog.Instance.UsePower(owner);
                 if (GameManager.LocalPlayer.Value == owner)
                 {
                     EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.GeorgesPower.Id, false, owner.Id));
@@ -64,6 +66,7 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
+                KernelLog.Instance.UsePower(owner);
                 if (GameManager.LocalPlayer.Value == owner)
                 {
                     EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.FranklinPower.Id, false, owner.Id));
@@ -88,50 +91,6 @@ namespace Assets.Noyau.Players.controller
             }
             );
 
-        /// <summary>
-        /// Fonction qui va instancier le pouvoir d'Emi.
-        /// </summary>
-        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
-        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
-        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
-        /*public static Power Emi = new Power
-            (
-            power: (owner) =>
-            {
-                // Si Emi se TP elle ne peut pas en plus se déplacer normalement
-                GameManager.MovementAvailable.Value = false;
-
-                List<int> availableDestination = new List<int>();
-
-                if (owner.Position.Value % 2 == 0)
-                    availableDestination.Add(owner.Position.Value + 1);
-                else
-                    availableDestination.Add(owner.Position.Value - 1);
-
-                EventView.Manager.Emit(new SelectMovement() { LocationAvailable = availableDestination.ToArray(), PlayerId = owner.Id });
-
-            },
-            addListeners: (owner) =>
-            {
-                // initialisation des listeners qui appeleront availability
-
-                GameManager.MovementAvailable.AddListener((sender) => { owner.Character.power.availability(owner); });
-                owner.Revealed.AddListener((sender) => { owner.Character.power.availability(owner); });
-            },
-            availability: (owner) =>
-            {
-                // fonction qui test si le pouvoir peut être utilisé
-                bool available = GameManager.PlayerTurn.Value == owner
-                                && GameManager.MovementAvailable.Value
-                                && owner.Revealed.Value
-                                && owner.Position.Value != -1;
-
-                if (owner.CanUsePower.Value != available)
-                {
-                    owner.CanUsePower.Value = available;
-                }
-            }
-            );*/
 
         //SHADOWS
 
@@ -262,6 +221,7 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
+                KernelLog.Instance.UsePower(owner);
                 //Elle ne pourra plus jamais l'utiliser
                 owner.CanUsePower.Value = false;
 

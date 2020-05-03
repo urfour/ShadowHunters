@@ -9,6 +9,7 @@ using Assets.Noyau.Players.view;
 using Assets.Noyau.Manager.view;
 using Assets.Noyau.Cards.view;
 using Kernel.Settings;
+using Log;
 
 public enum PlayerNames
 {
@@ -167,7 +168,7 @@ public class Player
 
     public Setting<bool> Disconnected { get; private set; } = new Setting<bool>(false);
     public Setting<bool> Revealable { get; private set; } = new Setting<bool>(true);
- 
+
     ///private static List<Player> players = new List<Player>();
 
     /// <summary>
@@ -193,8 +194,21 @@ public class Player
             }
         });
 
+        Revealed.AddListener((sender) =>
+        {
+            if (this.Revealed.Value)
+            {
+                KernelLog.Instance.Reveal(this);
+            }
+        });
+
         Dead.AddListener((sender) =>
         {
+            if (!this.Dead.Value)
+            {
+                return;
+            }
+            KernelLog.Instance.Die(this);
             if (this.Disconnected.Value)
             {
                 if (!this.Revealed.Value)
@@ -275,10 +289,6 @@ public class Player
             this.OnAttackedAttacker.Value = attacker.Id;
         }
         */
-        if (isAttack)
-        {
-            this.OnAttackedBy.Value = attacker.Id;
-        }
 
         if (damage > 0 && (!HasGuardian.Value || !isAttack))
         {
@@ -295,6 +305,15 @@ public class Player
             if (attacker.Character.characterName == "character.name.charles" && isAttack && this.Dead.Value)
                 GameManager.HasKilled.Value = true;
 
+            if (isAttack)
+            {
+                this.OnAttackedBy.Value = attacker.Id;
+                KernelLog.Instance.Attack(attacker, this, damage);
+            }
+            else
+            {
+                KernelLog.Instance.DealWounds(this, damage);
+            }
             return damage;
         }
         return 0;
@@ -308,8 +327,9 @@ public class Player
     {
         if (Dead.Value)
             return;
-
-        this.Wound.Value -= Mathf.Min(heal, this.Wound.Value);
+        int realHeal = Mathf.Min(heal, this.Wound.Value);
+        this.Wound.Value -= realHeal;
+        KernelLog.Instance.HealWounds(this, realHeal);
     }
     
 

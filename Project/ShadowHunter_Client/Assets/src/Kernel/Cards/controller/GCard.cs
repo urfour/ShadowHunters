@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Scripts.event_out;
 using Assets.Noyau.Players.view;
 using Scripts.event_in;
+using Log;
 
 namespace Assets.Noyau.Cards.controller
 {
@@ -1219,8 +1220,12 @@ namespace Assets.Noyau.Cards.controller
                 new CardEffect("card.vision.effect.send.&" + cardLabel,
                 effect: (target, player, card) =>
                 {
+                    KernelLog.Instance.GiveVision(player, target);
                     GameManager.TurnEndable.Value = false;
-                    EventView.Manager.Emit(new SelectUsableCardPickedEvent(auxilaire.Id, true, target.Id));
+                    if (GameManager.LocalPlayer.Value == target)
+                    {
+                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(auxilaire.Id, true, target.Id));
+                    }
                 },
                 targetableCondition: (target, owner) =>
                 {

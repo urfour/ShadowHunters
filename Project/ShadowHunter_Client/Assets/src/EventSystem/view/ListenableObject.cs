@@ -13,7 +13,6 @@ namespace EventSystem
     public class ListenableObject
     {
         private List<OnNotification> observers = new List<OnNotification>();
-        public List<(KernelLogType, string)> Messages { get; private set; }
 
         public virtual void AddListener(OnNotification listener)
         {

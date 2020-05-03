@@ -32,67 +32,68 @@ namespace Log
             Instance = this;
         }
 
-        void StartTurn()
+        public void StartTurn()
         {
-            Messages.Add((KernelLogType.STARTTURN, "kernel.log.startturn&" + GameManager.PlayerTurn.Value.Name));
+            Messages.Add((KernelLogType.STARTTURN, "kernel.log.startturn.args.playername&" + GameManager.PlayerTurn.Value.Name));
             Notify();
         }
-        void MoveOn(Position position)
+        public void MoveOn()
         {
-            Messages.Add((KernelLogType.MOVEON, "kernel.log.moveon&" + GameManager.PlayerTurn.Value.Name + "&" + GameManager.Board[GameManager.PlayerTurn.Value.Position.Value]));
+            Messages.Add((KernelLogType.MOVEON, "kernel.log.moveon.args.position&" + GameManager.PlayerTurn.Value.Name + "&" 
+                         + Language.Translate("board.position." + GameManager.Board[GameManager.PlayerTurn.Value.Position.Value].ToString().ToLower())));
             Notify();
         }
-        void DrawCard(int playerId, int cardId, bool isHidden)
+        public void DrawCard(Player player, int cardId, bool isHidden)
         {
             if (isHidden)
             {
-                Messages.Add((KernelLogType.DRAWCARD, "kernel.log.drawcardhidden&" + PlayerView.GetPlayer(playerId).Name));
+                Messages.Add((KernelLogType.DRAWCARD, "kernel.log.drawcard.args.playername&" + player.Name));
             }
             else
             {
-                Messages.Add((KernelLogType.DRAWCARD, "kernel.log.drawcard&" + PlayerView.GetPlayer(playerId).Name + "&" + Language.Translate(CardView.GetCard(cardId).cardLabel)));
+                Messages.Add((KernelLogType.DRAWCARD, "kernel.log.drawcard.args.playername_cardlabel&" + player.Name + "&" + Language.Translate(CardView.GetCard(cardId).cardLabel)));
             }
             Notify();
         }
-        void GiveVision(int playerSenderId, int playerReceiverId)
+        public void GiveVision(Player playerSender, Player playerReceiver)
         {
-            Messages.Add((KernelLogType.GIVEVISION, "kernel.log.givevision&" + PlayerView.GetPlayer(playerSenderId).Name + "&" + PlayerView.GetPlayer(playerReceiverId).Name));
+            Messages.Add((KernelLogType.GIVEVISION, "kernel.log.givevision.args.playersender_playerreceiver&" + playerSender.Name + "&" + playerReceiver.Name));
             Notify();
         }
-        void DealWounds(int playerId, int wounds)
+        public void DealWounds(Player player, int wounds)
         {
-            Messages.Add((KernelLogType.DEALWOUNDS, "kernel.log.dealwounds&" + PlayerView.GetPlayer(playerId).Name + "&" + wounds));
+            Messages.Add((KernelLogType.DEALWOUNDS, "kernel.log.dealwounds.args.playername_wounds&" + player.Name + "&" + wounds));
             Notify();
         }
-        void HealWounds(int playerId, int wounds)
+        public void HealWounds(Player player, int wounds)
         {
-            Messages.Add((KernelLogType.HEALWOUNDS, "kernel.log.healwounds&" + PlayerView.GetPlayer(playerId).Name + "&" + wounds));
+            Messages.Add((KernelLogType.HEALWOUNDS, "kernel.log.healwounds.args.playername_wounds&" + player.Name + "&" + wounds));
             Notify();
         }
-        void Attack(int attackerPlayerId, int attackedPlayerId, int wounds)
+        public void Attack(Player attackerPlayer, Player attackedPlayer, int wounds)
         {
-            Messages.Add((KernelLogType.ATTACK, "kernel.log.attack&" + PlayerView.GetPlayer(attackerPlayerId).Name + "&" + PlayerView.GetPlayer(attackedPlayerId).Name + wounds));
+            Messages.Add((KernelLogType.ATTACK, "kernel.log.attack.args.attackername_attackedname_wounds&" + attackerPlayer.Name + "&" + attackedPlayer.Name + "&" + wounds));
             Notify();
         }
-        void Reveal(int playerId)
+        public void Reveal(Player player)
         {
-            Messages.Add((KernelLogType.REVEAL, "kernel.log.reveal&" + PlayerView.GetPlayer(playerId).Name + "&" + PlayerView.GetPlayer(playerId).Character.characterName));
+            Messages.Add((KernelLogType.REVEAL, "kernel.log.reveal.args.playername&" + player.Name + "&" + player.Character.characterName));
             Notify();
         }
-        void UsePower(int playerId)
+        public void UsePower(Player player)
         {
-            Messages.Add((KernelLogType.USEPOWER, "kernel.log.usepower&" + PlayerView.GetPlayer(playerId).Name));
+            Messages.Add((KernelLogType.USEPOWER, "kernel.log.usepower.args.playername&" + player.Name));
             Notify();
         }
-        void Die(int playerId)
+        public void Die(Player player)
         {
-            if (!PlayerView.GetPlayer(playerId).Revealed.Value)
+            if (!player.Revealed.Value)
             {
-                Messages.Add((KernelLogType.DIE, "kernel.log.diereveal&" + PlayerView.GetPlayer(playerId).Name + "&" + PlayerView.GetPlayer(playerId).Character.characterName));
+                Messages.Add((KernelLogType.DIE, "kernel.log.die.args.playername_charactername&" + player.Name + "&" + player.Character.characterName));
             }
             else
             {
-                Messages.Add((KernelLogType.DIE, "kernel.log.die&" + PlayerView.GetPlayer(playerId).Name));
+                Messages.Add((KernelLogType.DIE, "kernel.log.die.args.playername&" + player.Name));
             }
             Notify();
         }
