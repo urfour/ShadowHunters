@@ -23,6 +23,7 @@ namespace Assets.Noyau.Players.controller
             (
                 checkWinning: (owner) =>
                 {
+                    if (owner.HasWon.Value) return;
                     bool shadowAlive = false;
                     foreach (Player p in PlayerView.GetPlayers())
                     {
@@ -59,6 +60,7 @@ namespace Assets.Noyau.Players.controller
             (
                 checkWinning: (owner) =>
                 {
+                    if (owner.HasWon.Value) return;
                     bool HunterAlive = false;
                     int nbNeutralDead = 0;
                     foreach (Player p in PlayerView.GetPlayers())
@@ -99,7 +101,8 @@ namespace Assets.Noyau.Players.controller
             (
                 checkWinning: (owner) =>
                 {
-                    if(!owner.Dead.Value && !owner.HasWon.Value)
+                    if (owner.HasWon.Value) return;
+                    if (!owner.Dead.Value && !owner.HasWon.Value)
                     {
                         foreach (Player p in PlayerView.GetPlayers())
                         {
@@ -129,7 +132,8 @@ namespace Assets.Noyau.Players.controller
             (
                 checkWinning: (owner) =>
                 {
-                    if(owner.NbEquipment.Value >= 5)
+                    if (owner.HasWon.Value) return;
+                    if (owner.NbEquipment.Value >= 5)
                         owner.HasWon.Value=true;
                 },
                 setWinningListeners: (owner) =>
@@ -147,6 +151,7 @@ namespace Assets.Noyau.Players.controller
             (
                 checkWinning: (owner) =>
                 {
+                    if (owner.HasWon.Value) return;
                     int nbDead=0;
                     foreach (Player p in PlayerView.GetPlayers())
                     {
@@ -177,6 +182,7 @@ namespace Assets.Noyau.Players.controller
             (
                 checkWinning: (owner) =>
                 {
+                    if (owner.HasWon.Value) return;
                     bool ShadowAlive = false;
                     int nbDead = 0;
                     foreach (Player p in PlayerView.GetPlayers())
