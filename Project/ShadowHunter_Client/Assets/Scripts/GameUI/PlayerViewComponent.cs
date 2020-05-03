@@ -34,6 +34,8 @@ public class PlayerViewComponent : MonoBehaviour
     public Button powerButton;
     public Text infoDisplayer;
 
+    private int lastWoundsValue = 0;
+
     private Player player;
 
     private List<(ListenableObject observed, OnNotification notification)> listeners = new List<(ListenableObject observed, OnNotification notification)>();
@@ -77,6 +79,7 @@ public class PlayerViewComponent : MonoBehaviour
         if (GameManager.LocalPlayer.Value.getTargetablePlayers().Contains(player))
         {
             EventView.Manager.Emit(new AttackPlayerEvent() { PlayerId=GameManager.LocalPlayer.Value.Id, PlayerAttackedId=player.Id });
+            AudioManager.Instance.PlayAsync("game.action.attack", true, false);
         }
     }
 
@@ -149,6 +152,18 @@ public class PlayerViewComponent : MonoBehaviour
         OnNotification playerWounds = (sender) =>
         {
             playerWound.text = player.Wound.Value.ToString();
+            if (GameManager.LocalPlayer.Value == player)
+            {
+                if (player.Wound.Value > lastWoundsValue)
+                {
+                    AudioManager.Instance.PlayAsync("game.action.dealwound", true, false);
+                }
+                else if (player.Wound.Value < lastWoundsValue)
+                {
+                    AudioManager.Instance.PlayAsync("game.action.heal", true, false);
+                }
+            }
+            lastWoundsValue = player.Wound.Value;
         };
         listeners.Add((player.Wound, playerWounds));
 

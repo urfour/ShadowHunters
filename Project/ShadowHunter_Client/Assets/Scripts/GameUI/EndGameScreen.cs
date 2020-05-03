@@ -46,6 +46,14 @@ public class EndGameScreen : MonoBehaviour
             if (GameManager.GameEnded.Value)
             {
                 gameObject.SetActive(true);
+                if (GameManager.LocalPlayer.Value.HasWon.Value)
+                {
+                    AudioManager.Instance.Play("game.music.victory");
+                }
+                else
+                {
+                    AudioManager.Instance.Play("game.music.defeat");
+                }
             }
         };
 

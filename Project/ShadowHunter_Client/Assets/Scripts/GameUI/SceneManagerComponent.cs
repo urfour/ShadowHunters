@@ -205,6 +205,7 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     public void ReturnToMenu()
     {
         //EventView.Manager.Emit(new PlayerLeaveEvent(GameManager.LocalPlayer.Value.Id));
+        AudioManager.Instance.Play(AudioManager.Instance.MainMenuMusique.clip);
         GameManager.Clean();
         SceneManager.LoadScene(0);
     }
