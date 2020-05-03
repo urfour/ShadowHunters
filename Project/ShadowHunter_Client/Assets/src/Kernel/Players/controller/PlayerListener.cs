@@ -180,7 +180,18 @@ namespace Assets.Noyau.Players.controller
             }
             else if (e is DrawCardEvent drawCard/* && GameManager.PlayerTurn.Value.Id == e.PlayerId*/)
             {
-                // la gestion de cet événement est uniquement fait pour le client qui l'envoie
+                switch (drawCard.SelectedCardType)
+                {
+                    case CardType.Vision:
+                        if (!GameManager.PickVisionDeck.Value) return;
+                        break;
+                    case CardType.Light:
+                        if (!GameManager.PickLightnessDeck.Value) return;
+                        break;
+                    case CardType.Darkness:
+                        if (!GameManager.PickDarknessDeck.Value) return;
+                        break;
+                }
                 GameManager.PickDarknessDeck.Value = false;
                 GameManager.PickLightnessDeck.Value = false;
                 GameManager.PickVisionDeck.Value = false;
