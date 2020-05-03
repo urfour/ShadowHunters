@@ -61,14 +61,6 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        if (!AudioSource.isPlaying)
-        {
-            OnPlayedClipEnd.Notify();
-        }
-    }
-
     public void Play(AudioClip clip)
     {
         if (clip != null)
@@ -93,6 +85,7 @@ public class AudioManager : MonoBehaviour
         if (sources.ContainsKey(soundLabel))
         {
             GameObject aux = new GameObject();
+            aux.transform.SetParent(transform);
             aux.AddComponent<AudioSource>();
             AudioAsyncComponent aac = aux.AddComponent<AudioAsyncComponent>();
             aac.Play(sources[soundLabel], isEffect);
