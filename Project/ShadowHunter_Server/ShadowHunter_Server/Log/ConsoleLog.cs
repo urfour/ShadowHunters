@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Log
@@ -11,6 +12,7 @@ namespace Log
         int nbIndente = 0;
         string indent = "";
         bool displayErrorStackTrace;
+        public Mutex Mutex { get; private set; } = new Mutex();
 
         public ConsoleLog(bool displayErrorStackTrace)
         {
@@ -19,6 +21,7 @@ namespace Log
 
         public void Comment(string msg)
         {
+            Mutex.WaitOne();
             Console.ForegroundColor = ConsoleColor.Green;
             if (msg.Contains('\n'))
             {
@@ -29,14 +32,17 @@ namespace Log
                 Console.WriteLine(indent + "// " + msg);
             }
             Console.ResetColor();
+            Mutex.ReleaseMutex();
         }
 
         public void Error(string msg)
         {
+            Mutex.WaitOne();
             Console.ForegroundColor = ConsoleColor.Red;
             msg.Replace("\n", "\n" + indent);
             Console.WriteLine(indent + msg);
             Console.ResetColor();
+            Mutex.ReleaseMutex();
         }
 
         public void Error(Exception msg)
@@ -66,18 +72,22 @@ namespace Log
 
         public void Info(string msg)
         {
+            Mutex.WaitOne();
             Console.ForegroundColor = ConsoleColor.White;
             msg.Replace("\n", "\n" + indent);
             Console.WriteLine(indent + msg);
             Console.ResetColor();
+            Mutex.ReleaseMutex();
         }
 
         public void Warning(string msg)
         {
+            Mutex.WaitOne();
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             msg.Replace("\n", "\n" + indent);
             Console.WriteLine(indent + msg);
             Console.ResetColor();
+            Mutex.ReleaseMutex();
         }
     }
 }

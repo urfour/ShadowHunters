@@ -29,4 +29,6 @@ Computer Science Licence of the University of Strasbourg, France.
    :maxdepth: 2
    :caption: Network
 
+   client
+   server
    database

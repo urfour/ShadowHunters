@@ -19,13 +19,9 @@ namespace ShadowHunter_ClientNetwork
             EventView.Load();
             EventView.Manager.AddListener(new ChatListener());
             Client client = new Client();
+            Tests tests = new Tests();
 
-            string msg = "";
-            while ((msg = Console.ReadLine()) != "exit")
-            {
-                //client.Send(msg);
-                EventView.Manager.Emit(new ChatMSGEvent() { MSG=msg });
-            }
+            tests.LaunchTests();
 
             client.Stop();
 

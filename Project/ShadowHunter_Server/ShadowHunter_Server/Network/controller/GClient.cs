@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Network.controller
@@ -11,6 +12,7 @@ namespace Network.controller
     class GClient
     {
         public static GClient Instance { get; private set; }
+        private Mutex ConnectedClientsMutex = new Mutex();
         private Dictionary<string, Client> ConnectedClients { get; set; } = new Dictionary<string, Client>();
 
 
@@ -24,7 +26,16 @@ namespace Network.controller
 
         public void RemoveTCPClient(TcpClient client)
         {
-            ConnectedClients.Remove(client.Client.RemoteEndPoint.ToString());
+            ConnectedClientsMutex.WaitOne();
+            //try
+            //{
+                ConnectedClients.Remove(client.Client.RemoteEndPoint.ToString());
+            //}
+            //catch (Exception e)
+            //{
+            //    Logger.Error(e);
+            //}
+            ConnectedClientsMutex.ReleaseMutex();
         }
 
         public void Stop()
