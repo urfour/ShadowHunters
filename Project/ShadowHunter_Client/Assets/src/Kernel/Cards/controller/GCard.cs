@@ -177,8 +177,8 @@ namespace Assets.Noyau.Cards.controller
                     {
                         EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
                         KernelLog.Instance.GiveEquipement(player, GameManager.PlayerTurn.Value, c.Id);
-                        c.equipe(GameManager.PlayerTurn.Value, c);
-                        c.unequipe(owner, c);
+                        c.equipe(player, c);
+                        c.unequipe(GameManager.PlayerTurn.Value, c);
                     }),
                 new CardEffect("card.darkness.darkness_banane.effect.args.wound&1",
                     targetableCondition: (player, owner) =>
@@ -867,7 +867,7 @@ namespace Assets.Noyau.Cards.controller
                     {
                         EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
                         KernelLog.Instance.GiveEquipement(player, GameManager.PlayerTurn.Value, c.Id);
-                        c.equipe(player, c);
+                        c.equipe(GameManager.PlayerTurn.Value, c);
                         c.unequipe(owner, c);
                     })),
 

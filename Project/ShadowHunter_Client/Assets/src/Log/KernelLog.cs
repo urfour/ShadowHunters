@@ -64,13 +64,13 @@ namespace Log
         }
         public void GiveEquipement(Player playerGiver, Player playerGiven, int cardId)
         {
-            Messages.Add((KernelLogType.GIVEEQUIPMENT, "kernel.log.giveequipement.args.playergiver_playergiven_playergiven&" +
+            Messages.Add((KernelLogType.GIVEEQUIPMENT, "kernel.log.giveequipement.args.playergiver_playergiven_playergiven_cardgiven&" +
                          playerGiver.Name + "&" + playerGiven.Name + "&" + Language.Translate(CardView.GetCard(cardId).cardLabel)));
             Notify();
         }
         public void StealEquipement(Player playerThief, Player playerStolen, int cardId)
         {
-            Messages.Add((KernelLogType.STEALEQUIPMENT, "kernel.log.stealequipement.args.playerthief_playerstolen&" +
+            Messages.Add((KernelLogType.STEALEQUIPMENT, "kernel.log.stealequipement.args.playerthief_playerstolen_cardgiven&" +
                          playerThief.Name + "&" + playerStolen.Name + "&" + Language.Translate(CardView.GetCard(cardId).cardLabel)));
             Notify();
         }
