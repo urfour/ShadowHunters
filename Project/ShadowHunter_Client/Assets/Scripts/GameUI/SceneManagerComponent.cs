@@ -187,6 +187,10 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
         }
     }
 
+    private void Update()
+    {
+        EventView.Manager.ExecMainThreaded();
+    }
 
     public void AddListeners()
     {
