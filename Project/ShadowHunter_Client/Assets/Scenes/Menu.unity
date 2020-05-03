@@ -7932,10 +7932,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 847904517}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64bdb2402b76d3644913340f712d0f20, type: 3}
+  m_Script: {fileID: 11500000, guid: 278ae1f6c61afa246afded281f6e9bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AudioSource: {fileID: 0}
   MainMenuMusique: {fileID: 0}
 --- !u!82 &847904519
 AudioSource:
