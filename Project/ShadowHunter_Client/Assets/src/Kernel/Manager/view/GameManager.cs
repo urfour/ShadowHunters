@@ -167,6 +167,8 @@ namespace Assets.Noyau.Manager.view
                         GameManager.TurnEndable.Value = true;
                     }
                 };
+
+                player.Disconnected.AddListener(playerDisconnect);
             }
         }
 
