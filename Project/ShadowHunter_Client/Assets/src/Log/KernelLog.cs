@@ -11,9 +11,12 @@ namespace Log
 {
     public enum KernelLogType
     {
+        NOTHINGHAPPEN,
         STARTTURN,
         MOVEON,
         DRAWCARD,
+        GIVEEQUIPMENT,
+        STEALEQUIPMENT,
         GIVEVISION,
         DEALWOUNDS,
         HEALWOUNDS,
@@ -32,6 +35,10 @@ namespace Log
             Instance = this;
         }
 
+        public void NothingHappen()
+        {
+            Messages.Add((KernelLogType.NOTHINGHAPPEN, "kernel.log.nothinghappen"));
+        }
         public void StartTurn()
         {
             Messages.Add((KernelLogType.STARTTURN, "kernel.log.startturn.args.playername&" + GameManager.PlayerTurn.Value.Name));
@@ -53,6 +60,18 @@ namespace Log
             {
                 Messages.Add((KernelLogType.DRAWCARD, "kernel.log.drawcard.args.playername_cardlabel&" + player.Name + "&" + Language.Translate(CardView.GetCard(cardId).cardLabel)));
             }
+            Notify();
+        }
+        public void GiveEquipement(Player playerGiver, Player playerGiven, int cardId)
+        {
+            Messages.Add((KernelLogType.GIVEEQUIPMENT, "kernel.log.giveequipement.args.playergiver_playergiven_playergiven&" +
+                         playerGiver.Name + "&" + playerGiven.Name + "&" + Language.Translate(CardView.GetCard(cardId).cardLabel)));
+            Notify();
+        }
+        public void StealEquipement(Player playerThief, Player playerStolen, int cardId)
+        {
+            Messages.Add((KernelLogType.STEALEQUIPMENT, "kernel.log.stealequipement.args.playerthief_playerstolen&" +
+                         playerThief.Name + "&" + playerStolen.Name + "&" + Language.Translate(CardView.GetCard(cardId).cardLabel)));
             Notify();
         }
         public void GiveVision(Player playerSender, Player playerReceiver)
@@ -77,7 +96,7 @@ namespace Log
         }
         public void Reveal(Player player)
         {
-            Messages.Add((KernelLogType.REVEAL, "kernel.log.reveal.args.playername&" + player.Name + "&" + player.Character.characterName));
+            Messages.Add((KernelLogType.REVEAL, "kernel.log.reveal.args.playername&" + player.Name + "&" + Language.Translate(player.Character.characterName)));
             Notify();
         }
         public void UsePower(Player player)
@@ -89,7 +108,7 @@ namespace Log
         {
             if (!player.Revealed.Value)
             {
-                Messages.Add((KernelLogType.DIE, "kernel.log.die.args.playername_charactername&" + player.Name + "&" + player.Character.characterName));
+                Messages.Add((KernelLogType.DIE, "kernel.log.die.args.playername_charactername&" + player.Name + "&" + Language.Translate(player.Character.characterName)));
             }
             else
             {

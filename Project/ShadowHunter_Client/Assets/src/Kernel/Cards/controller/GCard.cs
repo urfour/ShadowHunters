@@ -70,7 +70,7 @@ namespace Assets.Noyau.Cards.controller
                     effect: (target, owner, card) =>
                     {
                         EquipmentCard c = target.ListCard[GameManager.rand.Next(0, target.ListCard.Count - 1)] as EquipmentCard;
-
+                        KernelLog.Instance.StealEquipement(owner, target, c.Id);
                         c.equipe(owner, c);
                         c.unequipe(target, c);
                     },
@@ -90,6 +90,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
+                        KernelLog.Instance.NothingHappen();
                     }));
 
             GeorgesPower = CreateUsableCard("character.name.georges", CardType.Light, "character.name.georges.description", false,
@@ -125,7 +126,7 @@ namespace Assets.Noyau.Cards.controller
                     effect: (target, owner, card) =>
                     {
                         EquipmentCard c = target.ListCard[GameManager.rand.Next(0, target.ListCard.Count - 1)] as EquipmentCard;
-
+                        KernelLog.Instance.StealEquipement(owner, target, c.Id);
                         c.equipe(owner, c);
                         c.unequipe(target, c);
                     }),
@@ -175,7 +176,8 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
-                        c.equipe(player, c);
+                        KernelLog.Instance.GiveEquipement(player, GameManager.PlayerTurn.Value, c.Id);
+                        c.equipe(GameManager.PlayerTurn.Value, c);
                         c.unequipe(owner, c);
                     }),
                 new CardEffect("card.darkness.darkness_banane.effect.args.wound&1",
@@ -383,6 +385,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
+                        KernelLog.Instance.NothingHappen();
                     })),
 
                 CreateEquipmentCard("card.darkness.darkness_sabre", CardType.Darkness, "card.darkness.darkness_sabre.description",
@@ -411,7 +414,7 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         EquipmentCard c = player.ListCard[GameManager.rand.Next(0, player.ListCard.Count-1)] as EquipmentCard;
-
+                        KernelLog.Instance.StealEquipement(owner, player, c.Id);
                         c.equipe(owner, c);
                         c.unequipe(player, c);
                     }),
@@ -425,6 +428,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
+                        KernelLog.Instance.NothingHappen();
                     })),
 
                 CreateUsableCard("card.darkness.darkness_succube", CardType.Darkness, "card.darkness.darkness_succube.description", false,
@@ -438,7 +442,7 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         EquipmentCard c = player.ListCard[GameManager.rand.Next(0, player.ListCard.Count-1)] as EquipmentCard;
-
+                        KernelLog.Instance.StealEquipement(owner, player, c.Id);
                         c.equipe(owner, c);
                         c.unequipe(player, c);
                     }),
@@ -452,6 +456,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
+                        KernelLog.Instance.NothingHappen();
                     })),
 
                 CreateEquipmentCard("card.darkness.darkness_tronconneuse", CardType.Darkness, "card.darkness.darkness_tronconneuse.description",
@@ -533,6 +538,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
+                        KernelLog.Instance.NothingHappen();
                     })),
 
                 CreateUsableCard("card.light.light_chocolat", CardType.Light, "card.light.light_chocolat.description", false, true,
@@ -573,6 +579,7 @@ namespace Assets.Noyau.Cards.controller
                             && player.Revealed.Value);
                     },
                     effect: (player, owner, card) =>{
+                        KernelLog.Instance.NothingHappen();
                     })),
 
                 CreateUsableCard("card.light.light_benediction", CardType.Light, "card.light.light_benediction.description", false,
@@ -701,6 +708,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
+                        KernelLog.Instance.NothingHappen();
                     })),
 
                 CreateUsableCard("card.light.light_premiers_secours", CardType.Light, "card.light.light_premiers_secours.description", false,
@@ -800,8 +808,8 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         EquipmentCard c = player.ListCard[GameManager.rand.Next(0, player.ListCard.Count - 1)] as EquipmentCard;
-
-                        c.equipe(owner, c);
+                        KernelLog.Instance.GiveEquipement(player, GameManager.PlayerTurn.Value, c.Id);
+                        c.equipe(GameManager.PlayerTurn.Value, c);
                         c.unequipe(player, c);
                     })),
 
@@ -828,6 +836,37 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
+                        KernelLog.Instance.GiveEquipement(player, GameManager.PlayerTurn.Value, c.Id);
+                        c.equipe(GameManager.PlayerTurn.Value, c);
+                        c.unequipe(owner, c);
+                    })),
+
+                CreateVisionCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
+                new CardEffect("card.vision.vision_enivrante.effect.args.wound&1",
+                    targetableCondition: (player, owner) =>
+                    {
+                        return (player.Character.team == CharacterTeam.Neutral
+                            || player.Character.team == CharacterTeam.Hunter
+                            || player.Character.characterName == "character.name.metamorphe")
+                            && player == owner;
+                    },
+                    effect: (player, owner, card) =>
+                    {
+                        player.Wounded(1,player,false);
+                    }),
+                new CardEffect("card.vision.vision_enivrante.effect.give",
+                    targetableCondition: (player, owner) =>
+                    {
+                        return (player.Character.team == CharacterTeam.Neutral
+                            || player.Character.team == CharacterTeam.Hunter
+                            || player.Character.characterName == "character.name.metamorphe")
+                            && player.ListCard.Count > 0
+                            && player == owner;
+                    },
+                    effect: (player, owner, card) =>
+                    {
+                        EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
+                        KernelLog.Instance.GiveEquipement(player, GameManager.PlayerTurn.Value, c.Id);
                         c.equipe(player, c);
                         c.unequipe(owner, c);
                     })),
@@ -857,36 +896,8 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
-                        c.equipe(player, c);
-                        c.unequipe(owner, c);
-                    })),
-
-                CreateVisionCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
-                new CardEffect("card.vision.vision_enivrante.effect.args.wound&1",
-                    targetableCondition: (player, owner) =>
-                    {
-                        return (player.Character.team == CharacterTeam.Neutral
-                            || player.Character.team == CharacterTeam.Hunter
-                            || player.Character.characterName == "character.name.metamorphe")
-                            && player == owner;
-                    },
-                    effect: (player, owner, card) =>
-                    {
-                        player.Wounded(1,player,false);
-                    }),
-                new CardEffect("card.vision.vision_enivrante.effect.give",
-                    targetableCondition: (player, owner) =>
-                    {
-                        return (player.Character.team == CharacterTeam.Neutral
-                            || player.Character.team == CharacterTeam.Hunter
-                            || player.Character.characterName == "character.name.metamorphe")
-                            && player.ListCard.Count > 0
-                            && player == owner;
-                    },
-                    effect: (player, owner, card) =>
-                    {
-                        EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
-                        c.equipe(player, c);
+                        KernelLog.Instance.GiveEquipement(player, GameManager.PlayerTurn.Value, c.Id);
+                        c.equipe(GameManager.PlayerTurn.Value, c);
                         c.unequipe(owner, c);
                     })),
 
@@ -913,7 +924,8 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
-                        c.equipe(player, c);
+                        KernelLog.Instance.GiveEquipement(player, GameManager.PlayerTurn.Value, c.Id);
+                        c.equipe(GameManager.PlayerTurn.Value, c);
                         c.unequipe(owner, c);
                     })),
 
@@ -940,7 +952,8 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
-                        c.equipe(player, c);
+                        KernelLog.Instance.GiveEquipement(player, GameManager.PlayerTurn.Value, c.Id);
+                        c.equipe(GameManager.PlayerTurn.Value, c);
                         c.unequipe(owner, c);
                     })),
 
@@ -1192,7 +1205,7 @@ namespace Assets.Noyau.Cards.controller
             List<CardEffect> effects = new List<CardEffect>(cardEffect);
             int effectscount = effects.Count;
             effects.Add(new CardEffect(cardLabel + ".nothing_happen",
-                effect: (target, player, card) => { },
+                effect: (target, player, card) => { KernelLog.Instance.NothingHappen(); },
                 targetableCondition: (target, owner) => 
                 {
                     bool nothing_available = true;
