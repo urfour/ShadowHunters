@@ -12,8 +12,6 @@ namespace IO
     {
         public static string DataFolder = Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ShadowHunter"));
 
-        private static bool initStatics = true;
-
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void OnBeforeSceneLoadRuntimeMethod()
         {

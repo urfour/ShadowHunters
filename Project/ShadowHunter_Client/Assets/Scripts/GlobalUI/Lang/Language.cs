@@ -12,15 +12,6 @@ namespace Lang
 {
     class Language
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        public static void OnBeforeSceneLoadRuntimeMethod()
-        {
-            Notifier = new ListenableObject();
-            if (SettingManager.Settings == null) SettingManager.Load();
-            Instance = new Language(SettingManager.Settings.Lang.Value);
-
-            SettingManager.Settings.Lang.AddListener((sender) => { Instance = new Language(SettingManager.Settings.Lang.Value); });
-        }
 
         #region SINGLOTON
         private static Language _instance;
@@ -30,26 +21,45 @@ namespace Lang
             set
             {
                 _instance = value;
-                Notifier.TryNotify();
+                Notifier.Notify();
             }
         }
+        
+        public static void Init()
+        {
+            Notifier = new ListenableObject();
+            //if (SettingManager.Settings == null) SettingManager.Load();
+            Instance = new Language(SettingManager.Settings.UI_Lang.Value);
 
+            SettingManager.Settings.UI_Lang.AddListener((sender) => { Instance = new Language(SettingManager.Settings.UI_Lang.Value); });
+        }
         private static ListenableObject Notifier { get; set; } = new ListenableObject();
 
         public static string Translate(string label, params string[] args)
         {
             if (Instance == null) return label;
-            if (!Instance.Translations.ContainsKey(label))
-            {
-                Instance.Translations.Add(label, label);
-                Instance.Save();
-            }
-            return Instance.Translations[label];
+            return Instance.GetText(label);
         }
 
         public static void AddListener(OnNotification listener)
         {
             Notifier.AddListener(listener);
+        }
+
+        public static void RemoveListener(OnNotification listener)
+        {
+            Notifier.AddListener(listener);
+        }
+
+        public static (Language,string)[] GetAllLanguages(string path = "Lang")
+        {
+            string[] files = IOSystem.GetAllFileNames(path);
+            (Language, string)[] languages = new (Language, string)[files.Length];
+            for (int i = 0; i < files.Length; i++)
+            {
+                languages[i] = (new Language(files[i]), files[i]);
+            }
+            return languages;
         }
         #endregion
 
@@ -65,6 +75,54 @@ namespace Lang
         {
             this.Lang = lang;
             this.Load();
+        }
+        
+        public string GetText(string label)
+        {
+            try
+            {
+                string[] args = label.Split('&');
+                if (args.Length > 1)
+                {
+                    label = args[0] + "&" + (args.Length - 1);
+                    if (!Translations.ContainsKey(label))
+                    {
+                        Translations.Add(label, label);
+                        //Save();
+                        //return Translations[label];
+                    }
+                    string tlabel = Translations[label];
+                    string[] targs = tlabel.Split('&');
+                    string tmp = targs[0];
+                    for (int i = 1; i < targs.Length; i++)
+                    {
+                        int index = int.Parse("" + targs[i][0]);
+                        if (index > 0 && index < args.Length)
+                        {
+                            tmp += args[index] + targs[i].Substring(1);
+                        }
+                        else
+                        {
+                            tmp += "[INVALID ARG INDEX : " + index + "]";
+                        }
+                    }
+                    return tmp;
+                }
+                else
+                {
+                    if (!Translations.ContainsKey(args[0]))
+                    {
+                        Translations.Add(label, label);
+                        //Save();
+                    }
+                    return Translations[label];
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+                return "[LABEL ERROR]";
+            }
         }
 
         public void Load()

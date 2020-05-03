@@ -14,7 +14,6 @@ namespace Kernel.Settings
     public partial class SettingManager
     {
         public static SettingManager Settings { get; private set; }
-
         public static void Load(string path = "Settings.XML")
         {
             path = IOSystem.GetFullPath(path);
@@ -23,6 +22,7 @@ namespace Kernel.Settings
                 XmlSerializer serializer = new XmlSerializer(typeof(SettingManager));
                 StreamReader file = new StreamReader(path);
                 Settings = (SettingManager)serializer.Deserialize(file);
+                if (Settings == null) Settings = new SettingManager();
                 file.Close();
             }
             else
@@ -30,9 +30,10 @@ namespace Kernel.Settings
                 Settings = new SettingManager();
             }
         }
-
-        public static void Save(string path)
+        
+        public static void Save(string path = "Settings.XML")
         {
+            path = IOSystem.GetFullPath(path);
             XmlSerializer serializer = new XmlSerializer(typeof(SettingManager));
             Directory.CreateDirectory(Path.GetDirectoryName(path));
             FileStream file = File.Create(path);

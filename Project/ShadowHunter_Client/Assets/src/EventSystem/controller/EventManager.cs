@@ -65,7 +65,7 @@ namespace EventSystem.controller
 
         internal Mutex eventsToLaunch_Mutex = new Mutex();
 
-        public void AddListener<T>(IListener<T> listener, bool MainThreaded = false) where T : Event
+        public void AddListener<T>(IListener<T> listener, bool MainThreaded = true) where T : Event
         {
             ListenerInstance li = new ListenerInstance(listener, MainThreaded);
             AllListeners.Add(li);
@@ -100,6 +100,7 @@ namespace EventSystem.controller
 
         public void Emit(Event e, params string[] tags)
         {
+
             if (!Listeners.ContainsKey(e.GetType())) // si c'est la première fois qu'un type d'event est envoyé, on recherche tous les listeners existant qui lisent ce type d'event
             {
                 List<ListenerInstance> matchListeners = new List<ListenerInstance>(); // liste de tous les listeners qui écoutent un type assignable au type de 'e'
@@ -136,19 +137,36 @@ namespace EventSystem.controller
                     l.OnEvent(e, tags);
                 }
             }
+
+            if (e.AlreadyEmitted)
+            {
+                Logger.Warning("Event Already Emitted\n" + e.Serialize() + "\n" + Environment.StackTrace);
+            }
+            else
+            {
+                e.AlreadyEmitted = true;
+            }
         }
 
         public void ExecMainThreaded()
         {
             if (EventsToLaunch.Count > 0)
             {
-                eventsToLaunch_Mutex.WaitOne();
-                foreach (WaitingLaunchEvent e in EventsToLaunch)
+                if (eventsToLaunch_Mutex.WaitOne(100))
                 {
-                    e.Listener.OnEvent(e.Event, e.Tags);
+                    while (EventsToLaunch.Count > 0)
+                    {
+                        WaitingLaunchEvent e = EventsToLaunch.Dequeue();
+                        Logger.Info("[EVENTMANAGER] - " + e.Listener.Type.Name + ".OnEvent(" + e.Event.GetType().Name + ") : Start");
+                        e.Listener.OnEvent(e.Event, e.Tags);
+                        Logger.Info("[EVENTMANAGER] - " + e.Listener.Type.Name + ".OnEvent(" + e.Event.GetType().Name + ") : End");
+                    }
+                    eventsToLaunch_Mutex.ReleaseMutex();
                 }
-                EventsToLaunch.Clear();
-                eventsToLaunch_Mutex.ReleaseMutex();
+                else
+                {
+                    Logger.Warning("EventManager.ExecMainThreaded() : TimeOut");
+                }
             }
         }
     }

@@ -16,10 +16,14 @@ namespace EventSystem
     [Serializable]
     public abstract class Event
     {
+        public static bool StackTraceEnable { get; set; } = false;
+
+        public string StackTrace { get; set; }
+        public bool AlreadyEmitted { get; set; } = false;
 
         public Event()
         {
-
+            if (StackTraceEnable) StackTrace = Environment.StackTrace;
         }
 
         /// <summary>
@@ -27,7 +31,7 @@ namespace EventSystem
         /// </summary>
         /// <param name="data">XML de l'instance d'origine</param>
         /// <returns>L'événement désérialisé</returns>
-        public static Event Deserialize(string data)
+        public static Event Deserialize(string data, bool catchInvalidType = false)
         {
             int type_length = data.IndexOf(';');
             string type_name = data.Substring(0, type_length);
@@ -35,14 +39,23 @@ namespace EventSystem
             Type t = Type.GetType(type_name);
             if (t == null)
             {
+                if (catchInvalidType) return null;
                 if (EventView.Manager.LogError != null) EventView.Manager.LogError("Event.Deserialize(" + type_name + ") : unkown type");
                 else throw new ArgumentException("Event.Deserialize(" + type_name + ") : unkown type");
             }
             else
             {
-                XmlSerializer serializer = new XmlSerializer(t);
-                //StreamReader file = new StreamReader(path);
-                return (Event)serializer.Deserialize(new StringReader(data));
+                try
+                {
+                    XmlSerializer serializer = new XmlSerializer(t);
+                    //StreamReader file = new StreamReader(path);
+                    return (Event)serializer.Deserialize(new StringReader(data));
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                    Logger.Error("[Event XML] : \n" + data);
+                }
             }
             return null;
         }

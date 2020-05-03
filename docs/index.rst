@@ -13,7 +13,10 @@ Computer Science Licence of the University of Strasbourg, France.
    :maxdepth: 2
    :caption: Kernel
 
+   cards
    events
+   manager
+   players
 
 .. toctree::
    :maxdepth: 2
