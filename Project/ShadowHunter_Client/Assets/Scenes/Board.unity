@@ -4525,7 +4525,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 1
+  m_ShowMaskGraphic: 0
 --- !u!114 &1867715063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5243,7 +5243,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   content: {fileID: 637194937}
   prefab: {fileID: 549581025418301781, guid: 8898164ab76891b4898e118017560404, type: 3}
-  viewMask: {fileID: 0}
+  viewMask: {fileID: 1230910763}
 --- !u!114 &1943791553
 MonoBehaviour:
   m_ObjectHideFlags: 0
