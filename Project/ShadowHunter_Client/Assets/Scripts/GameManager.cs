@@ -19,36 +19,42 @@ namespace Assets.Scripts
         static bool emulServer = false;
         static bool EventLogger = true;
 
+        static bool IsOn { get; set; } = false;
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void OnBeforeSceneLoadRuntimeMethod()
         {
-            TextAsset[] langs = Resources.LoadAll<TextAsset>("AppData/Lang");
-            foreach (TextAsset t in langs)
+            if (!IsOn)
             {
-                Debug.Log(t.name);
-                if (!IOSystem.FileExists(IOSystem.GetFullPath("Lang/" + t.name + ".txt")))
+                TextAsset[] langs = Resources.LoadAll<TextAsset>("AppData/Lang");
+                foreach (TextAsset t in langs)
                 {
-                    IOSystem.CreateFile("Lang/" + t.name + ".txt", t.text.Split('\n'));
+                    Debug.Log(t.name);
+                    if (!IOSystem.FileExists(IOSystem.GetFullPath("Lang/" + t.name + ".txt")))
+                    {
+                        IOSystem.CreateFile("Lang/" + t.name + ".txt", t.text.Split('\n'));
+                    }
                 }
-            }
 
-            ResourceLoader.Load();
-            EventView.Load();
-            SettingManager.Load();
-            Language.Init();
-            GAccount.Init();
-            GRoom.Init();
-            if (EventLogger)
-            {
-                EventView.Manager.AddListener(new EventLogger());
-            }
-            if (emulServer)
-            {
-                ServerInterface.ServerTestEmul.Init();
-            }
-            else
-            {
-                ServerInterface.Network.NetworkView.Connect();
+                ResourceLoader.Load();
+                EventView.Load();
+                SettingManager.Load();
+                Language.Init();
+                GAccount.Init();
+                GRoom.Init();
+                if (EventLogger)
+                {
+                    EventView.Manager.AddListener(new EventLogger());
+                }
+                if (emulServer)
+                {
+                    ServerInterface.ServerTestEmul.Init();
+                }
+                else
+                {
+                    ServerInterface.Network.NetworkView.Connect();
+                }
+                IsOn = true;
             }
         }
 

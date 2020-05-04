@@ -59,6 +59,7 @@ namespace Network.model
                 Logger.Error("Unable to join listening thread");
                 Stream.Close();
                 TcpClient.Close();
+                ListenThread.Abort();
             }
             Logger.Info("Client stopped");
         }
