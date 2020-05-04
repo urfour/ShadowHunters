@@ -44,24 +44,37 @@ public class LocationButton : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        GameObject layout = new GameObject("poslayout", typeof(RectTransform));
+        layout.transform.SetParent(transform);
+        RectTransform lrect = layout.transform as RectTransform;
+
+
+        if (playerCubeOnRight)
+        {
+            lrect.anchorMin = new Vector2(1, 0);
+            lrect.anchorMax = new Vector2(1, 1);
+        }
+        else
+        {
+            lrect.anchorMin = new Vector2(0, 0);
+            lrect.anchorMax = new Vector2(0, 1);
+        }
+        lrect.anchoredPosition3D = new Vector3(0, 0, 0);
+        lrect.sizeDelta = new Vector2(32, 0);
+
+        VerticalLayoutGroup vlg = layout.AddComponent<VerticalLayoutGroup>();
+        vlg.spacing = 5;
+        vlg.childForceExpandHeight = true;
+        vlg.childControlHeight = false;
+        vlg.childControlWidth = false;
+
         for (int i = 0; i < SceneManagerComponent.Instance.playerColors.Count && i < PlayerView.NbPlayer; i++)
         {
-            GameObject o = Instantiate(SceneManagerComponent.Instance.playerPositionDisplayer.gameObject, transform);
+            GameObject o = Instantiate(SceneManagerComponent.Instance.playerPositionDisplayer.gameObject, layout.transform);
             o.GetComponent<Image>().color = SceneManagerComponent.Instance.playerColors[i];
             RectTransform r = o.transform as RectTransform;
-            Rect rect = r.rect;
-            if (playerCubeOnRight)
-            {
-                r.anchorMax = new Vector2(1, 1 - 0.125f * i);
-                r.anchorMin = new Vector2(1, 1 - 0.125f * i);
-            }
-            else
-            {
-                r.anchorMax = new Vector2(0, 1 - 0.125f * i);
-                r.anchorMin = new Vector2(0, 1 - 0.125f * i);
-            }
+
             r.sizeDelta = new Vector2(32, 32);
-            r.anchoredPosition3D = new Vector3(0, 0, 0);
 
             Player p = PlayerView.GetPlayer(i);
             listeners.Add((p.Position,
