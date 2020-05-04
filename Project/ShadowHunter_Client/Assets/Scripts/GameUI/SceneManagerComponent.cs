@@ -41,6 +41,7 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     public Color NeutralColor;
 
     public CardDisplayer cardDisplayer;
+    public RectTransform settings;
 
     public static void InitBeforeScene(Room room)
     {
@@ -202,6 +203,11 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
         }
     }
 
+
+    public void SettingsToggle()
+    {
+        settings.gameObject.SetActive(!settings.gameObject.activeInHierarchy);
+    }
 
     public void ReturnToMenu()
     {

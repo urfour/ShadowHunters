@@ -92,6 +92,11 @@ public class EndGameScreen : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        SceneManagerComponent.Instance.cardDisplayer.gameObject.SetActive(false);
+    }
+
     private void OnDestroy()
     {
         RemoveListeners();
