@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 static class Logger
 {
-    private static ILogger logSystem = new UnityLog();
-
+    private static ILogger logSystem =
+#if UNITY_EDITOR
+    new UnityLog();
+#else
+    new FileLogger();
+#endif
 
     public static void Error(string msg)
     {
