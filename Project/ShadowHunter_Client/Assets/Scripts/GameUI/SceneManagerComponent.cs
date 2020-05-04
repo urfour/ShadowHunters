@@ -76,7 +76,7 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
 
     public static void LoadScene()
     {
-        SceneManager.LoadScene(1, LoadSceneMode.Single);
+        SceneManager.LoadScene(2, LoadSceneMode.Single);
         //SceneManager.SetActiveScene(SceneManager.GetSceneAt(1));
     }
 
@@ -214,6 +214,6 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
         //EventView.Manager.Emit(new PlayerLeaveEvent(GameManager.LocalPlayer.Value.Id));
         AudioManager.Instance.Play(AudioManager.Instance.MainMenuMusique.clip);
         GameManager.Clean();
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 }
