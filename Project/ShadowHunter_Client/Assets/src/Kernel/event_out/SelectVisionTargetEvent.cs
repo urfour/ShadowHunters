@@ -15,7 +15,7 @@ namespace Scripts.event_out
 
     public class SelectVisionTargetEvent : PlayerEvent
     {
-        public int cardId;
+        public int cardId { get; set; }
 
         public SelectVisionTargetEvent(int playerId, int cardId) : base()
         {
