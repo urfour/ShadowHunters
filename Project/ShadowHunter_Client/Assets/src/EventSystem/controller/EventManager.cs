@@ -156,10 +156,17 @@ namespace EventSystem.controller
                 {
                     while (EventsToLaunch.Count > 0)
                     {
-                        WaitingLaunchEvent e = EventsToLaunch.Dequeue();
-                        Logger.Info("[EVENTMANAGER] - " + e.Listener.Type.Name + ".OnEvent(" + e.Event.GetType().Name + ") : Start");
-                        e.Listener.OnEvent(e.Event, e.Tags);
-                        Logger.Info("[EVENTMANAGER] - " + e.Listener.Type.Name + ".OnEvent(" + e.Event.GetType().Name + ") : End");
+                        try
+                        {
+                            WaitingLaunchEvent e = EventsToLaunch.Dequeue();
+                            Logger.Info("[EVENTMANAGER] - " + e.Listener.Type.Name + ".OnEvent(" + e.Event.GetType().Name + ") : Start");
+                            e.Listener.OnEvent(e.Event, e.Tags);
+                            Logger.Info("[EVENTMANAGER] - " + e.Listener.Type.Name + ".OnEvent(" + e.Event.GetType().Name + ") : End");
+                        }
+                        catch (Exception exception)
+                        {
+                            Logger.Error(exception);
+                        }
                     }
                     eventsToLaunch_Mutex.ReleaseMutex();
                 }

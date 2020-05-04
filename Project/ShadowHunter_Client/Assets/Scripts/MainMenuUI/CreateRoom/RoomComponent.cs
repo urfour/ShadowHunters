@@ -79,8 +79,15 @@ class RoomComponent : MonoBehaviour, IListener<RoomEvent>
 
     public void RefreshSearchRoom()
     {
+        if (WaitingRoomListContent == null)
+        {
+            Logger.Error("WaitingRoomListContent == null");
+            return;
+        }
+
         for (int i = WaitingRoomListContent.transform.childCount - 1; i >= 0; i--)
         {
+            Logger.Info("WaitingRoomListContent destroying : " + WaitingRoomListContent.transform.GetChild(i).name);
             Destroy(WaitingRoomListContent.transform.GetChild(i).gameObject);
         }
         

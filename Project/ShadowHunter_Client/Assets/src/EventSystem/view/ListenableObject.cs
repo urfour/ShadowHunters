@@ -37,9 +37,14 @@ namespace EventSystem
                     {
                         o(this);
                     }
-                    catch (MissingReferenceException)
+                    catch (MissingReferenceException mre)
                     {
                         // rien à faire ou alors supprimer l'observateur de la liste
+                        Logger.Warning(mre.Message + " : " + mre.Source);
+                    }
+                    catch(Exception e)
+                    {
+                        Logger.Error(e);
                     }
                 }
                 else

@@ -74,8 +74,15 @@ namespace Assets.Scripts.MainMenuUI.SearchGame
 
         public static void Init()
         {
-            new GRoom();
-            EventView.Manager.AddListener(Instance, true);
+            if (Instance != null)
+            {
+                Logger.Warning("[GROOM] initialization en trop");
+            }
+            else
+            {
+                new GRoom();
+                EventView.Manager.AddListener(Instance, true);
+            }
         }
         
         private GRoom()
