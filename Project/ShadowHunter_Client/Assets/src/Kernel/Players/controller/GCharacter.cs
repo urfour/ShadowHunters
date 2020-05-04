@@ -45,7 +45,7 @@ namespace Assets.Noyau.Players.controller
 
             if (nbPlayers >= 7)
             {
-                Neutral.Remove(Neutral.Find((item) => { return item.characterName.Equals("Bob"); }));
+                Neutral.Remove(Neutral.Find((item) => { return item.characterName.Equals("character.name.bob"); }));
             }
 
             int nbshadow = 0;

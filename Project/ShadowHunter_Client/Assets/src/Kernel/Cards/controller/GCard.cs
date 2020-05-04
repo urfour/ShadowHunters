@@ -176,7 +176,7 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
-                        KernelLog.Instance.GiveEquipement(player, GameManager.PlayerTurn.Value, c.Id);
+                        KernelLog.Instance.GiveEquipement(GameManager.PlayerTurn.Value, player, c.Id);
                         c.equipe(player, c);
                         c.unequipe(GameManager.PlayerTurn.Value, c);
                     }),
