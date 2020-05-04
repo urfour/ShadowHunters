@@ -2208,7 +2208,7 @@ MonoBehaviour:
   HunterColor: {r: 0.20392157, g: 0.59607846, b: 0.85882354, a: 1}
   NeutralColor: {r: 0.95686275, g: 0.8156863, b: 0.24705882, a: 1}
   cardDisplayer: {fileID: 999653979}
-  settings: {fileID: 0}
+  settings: {fileID: 547375044}
 --- !u!114 &569584312
 MonoBehaviour:
   m_ObjectHideFlags: 0
