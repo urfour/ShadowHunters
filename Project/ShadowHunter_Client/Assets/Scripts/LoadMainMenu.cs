@@ -17,7 +17,7 @@ public class LoadMainMenu : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKey(KeyCode.Escape) || Input.GetKey(KeyCode.KeypadEnter))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKey(KeyCode.Escape) || Input.GetKey(KeyCode.Return))
         {
             SceneManager.LoadScene(1, LoadSceneMode.Single);
         }

@@ -217,51 +217,54 @@ public class Player
             }
             if (!this.Revealed.Value)
                 this.Revealed.Value = true;
-            Player playerAttacking = PlayerView.GetPlayer(this.OnAttackedBy.Value);
-            if (this.Disconnected.Value)
+            if (this.OnAttackedBy.Value != -1)
             {
-                EquipmentCard card;
-                for (int i = this.ListCard.Count - 1; i >= 0; i--)
+                Player playerAttacking = PlayerView.GetPlayer(this.OnAttackedBy.Value);
+                if (this.Disconnected.Value)
                 {
-                    card = this.ListCard[i] as EquipmentCard;
+                    EquipmentCard card;
+                    for (int i = this.ListCard.Count - 1; i >= 0; i--)
+                    {
+                        card = this.ListCard[i] as EquipmentCard;
 
-                    if (this.ListCard[i].cardType == CardType.Darkness)
-                        CardView.GCard.darknessDiscard.Add(this.ListCard[i]);
-                    else
-                        CardView.GCard.lightDiscard.Add(this.ListCard[i]);
+                        if (this.ListCard[i].cardType == CardType.Darkness)
+                            CardView.GCard.darknessDiscard.Add(this.ListCard[i]);
+                        else
+                            CardView.GCard.lightDiscard.Add(this.ListCard[i]);
 
-                    card.unequipe(this, card);
+                        card.unequipe(this, card);
 
+                    }
                 }
-            }
-            if (playerAttacking.HasCrucifix.Value && this.ListCard.Count > 0)
-            {
-                for (int i = this.ListCard.Count - 1; i >= 0; i--)
+                if (playerAttacking.HasCrucifix.Value && this.ListCard.Count > 0)
                 {
-                    EquipmentCard card = this.ListCard[i] as EquipmentCard;
+                    for (int i = this.ListCard.Count - 1; i >= 0; i--)
+                    {
+                        EquipmentCard card = this.ListCard[i] as EquipmentCard;
+                        card.equipe(playerAttacking, card);
+                        card.unequipe(this, card);
+                    }
+                }
+                else if (this.ListCard.Count > 0)
+                {
+                    EquipmentCard card = this.ListCard[GameManager.rand.Next(0, this.ListCard.Count - 1)] as EquipmentCard;
+
                     card.equipe(playerAttacking, card);
                     card.unequipe(this, card);
-                }
-            }
-            else if (this.ListCard.Count > 0)
-            {
-                EquipmentCard card = this.ListCard[GameManager.rand.Next(0, this.ListCard.Count - 1)] as EquipmentCard;
 
-                card.equipe(playerAttacking, card);
-                card.unequipe(this, card);
+                    // on défausse toutes les autres cartes
+                    for (int i = this.ListCard.Count - 1; i >= 0; i--)
+                    {
+                        card = this.ListCard[i] as EquipmentCard;
 
-                // on défausse toutes les autres cartes
-                for (int i = this.ListCard.Count - 1; i >= 0; i--)
-                {
-                    card = this.ListCard[i] as EquipmentCard;
+                        if (this.ListCard[i].cardType == CardType.Darkness)
+                            CardView.GCard.darknessDiscard.Add(this.ListCard[i]);
+                        else
+                            CardView.GCard.lightDiscard.Add(this.ListCard[i]);
 
-                    if (this.ListCard[i].cardType == CardType.Darkness)
-                        CardView.GCard.darknessDiscard.Add(this.ListCard[i]);
-                    else
-                        CardView.GCard.lightDiscard.Add(this.ListCard[i]);
+                        card.unequipe(this, card);
 
-                    card.unequipe(this, card);
-
+                    }
                 }
             }
             this.OnAttackedBy.Value = -1;
