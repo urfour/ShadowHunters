@@ -10,7 +10,18 @@ public class LoadMainMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        videoPlayer.url = System.IO.Path.Combine(Application.streamingAssetsPath, "intro.webm");
+        videoPlayer.Play();
         videoPlayer.loopPointReached += EndReached;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKey(KeyCode.Escape) || Input.GetKey(KeyCode.KeypadEnter))
+        {
+            SceneManager.LoadScene(1, LoadSceneMode.Single);
+        }
+
     }
 
     void EndReached(VideoPlayer vp)
