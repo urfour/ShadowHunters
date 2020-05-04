@@ -264,6 +264,7 @@ public class Player
 
                 }
             }
+            this.OnAttackedBy.Value = -1;
         });
 
         //players.Add(this);
