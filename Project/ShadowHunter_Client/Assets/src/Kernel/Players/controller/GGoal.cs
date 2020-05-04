@@ -196,7 +196,7 @@ namespace Assets.Noyau.Players.controller
                             nbDead++;
                         }
                     }
-                    bool status = !ShadowAlive || (nbDead <= 1 && owner.Dead.Value);
+                    bool status = !ShadowAlive || (nbDead <= 1 && !owner.Dead.Value);
                     if (status != owner.HasWon.Value)
                     {
                         owner.HasWon.Value = status;

@@ -209,6 +209,7 @@ public class Player
                 return;
             }
             KernelLog.Instance.Die(this);
+            this.Position.Value = -1;
             if (this.Disconnected.Value)
             {
                 if (!this.Revealed.Value)
