@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7afe3fac877dfb74ea1b9dc9bd6fa7d4, type: 3}
   m_Name: antre
   m_EditorClassIdentifier: 
-  label: 
-  clip: {fileID: 0}
+  label: game.action.antre
+  clip: {fileID: 8300000, guid: 9c06507294606824a963d6e062b6f4ed, type: 3}
