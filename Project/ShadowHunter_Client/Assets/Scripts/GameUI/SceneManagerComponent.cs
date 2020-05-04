@@ -44,6 +44,11 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     public CardDisplayer playerDisplayer;
     public RectTransform settings;
 
+    public List<Color> playerColors;
+    public RectTransform playerPositionDisplayer;
+
+    public GameObject Board;
+
     public static void InitBeforeScene(Room room)
     {
         boardAvailibility = new Setting<bool>[6];
@@ -84,6 +89,7 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     private void Start()
     {
         Instance = this;
+        Board.SetActive(true);
         EventView.Manager.AddListener(this, true);
         PlayerBarComponent.Init();
 

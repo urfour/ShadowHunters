@@ -22,6 +22,7 @@ public class PlayerViewComponent : MonoBehaviour
     public Text playerCharacterName;
     public Image playerIcon;
     public Text playerWound;
+    public Image playerCube;
     public Text position;
     public Button attackButton;
     public RectTransform turnIndicator;
@@ -97,6 +98,8 @@ public class PlayerViewComponent : MonoBehaviour
     {
         //playerPseudo.text = GRoom.Instance.JoinedRoom.Players.Value[playerId];
         PlayerId = playerId;
+        playerCube.sprite = SceneManagerComponent.Instance.playerPositionDisplayer.GetComponent<Image>().sprite;
+        playerCube.color = SceneManagerComponent.Instance.playerColors[playerId];
         player = PlayerView.GetPlayer(playerId);
         playerPseudo.text = player.Name;
         isLocalPlayer = player.Name == GAccount.Instance.LoggedAccount.Login;
