@@ -35,10 +35,6 @@ events_in
 
     Movement event at the beginning of the turn.
 
-.. class:: AttackEvent
-
-    Event called when the player press the attack button.
-
 .. class:: AttackPlayerEvent
 
     Callback of the SelectAttackTargetEvent.
@@ -59,14 +55,6 @@ events_in
 
        Boolean used to know if Charles is the player's character that sent the event.
 
-.. class:: BobPowerEvent
-
-   Callback of the SelectBobPowerEvent.
-
-   .. property:: public bool UsePower{ get; set; }
-
-      If set to true the player use his power, else nothing happens.
-
 .. class:: DrawCardEvent
 
    Event called when the player draws a card.
@@ -79,46 +67,6 @@ events_in
 
    Event sent when the player press the button to end the turn to choose the next player.
 
-.. class:: ForestSelectTargetEvent
-
-   Event used to choose a player from a list to either heal him or wound him.
-
-   .. property:: public bool Hurt { get; set; }
-
-      If set to true, the selected player will be wounded, or else he will be healed.
-
-.. class:: GiveCardEvent
-
-   Callback of the SelectGiveCardEvent.
-
-   .. property:: public int PlayerGivedId { get; set; }
-
-      Id of the player which will get a card.
-
-   .. property:: public int CardId { get; set; }
-
-      Id of the selected card to give.
-
-.. class:: GiveOrWoundEvent
-
-   Callback of the SelectGiveOrWoundEvent.
-
-   .. property:: public bool Give { get; set; }
-
-      If set to true, the player will have to give a card, or else he will be wounded.
-
-.. class:: LightCardEffectEvent
-
-   Callback of the SelectLightCardTargetEvent.
-
-   .. property:: public int PlayerChoosenId { get; set; }
-
-      Id of the player targeted by the card.
-
-   .. property:: public Card LightCard { get; set; }
-
-      Card that has been drawn.
-
 .. class:: MoveOn
 
    Event which moves the player inside an area.
@@ -127,15 +75,7 @@ events_in
 
       Id of the area where the player will move.
 
-.. class:: NewTurnEvent
-
-   Event which starts the turn of a player.
-
-.. class:: PowerNotUsedEvent
-
-   Event that is triggered when a player choose not to use his power.
-
-.. class:: PowerUsedEvent
+.. class:: PowerUseEvent
 
    Event that is triggered when a player choose to use his power.
 
@@ -158,50 +98,7 @@ events_in
    .. property:: public bool PowerLoup { get; set; }
 
       Boolean to know if the player is Werewolf or not.
-
-.. class:: SelectedDiceEvent
-
-   Callback of the SelectDiceThrowEvent.
-
-   .. property:: public int D6Dice { get; set; }
-
-      Roll of the 6-faces die.
-
-   .. property:: public int D4Dice { get; set; }
-
-      Roll of the 4-faces die.
-
-.. class:: StealCardEvent
-
-   Callback of SelectStealCardEvent and SelectStealCardFromPlayerEvent.
-
-   .. property:: public int PlayerStealedId { get; set; }
-
-      Id of the player who will be stolen a card.
-
-   .. property:: public int CardId { get; set; }
-
-      Id of the stolen card.
-
-.. class:: TakingWoundsEffectEvent
-
-   Callback of the SelectPlayerTakingWoundsEffectEvent.
-
-   .. property:: public int PlayerAttackingId { get; set; }
-
-      Id of the player dealing the wounds.
-
-   .. property:: public bool IsPuppet { get; set; }
-
-      If set to true, the effect applied will be the one of the Demonic Puppet.
-
-   .. property:: public int NbWoundsTaken { get; set; }
-
-      Number of wounds taken.
-
-   .. property:: public int NbWoundsSelfHealed { get; set; }
-
-      Number of wounds healed.
+  Roll of the 4-faces die.
 
 .. class:: UsableCardUseEvent
 
@@ -227,17 +124,6 @@ events_in
 
       Constructor called when creating the event.
 
-.. class:: VisionCardEffectEvent
-
-   Callback of the SelectVisionPowerEvent.
-
-   .. property:: public int TargetId { get; set; }
-
-      Id of the player targeted by the card.
-
-   .. property:: public Card VisionCard { get; set; }
-
-      Card which effect is to be used.
 
 events_out
 ==========
@@ -290,58 +176,6 @@ events_out
 
    Callback of BobPowerEvent
 
-.. class:: SelectDiceThrow
-
-   Event when the player have the Compass
-
-   .. property:: public int D6Dice1 { get; set; }
-
-      Value of the first throw of the die 6
-
-   .. property:: public int D4Dice1 { get; set; }
-   
-      Value of the first throw of the die 4
-
-   .. property:: public int D6Dice2 { get; set; }
-   
-      Value of the second throw of the die 6
-
-   .. property:: public int D4Dice2 { get; set; }
-
-      Value of the second throw of the die 4
-
-.. class:: SelectedNextPlayer
-
-   Event that is triggered at the end of a turn and choose the next player.
-
-.. class:: SelectForestPowerEvent
-
-   Event sent when a player comes in the Haunted Forest.
-
-.. class:: SelectGiveCardEvent
-
-   Event that allow to choose a target to give a card.
-
-   .. property:: public int[] PossibleTargetId { get; set; }
-
-      Array of Id's possible targets.
-
-.. class:: SelectGiveOrWoundEvent
-
-   Event that allows the player to choose to give an equipment or to take a wound.
-
-.. class:: SelectLightCardTargetEvent
-
-   Event that allow to choose on who the effect of the card is used
-
-   .. property:: public int[] PossibleTargetId { get; set; }
-
-      Array of Id's possible targets.
-
-   .. property:: public Card LightCard { get; set; }
-
-      The card.
-
 .. class:: SelectMovement
 
    Event that gives available locations to the player.
@@ -349,30 +183,6 @@ events_out
    .. property::  public int[] LocationAvailable { get; set; }
 
       Array of possible locations.
-
-.. class:: SelectPlayerTakingWoundsEvent
-
-   Event that allow to choose a target in a list of players.
-
-   .. property:: public int[] PossibleTargetId { get; set; }
-
-      Array of Id's possible targets.
-
-   .. property:: public int TargetID { get; set; }
-
-      Initialised at -1, Id of a specific target.
-
-   .. property:: public bool IsPuppet { get; set; }
-
-      Boolean if the card that trigger the event is the Puppet.
-
-   .. property:: public int NbWoundsTaken { get; set; }
-
-      Number of wounds taken.
-
-   .. property:: public int NbWoundsSelfHealed { get; set; }
-
-      Number of wounds that are healed.
 
 .. class:: SelectRevealOrNotEvent
 
@@ -389,22 +199,6 @@ events_out
    .. property:: public bool PowerLoup { get; set; }
 
       Initialised at false ,boolean if the power of Werewolf is used.
-
-.. class:: SelectStealCardEvent
-
-   Event that allow to choose a target in a list of players.
-
-   .. property:: public (int equipment, int owner)[] PossiblePlayerTargetId { get; set; }
-
-      Array of tuples composed of the Ids of the equipment and the possible targeted players.
-
-.. class:: SelectStealCardFromPlayerEvent
-
-   Event that allow to choose which equipment to steal to a selected target.
-
-   .. property:: public int PlayerStealedId { get; set; }
-
-      Id of the selected target.
 
 .. class:: SelectUsableCardPickedEvent
 
@@ -425,3 +219,19 @@ events_out
    .. method:: public SelectUsableCardPickedEvent()
 
       Constructor called when creating the event.
+
+.. class:: SelectVisionTargetEvent
+
+   Event to select a target for the vision card picked
+
+   .. property:: public int cardId { get; set; }
+
+      Id of the card to give.
+
+.. class:: ShowCharacterCardEvent
+
+   Event for the vision card Prediction
+
+   .. property:: public string CardLabel { get; set; }
+
+      Label of the character name to give.
