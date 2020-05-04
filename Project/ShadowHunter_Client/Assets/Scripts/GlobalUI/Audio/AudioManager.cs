@@ -61,14 +61,6 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        if (!AudioSource.isPlaying)
-        {
-            OnPlayedClipEnd.Notify();
-        }
-    }
-
     public void Play(AudioClip clip)
     {
         if (clip != null)
@@ -82,6 +74,7 @@ public class AudioManager : MonoBehaviour
     {
         if (sources.ContainsKey(soundLabel))
         {
+            AudioSource.Stop();
             AudioSource.clip = sources[soundLabel];
             AudioSource.Play();
         }

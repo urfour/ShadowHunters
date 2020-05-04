@@ -41,8 +41,9 @@ public class AudioAsyncComponent : MonoBehaviour
 
     private void DestroyAudio()
     {
-
+        Destroy(gameObject);
     }
+
     private void OnDestroy()
     {
         listened.RemoveListener(volumeListener);

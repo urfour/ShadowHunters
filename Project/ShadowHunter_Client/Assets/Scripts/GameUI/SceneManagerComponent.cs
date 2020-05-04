@@ -109,6 +109,7 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
         listeners.Add((GameManager.PlayerTurn, darknessPick));
         listeners.Add((GameManager.PickDarknessDeck, darknessPick));
 
+        AudioManager.Instance.Play("game.music.main");
         AddListeners();
 
         EndGameScreen.Init();
@@ -177,7 +178,6 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
         {
             cardDisplayer.Display(showCard.CardLabel, PlayerView.GetPlayer(showCard.PlayerId));
         }
-        AudioManager.Instance.Play("game.music.main");
     }
 
     private void Update()
