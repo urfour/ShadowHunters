@@ -35,7 +35,7 @@ namespace Assets.Noyau.Cards.controller
 
         public UsableCard stealCard;
         public UsableCard giveCard;
-        public UsableCard stealCardDiscordAllOthers;
+        public UsableCard stealCardDiscardAllOthers;
 
         public GCard()
         {
@@ -1332,12 +1332,12 @@ namespace Assets.Noyau.Cards.controller
                         c.equipe(owner, c);
                         c.unequipe(target, c);
 
-                        for (int i = target.ListCard.Count - 1; i >= 0; i--)
+                        for (int j = target.ListCard.Count - 1; j >= 0; j--)
                         {
-                            int tmp = i;
-                            c = target.ListCard[tmp] as EquipmentCard;
+                            int tmp2 = j;
+                            c = target.ListCard[tmp2] as EquipmentCard;
 
-                            if (card.cardType == CardType.Darkness)
+                            if (c.cardType == CardType.Darkness)
                                 CardView.GCard.darknessDiscard.Add(c);
                             else
                                 CardView.GCard.lightDiscard.Add(c);
