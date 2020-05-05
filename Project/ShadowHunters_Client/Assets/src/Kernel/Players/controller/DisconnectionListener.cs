@@ -25,7 +25,10 @@ namespace Assets.src.Kernel.Players.controller
                     if (!e.RoomData.Players.Contains(p.Name))
                     {
                         p.Disconnected.Value = true;
-                        p.Dead.Value = true;
+                        if (!p.Dead.Value)
+                        {
+                            p.Dead.Value = true;
+                        }
                         break;
                     }
                 }
