@@ -170,6 +170,9 @@ public class Player
     public Setting<bool> Disconnected { get; private set; } = new Setting<bool>(false);
     public Setting<bool> Revealable { get; private set; } = new Setting<bool>(true);
 
+    public ListenableObject OnEquipmentLoose { get; private set; } = new ListenableObject();
+    public ListenableObject OnEquipmentGet { get; private set; } = new ListenableObject();
+
     ///private static List<Player> players = new List<Player>();
 
     /// <summary>
@@ -374,6 +377,7 @@ public class Player
     {
         ListCard.Add(card);
         NbEquipment.Value++;
+        this.OnEquipmentGet.Notify();
     }
 
     /// <summary>
@@ -384,6 +388,7 @@ public class Player
     {
         ListCard.RemoveAt(index);
         NbEquipment.Value--;
+        this.OnEquipmentLoose.Notify();
     }
     
     /// <summary>
