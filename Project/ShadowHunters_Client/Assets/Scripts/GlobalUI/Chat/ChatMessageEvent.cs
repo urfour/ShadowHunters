@@ -10,7 +10,7 @@ namespace Assets.Scripts.ChatSystem
         public string MessageSend { get; set; }
         public ChatMessageEvent(string user, string msg)
         {
-            this.User = User;
+            this.User = user;
             this.MessageSend = msg;
         }
 

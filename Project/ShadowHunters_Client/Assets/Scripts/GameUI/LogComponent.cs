@@ -30,8 +30,6 @@ public class LogComponent : MonoBehaviour
         }
         index = KernelLog.Instance.Messages.Count;
 
-        index = KernelLog.Instance.Messages.Count;
-
         float choicesheigh = 0;
         for (int i = 0; i < content.childCount; i++)
         {
