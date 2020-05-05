@@ -365,6 +365,7 @@ namespace Assets.Noyau.Players.controller
 
                     else if (lancer == 0)
                     {
+                        playerAttacked.OnAttackedBy.Value = playerAttacking.Id;
                         KernelLog.Instance.AttackFailed(playerAttacking, playerAttacked);
                     }
                     else
