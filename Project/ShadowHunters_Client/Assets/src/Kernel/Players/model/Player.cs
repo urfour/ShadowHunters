@@ -225,14 +225,9 @@ public class Player
             if (this.OnAttackedBy.Value != -1)
             {
                 Player playerAttacking = PlayerView.GetPlayer(this.OnAttackedBy.Value);
-                if (this.Disconnected.Value)
+                if (this.Disconnected.Value && this.ListCard.Count > 0)
                 {
                     EquipmentCard card;
-                    CardView.GCard.stealCard = CardView.GCard.CreateStealCardChoices(playerAttacking, this);
-                    if (GameManager.LocalPlayer.Value == playerAttacking)
-                    {
-                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.stealCard.Id, false, playerAttacking.Id));
-                    }
                     for (int i = this.ListCard.Count - 1; i >= 0; i--)
                     {
                         int tmp = i;
@@ -259,24 +254,10 @@ public class Player
                 }
                 else if (this.ListCard.Count > 0)
                 {
-                    EquipmentCard card;
-                    CardView.GCard.stealCard = CardView.GCard.CreateStealCardChoices(playerAttacking, this);
+                    CardView.GCard.stealCardDiscardAllOthers = CardView.GCard.CreateStealCardChoicesDestroyAllOthers(playerAttacking, this);
                     if (GameManager.LocalPlayer.Value == playerAttacking)
                     {
                         EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.stealCard.Id, false, playerAttacking.Id));
-                    }
-                    for (int i = this.ListCard.Count - 1; i >= 0; i--)
-                    {
-                        int tmp = i;
-                        card = this.ListCard[tmp] as EquipmentCard;
-
-                        if (card.cardType == CardType.Darkness)
-                            CardView.GCard.darknessDiscard.Add(card);
-                        else
-                            CardView.GCard.lightDiscard.Add(card);
-
-                        card.unequipe(this, card);
-
                     }
                 }
             }
@@ -299,13 +280,6 @@ public class Player
             attacker.OnAttacking.Value = true;
             attacker.OnAttackingPlayer.Value = this.Id;
         }
-        /*
-        if (this.Character.characterName == "character.name.loup_garou")
-        {
-            //this.OnAttacked.Value = true;
-            this.OnAttackedAttacker.Value = attacker.Id;
-        }
-        */
 
         if (damage > 0 && (!HasGuardian.Value || !isAttack))
         {

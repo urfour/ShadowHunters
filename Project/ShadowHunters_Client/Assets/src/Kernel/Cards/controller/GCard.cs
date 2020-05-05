@@ -35,6 +35,7 @@ namespace Assets.Noyau.Cards.controller
 
         public UsableCard stealCard;
         public UsableCard giveCard;
+        public UsableCard stealCardDiscordAllOthers;
 
         public GCard()
         {
@@ -657,7 +658,7 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         foreach (Player p in PlayerView.GetPlayers())
-                            if (p.Id != player.Id)
+                            if (p.Id != player.Id && !p.Dead.Value)
                                 p.Wounded(2, player, false);
                     })),
 
@@ -1314,6 +1315,45 @@ namespace Assets.Noyau.Cards.controller
                     ));
             }
             return CreateUsableCard(stolenPlayer.Character.characterName, CardType.Darkness, stolenPlayer.Character.characterName+".description", false, effects.ToArray());
+        }
+
+        public UsableCard CreateStealCardChoicesDiscardAllOthers(Player thiefPlayer, Player stolenPlayer)
+        {
+            List<CardEffect> effects = new List<CardEffect>();
+            int nbcards = stolenPlayer.ListCard.Count;
+            for (int i = 0; i < nbcards; i++)
+            {
+                int tmp = i;
+                effects.Add(new CardEffect(stolenPlayer.ListCard[tmp].cardLabel,
+                    effect: (target, owner, card) =>
+                    {
+                        EquipmentCard c = target.ListCard[tmp] as EquipmentCard;
+                        KernelLog.Instance.StealEquipement(owner, target, c.Id);
+                        c.equipe(owner, c);
+                        c.unequipe(target, c);
+
+                        for (int i = target.ListCard.Count - 1; i >= 0; i--)
+                        {
+                            int tmp = i;
+                            c = target.ListCard[tmp] as EquipmentCard;
+
+                            if (card.cardType == CardType.Darkness)
+                                CardView.GCard.darknessDiscard.Add(c);
+                            else
+                                CardView.GCard.lightDiscard.Add(c);
+
+                            c.unequipe(target, c);
+
+                        }
+                    },
+                    targetableCondition: (target, owner) =>
+                    {
+                        return owner == thiefPlayer
+                            && target == stolenPlayer;
+                    }
+                    ));
+            }
+            return CreateUsableCard(stolenPlayer.Character.characterName, CardType.Darkness, stolenPlayer.Character.characterName + ".description", false, effects.ToArray());
         }
 
         public UsableCard CreateGiveCardChoices(Player playerGiver, Player playerGiven, int cardId)
