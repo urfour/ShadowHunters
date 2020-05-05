@@ -169,6 +169,7 @@ public class Player
 
     public Setting<bool> Disconnected { get; private set; } = new Setting<bool>(false);
     public Setting<bool> Revealable { get; private set; } = new Setting<bool>(true);
+    public Setting<int> WoundedBy { get; private set; } = new Setting<int>(-1);
 
     public ListenableObject OnEquipmentLoose { get; private set; } = new ListenableObject();
     public ListenableObject OnEquipmentGet { get; private set; } = new ListenableObject();
@@ -222,9 +223,9 @@ public class Player
             }
             if (!this.Revealed.Value)
                 this.Revealed.Value = true;
-            if (this.OnAttackedBy.Value != -1)
+            if (this.WoundedBy.Value != -1)
             {
-                Player playerAttacking = PlayerView.GetPlayer(this.OnAttackedBy.Value);
+                Player playerAttacking = PlayerView.GetPlayer(this.WoundedBy.Value);
                 if (this.Disconnected.Value && this.ListCard.Count > 0)
                 {
                     EquipmentCard card;
@@ -275,6 +276,7 @@ public class Player
     /// <param name="isAttack">Booléen si c'est une attaque ou des dégats infligés par une carte à effet</param>
     public virtual int Wounded(int damage, Player attacker, bool isAttack)
     {
+        this.WoundedBy.Value = attacker.Id;
         if (attacker.Character.characterName == "character.name.charles" && isAttack)
         {
             attacker.OnAttacking.Value = true;
