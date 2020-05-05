@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7afe3fac877dfb74ea1b9dc9bd6fa7d4, type: 3}
   m_Name: get_equipment
   m_EditorClassIdentifier: 
-  label: sound.steal_give_equipment
+  label: game.action.get_equipment
   clip: {fileID: 8300000, guid: 468ce1df99b1f9c4a9d6ca58ec3146bc, type: 3}
