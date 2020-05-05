@@ -816,7 +816,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        giveCard = CreateGiveCardChoices(owner, player, card.Id);
+                        giveCard = CreateGiveCardChoices(owner, GameManager.PlayerTurn.Value, card.Id);
                         if (GameManager.LocalPlayer.Value == owner)
                         {
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
@@ -845,7 +845,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        giveCard = CreateGiveCardChoices(owner, player, card.Id);
+                        giveCard = CreateGiveCardChoices(owner, GameManager.PlayerTurn.Value, card.Id);
                         if (GameManager.LocalPlayer.Value == owner)
                         {
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
@@ -876,7 +876,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        giveCard = CreateGiveCardChoices(owner, player, card.Id);
+                        giveCard = CreateGiveCardChoices(owner, GameManager.PlayerTurn.Value, card.Id);
                         if (GameManager.LocalPlayer.Value == owner)
                         {
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
@@ -907,7 +907,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        giveCard = CreateGiveCardChoices(owner, player, card.Id);
+                        giveCard = CreateGiveCardChoices(owner, GameManager.PlayerTurn.Value, card.Id);
                         if (GameManager.LocalPlayer.Value == owner)
                         {
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
@@ -936,7 +936,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        giveCard = CreateGiveCardChoices(owner, player, card.Id);
+                        giveCard = CreateGiveCardChoices(owner, GameManager.PlayerTurn.Value, card.Id);
                         if (GameManager.LocalPlayer.Value == owner)
                         {
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
@@ -965,7 +965,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        giveCard = CreateGiveCardChoices(owner, player, card.Id);
+                        giveCard = CreateGiveCardChoices(owner, GameManager.PlayerTurn.Value, card.Id);
                         if (GameManager.LocalPlayer.Value == owner)
                         {
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));

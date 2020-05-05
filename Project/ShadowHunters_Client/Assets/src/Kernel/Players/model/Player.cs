@@ -235,12 +235,13 @@ public class Player
                     }
                     for (int i = this.ListCard.Count - 1; i >= 0; i--)
                     {
-                        card = this.ListCard[i] as EquipmentCard;
+                        int tmp = i;
+                        card = this.ListCard[tmp] as EquipmentCard;
 
-                        if (this.ListCard[i].cardType == CardType.Darkness)
-                            CardView.GCard.darknessDiscard.Add(this.ListCard[i]);
+                        if (card.cardType == CardType.Darkness)
+                            CardView.GCard.darknessDiscard.Add(card);
                         else
-                            CardView.GCard.lightDiscard.Add(this.ListCard[i]);
+                            CardView.GCard.lightDiscard.Add(card);
 
                         card.unequipe(this, card);
 
@@ -250,7 +251,8 @@ public class Player
                 {
                     for (int i = this.ListCard.Count - 1; i >= 0; i--)
                     {
-                        EquipmentCard card = this.ListCard[i] as EquipmentCard;
+                        int tmp = i;
+                        EquipmentCard card = this.ListCard[tmp] as EquipmentCard;
                         card.equipe(playerAttacking, card);
                         card.unequipe(this, card);
                     }
@@ -265,12 +267,13 @@ public class Player
                     }
                     for (int i = this.ListCard.Count - 1; i >= 0; i--)
                     {
-                        card = this.ListCard[i] as EquipmentCard;
+                        int tmp = i;
+                        card = this.ListCard[tmp] as EquipmentCard;
 
-                        if (this.ListCard[i].cardType == CardType.Darkness)
-                            CardView.GCard.darknessDiscard.Add(this.ListCard[i]);
+                        if (card.cardType == CardType.Darkness)
+                            CardView.GCard.darknessDiscard.Add(card);
                         else
-                            CardView.GCard.lightDiscard.Add(this.ListCard[i]);
+                            CardView.GCard.lightDiscard.Add(card);
 
                         card.unequipe(this, card);
 
