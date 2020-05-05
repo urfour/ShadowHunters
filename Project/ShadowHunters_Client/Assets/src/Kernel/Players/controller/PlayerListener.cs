@@ -309,7 +309,7 @@ namespace Assets.Noyau.Players.controller
                     Debug.Log("Le lancer vaut : " + lancer);
 
                     Logger.Info("Wounds avant : " + playerAttacked.Wound.Value);
-                    playerAttacked.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, false);
+                    playerAttacked.Wounded(lancer + playerAttacking.BonusAttack.Value - playerAttacking.MalusAttack.Value, playerAttacking, true);
                     Logger.Info("Wounds après : " + playerAttacked.Wound.Value);
                     Logger.Info("Vie total : " + playerAttacked.Character.characterHP);
                     Logger.Info("Mort ? " + playerAttacked.Dead.Value);
