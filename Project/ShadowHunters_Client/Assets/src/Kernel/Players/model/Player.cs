@@ -38,10 +38,22 @@ public class Player
     /// </summary>
     public string Name { get; set; }
     /// <summary>
+    /// personnage du joueur
+    /// </summary>
+    public Character Character { get; private set; }
+    /// <summary>
+    /// liste des cartes possédées par le joueur
+    /// </summary>
+    public List<Card> ListCard { get; private set; }
+
+    /// <summary>
     /// nombre de blessure
     /// </summary>
-
     public Setting<int> Wound { get; private set; } = new Setting<int>(0);
+    /// <summary>
+    /// le joueur peut-il être révélé ?
+    /// </summary>
+    public Setting<bool> Revealable { get; private set; } = new Setting<bool>(true);
     /// <summary>
     /// carte révélée à tous ou cachée
     /// </summary>
@@ -51,9 +63,29 @@ public class Player
     /// </summary>
     public Setting<bool> Dead { get; private set; } = new Setting<bool>(false);
     /// <summary>
+    /// le joueur a-t-il gagné ?
+    /// </summary>
+    public Setting<bool> HasWon { get; private set; } = new Setting<bool>(false);
+    /// <summary>
+    /// position du joueur
+    /// </summary>
+    public Setting<int> Position { get; private set; } = new Setting<int>(-1);
+    /// <summary>
+    /// le joueur peut-il utiliser son pouvoir ?
+    /// </summary>
+    public Setting<bool> CanUsePower { get; private set; } = new Setting<bool>(false);
+
+    /* DOUBLON  */
+    /// <summary>
     /// pouvoir déjà utilisé ou non
     /// </summary>
     public Setting<bool> UsedPower { get; private set; } = new Setting<bool>(false);
+    /// <summary>
+    /// le joueur a-t-il déjà utilisé son pouvoir une fois (utilisé pour les usages uniques)
+    /// </summary>
+    public Setting<bool> PowerUsed { get; private set; } = new Setting<bool>(false);
+
+
     /// <summary>
     /// bonus d'attaque (par défaut = 0)
     /// </summary>
@@ -69,7 +101,6 @@ public class Player
     /// <summary>
     /// le joueur possède-t-il la mitrailleuse ?
     /// </summary>
-
     public Setting<bool> HasGatling { get; private set; } = new Setting<bool>(false);
     /// <summary>
     /// le joueur possède-t-il le revolver ?
@@ -115,42 +146,16 @@ public class Player
     /// nb d'équipements
     /// </summary>
     public Setting<int> NbEquipment { get; private set; } = new Setting<int>(0);
-    /// <summary>
-    /// le joueur a-t-il gagné ?
-    /// </summary>
-    public Setting<bool> HasWon { get; private set; } = new Setting<bool>(false);
-    /// <summary>
-    /// position du joueur
-    /// </summary>
-    public Setting<int> Position { get; private set; } = new Setting<int>(-1);
-
-    /// <summary>
-    /// personnage du joueur
-    /// </summary>
-    public Character Character { get; private set; }
-    /// <summary>
-    /// liste des cartes possédées par le joueur
-    /// </summary>
-    public List<Card> ListCard { get; private set; }
-    /// <summary>
-    /// le joueur peut-il utiliser son pouvoir ?
-    /// </summary>
-    public Setting<bool> CanUsePower { get; private set; } = new Setting<bool>(false);
-    /// <summary>
-    /// le joueur a-t-il déjà utilisé son pouvoir une fois (utilisé pour les usages uniques)
-    /// </summary>
-    public Setting<bool> PowerUsed { get; private set; } = new Setting<bool>(false);
+    
+    /* DOUBLON  */
     /// <summary>
     /// Id du joueur qui m'a attaqué en dernier
     /// </summary>
     public Setting<int> OnAttackedBy { get; private set; } = new Setting<int>(-1);
-    /*
+
+    public Setting<int> WoundedBy { get; private set; } = new Setting<int>(-1);
+
     /// <summary>
-    /// Si le joueur se fait attaquer
-    /// </summary>
-    public Setting<bool> OnAttacked { get; private set; } = new Setting<bool>(false);
-    /// <summary>
-    */
     /// Si le joueur attaque (Charles)
     /// </summary>       
     public Setting<bool> OnAttacking { get; private set; } = new Setting<bool>(false);
@@ -167,9 +172,11 @@ public class Player
     /// </summary>
     public Setting<int> DamageDealed { get; private set; } = new Setting<int>(-1);
 
+    /// <summary>
+    /// Le joueur est-il déconnecté ?
+    /// </summary>
     public Setting<bool> Disconnected { get; private set; } = new Setting<bool>(false);
-    public Setting<bool> Revealable { get; private set; } = new Setting<bool>(true);
-    public Setting<int> WoundedBy { get; private set; } = new Setting<int>(-1);
+    
 
     public ListenableObject OnEquipmentLoose { get; private set; } = new ListenableObject();
     public ListenableObject OnEquipmentGet { get; private set; } = new ListenableObject();
@@ -263,8 +270,6 @@ public class Player
             this.WoundedBy.Value = -1;
             this.OnAttackedBy.Value = -1;
         });
-
-        //players.Add(this);
     }
 
     /// <summary>
@@ -340,8 +345,10 @@ public class Player
             KernelLog.Instance.HealWounds(this, realHeal);
         }
     }
-    
 
+    /// <summary>
+    /// Fonction qui affiche les cartes d'un joueur
+    /// </summary>
     public void PrintCards()
     {
         Debug.Log("Joueur " + Name + " : ");

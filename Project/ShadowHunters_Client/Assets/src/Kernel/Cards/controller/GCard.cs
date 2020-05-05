@@ -13,7 +13,6 @@ namespace Assets.Noyau.Cards.controller
     /// <summary>
     /// Classe qui va instancier toute les cartes du jeu.
     /// </summary>
-
     public class GCard
     {
         public List<Card> cards = new List<Card>();
@@ -99,6 +98,9 @@ namespace Assets.Noyau.Cards.controller
                         KernelLog.Instance.NothingHappen();
                     }));
 
+            /// <summary>
+            /// Fonction qui va instancier le pouvoir de Georges comme une carte à usage unique.
+            /// </summary>
             GeorgesPower = CreateUsableCard("character.name.georges", CardType.Light, "character.name.georges.description", false,
                 new CardEffect("character.name.georges.power",
                     targetableCondition: (player, owner) =>
@@ -111,6 +113,9 @@ namespace Assets.Noyau.Cards.controller
                         player.Wounded(lancer, owner, false);
                     }));
 
+            /// <summary>
+            /// Fonction qui va instancier le pouvoir de Franklin comme une carte à usage unique.
+            /// </summary>
             FranklinPower = CreateUsableCard("character.name.franklin", CardType.Light, "character.name.franklin.description", false,
                 new CardEffect("character.name.franklin.power",
                     targetableCondition: (player, owner) =>
@@ -123,6 +128,9 @@ namespace Assets.Noyau.Cards.controller
                         player.Wounded(lancer, owner, false);
                     }));
 
+            /// <summary>
+            /// Fonction qui va instancier le pouvoir de Bob comme une carte à usage unique.
+            /// </summary>
             BobPower = CreateUsableCard("character.name.bob", CardType.Darkness, "character.name.bob.description", false,
                 new CardEffect("character.name.bob.power.steal",
                     targetableCondition: (player, owner) =>
@@ -385,7 +393,6 @@ namespace Assets.Noyau.Cards.controller
                         player.Healed(player.Wound.Value);
                     }),
                 new CardEffect("card.darkness.darkness_rituel.nothing_happen",
-                    // on peut ne rien faire uniquement si on n'est pas un Shadow qui s'est révélé
                     targetableCondition: (player, owner) =>
                     {
                         return player == owner
@@ -1188,7 +1195,7 @@ namespace Assets.Noyau.Cards.controller
         }
 
         /// <summary>
-        /// Fonction qui va instancier une carte à usage unique.
+        /// Fonction qui va instancier une carte à usage unique avec hiddenchoice.
         /// </summary>
         /// <param name="cardLabel">Label de la carte</param>
         /// <param name="cardType">Type de la carte</param>

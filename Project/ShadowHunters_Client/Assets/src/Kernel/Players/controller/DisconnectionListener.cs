@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace Assets.src.Kernel.Players.controller
 {
+    /// <summary>
+    /// En cas de déconnexion d'un joueur, il meurt.
+    /// </summary>
     class DisconnectionListener : IListener<RoomDataEvent>
     {
         public void OnEvent(RoomDataEvent e, string[] tags = null)
@@ -29,6 +32,4 @@ namespace Assets.src.Kernel.Players.controller
             }
         }
     }
-
-    //class 
 }

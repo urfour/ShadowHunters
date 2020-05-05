@@ -11,7 +11,6 @@ namespace Assets.Noyau.Players.controller
     /// <summary>
     /// Classe qui va instancier tout les personnages du jeu.
     /// </summary>
-
     class GCharacter
     {
         public List<Character> characters = new List<Character>();

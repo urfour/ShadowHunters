@@ -18,7 +18,6 @@ namespace Assets.Noyau.Players.controller
     /// </summary>
     class GPower
     {
-
         // HUNTERS
 
         /// <summary>
@@ -146,26 +145,7 @@ namespace Assets.Noyau.Players.controller
                         }
                     }
                 }
-
-                /*
-                // Si le joueur attaquant met fin à son tour, dès le début du suivant on coupe le pouvoir
-                if (GameManager.StartOfTurn.Value)
-                {
-                    if (owner.CanUsePower.Value)
-                        owner.CanUsePower.Value = false;
-
-                    if (owner.OnAttackedBy.Value)
-                        owner.OnAttackedBy.Value = false;
-                }
-                // Si la raison de l'appel vient de OnAttacked (donc pas start)
-                else if (owner.OnAttackedBy.Value && owner.Revealed.Value)
-                {
-                    owner.CanUsePower.Value = true;
-                    owner.OnAttackedBy.Value = false;
-                }
-                */
-            }
-            );
+            });
 
         /// <summary>
         /// Fonction qui va instancier le pouvoir du Vampire.
@@ -192,23 +172,6 @@ namespace Assets.Noyau.Players.controller
             }
             );
 
-/* pas besoin de le faire car déjà géré par les cartes visions
-        public static Power Metamorphe = new Power
-            (
-            power: (owner) =>
-            {
-                //TODO
-            },
-            addListeners: (owner) =>
-            {
-                //TODO
-            },
-            availability: (owner) =>
-            {
-                //TODO
-            }
-            );
-*/
         //NEUTRES
 
         /// <summary>

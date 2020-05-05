@@ -16,7 +16,6 @@ using UnityEngine;
 
 namespace Assets.Noyau.Manager.view
 {
-
     public enum Position
     {
         None,
@@ -68,10 +67,10 @@ namespace Assets.Noyau.Manager.view
         /// Booléen qui annonce si l'action d'attaquer est possible.
         /// </summary>
         public static Setting<bool> AttackAvailable { get; private set; } = new Setting<bool>(false);
+        
         /// <summary>
         /// Booléen qui annonce si l'on peut piocher une carte Vision.
         /// </summary>
-
         public static Setting<bool> PickVisionDeck { get; private set; } = new Setting<bool>(false);
         /// <summary>
         /// Booléen qui annonce si l'on peut piocher une carte Ténèbre.
@@ -81,15 +80,15 @@ namespace Assets.Noyau.Manager.view
         /// Booléen qui annonce si l'on peut piocher une carte Lumière.
         /// </summary>
         public static Setting<bool> PickLightnessDeck { get; private set; } = new Setting<bool>(false);
+        
         /// <summary>
         /// Booléen qui annonce si l'on a tué un autre personnage.
         /// </summary>
-
         public static Setting<bool> HasKilled {get; private set; } = new Setting<bool>(false);
+        
         /// <summary>
         /// Booléen qui annonce si l'on peut terminer le tour.
         /// </summary>
-
         public static Setting<bool> TurnEndable { get; private set; } = new Setting<bool>(false);
 
 
@@ -135,7 +134,6 @@ namespace Assets.Noyau.Manager.view
                 Position.Sanctuaire
             };
             
-
             int index;
 
             for (int i = 0; i < 6; i++)
@@ -144,8 +142,7 @@ namespace Assets.Noyau.Manager.view
                 Board.Add(i, p[index]);
                 p.RemoveAt(index);
             }
-
-
+            
             foreach (Player player in PlayerView.GetPlayers())
             {
                 player.Character.goal.setWinningListeners(player);
