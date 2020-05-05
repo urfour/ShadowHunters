@@ -93,7 +93,7 @@ class RoomComponent : MonoBehaviour, IListener<RoomEvent>
         
         foreach (var pair in GRoom.Instance.Rooms)
         {
-            if (!pair.Value.IsPrivate.Value)
+            if (!pair.Value.IsPrivate.Value && !pair.Value.RawData.IsLaunched)
             {
                 GameObject o = GameObject.Instantiate(RoomPrefab, WaitingRoomListContent.transform);
                 RoomBarComponent rbc = o.GetComponent<RoomBarComponent>();
