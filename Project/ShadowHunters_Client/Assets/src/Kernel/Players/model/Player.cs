@@ -215,18 +215,15 @@ public class Player
             }
             KernelLog.Instance.Die(this);
             this.Position.Value = -1;
-            if (this.Disconnected.Value)
-            {
-                if (!this.Revealed.Value)
-                    this.Revealed.Value = true;
-                return;
-            }
             if (!this.Revealed.Value)
+            {
                 this.Revealed.Value = true;
-            if (this.WoundedBy.Value != -1)
+            }
+            if (this.ListCard.Count > 0)
             {
                 Player playerAttacking = PlayerView.GetPlayer(this.WoundedBy.Value);
-                if (this.Disconnected.Value && this.ListCard.Count > 0)
+                Logger.Info("Joueur attaquant : " + playerAttacking.Name);
+                if (this.Disconnected.Value || this.WoundedBy.Value == -1)
                 {
                     EquipmentCard card;
                     for (int i = this.ListCard.Count - 1; i >= 0; i--)
@@ -243,7 +240,7 @@ public class Player
 
                     }
                 }
-                if (playerAttacking.HasCrucifix.Value && this.ListCard.Count > 0)
+                else if (playerAttacking.HasCrucifix.Value)
                 {
                     for (int i = this.ListCard.Count - 1; i >= 0; i--)
                     {
@@ -253,7 +250,7 @@ public class Player
                         card.unequipe(this, card);
                     }
                 }
-                else if (this.ListCard.Count > 0)
+                else
                 {
                     CardView.GCard.stealCardDiscardAllOthers = CardView.GCard.CreateStealCardChoicesDiscardAllOthers(playerAttacking, this);
                     if (GameManager.LocalPlayer.Value == playerAttacking)
@@ -262,6 +259,8 @@ public class Player
                     }
                 }
             }
+
+            this.WoundedBy.Value = -1;
             this.OnAttackedBy.Value = -1;
         });
 
@@ -276,7 +275,15 @@ public class Player
     /// <param name="isAttack">Booléen si c'est une attaque ou des dégats infligés par une carte à effet</param>
     public virtual int Wounded(int damage, Player attacker, bool isAttack)
     {
-        this.WoundedBy.Value = attacker.Id;
+        if (this != attacker)
+        {
+            this.WoundedBy.Value = attacker.Id;
+            Logger.Info("Changement d'attaqueur : " + attacker.Name);
+        }
+        else
+        {
+            this.WoundedBy.Value = -1;
+        }
         if (attacker.Character.characterName == "character.name.charles" && isAttack)
         {
             attacker.OnAttacking.Value = true;
