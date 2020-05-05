@@ -74,12 +74,6 @@ public class Player
     /// le joueur peut-il utiliser son pouvoir ?
     /// </summary>
     public Setting<bool> CanUsePower { get; private set; } = new Setting<bool>(false);
-
-    /* DOUBLON  */
-    /// <summary>
-    /// pouvoir déjà utilisé ou non
-    /// </summary>
-    public Setting<bool> UsedPower { get; private set; } = new Setting<bool>(false);
     /// <summary>
     /// le joueur a-t-il déjà utilisé son pouvoir une fois (utilisé pour les usages uniques)
     /// </summary>

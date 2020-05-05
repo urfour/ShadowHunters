@@ -786,7 +786,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(2, player, false);
+                        player.Wounded(2, GameManager.PlayerTurn.Value, false);
                     })),
 
                 CreateVisionCard("card.vision.vision_clairvoyante", CardType.Vision, "card.vision.vision_clairvoyante.description", false,
@@ -799,7 +799,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(1, player, false);
+                        player.Wounded(1, GameManager.PlayerTurn.Value, false);
                     })),
 
                 CreateVisionCard("card.vision.vision_cupide", CardType.Vision, "card.vision.vision_cupide.description", false,
@@ -812,7 +812,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(1,player,false);
+                        player.Wounded(1, GameManager.PlayerTurn.Value, false);
                     }),
                 new CardEffect("card.vision.vision_cupide.effect.give",
                     targetableCondition: (player, owner) =>
@@ -841,7 +841,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(1,player,false);
+                        player.Wounded(1,GameManager.PlayerTurn.Value,false);
                     }),
                 new CardEffect("card.vision.vision_cupide.effect.give",
                     targetableCondition: (player, owner) =>
@@ -871,7 +871,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(1,player,false);
+                        player.Wounded(1,GameManager.PlayerTurn.Value,false);
                     }),
                 new CardEffect("card.vision.vision_enivrante.effect.give",
                     targetableCondition: (player, owner) =>
@@ -902,7 +902,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(1,player,false);
+                        player.Wounded(1,GameManager.PlayerTurn.Value,false);
                     }),
                 new CardEffect("card.vision.vision_enivrante.effect.give",
                     targetableCondition: (player, owner) =>
@@ -932,7 +932,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(1,player,false);
+                        player.Wounded(1,GameManager.PlayerTurn.Value,false);
                     }),
                 new CardEffect("card.vision.vision_furtive.effect.give",
                     targetableCondition: (player, owner) =>
@@ -961,7 +961,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(1,player,false);
+                        player.Wounded(1,GameManager.PlayerTurn.Value,false);
                     }),
                 new CardEffect("card.vision.vision_furtive.effect.give",
                     targetableCondition: (player, owner) =>
@@ -991,7 +991,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(1, player, false);
+                        player.Wounded(1, GameManager.PlayerTurn.Value, false);
                     }),
                 new CardEffect("card.vision.vision_divine.effect.args.heal&1",
                     targetableCondition: (player, owner) =>
@@ -1018,7 +1018,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(1, player, false);
+                        player.Wounded(1, GameManager.PlayerTurn.Value, false);
                     }),
                 new CardEffect("card.vision.vision_divine.effect.args.heal&1",
                     targetableCondition: (player, owner) =>
@@ -1043,7 +1043,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(1, player, false);
+                        player.Wounded(1, GameManager.PlayerTurn.Value, false);
                     }),
                 new CardEffect("card.vision.vision_lugubre.effect.args.heal&1",
                     targetableCondition: (player, owner) =>
@@ -1068,7 +1068,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(1, player, false);
+                        player.Wounded(1, GameManager.PlayerTurn.Value, false);
                     }),
                 new CardEffect("card.vision.vision_reconfortante.effect.args.heal&1",
                     targetableCondition: (player, owner) =>
@@ -1092,7 +1092,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(1, player, false);
+                        player.Wounded(1, GameManager.PlayerTurn.Value, false);
                     })),
 
                 CreateVisionCard("card.vision.vision_mortifere", CardType.Vision, "card.vision.vision_mortifere.description", false,
@@ -1105,7 +1105,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(1, player, false);
+                        player.Wounded(1, GameManager.PlayerTurn.Value, false);
                     })),
 
                 CreateVisionCard("card.vision.vision_mortifere", CardType.Vision, "card.vision.vision_mortifere.description", false,
@@ -1118,7 +1118,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(1, player, false);
+                        player.Wounded(1, GameManager.PlayerTurn.Value, false);
                     })),
 
                 CreateVisionCard("card.vision.vision_purificatrice", CardType.Vision, "card.vision.vision_purificatrice.description", false,
@@ -1130,7 +1130,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        player.Wounded(2, player, false);
+                        player.Wounded(2, GameManager.PlayerTurn.Value, false);
                     })),
 
                 CreateVisionCard("card.vision.vision_supreme", CardType.Vision, "card.vision.vision_supreme.description", false,
