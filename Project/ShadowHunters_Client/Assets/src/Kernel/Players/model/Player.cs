@@ -141,14 +141,14 @@ public class Player
     /// </summary>
     public Setting<int> NbEquipment { get; private set; } = new Setting<int>(0);
     
-    /* DOUBLON  */
     /// <summary>
     /// Id du joueur qui m'a attaqué en dernier
     /// </summary>
     public Setting<int> OnAttackedBy { get; private set; } = new Setting<int>(-1);
-
+    /// <summary>
+    /// Id du joueur qui m'a infligé des dommages en dernier
+    /// </summary>
     public Setting<int> WoundedBy { get; private set; } = new Setting<int>(-1);
-
     /// <summary>
     /// Si le joueur attaque (Charles)
     /// </summary>       
