@@ -27,8 +27,6 @@ namespace Assets.Noyau.Players.controller
             {
                 Players[i] = new Player(i, characters.PickCharacter());
             }
-
-        }
-        
+        }  
     }
 }

@@ -22,7 +22,8 @@ namespace Assets.Noyau.Cards.model
     {
         public readonly Equipe equipe;
         public readonly Unequipe unequipe;
-        public readonly EquipmentCondition condition; public readonly EquipmentAddEffect addEffect;
+        public readonly EquipmentCondition condition;
+        public readonly EquipmentAddEffect addEffect;
         public readonly EquipmentRemoveEffect rmEffect;
 
 
@@ -42,7 +43,8 @@ namespace Assets.Noyau.Cards.model
         {
             this.equipe = equipe;
             this.unequipe = unequipe;
-            this.condition = condition; this.addEffect = addeffect;
+            this.condition = condition;
+            this.addEffect = addeffect;
             this.rmEffect = rmeffect;
         }
     }

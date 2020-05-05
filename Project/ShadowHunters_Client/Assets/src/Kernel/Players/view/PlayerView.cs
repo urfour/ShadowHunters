@@ -13,6 +13,11 @@ namespace Assets.Noyau.Players.view
         private static GPlayer gPlayer;
 
         /// <summary>
+        /// le nombre de joueur dans la partie
+        /// </summary>
+        public static int NbPlayer { get; private set; }
+
+        /// <summary>
         /// Initialise les joueurs.
         /// </summary>
         /// <param name="nbPlayers">Le nombre de joueurs de la partie</param>
@@ -53,8 +58,6 @@ namespace Assets.Noyau.Players.view
         {
             return gPlayer.Players;
         }
-
-        public static int NbPlayer { get; private set; }
 
         /// <summary>
         /// Fonction qui renvoie le joueur pour le prochain tour.

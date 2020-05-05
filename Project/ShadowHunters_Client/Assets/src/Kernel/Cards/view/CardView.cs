@@ -12,14 +12,12 @@ namespace Assets.Noyau.Cards.view
     public static class CardView
     {
         public static GCard GCard;
-        //private static Random rand;
 
         /// <summary>
         /// Initialise toute les cartes du jeu.
         /// </summary>
         public static void Init()
         {
-            //rand = GameManager.rand;
             GCard = new GCard();
         }
 
@@ -31,6 +29,7 @@ namespace Assets.Noyau.Cards.view
         /// <summary>
         /// Fonction qui permet de piocher une carte Vision.
         /// </summary>
+        /// <returns>Carte piochée</returns>
         public static Card PickVision()
         {
             if (GCard.visionDeck.Count == 0)
@@ -49,6 +48,7 @@ namespace Assets.Noyau.Cards.view
         /// <summary>
         /// Fonction qui permet de piocher une carte Lumière.
         /// </summary>
+        /// <returns>Carte piochée</returns>
         public static Card PickLight()
         {
             if (GCard.lightDeck.Count == 0)
@@ -70,6 +70,7 @@ namespace Assets.Noyau.Cards.view
         /// <summary>
         /// Fonction qui permet de piocher une carte Ténèbre.
         /// </summary>
+        /// <returns>Carte piochée</returns>
         public static Card PickDarkness()
         {
             if (GCard.darknessDeck.Count == 0)
@@ -87,6 +88,12 @@ namespace Assets.Noyau.Cards.view
             }
             return c;
         }
+
+        /// <summary>
+        /// Fonction qui permet d'obtenir une carte par son Id.
+        /// </summary>
+        /// <param name="idCard">Id de la carte choisie</param>
+        /// <returns>Carte piochée</returns>
         public static Card GetCard(int idCard)
         {
             foreach (Card c in GCard.cards)
@@ -95,6 +102,5 @@ namespace Assets.Noyau.Cards.view
 
             return null;
         }
-
     }
 }

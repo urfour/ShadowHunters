@@ -21,14 +21,15 @@ namespace Assets.Noyau.Players.controller
     {
         public void OnEvent(PlayerEvent e, string[] tags = null)
         {
+            /// <summary>
+            /// déroulement de l'évènement de fin de tour
+            /// </summary>
             if (e is EndTurnEvent ete)
             {
-
                 GameManager.AttackAvailable.Value = false;
 
                 if (GameManager.PlayerTurn.Value == null)
                 {
-                    //GameManager.PlayerTurn.Value = PlayerView.GetPlayer(PlayerView.NbPlayer -1);
                     GameManager.PlayerTurn.Value = PlayerView.GetPlayer(GameManager.rand.Next(0, PlayerView.NbPlayer));
                 }
                 else if (GameManager.PlayerTurn.Value.HasAncestral.Value) // si le joueur a utilisé le savoir ancestral, le joueur suivant reste lui
@@ -40,7 +41,6 @@ namespace Assets.Noyau.Players.controller
                     GameManager.PlayerTurn.Value = PlayerView.NextPlayer(GameManager.PlayerTurn.Value);
                 }
                 
-
                 if (GameManager.PlayerTurn.Value.HasGuardian.Value)
                     GameManager.PlayerTurn.Value.HasGuardian.Value = false;
 
@@ -51,14 +51,13 @@ namespace Assets.Noyau.Players.controller
                 GameManager.PickLightnessDeck.Value = false;
                 GameManager.PickVisionDeck.Value = false;
                 GameManager.WaitingPlayer.Value = GameManager.PlayerTurn.Value;
-                /*
-                EventView.Manager.Emit(new SelectedNextPlayer()
-                {
-                    PlayerId = GameManager.PlayerTurn.Value.Id
-                });
-                */
+
                 KernelLog.Instance.StartTurn();
             }
+
+            /// <summary>
+            /// déroulement de l'évènement de choix du déplacement à effectuer
+            /// </summary>
             else if (e is AskMovement am)
             {
                 GameManager.StartOfTurn.Value = false;
@@ -69,8 +68,7 @@ namespace Assets.Noyau.Players.controller
                 {
                     return;
                 }
-
-
+                
                 List<int> dicesRolls = new List<int>();
 
                 int nbrolls = 1;
@@ -87,8 +85,7 @@ namespace Assets.Noyau.Players.controller
                     int val = UnityEngine.Random.Range(1, 6) + UnityEngine.Random.Range(1, 4);
 
                     int tmpavailableDestination = -1;
-
-
+                    
                     switch (val)
                     {
                         case 2:
@@ -140,6 +137,10 @@ namespace Assets.Noyau.Players.controller
                     LocationAvailable = availableDestination.ToArray()
                 });
             }
+
+            /// <summary>
+            /// déroulement de l'évènement de déplacement
+            /// </summary>
             else if (e is MoveOn mo)
             {
                 Player currentPlayer = PlayerView.GetPlayer(mo.PlayerId);
@@ -175,10 +176,13 @@ namespace Assets.Noyau.Players.controller
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Sanctuaire.Id, false, e.PlayerId));
                         break;
                 }
-
                 KernelLog.Instance.MoveOn();
             }
-            else if (e is DrawCardEvent drawCard/* && GameManager.PlayerTurn.Value.Id == e.PlayerId*/)
+
+            /// <summary>
+            /// déroulement de l'évènement de pioche d'une carte
+            /// </summary>
+            else if (e is DrawCardEvent drawCard)
             {
                 switch (drawCard.SelectedCardType)
                 {
@@ -247,6 +251,10 @@ namespace Assets.Noyau.Players.controller
                     }
                 }
             }
+
+            /// <summary>
+            /// déroulement de l'évènement d'utilisation d'une carte à usage unique
+            /// </summary>
             else if (e is UsableCardUseEvent ecue)
             {
                 Card c = CardView.GCard.cards[ecue.Cardid];
@@ -274,6 +282,10 @@ namespace Assets.Noyau.Players.controller
                     Debug.Log("L'effet ne s'active pas !");
 
             }
+
+            /// <summary>
+            /// déroulement de l'évènement d'attaque d'un joueur
+            /// </summary>
             else if (e is AttackPlayerEvent attackPlayer)
             {
                 GameManager.PickVisionDeck.Value = false;
@@ -385,7 +397,6 @@ namespace Assets.Noyau.Players.controller
                             Logger.Info("Vie total : " + playerAttacked.Character.characterHP);
                             Logger.Info("Mort ? " + playerAttacked.Dead.Value);
                         }
-
                     }
                     GameManager.TurnEndable.Value = true;
                     GameManager.WaitingPlayer.Value = null;
@@ -393,6 +404,10 @@ namespace Assets.Noyau.Players.controller
                     GameManager.AttackAvailable.Value = false;
                 }
             }
+
+            /// <summary>
+            /// déroulement de l'évènement de révélation de son personnage
+            /// </summary>
             else if (e is RevealCardEvent reveal)
             {
                 Player p = PlayerView.GetPlayer(reveal.PlayerId);
@@ -404,6 +419,10 @@ namespace Assets.Noyau.Players.controller
 
                 Debug.Log("Le joueur " + p.Name + " se révèle.");
             }
+
+            /// <summary>
+            /// déroulement de l'évènement de choix de si on se révèle ou non
+            /// </summary>
             else if (e is RevealOrNotEvent rone)
             {
                 Player player = PlayerView.GetPlayer(rone.PlayerId);
@@ -419,6 +438,10 @@ namespace Assets.Noyau.Players.controller
                         player.Healed(player.Wound.Value);
                 }
             }
+
+            /// <summary>
+            /// déroulement de l'évènement d'utilisation du pouvoir de son personnage
+            /// </summary>
             else if (e is PowerUseEvent pue)
             {
                 Player p = PlayerView.GetPlayer(pue.PlayerId);
