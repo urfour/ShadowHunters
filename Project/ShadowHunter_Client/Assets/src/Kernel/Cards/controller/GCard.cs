@@ -6,6 +6,7 @@ using Scripts.event_out;
 using Assets.Noyau.Players.view;
 using Scripts.event_in;
 using Log;
+using Assets.Noyau.Cards.view;
 
 namespace Assets.Noyau.Cards.controller
 {
@@ -31,6 +32,9 @@ namespace Assets.Noyau.Cards.controller
         public UsableCard GeorgesPower;
         public UsableCard FranklinPower;
         public UsableCard BobPower;
+
+        public UsableCard stealCard;
+        public UsableCard giveCard;
 
         public GCard()
         {
@@ -69,10 +73,11 @@ namespace Assets.Noyau.Cards.controller
                 new CardEffect("card.location.sanctuaire.effect.steal",
                     effect: (target, owner, card) =>
                     {
-                        EquipmentCard c = target.ListCard[GameManager.rand.Next(0, target.ListCard.Count - 1)] as EquipmentCard;
-                        KernelLog.Instance.StealEquipement(owner, target, c.Id);
-                        c.equipe(owner, c);
-                        c.unequipe(target, c);
+                        stealCard = CreateStealCardChoices(owner, target, card.Id);
+                        if (GameManager.LocalPlayer.Value == owner)
+                        {
+                            EventView.Manager.Emit(new SelectUsableCardPickedEvent(stealCard.Id, false, owner.Id));
+                        }
                     },
                     targetableCondition: (player, owner) =>
                     {
@@ -125,10 +130,11 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (target, owner, card) =>
                     {
-                        EquipmentCard c = target.ListCard[GameManager.rand.Next(0, target.ListCard.Count - 1)] as EquipmentCard;
-                        KernelLog.Instance.StealEquipement(owner, target, c.Id);
-                        c.equipe(owner, c);
-                        c.unequipe(target, c);
+                        stealCard = CreateStealCardChoices(owner, target, card.Id);
+                        if (GameManager.LocalPlayer.Value == owner)
+                        {
+                            EventView.Manager.Emit(new SelectUsableCardPickedEvent(stealCard.Id, false, owner.Id));
+                        }
                     }),
                 new CardEffect("character.name.bob.power.attack",
                     targetableCondition: (player, owner) =>
@@ -175,10 +181,11 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
-                        KernelLog.Instance.GiveEquipement(GameManager.PlayerTurn.Value, player, c.Id);
-                        c.equipe(player, c);
-                        c.unequipe(GameManager.PlayerTurn.Value, c);
+                        giveCard = CreateGiveCardChoices(owner, player, card.Id);
+                        if (GameManager.LocalPlayer.Value == owner)
+                        {
+                            EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
+                        }
                     }),
                 new CardEffect("card.darkness.darkness_banane.effect.args.wound&1",
                     targetableCondition: (player, owner) =>
@@ -413,10 +420,11 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EquipmentCard c = player.ListCard[GameManager.rand.Next(0, player.ListCard.Count-1)] as EquipmentCard;
-                        KernelLog.Instance.StealEquipement(owner, player, c.Id);
-                        c.equipe(owner, c);
-                        c.unequipe(player, c);
+                        stealCard = CreateStealCardChoices(owner, player, card.Id);
+                        if (GameManager.LocalPlayer.Value == owner)
+                        {
+                            EventView.Manager.Emit(new SelectUsableCardPickedEvent(stealCard.Id, false, owner.Id));
+                        }
                     }),
                 new CardEffect("card.darkness.darkness_succube.nothing_happen",
                     targetableCondition: (player, owner) =>
@@ -441,10 +449,11 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EquipmentCard c = player.ListCard[GameManager.rand.Next(0, player.ListCard.Count-1)] as EquipmentCard;
-                        KernelLog.Instance.StealEquipement(owner, player, c.Id);
-                        c.equipe(owner, c);
-                        c.unequipe(player, c);
+                        stealCard = CreateStealCardChoices(owner, player, card.Id);
+                        if (GameManager.LocalPlayer.Value == owner)
+                        {
+                            EventView.Manager.Emit(new SelectUsableCardPickedEvent(stealCard.Id, false, owner.Id));
+                        }
                     }),
                 new CardEffect("card.darkness.darkness_succube.nothing_happen",
                     targetableCondition: (player, owner) =>
@@ -807,10 +816,11 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EquipmentCard c = player.ListCard[GameManager.rand.Next(0, player.ListCard.Count - 1)] as EquipmentCard;
-                        KernelLog.Instance.GiveEquipement(player, GameManager.PlayerTurn.Value, c.Id);
-                        c.equipe(GameManager.PlayerTurn.Value, c);
-                        c.unequipe(player, c);
+                        giveCard = CreateGiveCardChoices(owner, player, card.Id);
+                        if (GameManager.LocalPlayer.Value == owner)
+                        {
+                            EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
+                        }
                     })),
 
                 CreateVisionCard("card.vision.vision_cupide", CardType.Vision, "card.vision.vision_cupide.description", false,
@@ -835,10 +845,11 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
-                        KernelLog.Instance.GiveEquipement(player, GameManager.PlayerTurn.Value, c.Id);
-                        c.equipe(GameManager.PlayerTurn.Value, c);
-                        c.unequipe(owner, c);
+                        giveCard = CreateGiveCardChoices(owner, player, card.Id);
+                        if (GameManager.LocalPlayer.Value == owner)
+                        {
+                            EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
+                        }
                     })),
 
                 CreateVisionCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
@@ -865,10 +876,11 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
-                        KernelLog.Instance.GiveEquipement(player, GameManager.PlayerTurn.Value, c.Id);
-                        c.equipe(GameManager.PlayerTurn.Value, c);
-                        c.unequipe(owner, c);
+                        giveCard = CreateGiveCardChoices(owner, player, card.Id);
+                        if (GameManager.LocalPlayer.Value == owner)
+                        {
+                            EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
+                        }
                     })),
 
                 CreateVisionCard("card.vision.vision_enivrante", CardType.Vision, "card.vision.vision_enivrante.description", false,
@@ -895,10 +907,11 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
-                        KernelLog.Instance.GiveEquipement(player, GameManager.PlayerTurn.Value, c.Id);
-                        c.equipe(GameManager.PlayerTurn.Value, c);
-                        c.unequipe(owner, c);
+                        giveCard = CreateGiveCardChoices(owner, player, card.Id);
+                        if (GameManager.LocalPlayer.Value == owner)
+                        {
+                            EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
+                        }
                     })),
 
                 CreateVisionCard("card.vision.vision_furtive", CardType.Vision, "card.vision.vision_furtive.description", false,
@@ -923,10 +936,11 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
-                        KernelLog.Instance.GiveEquipement(player, GameManager.PlayerTurn.Value, c.Id);
-                        c.equipe(GameManager.PlayerTurn.Value, c);
-                        c.unequipe(owner, c);
+                        giveCard = CreateGiveCardChoices(owner, player, card.Id);
+                        if (GameManager.LocalPlayer.Value == owner)
+                        {
+                            EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
+                        }
                     })),
 
                 CreateVisionCard("card.vision.vision_furtive", CardType.Vision, "card.vision.vision_furtive.description", false,
@@ -951,10 +965,11 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        EquipmentCard c = owner.ListCard[GameManager.rand.Next(0, owner.ListCard.Count-1)] as EquipmentCard;
-                        KernelLog.Instance.GiveEquipement(player, GameManager.PlayerTurn.Value, c.Id);
-                        c.equipe(GameManager.PlayerTurn.Value, c);
-                        c.unequipe(owner, c);
+                        giveCard = CreateGiveCardChoices(owner, player, card.Id);
+                        if (GameManager.LocalPlayer.Value == owner)
+                        {
+                            EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
+                        }
                     })),
 
                 CreateVisionCard("card.vision.vision_divine", CardType.Vision, "card.vision.vision_divine.description", false,
@@ -1248,6 +1263,58 @@ namespace Assets.Noyau.Cards.controller
                 ));
             cards.Add(vision);
             return vision;
+        }
+
+        public UsableCard CreateStealCardChoices(Player thiefPlayer, Player stolenPlayer, int cardId)
+        {
+            Card baseCard = CardView.GetCard(cardId);
+            List<CardEffect> effects = new List<CardEffect>();
+            int nbcards = stolenPlayer.ListCard.Count;
+            for (int i = 0; i < nbcards; i++)
+            {
+                int tmp = i;
+                effects.Add(new CardEffect(stolenPlayer.ListCard[tmp].cardLabel,
+                    effect: (target, owner, card) =>
+                    {
+                        EquipmentCard c = stolenPlayer.ListCard[tmp] as EquipmentCard;
+                        KernelLog.Instance.StealEquipement(thiefPlayer, stolenPlayer, c.Id);
+                        c.equipe(owner, c);
+                        c.unequipe(target, c);
+                    },
+                    targetableCondition: (target, owner) =>
+                    {
+                        return owner == thiefPlayer
+                            && target == stolenPlayer;
+                    }
+                    ));
+            }
+            return CreateUsableCard(baseCard.cardLabel, baseCard.cardType, baseCard.description, false, effects.ToArray());
+        }
+
+        public UsableCard CreateGiveCardChoices(Player playerGiver, Player playerGiven, int cardId)
+        {
+            Card baseCard = CardView.GetCard(cardId);
+            List<CardEffect> effects = new List<CardEffect>();
+            int nbcards = playerGiver.ListCard.Count;
+            for (int i = 0; i < nbcards; i++)
+            {
+                int tmp = i;
+                effects.Add(new CardEffect(playerGiver.ListCard[tmp].cardLabel,
+                    effect: (target, owner, card) =>
+                    {
+                        EquipmentCard c = playerGiver.ListCard[tmp] as EquipmentCard;
+                        KernelLog.Instance.GiveEquipement(playerGiver, playerGiven, c.Id);
+                        c.equipe(target, c);
+                        c.unequipe(owner, c);
+                    },
+                    targetableCondition: (target, owner) =>
+                    {
+                        return owner == playerGiver
+                            && target == playerGiven;
+                    }
+                    ));
+            }
+            return CreateUsableCard(baseCard.cardLabel, baseCard.cardType, baseCard.description, false, effects.ToArray());
         }
     }
 }

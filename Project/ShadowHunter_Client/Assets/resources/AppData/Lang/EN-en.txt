@@ -196,6 +196,7 @@ card.vision.vision_lugubre.effect.args.heal&1;Heal &1 Wound
 card.vision.vision_lugubre.nothing_happen;Nothing happens
 card.vision.vision_reconfortante.effect.args.wound&1;Take &1 Wound
 card.vision.vision_reconfortante.effect.args.heal&1;Heal &1 Wound
+card.vision.vision_lugubre.effect.args.wound&1;Take &1 Wound
 card.vision.vision_reconfortante.nothing_happen;Nothing happens
 card.vision.vision_foudroyante.effect.args.wound&1;Take &1 Wound
 card.vision.vision_foudroyante.nothing_happen;Nothing happens
