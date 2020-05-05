@@ -1291,6 +1291,31 @@ namespace Assets.Noyau.Cards.controller
             return CreateUsableCard(baseCard.cardLabel, baseCard.cardType, baseCard.description, false, effects.ToArray());
         }
 
+        public UsableCard CreateStealCardChoices(Player thiefPlayer, Player stolenPlayer)
+        {
+            List<CardEffect> effects = new List<CardEffect>();
+            int nbcards = stolenPlayer.ListCard.Count;
+            for (int i = 0; i < nbcards; i++)
+            {
+                int tmp = i;
+                effects.Add(new CardEffect(stolenPlayer.ListCard[tmp].cardLabel,
+                    effect: (target, owner, card) =>
+                    {
+                        EquipmentCard c = stolenPlayer.ListCard[tmp] as EquipmentCard;
+                        KernelLog.Instance.StealEquipement(thiefPlayer, stolenPlayer, c.Id);
+                        c.equipe(owner, c);
+                        c.unequipe(target, c);
+                    },
+                    targetableCondition: (target, owner) =>
+                    {
+                        return owner == thiefPlayer
+                            && target == stolenPlayer;
+                    }
+                    ));
+            }
+            return CreateUsableCard(stolenPlayer.Character.characterName, CardType.Darkness, stolenPlayer.Character.characterName+".description", false, effects.ToArray());
+        }
+
         public UsableCard CreateGiveCardChoices(Player playerGiver, Player playerGiven, int cardId)
         {
             Card baseCard = CardView.GetCard(cardId);

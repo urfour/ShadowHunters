@@ -10,6 +10,7 @@ using Assets.Noyau.Manager.view;
 using Assets.Noyau.Cards.view;
 using Kernel.Settings;
 using Log;
+using Scripts.event_out;
 
 public enum PlayerNames
 {
@@ -224,6 +225,11 @@ public class Player
                 if (this.Disconnected.Value)
                 {
                     EquipmentCard card;
+                    CardView.GCard.stealCard = CardView.GCard.CreateStealCardChoices(playerAttacking, this);
+                    if (GameManager.LocalPlayer.Value == playerAttacking)
+                    {
+                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.stealCard.Id, false, playerAttacking.Id));
+                    }
                     for (int i = this.ListCard.Count - 1; i >= 0; i--)
                     {
                         card = this.ListCard[i] as EquipmentCard;
@@ -248,12 +254,12 @@ public class Player
                 }
                 else if (this.ListCard.Count > 0)
                 {
-                    EquipmentCard card = this.ListCard[GameManager.rand.Next(0, this.ListCard.Count - 1)] as EquipmentCard;
-
-                    card.equipe(playerAttacking, card);
-                    card.unequipe(this, card);
-
-                    // on défausse toutes les autres cartes
+                    EquipmentCard card;
+                    CardView.GCard.stealCard = CardView.GCard.CreateStealCardChoices(playerAttacking, this);
+                    if (GameManager.LocalPlayer.Value == playerAttacking)
+                    {
+                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.stealCard.Id, false, playerAttacking.Id));
+                    }
                     for (int i = this.ListCard.Count - 1; i >= 0; i--)
                     {
                         card = this.ListCard[i] as EquipmentCard;
@@ -335,8 +341,15 @@ public class Player
         if (Dead.Value)
             return;
         int realHeal = Mathf.Min(heal, this.Wound.Value);
-        this.Wound.Value -= realHeal;
-        KernelLog.Instance.HealWounds(this, realHeal);
+        if (realHeal == 0)
+        {
+            KernelLog.Instance.NothingHappen();
+        }
+        else
+        {
+            this.Wound.Value -= realHeal;
+            KernelLog.Instance.HealWounds(this, realHeal);
+        }
     }
     
 

@@ -363,6 +363,10 @@ namespace Assets.Noyau.Players.controller
                         }
                     }
 
+                    else if (lancer == 0)
+                    {
+                        KernelLog.Instance.AttackFailed(playerAttacking, playerAttacked);
+                    }
                     else
                     {
                         if (playerAttacking.HasGatling.Value)
