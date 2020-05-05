@@ -269,6 +269,10 @@ namespace Assets.Noyau.Players.controller
                         GameManager.TurnEndable.Value = true;
                         GameManager.WaitingPlayer.Value = null;
                     }
+                    else if (p1.HasSaber.Value)
+                    {
+                        GameManager.TurnEndable.Value = false;
+                    }
                 }
 
                 UsableCard uCard = c as UsableCard;
