@@ -256,7 +256,7 @@ public class Player
                     CardView.GCard.stealCardDiscardAllOthers = CardView.GCard.CreateStealCardChoicesDiscardAllOthers(playerAttacking, this);
                     if (GameManager.LocalPlayer.Value == playerAttacking)
                     {
-                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.stealCard.Id, false, playerAttacking.Id));
+                        EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.stealCardDiscardAllOthers.Id, false, playerAttacking.Id));
                     }
                 }
             }
