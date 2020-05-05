@@ -269,7 +269,7 @@ namespace Assets.Noyau.Players.controller
                         GameManager.TurnEndable.Value = true;
                         GameManager.WaitingPlayer.Value = null;
                     }
-                    else if (p1.HasSaber.Value)
+                    else if (GameManager.PlayerTurn.Value.HasSaber.Value)
                     {
                         GameManager.TurnEndable.Value = false;
                     }
