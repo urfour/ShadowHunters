@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3927648091082021400}
   - component: {fileID: 4207919147221992324}
   - component: {fileID: 5006722770095677176}
-  - component: {fileID: 4529335956605221938}
   - component: {fileID: 549581025418301781}
   m_Layer: 5
   m_Name: LogMessage
@@ -60,13 +59,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 06d276470d3a26e4bb7777f0f88364d3, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0
@@ -79,21 +78,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
---- !u!114 &4529335956605221938
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5520356998898578726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e984706f0d06b3a4a907cb9689323db7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  elemClass: 2
-  elemType: 4
-  emMultiplier: 1
 --- !u!114 &549581025418301781
 MonoBehaviour:
   m_ObjectHideFlags: 0
