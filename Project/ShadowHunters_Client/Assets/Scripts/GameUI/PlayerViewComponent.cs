@@ -114,16 +114,16 @@ public class PlayerViewComponent : MonoBehaviour
             };
             listeners.Add((player.Revealed, revealNotification));
 
-            listeners.Add((player.OnEquipmentGet, (sender) =>
+            player.OnEquipmentGet.AddListener((sender) =>
             {
                 AudioManager.Instance.PlayAsync("game.action.get_equipment", true, false);
             }
-            ));
-            listeners.Add((player.OnEquipmentLoose, (sender) =>
+            );
+            player.OnEquipmentLoose.AddListener((sender) =>
             {
                 AudioManager.Instance.PlayAsync("game.action.loose_equipment", true, false);
             }
-            ));
+            );
         }
 
         revealButton.interactable = player.Revealable.Value;
