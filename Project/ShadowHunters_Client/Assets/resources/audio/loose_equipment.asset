@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7afe3fac877dfb74ea1b9dc9bd6fa7d4, type: 3}
   m_Name: loose_equipment
   m_EditorClassIdentifier: 
-  label: game.action.loose_equipemtn
+  label: game.action.loose_equipment
   clip: {fileID: 8300000, guid: 843fca5fd6bfbfe4fa9e510f15306cb8, type: 3}
