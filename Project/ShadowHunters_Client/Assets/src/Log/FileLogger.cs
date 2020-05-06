@@ -21,8 +21,10 @@ namespace Log
 
         public void Comment(string msg)
         {
+            /*
             byte[] buffer = Encoding.Unicode.GetBytes("[COMMENT] " + msg + "\n\n");
             logFile.Write(buffer, 0, buffer.Length);
+            */
         }
 
         public void Error(string msg)
@@ -44,8 +46,10 @@ namespace Log
 
         public void Info(string msg)
         {
+            /*
             byte[] buffer = Encoding.Unicode.GetBytes("[INFO] " + msg + "\n\n");
             logFile.Write(buffer, 0, buffer.Length);
+            */
         }
 
         public void Warning(string msg)
