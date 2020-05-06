@@ -1356,6 +1356,7 @@ namespace Assets.Noyau.Cards.controller
                             c.unequipe(target, c);
 
                         }
+                        GameManager.AttackAvailable.Value = true;
                     },
                     targetableCondition: (target, owner) =>
                     {
