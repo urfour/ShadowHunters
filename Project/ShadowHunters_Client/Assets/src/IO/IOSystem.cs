@@ -10,7 +10,7 @@ namespace IO
 {
     class IOSystem : MonoBehaviour
     {
-        public static string DataFolder = Path.GetFullPath(Path.Combine(Application.persistentDataPath, "ShadowHunters"));
+        public static string DataFolder = Path.GetFullPath(Application.persistentDataPath);
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void OnBeforeSceneLoadRuntimeMethod()
