@@ -67,6 +67,8 @@ namespace Assets.Noyau.Manager.view
         /// Booléen qui annonce si l'action d'attaquer est possible.
         /// </summary>
         public static Setting<bool> AttackAvailable { get; private set; } = new Setting<bool>(false);
+
+        public static Setting<bool> AttackDone { get; private set; } = new Setting<bool>(false);
         
         /// <summary>
         /// Booléen qui annonce si l'on peut piocher une carte Vision.
@@ -142,6 +144,14 @@ namespace Assets.Noyau.Manager.view
                 Board.Add(i, p[index]);
                 p.RemoveAt(index);
             }
+
+            AttackAvailable.AddListener((sender) =>
+            {
+                if (AttackAvailable.Value && AttackDone.Value)
+                {
+                    AttackAvailable.Value = false;
+                }
+            });
             
             foreach (Player player in PlayerView.GetPlayers())
             {

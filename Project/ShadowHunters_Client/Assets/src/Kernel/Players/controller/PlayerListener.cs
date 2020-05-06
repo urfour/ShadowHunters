@@ -27,6 +27,7 @@ namespace Assets.Noyau.Players.controller
             if (e is EndTurnEvent ete)
             {
                 GameManager.AttackAvailable.Value = false;
+                GameManager.AttackDone.Value = false;
 
                 if (GameManager.PlayerTurn.Value == null)
                 {
@@ -406,6 +407,7 @@ namespace Assets.Noyau.Players.controller
                     GameManager.TurnEndable.Value = true;
                     GameManager.WaitingPlayer.Value = null;
 
+                    GameManager.AttackDone.Value = true;
                     GameManager.AttackAvailable.Value = false;
                 }
             }
