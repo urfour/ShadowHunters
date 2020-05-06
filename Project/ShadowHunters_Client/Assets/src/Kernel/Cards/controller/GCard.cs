@@ -1285,6 +1285,7 @@ namespace Assets.Noyau.Cards.controller
                 effects.Add(new CardEffect(stolenPlayer.ListCard[tmp].cardLabel,
                     effect: (target, owner, card) =>
                     {
+                        GameManager.AttackAvailable.Value = false;
                         EquipmentCard c = stolenPlayer.ListCard[tmp] as EquipmentCard;
                         KernelLog.Instance.StealEquipement(thiefPlayer, stolenPlayer, c.Id);
                         c.equipe(owner, c);
@@ -1310,6 +1311,7 @@ namespace Assets.Noyau.Cards.controller
                 effects.Add(new CardEffect(stolenPlayer.ListCard[tmp].cardLabel,
                     effect: (target, owner, card) =>
                     {
+                        GameManager.AttackAvailable.Value = false;
                         EquipmentCard c = stolenPlayer.ListCard[tmp] as EquipmentCard;
                         KernelLog.Instance.StealEquipement(thiefPlayer, stolenPlayer, c.Id);
                         c.equipe(owner, c);
@@ -1335,6 +1337,7 @@ namespace Assets.Noyau.Cards.controller
                 effects.Add(new CardEffect(stolenPlayer.ListCard[tmp].cardLabel,
                     effect: (target, owner, card) =>
                     {
+                        GameManager.AttackAvailable.Value = false;
                         EquipmentCard c = target.ListCard[tmp] as EquipmentCard;
                         KernelLog.Instance.StealEquipement(owner, target, c.Id);
                         c.equipe(owner, c);
@@ -1375,6 +1378,7 @@ namespace Assets.Noyau.Cards.controller
                 effects.Add(new CardEffect(playerGiver.ListCard[tmp].cardLabel,
                     effect: (target, owner, card) =>
                     {
+                        GameManager.AttackAvailable.Value = false;
                         EquipmentCard c = playerGiver.ListCard[tmp] as EquipmentCard;
                         KernelLog.Instance.GiveEquipement(playerGiver, playerGiven, c.Id);
                         c.equipe(target, c);
