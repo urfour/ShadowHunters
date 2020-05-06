@@ -1293,6 +1293,10 @@ namespace Assets.Noyau.Cards.controller
                         c.unequipe(target, c);
 
                         GameManager.AttackAvailable.Value = true;
+                        if (GameManager.PlayerTurn.Value.getTargetablePlayers().Count == 0)
+                        {
+                            GameManager.TurnEndable.Value = true;
+                        }
                     },
                     targetableCondition: (target, owner) =>
                     {
@@ -1302,35 +1306,6 @@ namespace Assets.Noyau.Cards.controller
                     ));
             }
             return CreateUsableCard(baseCard.cardLabel, baseCard.cardType, baseCard.description, false, effects.ToArray());
-        }
-
-        public UsableCard CreateStealCardChoices(Player thiefPlayer, Player stolenPlayer)
-        {
-            GameManager.TurnEndable.Value = false;
-            GameManager.AttackAvailable.Value = false;
-            List<CardEffect> effects = new List<CardEffect>();
-            int nbcards = stolenPlayer.ListCard.Count;
-            for (int i = 0; i < nbcards; i++)
-            {
-                int tmp = i;
-                effects.Add(new CardEffect(stolenPlayer.ListCard[tmp].cardLabel,
-                    effect: (target, owner, card) =>
-                    {
-                        EquipmentCard c = stolenPlayer.ListCard[tmp] as EquipmentCard;
-                        KernelLog.Instance.StealEquipement(thiefPlayer, stolenPlayer, c.Id);
-                        c.equipe(owner, c);
-                        c.unequipe(target, c);
-
-                        GameManager.AttackAvailable.Value = true;
-                    },
-                    targetableCondition: (target, owner) =>
-                    {
-                        return owner == thiefPlayer
-                            && target == stolenPlayer;
-                    }
-                    ));
-            }
-            return CreateUsableCard(stolenPlayer.Character.characterName, CardType.Darkness, stolenPlayer.Character.characterName+".description", false, effects.ToArray());
         }
 
         public UsableCard CreateStealCardChoicesDiscardAllOthers(Player thiefPlayer, Player stolenPlayer)
@@ -1393,6 +1368,8 @@ namespace Assets.Noyau.Cards.controller
                         c.unequipe(owner, c);
 
                         GameManager.AttackAvailable.Value = true;
+                        if (owner == GameManager.PlayerTurn.Value && owner.getTargetablePlayers().Count == 0)
+                            GameManager.TurnEndable.Value = true;
                     },
                     targetableCondition: (target, owner) =>
                     {
