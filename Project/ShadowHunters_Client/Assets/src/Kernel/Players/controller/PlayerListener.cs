@@ -272,12 +272,13 @@ namespace Assets.Noyau.Players.controller
                 if (!GameManager.StartOfTurn.Value)
                 {
                     GameManager.AttackAvailable.Value = true;
-                    if (!p1.HasSaber.Value || p1 != GameManager.PlayerTurn.Value || (p1.HasSaber.Value && p1.getTargetablePlayers().Count == 0))
+                    if (!GameManager.PlayerTurn.Value.HasSaber.Value || (GameManager.PlayerTurn.Value.HasSaber.Value &&
+                        GameManager.PlayerTurn.Value.getTargetablePlayers().Count == 0))
                     {
                         GameManager.TurnEndable.Value = true;
                         GameManager.WaitingPlayer.Value = null;
                     }
-                    else if (GameManager.PlayerTurn.Value.HasSaber.Value)
+                    else
                     {
                         GameManager.TurnEndable.Value = false;
                     }
