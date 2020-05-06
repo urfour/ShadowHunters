@@ -1,0 +1,430 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Manager &mdash; ShadowHunters v0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Players" href="players.html" />
+    <link rel="prev" title="Events" href="events.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ShadowHunters
+          
+
+          
+            
+            <img src="_static/shadowhunters.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Kernel</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cards.html">Cards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Events</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="players.html">Players</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Network</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="server.html">Server</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ShadowHunters</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Manager</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/manager.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="manager">
+<h1>Manager<a class="headerlink" href="#manager" title="Permalink to this headline">¶</a></h1>
+<p>It’s the ‘main’ file that initiate all the others and the different listeners</p>
+<div class="literal-block-wrapper docutils container" id="gamemanager">
+<div class="code-block-caption"><span class="caption-text">GameManager.cs</span><a class="headerlink" href="#gamemanager" title="Permalink to this code">¶</a></div>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="nn">Assets.Noyau.Cards.view</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Assets.Noyau.Players.controller</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Assets.Noyau.Players.view</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Assets.src.Kernel.Players.controller</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">EventSystem</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Kernel.Settings</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Log</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Scripts</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Scripts.event_in</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Text</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Threading.Tasks</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">Assets.Noyau.Manager.view</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">enum</span> <span class="n">Position</span>
+    <span class="p">{</span>
+        <span class="n">None</span><span class="p">,</span>
+        <span class="n">Antre</span><span class="p">,</span>
+        <span class="n">Cimetiere</span><span class="p">,</span>
+        <span class="n">Foret</span><span class="p">,</span>
+        <span class="n">Monastere</span><span class="p">,</span>
+        <span class="n">Porte</span><span class="p">,</span>
+        <span class="n">Sanctuaire</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">GameManager</span>
+    <span class="p">{</span>
+        <span class="k">private</span> <span class="k">static</span> <span class="n">PlayerListener</span> <span class="n">playerListener</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+        <span class="k">private</span> <span class="k">static</span> <span class="n">DisconnectionListener</span> <span class="n">disconnectionListener</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+
+        <span class="k">private</span> <span class="k">static</span> <span class="n">System</span><span class="p">.</span><span class="n">Random</span> <span class="n">Rand</span><span class="p">;</span>
+        <span class="k">private</span> <span class="k">static</span> <span class="kt">int</span> <span class="n">nbRandCall</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="k">static</span> <span class="n">System</span><span class="p">.</span><span class="n">Random</span> <span class="n">rand</span>
+        <span class="p">{</span>
+            <span class="k">get</span>
+            <span class="p">{</span>
+                <span class="n">nbRandCall</span><span class="p">++;</span>
+                <span class="n">Logger</span><span class="p">.</span><span class="n">Comment</span><span class="p">(</span><span class="s">&quot;rand call &quot;</span> <span class="p">+</span> <span class="n">nbRandCall</span> <span class="p">+</span> <span class="s">&quot; \n&quot;</span> <span class="p">+</span> <span class="n">Environment</span><span class="p">.</span><span class="n">StackTrace</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">Rand</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">set</span>
+            <span class="p">{</span>
+                <span class="n">Rand</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">static</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="n">Player</span><span class="p">&gt;</span> <span class="n">LocalPlayer</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="n">Player</span><span class="p">&gt;(</span><span class="k">null</span><span class="p">);</span>
+
+        <span class="c1">/// &lt;summary&gt;</span>
+        <span class="c1">/// Propriété d&#39;accès au joueur dont c&#39;est le tour.</span>
+        <span class="c1">/// &lt;/summary&gt;</span>
+        <span class="k">public</span> <span class="k">static</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="n">Player</span><span class="p">&gt;</span> <span class="n">PlayerTurn</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="n">Player</span><span class="p">&gt;(</span><span class="k">null</span><span class="p">);</span>
+        <span class="c1">/// &lt;summary&gt;</span>
+        <span class="c1">/// Booléen qui annonce si c&#39;est le début du tour.</span>
+        <span class="c1">/// &lt;/summary&gt;</span>
+        <span class="k">public</span> <span class="k">static</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">StartOfTurn</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">true</span><span class="p">);</span>
+        <span class="c1">/// &lt;summary&gt;</span>
+        <span class="c1">/// Booléen qui annonce si le déplacement du personnage est possible.</span>
+        <span class="c1">/// &lt;/summary&gt;</span>
+        <span class="k">public</span> <span class="k">static</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">MovementAvailable</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+        <span class="c1">/// &lt;summary&gt;</span>
+        <span class="c1">/// Booléen qui annonce si l&#39;action d&#39;attaquer est possible.</span>
+        <span class="c1">/// &lt;/summary&gt;</span>
+        <span class="k">public</span> <span class="k">static</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">AttackAvailable</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+
+        <span class="k">public</span> <span class="k">static</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">AttackDone</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+        
+        <span class="c1">/// &lt;summary&gt;</span>
+        <span class="c1">/// Booléen qui annonce si l&#39;on peut piocher une carte Vision.</span>
+        <span class="c1">/// &lt;/summary&gt;</span>
+        <span class="k">public</span> <span class="k">static</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">PickVisionDeck</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+        <span class="c1">/// &lt;summary&gt;</span>
+        <span class="c1">/// Booléen qui annonce si l&#39;on peut piocher une carte Ténèbre.</span>
+        <span class="c1">/// &lt;/summary&gt;</span>
+        <span class="k">public</span> <span class="k">static</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">PickDarknessDeck</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+        <span class="c1">/// &lt;summary&gt;</span>
+        <span class="c1">/// Booléen qui annonce si l&#39;on peut piocher une carte Lumière.</span>
+        <span class="c1">/// &lt;/summary&gt;</span>
+        <span class="k">public</span> <span class="k">static</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">PickLightnessDeck</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+        
+        <span class="c1">/// &lt;summary&gt;</span>
+        <span class="c1">/// Booléen qui annonce si l&#39;on a tué un autre personnage.</span>
+        <span class="c1">/// &lt;/summary&gt;</span>
+        <span class="k">public</span> <span class="k">static</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">HasKilled</span> <span class="p">{</span><span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+        
+        <span class="c1">/// &lt;summary&gt;</span>
+        <span class="c1">/// Booléen qui annonce si l&#39;on peut terminer le tour.</span>
+        <span class="c1">/// &lt;/summary&gt;</span>
+        <span class="k">public</span> <span class="k">static</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">TurnEndable</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+
+
+        <span class="k">public</span> <span class="k">static</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="n">Player</span><span class="p">&gt;</span> <span class="n">WaitingPlayer</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="n">Player</span><span class="p">&gt;();</span>
+
+        <span class="k">public</span> <span class="k">static</span> <span class="kt">int</span> <span class="n">PlayerAttackedByBob</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
+        <span class="k">public</span> <span class="k">static</span> <span class="kt">int</span> <span class="n">DamageDoneByBob</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
+        <span class="c1">/// &lt;summary&gt;</span>
+        <span class="c1">/// Dictionnaire de tuple pour le terrain du jeu.</span>
+        <span class="c1">/// &lt;/summary&gt;</span>
+        <span class="k">public</span> <span class="k">static</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Position</span><span class="p">&gt;</span> <span class="n">Board</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">Position</span><span class="p">&gt;();</span>
+
+        <span class="k">public</span> <span class="k">static</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">GameEnded</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+
+        <span class="c1">/// &lt;summary&gt;</span>
+        <span class="c1">/// Initialise l&#39;ensemble du jeu.</span>
+        <span class="c1">/// &lt;/summary&gt;</span>
+        <span class="c1">/// &lt;param name=&quot;nbPlayers&quot;&gt;Le nombre de joueurs de la partie&lt;/param&gt;</span>
+        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Init</span><span class="p">(</span><span class="kt">int</span> <span class="n">nbPlayers</span><span class="p">,</span> <span class="kt">int</span> <span class="n">randSeed</span><span class="p">,</span> <span class="kt">int</span> <span class="n">localPlayer</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">new</span> <span class="nf">KernelLog</span><span class="p">();</span>
+            <span class="n">playerListener</span> <span class="p">=</span> <span class="k">new</span> <span class="n">PlayerListener</span><span class="p">();</span>
+            <span class="n">disconnectionListener</span> <span class="p">=</span> <span class="k">new</span> <span class="n">DisconnectionListener</span><span class="p">();</span>
+            <span class="n">EventView</span><span class="p">.</span><span class="n">Manager</span><span class="p">.</span><span class="n">AddListener</span><span class="p">(</span><span class="n">playerListener</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+            <span class="n">EventView</span><span class="p">.</span><span class="n">Manager</span><span class="p">.</span><span class="n">AddListener</span><span class="p">(</span><span class="n">disconnectionListener</span><span class="p">);</span>
+
+            <span class="n">rand</span> <span class="p">=</span> <span class="k">new</span> <span class="n">System</span><span class="p">.</span><span class="n">Random</span><span class="p">(</span><span class="n">randSeed</span><span class="p">);</span>
+            
+            <span class="n">PlayerView</span><span class="p">.</span><span class="n">Init</span><span class="p">(</span><span class="n">nbPlayers</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">localPlayer</span> <span class="p">!=</span> <span class="p">-</span><span class="m">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">LocalPlayer</span><span class="p">.</span><span class="n">Value</span> <span class="p">=</span> <span class="n">PlayerView</span><span class="p">.</span><span class="n">GetPlayer</span><span class="p">(</span><span class="n">localPlayer</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="n">CardView</span><span class="p">.</span><span class="n">Init</span><span class="p">();</span>
+
+            <span class="n">List</span><span class="p">&lt;</span><span class="n">Position</span><span class="p">&gt;</span> <span class="n">p</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Position</span><span class="p">&gt;()</span>
+            <span class="p">{</span>
+                <span class="n">Position</span><span class="p">.</span><span class="n">Antre</span><span class="p">,</span>
+                <span class="n">Position</span><span class="p">.</span><span class="n">Cimetiere</span><span class="p">,</span>
+                <span class="n">Position</span><span class="p">.</span><span class="n">Foret</span><span class="p">,</span>
+                <span class="n">Position</span><span class="p">.</span><span class="n">Monastere</span><span class="p">,</span>
+                <span class="n">Position</span><span class="p">.</span><span class="n">Porte</span><span class="p">,</span>
+                <span class="n">Position</span><span class="p">.</span><span class="n">Sanctuaire</span>
+            <span class="p">};</span>
+            
+            <span class="kt">int</span> <span class="n">index</span><span class="p">;</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="m">6</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
+            <span class="p">{</span>
+                <span class="n">index</span> <span class="p">=</span> <span class="n">rand</span><span class="p">.</span><span class="n">Next</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">Count</span><span class="p">);</span>
+                <span class="n">Board</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="n">index</span><span class="p">]);</span>
+                <span class="n">p</span><span class="p">.</span><span class="n">RemoveAt</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="n">AttackAvailable</span><span class="p">.</span><span class="n">AddListener</span><span class="p">((</span><span class="n">sender</span><span class="p">)</span> <span class="p">=&gt;</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">AttackAvailable</span><span class="p">.</span><span class="n">Value</span> <span class="p">&amp;&amp;</span> <span class="n">AttackDone</span><span class="p">.</span><span class="n">Value</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">AttackAvailable</span><span class="p">.</span><span class="n">Value</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">});</span>
+            
+            <span class="k">foreach</span> <span class="p">(</span><span class="n">Player</span> <span class="n">player</span> <span class="k">in</span> <span class="n">PlayerView</span><span class="p">.</span><span class="n">GetPlayers</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="n">player</span><span class="p">.</span><span class="n">Character</span><span class="p">.</span><span class="n">goal</span><span class="p">.</span><span class="n">setWinningListeners</span><span class="p">(</span><span class="n">player</span><span class="p">);</span>
+                <span class="n">OnNotification</span> <span class="n">gameEnded</span> <span class="p">=</span> <span class="p">(</span><span class="n">sender</span><span class="p">)</span> <span class="p">=&gt;</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">player</span><span class="p">.</span><span class="n">HasWon</span><span class="p">.</span><span class="n">Value</span> <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="n">GameEnded</span><span class="p">.</span><span class="n">Value</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="k">foreach</span><span class="p">(</span><span class="n">Player</span> <span class="n">pl</span> <span class="k">in</span> <span class="n">PlayerView</span><span class="p">.</span><span class="n">GetPlayers</span><span class="p">())</span>
+                        <span class="p">{</span>
+                            <span class="n">pl</span><span class="p">.</span><span class="n">Character</span><span class="p">.</span><span class="n">goal</span><span class="p">.</span><span class="n">checkWinning</span><span class="p">(</span><span class="n">pl</span><span class="p">);</span>
+                        <span class="p">}</span>
+                        <span class="n">GameEnded</span><span class="p">.</span><span class="n">Value</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">};</span>
+                <span class="n">player</span><span class="p">.</span><span class="n">HasWon</span><span class="p">.</span><span class="n">AddListener</span><span class="p">(</span><span class="n">gameEnded</span><span class="p">);</span>
+
+                <span class="n">OnNotification</span> <span class="n">playerDisconnect</span> <span class="p">=</span> <span class="p">(</span><span class="n">sender</span><span class="p">)</span> <span class="p">=&gt;</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">GameManager</span><span class="p">.</span><span class="n">PlayerTurn</span><span class="p">.</span><span class="n">Value</span> <span class="p">==</span> <span class="n">player</span> <span class="p">&amp;&amp;</span> <span class="n">GameManager</span><span class="p">.</span><span class="n">LocalPlayer</span><span class="p">.</span><span class="n">Value</span> <span class="p">==</span> <span class="n">PlayerView</span><span class="p">.</span><span class="n">NextPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">))</span>
+                    <span class="p">{</span>
+                        <span class="n">EventView</span><span class="p">.</span><span class="n">Manager</span><span class="p">.</span><span class="n">Emit</span><span class="p">(</span><span class="k">new</span> <span class="n">EndTurnEvent</span><span class="p">(</span><span class="n">player</span><span class="p">.</span><span class="n">Id</span><span class="p">));</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">GameManager</span><span class="p">.</span><span class="n">WaitingPlayer</span><span class="p">.</span><span class="n">Value</span> <span class="p">==</span> <span class="n">player</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">GameManager</span><span class="p">.</span><span class="n">TurnEndable</span><span class="p">.</span><span class="n">Value</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">};</span>
+
+                <span class="n">player</span><span class="p">.</span><span class="n">Disconnected</span><span class="p">.</span><span class="n">AddListener</span><span class="p">(</span><span class="n">playerDisconnect</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Clean</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">EventView</span><span class="p">.</span><span class="n">Manager</span><span class="p">.</span><span class="n">RemoveListener</span><span class="p">(</span><span class="n">playerListener</span><span class="p">);</span>
+            <span class="n">EventView</span><span class="p">.</span><span class="n">Manager</span><span class="p">.</span><span class="n">RemoveListener</span><span class="p">(</span><span class="n">disconnectionListener</span><span class="p">);</span>
+            <span class="n">PlayerView</span><span class="p">.</span><span class="n">Clean</span><span class="p">();</span>
+            <span class="n">CardView</span><span class="p">.</span><span class="n">Clean</span><span class="p">();</span>
+            <span class="n">Board</span><span class="p">.</span><span class="n">Clear</span><span class="p">();</span>
+            <span class="n">LocalPlayer</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="n">Player</span><span class="p">&gt;(</span><span class="k">null</span><span class="p">);</span>
+            <span class="n">PlayerTurn</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="n">Player</span><span class="p">&gt;(</span><span class="k">null</span><span class="p">);</span>
+            <span class="n">StartOfTurn</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">true</span><span class="p">);</span>
+            <span class="n">MovementAvailable</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+            <span class="n">AttackAvailable</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+            <span class="n">PickVisionDeck</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+            <span class="n">PickLightnessDeck</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+            <span class="n">PickDarknessDeck</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+            <span class="n">HasKilled</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+            <span class="n">TurnEndable</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+            <span class="n">WaitingPlayer</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="n">Player</span><span class="p">&gt;();</span>
+            <span class="n">GameEnded</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+
+            <span class="n">rand</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="players.html" class="btn btn-neutral float-right" title="Players" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="events.html" class="btn btn-neutral float-left" title="Events" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Groupe MN
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

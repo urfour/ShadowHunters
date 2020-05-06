@@ -1,0 +1,532 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Players &mdash; ShadowHunters v0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Server" href="server.html" />
+    <link rel="prev" title="Manager" href="manager.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ShadowHunters
+          
+
+          
+            
+            <img src="_static/shadowhunters.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Kernel</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cards.html">Cards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manager.html">Manager</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Players</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#controller">Controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#view">View</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Network</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="server.html">Server</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ShadowHunters</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Players</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/players.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="players">
+<h1>Players<a class="headerlink" href="#players" title="Permalink to this headline">¶</a></h1>
+<p>Implemented in the software design pattern MVC (Model View Controller).</p>
+<div class="section" id="controller">
+<h2>Controller<a class="headerlink" href="#controller" title="Permalink to this headline">¶</a></h2>
+<p>This is where the different classes in the Model folder are instanciated.</p>
+<dl class="class">
+<dt id="class-GCharacter">
+<code class="sig-name descname">class GCharacter</code><a class="headerlink" href="#class-GCharacter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that insanciate every character in the game.</p>
+<dl class="method">
+<dt id="method-GCharacter.GCharacter">
+<em>public</em> <code class="sig-name descname">GCharacter</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <em>nbPlayers</em><span class="sig-paren">)</span><a class="headerlink" href="#method-GCharacter.GCharacter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor of the class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-GCharacter.PickCharacter">
+<em>public</em> <a class="reference internal" href="#class-Character" title="Character class">Character</a> <code class="sig-name descname">PickCharacter</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-GCharacter.PickCharacter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that pick randomly a character in a list of character.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-GGoal">
+<code class="sig-name descname">class GGoal</code><a class="headerlink" href="#class-GGoal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Static class that insanciate the winning conditions of every character.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">public</span> <span class="k">static</span> <span class="n">Goal</span> <span class="n">HunterGoal</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Goal</span><span class="p">(</span> <span class="n">checkWinning</span><span class="p">,</span> <span class="n">setWinningListeners</span> <span class="p">);</span>
+<span class="k">public</span> <span class="k">static</span> <span class="n">Goal</span> <span class="n">ShadowGoal</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Goal</span><span class="p">(</span> <span class="n">checkWinning</span><span class="p">,</span> <span class="n">setWinningListeners</span> <span class="p">);</span>
+<span class="k">public</span> <span class="k">static</span> <span class="n">Goal</span> <span class="n">AllieGoal</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Goal</span><span class="p">(</span> <span class="n">checkWinning</span><span class="p">,</span> <span class="n">setWinningListeners</span> <span class="p">);</span>
+<span class="k">public</span> <span class="k">static</span> <span class="n">Goal</span> <span class="n">BobGoal</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Goal</span><span class="p">(</span> <span class="n">checkWinning</span><span class="p">,</span> <span class="n">setWinningListeners</span> <span class="p">);</span>
+<span class="k">public</span> <span class="k">static</span> <span class="n">Goal</span> <span class="n">CharlesGoal</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Goal</span><span class="p">(</span> <span class="n">checkWinning</span><span class="p">,</span> <span class="n">setWinningListeners</span> <span class="p">);</span>
+<span class="k">public</span> <span class="k">static</span> <span class="n">Goal</span> <span class="n">DanielGoal</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Goal</span><span class="p">(</span> <span class="n">checkWinning</span><span class="p">,</span> <span class="n">setWinningListeners</span> <span class="p">);</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="class-GPlayer">
+<code class="sig-name descname">class GPlayer</code><a class="headerlink" href="#class-GPlayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that insanciate a character to a player.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">public</span> <span class="n">Player</span><span class="p">[]</span> <span class="n">Players</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>Array of players.</p>
+<dl class="method">
+<dt id="method-GPlayer.GPlayer">
+<em>public</em> <code class="sig-name descname">GPlayer</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <em>nbPlayers</em><span class="sig-paren">)</span><a class="headerlink" href="#method-GPlayer.GPlayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor of the class.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-GPower">
+<code class="sig-name descname">class GPower</code><a class="headerlink" href="#class-GPower" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that insanciate the power of a character.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">public</span> <span class="k">static</span> <span class="n">Power</span> <span class="n">George</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Power</span><span class="p">(</span> <span class="n">power</span><span class="p">,</span> <span class="n">addListeners</span><span class="p">,</span> <span class="n">availability</span> <span class="p">);</span>
+<span class="k">public</span> <span class="k">static</span> <span class="n">Power</span> <span class="n">Franklin</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Power</span><span class="p">(</span> <span class="n">power</span><span class="p">,</span> <span class="n">addListeners</span><span class="p">,</span> <span class="n">availability</span> <span class="p">);</span>
+<span class="k">public</span> <span class="k">static</span> <span class="n">Power</span> <span class="n">Emi</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Power</span><span class="p">(</span> <span class="n">power</span><span class="p">,</span> <span class="n">addListeners</span><span class="p">,</span> <span class="n">availability</span> <span class="p">);</span>
+<span class="k">public</span> <span class="k">static</span> <span class="n">Power</span> <span class="n">Loup</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Power</span><span class="p">(</span> <span class="n">power</span><span class="p">,</span> <span class="n">addListeners</span><span class="p">,</span> <span class="n">availability</span> <span class="p">);</span>
+<span class="k">public</span> <span class="k">static</span> <span class="n">Power</span> <span class="n">Vampire</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Power</span><span class="p">(</span> <span class="n">power</span><span class="p">,</span> <span class="n">addListeners</span><span class="p">,</span> <span class="n">availability</span> <span class="p">);</span>
+<span class="k">public</span> <span class="k">static</span> <span class="n">Power</span> <span class="n">Allie</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Power</span><span class="p">(</span> <span class="n">power</span><span class="p">,</span> <span class="n">addListeners</span><span class="p">,</span> <span class="n">availability</span> <span class="p">);</span>
+<span class="k">public</span> <span class="k">static</span> <span class="n">Power</span> <span class="n">Bob</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Power</span><span class="p">(</span> <span class="n">power</span><span class="p">,</span> <span class="n">addListeners</span><span class="p">,</span> <span class="n">availability</span> <span class="p">);</span>
+<span class="k">public</span> <span class="k">static</span> <span class="n">Power</span> <span class="n">Charles</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Power</span><span class="p">(</span> <span class="n">power</span><span class="p">,</span> <span class="n">addListeners</span><span class="p">,</span> <span class="n">availability</span> <span class="p">);</span>
+<span class="k">public</span> <span class="k">static</span> <span class="n">Power</span> <span class="n">Daniel</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Power</span><span class="p">(</span> <span class="n">power</span><span class="p">,</span> <span class="n">addListeners</span><span class="p">,</span> <span class="n">availability</span> <span class="p">);</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="class-PlayerListener">
+<code class="sig-name descname">class PlayerListener</code><a class="headerlink" href="#class-PlayerListener" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-PlayerListener.IListener">
+: IListener&lt;PlayerEvent&gt;<a class="headerlink" href="#inherits-PlayerListener.IListener" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Class that listen every event_in.</p>
+<dl class="method">
+<dt id="method-PlayerListener.OnEvent">
+<em>public</em> void <code class="sig-name descname">OnEvent</code> <span class="sig-paren">(</span>PlayerEvent <em>e</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a>[] <em>tags</em><em> = null</em><span class="sig-paren">)</span><a class="headerlink" href="#method-PlayerListener.OnEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="model">
+<h2>Model<a class="headerlink" href="#model" title="Permalink to this headline">¶</a></h2>
+<p>This is where every part of the character is defined.</p>
+<dl class="class">
+<dt id="class-Character">
+<code class="sig-name descname">class Character</code><a class="headerlink" href="#class-Character" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class of the definition of a character.</p>
+<dl class="enum">
+<dt id="enum-Character.CharacterTeam">
+<code class="sig-name descname">enum CharacterTeam</code><a class="headerlink" href="#enum-Character.CharacterTeam" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="value">
+<dt id="value-Character.CharacterTeam.Shadow, Hunter, Neutral">
+<code class="sig-name descname">Shadow, Hunter, Neutral</code><a class="headerlink" href="#value-Character.CharacterTeam.Shadow, Hunter, Neutral" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Character.Character">
+<em>public</em> <code class="sig-name descname">Character</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <em>characterName</em>, <a class="reference internal" href="#enum-Character.CharacterTeam" title="Character.CharacterTeam enum">CharacterTeam</a> <em>team</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <em>characterHP</em>, <a class="reference internal" href="#class-Goal" title="Goal class">Goal</a> <em>goal</em>, <a class="reference internal" href="#class-Power" title="Power class">Power</a> <em>power</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Character.Character" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor of the class.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Goal">
+<code class="sig-name descname">class Goal</code><a class="headerlink" href="#class-Goal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class of the definition of a winning condition.</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">public</span> <span class="k">delegate</span> <span class="k">void</span> <span class="nf">CheckWinningCondition</span><span class="p">(</span><span class="n">Player</span> <span class="n">owner</span><span class="p">);</span>
+<span class="k">public</span> <span class="k">delegate</span> <span class="k">void</span> <span class="nf">SetWinningListeners</span><span class="p">(</span><span class="n">Player</span> <span class="n">owner</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Functions used to tests if the winning condition is reached and to add listeners on specific attributes.</p>
+<dl class="method">
+<dt id="method-Goal.Goal">
+<em>public</em> <code class="sig-name descname">Goal</code> <span class="sig-paren">(</span>CheckWinningCondition <em>checkWinning</em>, SetWinningListeners <em>setWinningListeners</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Goal.Goal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor of the class.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Player">
+<code class="sig-name descname">class Player</code><a class="headerlink" href="#class-Player" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class of the definition of a player.</p>
+<dl class="enum">
+<dt id="enum-Player.PlayerNames">
+<code class="sig-name descname">enum PlayerNames</code><a class="headerlink" href="#enum-Player.PlayerNames" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="value">
+<dt id="value-Player.PlayerNames.Alpha, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel">
+<code class="sig-name descname">Alpha, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel</code><a class="headerlink" href="#value-Player.PlayerNames.Alpha, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, Hotel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="c1">// id du joueur</span>
+<span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="c1">// nom du joueur</span>
+<span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="c1">// nombre de blessure</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">Wound</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(</span><span class="m">0</span><span class="p">);</span>
+<span class="c1">// carte révélée à tous ou cachée</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">Revealed</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+<span class="c1">// vivant ou mort</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">Dead</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+<span class="c1">// pouvoir déjà utilisé ou non</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">UsedPower</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+<span class="c1">// bonus d&#39;attaque (par défaut = 0)</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">BonusAttack</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(</span><span class="m">0</span><span class="p">);</span>
+<span class="c1">// malus d&#39;attaque (par défaut = 0)</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">MalusAttack</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(</span><span class="m">0</span><span class="p">);</span>
+<span class="c1">// réduction du nombre de Blessures subites (par défaut = 0)</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">ReductionWounds</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(</span><span class="m">0</span><span class="p">);</span>
+<span class="c1">// le joueur possède-t-il la mitrailleuse ?</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">HasGatling</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+<span class="c1">// le joueur possède-t-il le revolver ?</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">HasRevolver</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+<span class="c1">// le joueur possède-t-il le sabre ?</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">HasSaber</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+<span class="c1">// le joueur possède-t-il l&#39;amulette ?</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">HasAmulet</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+<span class="c1">// le joueur possède-t-il la broche ?</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">HasBroche</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+<span class="c1">// le joueur possède-t-il la boussole ?</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">HasCompass</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+<span class="c1">// le joueur possède-t-il le crucifix ?</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">HasCrucifix</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+<span class="c1">// le joueur possède-t-il la lance ?</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">HasSpear</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+<span class="c1">// le joueur possède-t-il la toge ?</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">HasToge</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+<span class="c1">// le joueur est-il sous l&#39;effet de l&#39;ange gardien ?</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">HasGuardian</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+<span class="c1">// le joueur est-il sous l&#39;effet du savoir ancestral ?</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">HasAncestral</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+<span class="c1">// nb d&#39;équipements</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">NbEquipment</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(</span><span class="m">0</span><span class="p">);</span>
+<span class="c1">// le joueur a-t-il gagné ?</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">HasWon</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+<span class="c1">// position du joueur</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">Position</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(-</span><span class="m">1</span><span class="p">);</span>
+
+<span class="c1">// personnage du joueur</span>
+<span class="k">public</span> <span class="n">Character</span> <span class="n">Character</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="c1">// liste des cartes possédées par le joueur</span>
+<span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Card</span><span class="p">&gt;</span> <span class="n">ListCard</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="c1">// le joueur peut-il utiliser son pouvoir ?</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">CanUsePower</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+<span class="c1">// le joueur a-t-il déjà utilisé son pouvoir une fois (utilisé pour les usages uniques)</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">PowerUsed</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="k">false</span><span class="p">);</span>
+<span class="c1">// Id du joueur qui m&#39;a attaqué en dernier (Loup-garou)</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">OnAttacked</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(-</span><span class="m">1</span><span class="p">);</span>
+<span class="c1">// Id du joueur que j&#39;ai attaqué en dernier (Charles)</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">OnAttacking</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(-</span><span class="m">1</span><span class="p">);</span>
+<span class="c1">// Nombre de dommage reçu</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">OnDealDamage</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(</span><span class="m">0</span><span class="p">);</span>
+<span class="c1">// Nombre de dommage infligé pour la dernière fois en attaquant</span>
+<span class="k">public</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">DamageDealed</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Setting</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(-</span><span class="m">1</span><span class="p">);</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="method-Player.Player">
+<em>public</em> <code class="sig-name descname">Player</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <em>id</em>, <a class="reference internal" href="#class-Character" title="Character class">Character</a> <em>c</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Player.Player" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor of the class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Player.Wounded">
+<em>public</em> <em>virtual</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <code class="sig-name descname">Wounded</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <em>damage</em>, <a class="reference internal" href="#class-Player" title="Player class">Player</a> <em>attacker</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <em>isAttack</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Player.Wounded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that deals damage.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Player.Healed">
+<em>public</em> <em>virtual</em> void <code class="sig-name descname">Healed</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <em>heal</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Player.Healed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that heals.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Player.AddCard">
+<em>public</em> void <code class="sig-name descname">AddCard</code> <span class="sig-paren">(</span><a class="reference internal" href="cards.html#class-Card" title="Card class">Card</a> <em>card</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Player.AddCard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that add a card in the hands of a player.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Player.RemoveCard">
+<em>public</em> void <code class="sig-name descname">RemoveCard</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Player.RemoveCard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that remove a card from the hand of a player.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Player.HasCard">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <code class="sig-name descname">HasCard</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <em>cardName</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Player.HasCard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that check if a player has a card.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Player.getTargetablePlayers">
+<em>public</em> List&lt;<a class="reference internal" href="#class-Player" title="Player class">Player</a>&gt; <code class="sig-name descname">getTargetablePlayers</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Player.getTargetablePlayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that lists every others players that can be targeted.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Power">
+<code class="sig-name descname">class Power</code><a class="headerlink" href="#class-Power" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">public</span> <span class="k">delegate</span> <span class="k">void</span> <span class="nf">CharaterPower</span><span class="p">(</span><span class="n">Player</span> <span class="n">owner</span><span class="p">);</span>
+<span class="k">public</span> <span class="k">delegate</span> <span class="k">void</span> <span class="nf">CharaterAvailabilityPowerListeners</span><span class="p">(</span><span class="n">Player</span> <span class="n">owner</span><span class="p">);</span>
+<span class="k">public</span> <span class="k">delegate</span> <span class="k">void</span> <span class="nf">CharaterAvailabilityPower</span><span class="p">(</span><span class="n">Player</span> <span class="n">owner</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Functions used to implemente the power of a character, when he can uses his powers
+and add listeners on specific attributes.</p>
+<dl class="method">
+<dt id="method-Power.Power">
+<em>public</em> <code class="sig-name descname">Power</code> <span class="sig-paren">(</span>CharacterPower <em>power</em>, CharacterAvailabilityPowerListeners <em>addListeners</em>, CharacterAvailabilityPower <em>availability</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Power.Power" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor of the class.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="view">
+<h2>View<a class="headerlink" href="#view" title="Permalink to this headline">¶</a></h2>
+<p>This is the part where the Controller is called to generate every players needed for the game.</p>
+<dl class="class">
+<dt id="class-PlayerView">
+<code class="sig-name descname">class PlayerView</code><a class="headerlink" href="#class-PlayerView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that initiate a character for every player</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">private</span> <span class="k">static</span> <span class="n">GPlayer</span> <span class="n">gPlayer</span><span class="p">;</span>
+<span class="k">public</span> <span class="k">static</span> <span class="kt">int</span> <span class="n">NbPlayer</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="method-PlayerView.Init">
+<em>public</em> <em>static</em> void <code class="sig-name descname">Init</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <em>nbPlayers</em><span class="sig-paren">)</span><a class="headerlink" href="#method-PlayerView.Init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initiate every player.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-PlayerView.Clean">
+<em>public</em> <em>static</em> void <code class="sig-name descname">Clean</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-PlayerView.Clean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destructor of every player.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-PlayerView.GetPlayer">
+<em>public</em> <em>static</em> <a class="reference internal" href="#class-Player" title="Player class">Player</a> <code class="sig-name descname">GetPlayer</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#method-PlayerView.GetPlayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a player by his Id.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-PlayerView.GetPlayers">
+<em>public</em> <em>static</em> <a class="reference internal" href="#class-Player" title="Player class">Player</a>[] <code class="sig-name descname">GetPlayers</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-PlayerView.GetPlayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get every players.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-PlayerView.NextPlayer">
+<em>public</em> <em>static</em> <a class="reference internal" href="#class-Player" title="Player class">Player</a> <code class="sig-name descname">NextPlayer</code> <span class="sig-paren">(</span><a class="reference internal" href="#class-Player" title="Player class">Player</a> <em>currentPlayer</em><span class="sig-paren">)</span><a class="headerlink" href="#method-PlayerView.NextPlayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select the next player.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="server.html" class="btn btn-neutral float-right" title="Server" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="manager.html" class="btn btn-neutral float-left" title="Manager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Groupe MN
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

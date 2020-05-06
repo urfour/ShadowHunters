@@ -1,0 +1,1188 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Server &mdash; ShadowHunters v0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Players" href="players.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ShadowHunters
+          
+
+          
+            
+            <img src="_static/shadowhunters.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Kernel</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cards.html">Cards</a></li>
+<li class="toctree-l1"><a class="reference internal" href="events.html">Events</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manager.html">Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="players.html">Players</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Network</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#accounts">Accounts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eventsystem">EventSystem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#view">View</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#controller">Controller</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#io">IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#log">Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#network">Network</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#model">model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">controller</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#properties">Properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rooms">Rooms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#serverinterface">ServerInterface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#authevents">AuthEvents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#event-in">event_in</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#event-out">event_out</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#roomevents">RoomEvents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">event_in</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">event_out</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#settings">Settings</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ShadowHunters</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Server</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/server.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="server">
+<h1>Server<a class="headerlink" href="#server" title="Permalink to this headline">¶</a></h1>
+<p>The server will transfer game events between the clients, and will receive authentification and room managing events from the clients. The server will answer by sending specific events.</p>
+<div class="section" id="accounts">
+<h2>Accounts<a class="headerlink" href="#accounts" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="class-Accounts.GAccount">
+<code class="sig-name descname">class GAccount</code><a class="headerlink" href="#class-Accounts.GAccount" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-Accounts.GAccount.IListener">
+: IListener&lt;AuthEvent&gt;<a class="headerlink" href="#inherits-Accounts.GAccount.IListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class used to listen for incoming AuthEvents, and to manage authentification.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Accounts.GAccount.Instance">
+<em>static</em> GAccounts <code class="sig-name descname">Instance</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Accounts.GAccount.Instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instanciate the account manager.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Accounts.GAccount.ConnectedAccounts">
+<em>Dictionary&lt;Account,</em> Client&gt; <code class="sig-name descname">ConnectedAccounts</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Accounts.GAccount.ConnectedAccounts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionnary used to associate each connected Account to a Client.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Accounts.GAccount.OnEvent">
+<em>public</em> void <code class="sig-name descname">OnEvent</code> <span class="sig-paren">(</span>AuthEvent <em>e</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a>[] <em>tags</em><em> = null</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Accounts.GAccount.OnEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method controlling the behavior of the server depending on the received AuthEvent.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Accounts.GAccount.OnClientDisconnect">
+<em>public</em> void <code class="sig-name descname">OnClientDisconnect</code> <span class="sig-paren">(</span>Client <em>c</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Accounts.GAccount.OnClientDisconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the account of the disconnected client from the list of all ConnectedAccounts.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Accounts.GAccount.Authentify">
+<em>private</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.byte" title="System.Byte">Byte</a> <code class="sig-name descname">Authentify</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <em>login</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Accounts.GAccount.Authentify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Asks the database if the given login/password pair match an existing user. Returns 0 if they match, 1 if the password is invalid, and 2 if they do not match at all.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Accounts.GAccount.CreateAccount">
+<em>private</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">CreateAccount</code> <span class="sig-paren">(</span>SignInEvent <em>sie</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Accounts.GAccount.CreateAccount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Asks the database to create a new account from the login and password stored in the SignInEvent. Returns true if the account has been create, false otherwise.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Accounts.GAccount.Init">
+<em>public</em> <em>static</em> void <code class="sig-name descname">Init</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Accounts.GAccount.Init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the Account manager.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="eventsystem">
+<h2>EventSystem<a class="headerlink" href="#eventsystem" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="view">
+<h3>View<a class="headerlink" href="#view" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="class-EventSystem.Event">
+<code class="sig-name descname">class Event</code><a class="headerlink" href="#class-EventSystem.Event" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Base class, inherited by all events transmitted by an IEventManager. Each class inheriting it must have a parameterless constructor and public attributes, to make the serialization work.</p>
+</div></blockquote>
+<dl class="method">
+<dt id="method-EventSystem.Event.Deserialize">
+<em>public</em> <em>static</em> <a class="reference internal" href="#class-EventSystem.Event" title="EventSystem.Event class">Event</a> <code class="sig-name descname">Deserialize</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <em>data</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <em>catchInvalidType</em><em> = false</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.Event.Deserialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserializes an event from the XML string generated by the function Event.Serialize.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.Event.Serialize">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <code class="sig-name descname">Serialize</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.Event.Serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes the event to XML format.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-EventSystem.EventView">
+<code class="sig-name descname">class EventView</code><a class="headerlink" href="#class-EventSystem.EventView" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Class used to create an IEventManager and instanciate it.</p>
+</div></blockquote>
+<dl class="property">
+<dt id="property-EventSystem.EventView.Manager">
+<em>static</em> <a class="reference internal" href="#class-EventSystem.IEventManager" title="EventSystem.IEventManager class">IEventManager</a> <code class="sig-name descname">Manager</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-EventSystem.EventView.Manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new IEventManager.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.EventView.Load">
+<em>public</em> <em>static</em> void <code class="sig-name descname">Load</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.EventView.Load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instanciates the EventManager.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-EventSystem.IEventManager">
+<code class="sig-name descname">class IEventManager</code><a class="headerlink" href="#class-EventSystem.IEventManager" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Interface of an event controller.</p>
+</div></blockquote>
+<dl class="method">
+<dt id="method-EventSystem.IEventManager.Emit">
+void <code class="sig-name descname">Emit</code> <span class="sig-paren">(</span><a class="reference internal" href="#class-EventSystem.Event" title="EventSystem.Event class">Event</a> <em>e</em>, <em>params</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a>[] <em>tags</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.IEventManager.Emit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a signal to all IListeners added to this IEventManager instance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.IEventManager.AddListener">
+void <code class="sig-name descname">AddListener</code>&lt;T&gt; <span class="sig-paren">(</span><a class="reference internal" href="#class-EventSystem.IListener" title="EventSystem.IListener class">IListener</a>&lt;T&gt; <em>listener</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <em>MainThreaded</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.IEventManager.AddListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a Listener to the list of listeners. T inherits Event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.IEventManager.RemoveListener">
+void <code class="sig-name descname">RemoveListener</code>&lt;T&gt; <span class="sig-paren">(</span><a class="reference internal" href="#class-EventSystem.IListener" title="EventSystem.IListener class">IListener</a>&lt;T&gt; <em>listener</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.IEventManager.RemoveListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a Listener from the list of listeners. T inherits Event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.IEventManager.ExecMainThreaded">
+void <code class="sig-name descname">ExecMainThreaded</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.IEventManager.ExecMainThreaded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-EventSystem.IEventManager.Log">
+Log <code class="sig-name descname">Log</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-EventSystem.IEventManager.Log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints messages.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-EventSystem.IEventManager.LogWarning">
+Log <code class="sig-name descname">LogWarning</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-EventSystem.IEventManager.LogWarning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints warnings.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-EventSystem.IEventManager.LogError">
+Log <code class="sig-name descname">LogError</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-EventSystem.IEventManager.LogError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints errors. If defined, catches exceptions directly causes by the transmission of an event to a listener. Else, an exception will be raised with the error message.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-EventSystem.IListener">
+<code class="sig-name descname">class IListener&lt;T&gt;</code><a class="headerlink" href="#class-EventSystem.IListener" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Interface of all listeners added to an IEventManager. T inherits Event.</p>
+</div></blockquote>
+<dl class="method">
+<dt id="method-EventSystem.IListener.OnEvent">
+void <code class="sig-name descname">OnEvent</code> <span class="sig-paren">(</span>T <em>e</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a>[] <em>tags</em><em> = null</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.IListener.OnEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method called each time an IEvent is sent to an IEventManager in which this IListener has been added.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-EventSystem.ListenableObject">
+<code class="sig-name descname">class ListenableObject</code><a class="headerlink" href="#class-EventSystem.ListenableObject" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="method-EventSystem.ListenableObject.AddListener">
+<em>public</em> void <code class="sig-name descname">AddListener</code> <span class="sig-paren">(</span>OnNotification <em>listener</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.ListenableObject.AddListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a Listener to the list of observers.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.ListenableObject.RemoveListener">
+<em>public</em> void <code class="sig-name descname">RemoveListener</code> <span class="sig-paren">(</span>OnNotification <em>listener</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.ListenableObject.RemoveListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a Listener from the list of observers.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.ListenableObject.Notify">
+<em>public</em> void <code class="sig-name descname">Notify</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.ListenableObject.Notify" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="controller">
+<h3>Controller<a class="headerlink" href="#controller" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="class-EventSystem.ListenerInstance">
+<code class="sig-name descname">class ListenerInstance</code><a class="headerlink" href="#class-EventSystem.ListenerInstance" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Internal class</p>
+</div></blockquote>
+<dl class="property">
+<dt id="property-EventSystem.ListenerInstance.Type">
+<em>public</em> Type <code class="sig-name descname">Type</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-EventSystem.ListenerInstance.Type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-EventSystem.ListenerInstance.Listener">
+<em>public</em> object <code class="sig-name descname">Listener</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-EventSystem.ListenerInstance.Listener" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-EventSystem.ListenerInstance.MainThreaded">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">MainThreaded</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-EventSystem.ListenerInstance.MainThreaded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.ListenerInstance.ListenerInstance">
+<em>public</em> <code class="sig-name descname">ListenerInstance</code> <span class="sig-paren">(</span>object <em>listener</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <em>mainThreaded</em><em> = false</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.ListenerInstance.ListenerInstance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.ListenerInstance.OnEvent">
+<em>public</em> void <code class="sig-name descname">OnEvent</code> <span class="sig-paren">(</span><a class="reference internal" href="#class-EventSystem.Event" title="EventSystem.Event class">Event</a> <em>e</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a>[] <em>tags</em><em> = null</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.ListenerInstance.OnEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-EventSystem.WaitingLaunchEvent">
+<code class="sig-name descname">class WaitingLaunchEvent</code><a class="headerlink" href="#class-EventSystem.WaitingLaunchEvent" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Internal class</p>
+</div></blockquote>
+<dl class="property">
+<dt id="property-EventSystem.WaitingLaunchEvent.Listener">
+<em>public</em> <a class="reference internal" href="#class-EventSystem.ListenerInstance" title="EventSystem.ListenerInstance class">ListenerInstance</a> <code class="sig-name descname">Listener</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-EventSystem.WaitingLaunchEvent.Listener" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-EventSystem.WaitingLaunchEvent.Event">
+<em>public</em> <a class="reference internal" href="#class-EventSystem.Event" title="EventSystem.Event class">Event</a> <code class="sig-name descname">Event</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-EventSystem.WaitingLaunchEvent.Event" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-EventSystem.WaitingLaunchEvent.Tags">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a>[] <code class="sig-name descname">Tags</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-EventSystem.WaitingLaunchEvent.Tags" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.WaitingLaunchEvent.WaitingLaunchEvent">
+<em>public</em> <code class="sig-name descname">WaitingLaunchEvent</code> <span class="sig-paren">(</span><a class="reference internal" href="#class-EventSystem.ListenerInstance" title="EventSystem.ListenerInstance class">ListenerInstance</a> <em>listener</em>, <a class="reference internal" href="#class-EventSystem.Event" title="EventSystem.Event class">Event</a> <em>e</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a>[] <em>tags</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.WaitingLaunchEvent.WaitingLaunchEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-EventSystem.EventManager">
+<code class="sig-name descname">class EventManager</code><a class="headerlink" href="#class-EventSystem.EventManager" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-EventSystem.EventManager.IEventManager">
+: <a class="reference internal" href="#class-EventSystem.IEventManager" title="EventSystem.IEventManager class">IEventManager</a><a class="headerlink" href="#inherits-EventSystem.EventManager.IEventManager" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-EventSystem.EventManager.Listeners">
+<em>Dictionary&lt;Type,</em> List&lt;ListenerInstance&gt;&gt; <code class="sig-name descname">Listeners</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-EventSystem.EventManager.Listeners" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionnary that contains all listeners for every subtype of IEvent.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-EventSystem.EventManager.Event">
+<em>public</em> <a class="reference internal" href="#class-EventSystem.Event" title="EventSystem.Event class">Event</a> <code class="sig-name descname">Event</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-EventSystem.EventManager.Event" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-EventSystem.EventManager.AllListeners">
+<em>internal</em> List&lt;<a class="reference internal" href="#class-EventSystem.ListenerInstance" title="EventSystem.ListenerInstance class">ListenerInstance</a>&gt; <code class="sig-name descname">AllListeners</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-EventSystem.EventManager.AllListeners" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-EventSystem.EventManager.EventsToLaunch">
+<em>internal</em> Queue&lt;<a class="reference internal" href="#class-EventSystem.WaitingLaunchEvent" title="EventSystem.WaitingLaunchEvent class">WaitingLaunchEvent</a>&gt; <code class="sig-name descname">EventsToLaunch</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-EventSystem.EventManager.EventsToLaunch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-EventSystem.EventManager.Log">
+Log <code class="sig-name descname">Log</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-EventSystem.EventManager.Log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints messages.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-EventSystem.EventManager.LogWarning">
+Log <code class="sig-name descname">LogWarning</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-EventSystem.EventManager.LogWarning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints warnings.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-EventSystem.EventManager.LogError">
+Log <code class="sig-name descname">LogError</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-EventSystem.EventManager.LogError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints errors. If defined, catches exceptions directly causes by the transmission of an event to a listener. Else, an exception will be raised with the error message.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.EventManager.Emit">
+void <code class="sig-name descname">Emit</code> <span class="sig-paren">(</span><a class="reference internal" href="#class-EventSystem.Event" title="EventSystem.Event class">Event</a> <em>e</em>, <em>params</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a>[] <em>tags</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.EventManager.Emit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a signal to all IListeners added to this IEventManager instance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.EventManager.AddListener">
+void <code class="sig-name descname">AddListener</code>&lt;T&gt; <span class="sig-paren">(</span><a class="reference internal" href="#class-EventSystem.IListener" title="EventSystem.IListener class">IListener</a>&lt;T&gt; <em>listener</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <em>MainThreaded</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.EventManager.AddListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a Listener of T to the list of listeners. T inherits Event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.EventManager.RemoveListener">
+void <code class="sig-name descname">RemoveListener</code>&lt;T&gt; <span class="sig-paren">(</span><a class="reference internal" href="#class-EventSystem.IListener" title="EventSystem.IListener class">IListener</a>&lt;T&gt; <em>listener</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.EventManager.RemoveListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a Listener of T from the list of listeners. T inherits Event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.EventManager.ExecMainThreaded">
+<em>public</em> void <code class="sig-name descname">ExecMainThreaded</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.EventManager.ExecMainThreaded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="io">
+<h2>IO<a class="headerlink" href="#io" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="class-EventSystem.IOSystem">
+<code class="sig-name descname">class IOSystem</code><a class="headerlink" href="#class-EventSystem.IOSystem" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="method-EventSystem.IOSystem.FileExists">
+<em>public</em> <em>static</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">FileExists</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.IOSystem.FileExists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.IOSystem.DirectoryExists">
+<em>public</em> <em>static</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">DirectoryExists</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.IOSystem.DirectoryExists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.IOSystem.CreateFile">
+<em>public</em> <em>static</em> void <code class="sig-name descname">CreateFile</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <em>path</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a>[] <em>allLines</em><em> = null</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <em>deletePrevious</em><em> = false</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.IOSystem.CreateFile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt>
+<em>public</em> <em>static</em> FileStream <code class="sig-name descname">CreateFile</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <em>path</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <em>deletePrevious</em><em> = false</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.IOSystem.DeleteFile">
+<em>public</em> <em>static</em> void <code class="sig-name descname">DeleteFile</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.IOSystem.DeleteFile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.IOSystem.GetFullPath">
+<em>public</em> <em>static</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <code class="sig-name descname">GetFullPath</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.IOSystem.GetFullPath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.IOSystem.GetAllFileNames">
+<em>public</em> <em>static</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a>[] <code class="sig-name descname">GetAllFileNames</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <em>directory</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <em>with_extension</em><em> = false</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.IOSystem.GetAllFileNames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="method-EventSystem.IOSystem.GetAllLines">
+<em>public</em> <em>static</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a>[] <code class="sig-name descname">GetAllLines</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#method-EventSystem.IOSystem.GetAllLines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="log">
+<h2>Log<a class="headerlink" href="#log" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="network">
+<h2>Network<a class="headerlink" href="#network" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="model">
+<h3>model<a class="headerlink" href="#model" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="class-Network.model.Client">
+<code class="sig-name descname">class Client</code><a class="headerlink" href="#class-Network.model.Client" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-Network.model.Client.ListenableObject">
+: ListenableObject<a class="headerlink" href="#inherits-Network.model.Client.ListenableObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the TCP connection from a Server.Accept() and manage the sending/receiving of events.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Network.model.Client.TcpClient">
+<em>private</em> TcpClient <code class="sig-name descname">TcpClient</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Network.model.Client.TcpClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>TCPClient of the client.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Network.model.Client.ListenThread">
+<em>private</em> Thread <code class="sig-name descname">ListenThread</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Network.model.Client.ListenThread" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-Network.model.Client.Stream">
+<em>private</em> NetworkStream <code class="sig-name descname">Stream</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Network.model.Client.Stream" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stream on which data will be sent for this client.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Network.model.Client.OnDisconnect">
+<em>public</em> ListenableObject <code class="sig-name descname">OnDisconnect</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Network.model.Client.OnDisconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Listener waiting for this client to disconnect.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Network.model.Client.OnConnect">
+<em>static</em> List&lt;OnNotification&gt; <code class="sig-name descname">OnConnect</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Network.model.Client.OnConnect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-Network.model.Client.Room">
+<em>public</em> Room <code class="sig-name descname">Room</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Network.model.Client.Room" title="Permalink to this definition">¶</a></dt>
+<dd><p>Room in which this client is.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Network.model.Client.Account">
+<em>public</em> Account <code class="sig-name descname">Account</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Network.model.Client.Account" title="Permalink to this definition">¶</a></dt>
+<dd><p>Account associated with this client.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Network.model.Client.JoinRoom">
+<em>public</em> void <code class="sig-name descname">JoinRoom</code> <span class="sig-paren">(</span>Room <em>new_room</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Network.model.Client.JoinRoom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add this client to a Room.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Network.model.Client.LeaveRoom">
+<em>public</em> void <code class="sig-name descname">LeaveRoom</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Network.model.Client.LeaveRoom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes this client from this Room.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Network.model.Client.Stop">
+<em>public</em> void <code class="sig-name descname">Stop</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Network.model.Client.Stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Closes the connection with the client.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Network.model.Client.Send">
+<em>public</em> void <code class="sig-name descname">Send</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Network.model.Client.Send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a string to the client.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<em>public</em> void <code class="sig-name descname">Send</code> <span class="sig-paren">(</span>Event <em>e</em><span class="sig-paren">)</span></dt>
+<dd><p>Sends an event to this client.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Network.model.Client.Listen">
+<em>private</em> void <code class="sig-name descname">Listen</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Network.model.Client.Listen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Listens incoming messages from the Client, and tries to serialize them into an Event. If it works, the event will sent in the IEventMAnager; else, it will be transmitted to the client’s room.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Network.model.Server">
+<code class="sig-name descname">class Server</code><a class="headerlink" href="#class-Network.model.Server" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Manages incoming connections.</p>
+</div></blockquote>
+<dl class="property">
+<dt id="property-Network.model.Server.Listener">
+<em>private</em> TcpListener <code class="sig-name descname">Listener</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Network.model.Server.Listener" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-Network.model.Server.ListenThread">
+<em>private</em> Thread <code class="sig-name descname">ListenThread</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Network.model.Server.ListenThread" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="property">
+<dt id="property-Network.model.Server.GClient">
+<em>private</em> GClient <code class="sig-name descname">GClient</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Network.model.Server.GClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The client manager of this server.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Network.model.Server.Stop">
+<em>public</em> void <code class="sig-name descname">Stop</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Network.model.Server.Stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the server.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Network.model.Server.AcceptClients">
+<em>public</em> void <code class="sig-name descname">AcceptClients</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Network.model.Server.AcceptClients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accepts incoming clients.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="id1">
+<h3>controller<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="class-Network.controller.GClient">
+<code class="sig-name descname">class GClient</code><a class="headerlink" href="#class-Network.controller.GClient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="property">
+<dt id="property-Network.controller.GClient.Instance">
+<em>static</em> <a class="reference internal" href="#class-Network.controller.GClient" title="Network.controller.GClient class">GClient</a> <code class="sig-name descname">Instance</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Network.controller.GClient.Instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Instance of the client manager</p>
+<dl class="property">
+<dt id="property-Network.controller.GClient.ConnectedClients">
+<em>Dictionary&lt;string,</em> Client&gt; <code class="sig-name descname">ConnectedClients</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Network.controller.GClient.ConnectedClients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionnary associating a string to a Client.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="rooms">
+<h2>Rooms<a class="headerlink" href="#rooms" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="class-Rooms.GRooms">
+<code class="sig-name descname">class GRooms</code><a class="headerlink" href="#class-Rooms.GRooms" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-Rooms.GRooms.IListener">
+: IListener&lt;RoomEvent&gt;<a class="headerlink" href="#inherits-Rooms.GRooms.IListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class used to listen for incoming RoomEvents, and to manage authentification.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Rooms.GRooms.Instance">
+<em>static</em> GRoom <code class="sig-name descname">Instance</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Rooms.GRooms.Instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instanciates the room manager.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Rooms.GRooms.Rooms">
+<em>Dictionary&lt;int,</em> Room&gt; <code class="sig-name descname">Rooms</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Rooms.GRooms.Rooms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionnary used to associate their code to each Room.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Rooms.GRooms.OnEvent">
+<em>public</em> void <code class="sig-name descname">OnEvent</code> <span class="sig-paren">(</span>RoomEvent <em>e</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a>[] <em>tags</em><em> = null</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Rooms.GRooms.OnEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method controlling the behavior of the server depending on the received RoomEvent.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Rooms.GRooms.Init">
+<em>public</em> <em>static</em> void <code class="sig-name descname">Init</code> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-Rooms.GRooms.Init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the Account manager.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Rooms.GRooms.AddClient">
+<em>public</em> void <code class="sig-name descname">AddClient</code> <span class="sig-paren">(</span>Client <em>c</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Rooms.GRooms.AddClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a client to the Global Room and adds a listener waiting for the disconnection of this user</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Rooms.GRooms.RemoveClient">
+<em>public</em> void <code class="sig-name descname">RemoveClient</code> <span class="sig-paren">(</span>Client <em>c</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Rooms.GRooms.RemoveClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the client from the Global Room.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Rooms.GRooms.OnClientDisconnect">
+<em>public</em> void <code class="sig-name descname">OnClientDisconnect</code> <span class="sig-paren">(</span>Client <em>c</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Rooms.GRooms.OnClientDisconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes the client and his account from his room.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Rooms.GRooms.RemovePlayerFromRoom">
+<em>public</em> void <code class="sig-name descname">RemovePlayerFromRoom</code> <span class="sig-paren">(</span>Client <em>c</em>, RoomData <em>r</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <em>notifyClient</em><em> = true</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <em>leaveMessage</em><em> = null</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Rooms.GRooms.RemovePlayerFromRoom" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a Client from a Room.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="serverinterface">
+<h2>ServerInterface<a class="headerlink" href="#serverinterface" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="authevents">
+<h3>AuthEvents<a class="headerlink" href="#authevents" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="class-ServerInterface.AuthEvents.AuthEvent">
+<code class="sig-name descname">class AuthEvent</code><a class="headerlink" href="#class-ServerInterface.AuthEvents.AuthEvent" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Class modelizing an account.</p>
+</div></blockquote>
+<dl class="property">
+<dt id="property-ServerInterface.AuthEvents.AuthEvent.Login">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <code class="sig-name descname">Login</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.AuthEvents.AuthEvent.Login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Login of the Account.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-ServerInterface.AuthEvents.AuthEvent.IsLogged">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">IsLogged</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.AuthEvents.AuthEvent.IsLogged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean set to true if someone is logged to this Account, or to false otherwise.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt>
+<code class="sig-name descname">class AuthEvent</code></dt>
+<dd><dl class="inherits">
+<dt id="inherits-ServerInterface.AuthEvents.AuthEvent.ServerOnlyEvent">
+: ServerOnlyEvent<a class="headerlink" href="#inherits-ServerInterface.AuthEvents.AuthEvent.ServerOnlyEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base authentification event, inherited by all other authentification events.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="event-in">
+<h4>event_in<a class="headerlink" href="#event-in" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="class-ServerInterface.AuthEvents.AccountDataEvent">
+<code class="sig-name descname">class AccountDataEvent</code><a class="headerlink" href="#class-ServerInterface.AuthEvents.AccountDataEvent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-ServerInterface.AuthEvents.AccountDataEvent.AuthEvent">
+: <a class="reference internal" href="#class-ServerInterface.AuthEvents.AuthEvent" title="ServerInterface.AuthEvents.AuthEvent class">AuthEvent</a><a class="headerlink" href="#inherits-ServerInterface.AuthEvents.AccountDataEvent.AuthEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event to give his Account’s data to a client.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-ServerInterface.AuthEvents.AccountDataEvent.Account">
+<em>public</em> Account <code class="sig-name descname">Account</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.AuthEvents.AccountDataEvent.Account" title="Permalink to this definition">¶</a></dt>
+<dd><p>The object containing the data of the account.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-ServerInterface.AuthEvents.AssingAccountEvent">
+<code class="sig-name descname">class AssingAccountEvent</code><a class="headerlink" href="#class-ServerInterface.AuthEvents.AssingAccountEvent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-ServerInterface.AuthEvents.AssingAccountEvent.AuthEvent">
+: <a class="reference internal" href="#class-ServerInterface.AuthEvents.AuthEvent" title="ServerInterface.AuthEvents.AuthEvent class">AuthEvent</a><a class="headerlink" href="#inherits-ServerInterface.AuthEvents.AssingAccountEvent.AuthEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event to assign an Account to a client.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-ServerInterface.AuthEvents.AssingAccountEvent.Account">
+<em>public</em> Account <code class="sig-name descname">Account</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.AuthEvents.AssingAccountEvent.Account" title="Permalink to this definition">¶</a></dt>
+<dd><p>The object containing the data of the account.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-ServerInterface.AuthEvents.AuthInvalidEvent">
+<code class="sig-name descname">class AuthInvalidEvent</code><a class="headerlink" href="#class-ServerInterface.AuthEvents.AuthInvalidEvent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-ServerInterface.AuthEvents.AuthInvalidEvent.AuthEvent">
+: <a class="reference internal" href="#class-ServerInterface.AuthEvents.AuthEvent" title="ServerInterface.AuthEvents.AuthEvent class">AuthEvent</a><a class="headerlink" href="#inherits-ServerInterface.AuthEvents.AuthInvalidEvent.AuthEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event to report the failure of a request to a client.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="event-out">
+<h4>event_out<a class="headerlink" href="#event-out" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="class-ServerInterface.AuthEvents.AskAccountEvent">
+<code class="sig-name descname">class AskAccountEvent</code><a class="headerlink" href="#class-ServerInterface.AuthEvents.AskAccountEvent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-ServerInterface.AuthEvents.AskAccountEvent.AuthEvent">
+: <a class="reference internal" href="#class-ServerInterface.AuthEvents.AuthEvent" title="ServerInterface.AuthEvents.AuthEvent class">AuthEvent</a><a class="headerlink" href="#inherits-ServerInterface.AuthEvents.AskAccountEvent.AuthEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event to ask the server informations of an account.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-ServerInterface.AuthEvents.AskAccountEvent.Login">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <code class="sig-name descname">Login</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.AuthEvents.AskAccountEvent.Login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Login of the account from which to get informations.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-ServerInterface.AuthEvents.LogInEvent">
+<code class="sig-name descname">class LogInEvent</code><a class="headerlink" href="#class-ServerInterface.AuthEvents.LogInEvent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-ServerInterface.AuthEvents.LogInEvent.AuthEvent">
+: <a class="reference internal" href="#class-ServerInterface.AuthEvents.AuthEvent" title="ServerInterface.AuthEvents.AuthEvent class">AuthEvent</a><a class="headerlink" href="#inherits-ServerInterface.AuthEvents.LogInEvent.AuthEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event to ask the server to log the client in.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-ServerInterface.AuthEvents.LogInEvent.Account">
+<em>public</em> Account <code class="sig-name descname">Account</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.AuthEvents.LogInEvent.Account" title="Permalink to this definition">¶</a></dt>
+<dd><p>The object containing the data of the account.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-ServerInterface.AuthEvents.LogInEvent.Password">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <code class="sig-name descname">Password</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.AuthEvents.LogInEvent.Password" title="Permalink to this definition">¶</a></dt>
+<dd><p>The password of the account to which to log in.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-ServerInterface.AuthEvents.LogOutEvent">
+<code class="sig-name descname">class LogOutEvent</code><a class="headerlink" href="#class-ServerInterface.AuthEvents.LogOutEvent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-ServerInterface.AuthEvents.LogOutEvent.AuthEvent">
+: <a class="reference internal" href="#class-ServerInterface.AuthEvents.AuthEvent" title="ServerInterface.AuthEvents.AuthEvent class">AuthEvent</a><a class="headerlink" href="#inherits-ServerInterface.AuthEvents.LogOutEvent.AuthEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event to ask the server to log out the sending client.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt>
+<code class="sig-name descname">class LogInEvent</code></dt>
+<dd><dl class="inherits">
+<dt>
+: <a class="reference internal" href="#class-ServerInterface.AuthEvents.AuthEvent" title="ServerInterface.AuthEvents.AuthEvent class">AuthEvent</a></dt>
+<dd><p>Event to ask the server to create an account, and log the client in with the created account.</p>
+</dd></dl>
+
+<dl class="property">
+<dt>
+<em>public</em> Account <code class="sig-name descname">Account</code> { <em class="property">get; set;</em> }</dt>
+<dd><p>The object containing the data of the account.</p>
+</dd></dl>
+
+<dl class="property">
+<dt>
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <code class="sig-name descname">Password</code> { <em class="property">get; set;</em> }</dt>
+<dd><p>The password of the account to which to log in.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="roomevents">
+<h3>RoomEvents<a class="headerlink" href="#roomevents" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="class-ServerInterface.RoomEvents.RoomData">
+<code class="sig-name descname">class RoomData</code><a class="headerlink" href="#class-ServerInterface.RoomEvents.RoomData" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>This class countains all the informations about a Room.</p>
+</div></blockquote>
+<dl class="property">
+<dt id="property-ServerInterface.RoomEvents.RoomData.Code">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <code class="sig-name descname">Code</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.RoomEvents.RoomData.Code" title="Permalink to this definition">¶</a></dt>
+<dd><p>An integer used to identify a Room. This field will be filled by the server: what the client will write here will not be used.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-ServerInterface.RoomEvents.RoomData.CurrentNbPlayer">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <code class="sig-name descname">CurrentNbPlayer</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.RoomEvents.RoomData.CurrentNbPlayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of players currently in the room. This field will be filled by the server: what the client will write here will not be used.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-ServerInterface.RoomEvents.RoomData.IsSuppressed">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">IsSuppressed</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.RoomEvents.RoomData.IsSuppressed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean set to true if this Room is currently active, false otherwise. This field will be filled by the server: what the client will write here will not be used.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-ServerInterface.RoomEvents.RoomData.IsLaunched">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">IsLaunched</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.RoomEvents.RoomData.IsLaunched" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean set to true if a game is currently being played in this Room. This field will be filled by the server: what the client will write here will not be used.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-ServerInterface.RoomEvents.RoomData.Players">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a>[] <code class="sig-name descname">Players</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.RoomEvents.RoomData.Players" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of the logins of all the players in the Room. This field will be filled by the server: what the client will write here will not be used.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-ServerInterface.RoomEvents.RoomData.ReadyPlayers">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a>[] <code class="sig-name descname">ReadyPlayers</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.RoomEvents.RoomData.ReadyPlayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of booleans associated with the Players property; if Players[1] is ready to play, then ReadyPlayers[1] will be set to true, false otherwise. This field will be filled by the server: what the client will write here will not be used.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-ServerInterface.RoomEvents.RoomData.Name">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <code class="sig-name descname">Name</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.RoomEvents.RoomData.Name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the Room.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-ServerInterface.RoomEvents.RoomData.MaxNbPlayer">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <code class="sig-name descname">MaxNbPlayer</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.RoomEvents.RoomData.MaxNbPlayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum number of players a Room can accept.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-ServerInterface.RoomEvents.RoomData.HasPassword">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">HasPassword</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.RoomEvents.RoomData.HasPassword" title="Permalink to this definition">¶</a></dt>
+<dd><p>A boolean set to true if the Room has a password, false otherwise.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-ServerInterface.RoomEvents.RoomData.Password">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <code class="sig-name descname">Password</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.RoomEvents.RoomData.Password" title="Permalink to this definition">¶</a></dt>
+<dd><p>The password of the Room.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-ServerInterface.RoomEvents.RoomEvent">
+<code class="sig-name descname">class RoomEvent</code><a class="headerlink" href="#class-ServerInterface.RoomEvents.RoomEvent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-ServerInterface.RoomEvents.RoomEvent.ServerOnlyEvent">
+: ServerOnlyEvent<a class="headerlink" href="#inherits-ServerInterface.RoomEvents.RoomEvent.ServerOnlyEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Basic event, from which inherits all events related to the rooms.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-ServerInterface.RoomEvents.RoomEvent.RoomData">
+<em>public</em> <a class="reference internal" href="#class-ServerInterface.RoomEvents.RoomData" title="ServerInterface.RoomEvents.RoomData class">RoomData</a> <code class="sig-name descname">RoomData</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-ServerInterface.RoomEvents.RoomEvent.RoomData" title="Permalink to this definition">¶</a></dt>
+<dd><p>The informations of this Room.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="id2">
+<h4>event_in<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="class-ServerInterface.RoomEvents.RoomDataEvent">
+<code class="sig-name descname">class RoomDataEvent</code><a class="headerlink" href="#class-ServerInterface.RoomEvents.RoomDataEvent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-ServerInterface.RoomEvents.RoomDataEvent.RoomEvent">
+: <a class="reference internal" href="#class-ServerInterface.RoomEvents.RoomEvent" title="ServerInterface.RoomEvents.RoomEvent class">RoomEvent</a><a class="headerlink" href="#inherits-ServerInterface.RoomEvents.RoomDataEvent.RoomEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event to inform all clients of the state of every Room.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-ServerInterface.RoomEvents.RoomFailureEvent">
+<code class="sig-name descname">class RoomFailureEvent</code><a class="headerlink" href="#class-ServerInterface.RoomEvents.RoomFailureEvent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-ServerInterface.RoomEvents.RoomFailureEvent.RoomEvent">
+: <a class="reference internal" href="#class-ServerInterface.RoomEvents.RoomEvent" title="ServerInterface.RoomEvents.RoomEvent class">RoomEvent</a><a class="headerlink" href="#inherits-ServerInterface.RoomEvents.RoomFailureEvent.RoomEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event to notify a client of the failure of his request.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-ServerInterface.RoomEvents.RoomJoinedEvent">
+<code class="sig-name descname">class RoomJoinedEvent</code><a class="headerlink" href="#class-ServerInterface.RoomEvents.RoomJoinedEvent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-ServerInterface.RoomEvents.RoomJoinedEvent.RoomEvent">
+: <a class="reference internal" href="#class-ServerInterface.RoomEvents.RoomEvent" title="ServerInterface.RoomEvents.RoomEvent class">RoomEvent</a><a class="headerlink" href="#inherits-ServerInterface.RoomEvents.RoomJoinedEvent.RoomEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event to inform a client that he has been added to a Room.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-ServerInterface.RoomEvents.RoomLeavedEvent">
+<code class="sig-name descname">class RoomLeavedEvent</code><a class="headerlink" href="#class-ServerInterface.RoomEvents.RoomLeavedEvent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-ServerInterface.RoomEvents.RoomLeavedEvent.RoomEvent">
+: <a class="reference internal" href="#class-ServerInterface.RoomEvents.RoomEvent" title="ServerInterface.RoomEvents.RoomEvent class">RoomEvent</a><a class="headerlink" href="#inherits-ServerInterface.RoomEvents.RoomLeavedEvent.RoomEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event to inform a client that he has been removed from a Room.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h4>event_out<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="class-ServerInterface.RoomEvents.CreateRoomEvent">
+<code class="sig-name descname">class CreateRoomEvent</code><a class="headerlink" href="#class-ServerInterface.RoomEvents.CreateRoomEvent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-ServerInterface.RoomEvents.CreateRoomEvent.RoomEvent">
+: <a class="reference internal" href="#class-ServerInterface.RoomEvents.RoomEvent" title="ServerInterface.RoomEvents.RoomEvent class">RoomEvent</a><a class="headerlink" href="#inherits-ServerInterface.RoomEvents.CreateRoomEvent.RoomEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event to ask the server to create a Room, using RoomData.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-ServerInterface.RoomEvents.JoinRoomEvent">
+<code class="sig-name descname">class JoinRoomEvent</code><a class="headerlink" href="#class-ServerInterface.RoomEvents.JoinRoomEvent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-ServerInterface.RoomEvents.JoinRoomEvent.RoomEvent">
+: <a class="reference internal" href="#class-ServerInterface.RoomEvents.RoomEvent" title="ServerInterface.RoomEvents.RoomEvent class">RoomEvent</a><a class="headerlink" href="#inherits-ServerInterface.RoomEvents.JoinRoomEvent.RoomEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event ask the server to join a Room.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-ServerInterface.RoomEvents.LeaveRoomEvent">
+<code class="sig-name descname">class LeaveRoomEvent</code><a class="headerlink" href="#class-ServerInterface.RoomEvents.LeaveRoomEvent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-ServerInterface.RoomEvents.LeaveRoomEvent.RoomEvent">
+: <a class="reference internal" href="#class-ServerInterface.RoomEvents.RoomEvent" title="ServerInterface.RoomEvents.RoomEvent class">RoomEvent</a><a class="headerlink" href="#inherits-ServerInterface.RoomEvents.LeaveRoomEvent.RoomEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event ask the server to leave a Room.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-ServerInterface.RoomEvents.ModifyRoomEvent">
+<code class="sig-name descname">class ModifyRoomEvent</code><a class="headerlink" href="#class-ServerInterface.RoomEvents.ModifyRoomEvent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-ServerInterface.RoomEvents.ModifyRoomEvent.RoomEvent">
+: <a class="reference internal" href="#class-ServerInterface.RoomEvents.RoomEvent" title="ServerInterface.RoomEvents.RoomEvent class">RoomEvent</a><a class="headerlink" href="#inherits-ServerInterface.RoomEvents.ModifyRoomEvent.RoomEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event to ask the server to modify a Room, using the new RoomData.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-ServerInterface.RoomEvents.ReadyEvent">
+<code class="sig-name descname">class ReadyEvent</code><a class="headerlink" href="#class-ServerInterface.RoomEvents.ReadyEvent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-ServerInterface.RoomEvents.ReadyEvent.RoomEvent">
+: <a class="reference internal" href="#class-ServerInterface.RoomEvents.RoomEvent" title="ServerInterface.RoomEvents.RoomEvent class">RoomEvent</a><a class="headerlink" href="#inherits-ServerInterface.RoomEvents.ReadyEvent.RoomEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event to notify the server that the sending client is ready to play.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="settings">
+<h2>Settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="players.html" class="btn btn-neutral float-left" title="Players" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Groupe MN
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

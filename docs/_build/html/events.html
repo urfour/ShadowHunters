@@ -1,0 +1,553 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Events &mdash; ShadowHunters v0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Manager" href="manager.html" />
+    <link rel="prev" title="Cards" href="cards.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ShadowHunters
+          
+
+          
+            
+            <img src="_static/shadowhunters.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Kernel</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cards.html">Cards</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#main-event">Main event</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#events-in">events_in</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#events-out">events_out</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manager.html">Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="players.html">Players</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Network</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="server.html">Server</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ShadowHunters</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Events</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/events.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="events">
+<h1>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h1>
+<p>There are two types of events used for the kernel:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>the events that are waited by the kernel to occur (called events_in)</p></li>
+<li><p>the events that are sent by the kernel (called events_out).</p></li>
+</ul>
+</div></blockquote>
+<p>In this page, every events that are used will be listed.</p>
+<div class="section" id="main-event">
+<h2>Main event<a class="headerlink" href="#main-event" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="class-Assets.Noyau.PlayerEvent">
+<code class="sig-name descname">class PlayerEvent</code><a class="headerlink" href="#class-Assets.Noyau.PlayerEvent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="inherits">
+<dt id="inherits-Assets.Noyau.PlayerEvent.Event">
+: Event<a class="headerlink" href="#inherits-Assets.Noyau.PlayerEvent.Event" title="Permalink to this definition">¶</a></dt>
+<dd><p>It is the main event, herited by all the other, used to interpret actions from the player.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Assets.Noyau.PlayerEvent.PlayerId">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <code class="sig-name descname">PlayerId</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.PlayerEvent.PlayerId" title="Permalink to this definition">¶</a></dt>
+<dd><p>The id of the player that is concerned by the event.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="events-in">
+<h2>events_in<a class="headerlink" href="#events-in" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="class-Assets.Noyau.event_in.AskMovement">
+<code class="sig-name descname">class AskMovement</code><a class="headerlink" href="#class-Assets.Noyau.event_in.AskMovement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Movement event at the beginning of the turn.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Assets.Noyau.event_in.AttackPlayerEvent">
+<code class="sig-name descname">class AttackPlayerEvent</code><a class="headerlink" href="#class-Assets.Noyau.event_in.AttackPlayerEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback of the SelectAttackTargetEvent.</p>
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.AttackPlayerEvent.PowerFranklin">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">PowerFranklin</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.AttackPlayerEvent.PowerFranklin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean used to know if Franklin is the player’s character that sent the event.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.AttackPlayerEvent.PowerGeorges">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">PowerGeorges</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.AttackPlayerEvent.PowerGeorges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean used to know if Georges is the player’s character that sent the event.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.AttackPlayerEvent.PowerLoup">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">PowerLoup</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.AttackPlayerEvent.PowerLoup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean used to know if Werewolf is the player’s character that sent the event.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.AttackPlayerEvent.PowerCharles">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">PowerCharles</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.AttackPlayerEvent.PowerCharles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean used to know if Charles is the player’s character that sent the event.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Assets.Noyau.event_in.DrawCardEvent">
+<code class="sig-name descname">class DrawCardEvent</code><a class="headerlink" href="#class-Assets.Noyau.event_in.DrawCardEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event called when the player draws a card.</p>
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.DrawCardEvent.SelectedCardType">
+<em>public</em> CardType <code class="sig-name descname">SelectedCardType</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.DrawCardEvent.SelectedCardType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type of the selected card.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Assets.Noyau.event_in.EndTurnEvent">
+<code class="sig-name descname">class EndTurnEvent</code><a class="headerlink" href="#class-Assets.Noyau.event_in.EndTurnEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event sent when the player press the button to end the turn to choose the next player.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Assets.Noyau.event_in.MoveOn">
+<code class="sig-name descname">class MoveOn</code><a class="headerlink" href="#class-Assets.Noyau.event_in.MoveOn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event which moves the player inside an area.</p>
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.MoveOn.Location">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <code class="sig-name descname">Location</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.MoveOn.Location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Id of the area where the player will move.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Assets.Noyau.event_in.PowerUseEvent">
+<code class="sig-name descname">class PowerUseEvent</code><a class="headerlink" href="#class-Assets.Noyau.event_in.PowerUseEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event that is triggered when a player choose to use his power.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Assets.Noyau.event_in.RevealCardEvent">
+<code class="sig-name descname">class RevealCardEvent</code><a class="headerlink" href="#class-Assets.Noyau.event_in.RevealCardEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event triggered when a player choose to reveal his card.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Assets.Noyau.event_in.RevealOrNotEvent">
+<code class="sig-name descname">class RevealOrNotEvent</code><a class="headerlink" href="#class-Assets.Noyau.event_in.RevealOrNotEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback of the SelectRevealOrNotEvent.</p>
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.RevealOrNotEvent.EffectCard">
+<em>public</em> <a class="reference internal" href="cards.html#class-Card" title="Card class">Card</a> <code class="sig-name descname">EffectCard</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.RevealOrNotEvent.EffectCard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Card which effect is used.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.RevealOrNotEvent.HasRevealed">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">HasRevealed</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.RevealOrNotEvent.HasRevealed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean representing the choice of the player to reveal or not.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.RevealOrNotEvent.PowerLoup">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">PowerLoup</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.RevealOrNotEvent.PowerLoup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean to know if the player is Werewolf or not.
+Roll of the 4-faces die.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Assets.Noyau.event_in.UsableCardUseEvent">
+<code class="sig-name descname">class UsableCardUseEvent</code><a class="headerlink" href="#class-Assets.Noyau.event_in.UsableCardUseEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event sent when a single use card is used.</p>
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.UsableCardUseEvent.Cardid">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <code class="sig-name descname">Cardid</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.UsableCardUseEvent.Cardid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Id of the card used.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.UsableCardUseEvent.EffectSelected">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <code class="sig-name descname">EffectSelected</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.UsableCardUseEvent.EffectSelected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index of the effect to trigger.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.UsableCardUseEvent.PlayerSelected">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <code class="sig-name descname">PlayerSelected</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.UsableCardUseEvent.PlayerSelected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Id of the player targeted by the card.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Assets.Noyau.event_in.UsableCardUseEvent.UsableCardUseEvent">
+<em>public</em> <code class="sig-name descname">UsableCardUseEvent</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <em>card_id</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <em>effect_selected</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <em>player_selected</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Assets.Noyau.event_in.UsableCardUseEvent.UsableCardUseEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor used to serialize the event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<em>public</em> <code class="sig-name descname">UsableCardUseEvent</code> <span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>Constructor called when creating the event.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="events-out">
+<h2>events_out<a class="headerlink" href="#events-out" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="class-Assets.Noyau.event_in.DrawEquipmentCardEvent">
+<code class="sig-name descname">class DrawEquipmentCardEvent</code><a class="headerlink" href="#class-Assets.Noyau.event_in.DrawEquipmentCardEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event that transmit the info that an equipment card has been drawn.</p>
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.DrawEquipmentCardEvent.CardId">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <code class="sig-name descname">CardId</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.DrawEquipmentCardEvent.CardId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Id of the card.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Assets.Noyau.event_in.DrawEquipmentCardEvent.DrawEquipmentCardEvent">
+<em>public</em> <code class="sig-name descname">DrawEquipmentCardEvent</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Assets.Noyau.event_in.DrawEquipmentCardEvent.DrawEquipmentCardEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor used to serialize the event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<em>public</em> <code class="sig-name descname">DrawEquipmentCardEvent</code> <span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>Constructor called when creating the event.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Assets.Noyau.event_in.SelectAttackTargetEvent">
+<code class="sig-name descname">class SelectAttackTargetEvent</code><a class="headerlink" href="#class-Assets.Noyau.event_in.SelectAttackTargetEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event that allow to choose a target in a list of player</p>
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.SelectAttackTargetEvent.PossibleTargetId">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a>[] <code class="sig-name descname">PossibleTargetId</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.SelectAttackTargetEvent.PossibleTargetId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Array of Id’s possible targets.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.SelectAttackTargetEvent.TargetID">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <code class="sig-name descname">TargetID</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.SelectAttackTargetEvent.TargetID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Id of a specific target.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.SelectAttackTargetEvent.PowerFranklin">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">PowerFranklin</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.SelectAttackTargetEvent.PowerFranklin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean if the power of the character Franklin is used.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.SelectAttackTargetEvent.PowerGeorges">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">PowerGeorges</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.SelectAttackTargetEvent.PowerGeorges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean if the power of the character Georges is used.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.SelectAttackTargetEvent.PowerLoup">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">PowerLoup</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.SelectAttackTargetEvent.PowerLoup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean if the power of the character Werewolf is used.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.SelectAttackTargetEvent.PowerCharles">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">PowerCharles</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.SelectAttackTargetEvent.PowerCharles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean if the power of the character Charles is used.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Assets.Noyau.event_in.SelectBobPowerEvent">
+<code class="sig-name descname">class SelectBobPowerEvent</code><a class="headerlink" href="#class-Assets.Noyau.event_in.SelectBobPowerEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback of BobPowerEvent</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Assets.Noyau.event_in.SelectMovement">
+<code class="sig-name descname">class SelectMovement</code><a class="headerlink" href="#class-Assets.Noyau.event_in.SelectMovement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event that gives available locations to the player.</p>
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.SelectMovement.LocationAvailable">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a>[] <code class="sig-name descname">LocationAvailable</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.SelectMovement.LocationAvailable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Array of possible locations.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Assets.Noyau.event_in.SelectRevealOrNotEvent">
+<code class="sig-name descname">class SelectRevealOrNotEvent</code><a class="headerlink" href="#class-Assets.Noyau.event_in.SelectRevealOrNotEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event that allow the player to choose to reveal his character.</p>
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.SelectRevealOrNotEvent.EffectCard">
+<em>public</em> <a class="reference internal" href="cards.html#class-Card" title="Card class">Card</a> <code class="sig-name descname">EffectCard</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.SelectRevealOrNotEvent.EffectCard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialised at null, the card that forces the player to reveal himself.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.SelectRevealOrNotEvent.PowerDaniel">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">PowerDaniel</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.SelectRevealOrNotEvent.PowerDaniel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialised at false, boolean if the power of Daniel is used.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.SelectRevealOrNotEvent.PowerLoup">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">PowerLoup</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.SelectRevealOrNotEvent.PowerLoup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialised at false ,boolean if the power of Werewolf is used.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Assets.Noyau.event_in.SelectUsableCardPickedEvent">
+<code class="sig-name descname">class SelectUsableCardPickedEvent</code><a class="headerlink" href="#class-Assets.Noyau.event_in.SelectUsableCardPickedEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event that announce a usable card had been drawned.</p>
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.SelectUsableCardPickedEvent.CardId">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <code class="sig-name descname">CardId</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.SelectUsableCardPickedEvent.CardId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Id of the card.</p>
+</dd></dl>
+
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.SelectUsableCardPickedEvent.IsHidden">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <code class="sig-name descname">IsHidden</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.SelectUsableCardPickedEvent.IsHidden" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean if  the card is hidden (in the case of a vision card, only 2 players can see).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="method-Assets.Noyau.event_in.SelectUsableCardPickedEvent.SelectUsableCardPickedEvent">
+<em>public</em> <code class="sig-name descname">SelectUsableCardPickedEvent</code> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <em>cardId</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean">Boolean</a> <em>isHidden</em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <em>playerId</em><span class="sig-paren">)</span><a class="headerlink" href="#method-Assets.Noyau.event_in.SelectUsableCardPickedEvent.SelectUsableCardPickedEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor used to serialize the event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<em>public</em> <code class="sig-name descname">SelectUsableCardPickedEvent</code> <span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>Constructor called when creating the event.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Assets.Noyau.event_in.SelectVisionTargetEvent">
+<code class="sig-name descname">class SelectVisionTargetEvent</code><a class="headerlink" href="#class-Assets.Noyau.event_in.SelectVisionTargetEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event to select a target for the vision card picked</p>
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.SelectVisionTargetEvent.cardId">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32">Int32</a> <code class="sig-name descname">cardId</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.SelectVisionTargetEvent.cardId" title="Permalink to this definition">¶</a></dt>
+<dd><p>Id of the card to give.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="class-Assets.Noyau.event_in.ShowCharacterCardEvent">
+<code class="sig-name descname">class ShowCharacterCardEvent</code><a class="headerlink" href="#class-Assets.Noyau.event_in.ShowCharacterCardEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Event for the vision card Prediction</p>
+<dl class="property">
+<dt id="property-Assets.Noyau.event_in.ShowCharacterCardEvent.CardLabel">
+<em>public</em> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String">String</a> <code class="sig-name descname">CardLabel</code> { <em class="property">get; set;</em> }<a class="headerlink" href="#property-Assets.Noyau.event_in.ShowCharacterCardEvent.CardLabel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Label of the character name to give.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="manager.html" class="btn btn-neutral float-right" title="Manager" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cards.html" class="btn btn-neutral float-left" title="Cards" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Groupe MN
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
