@@ -1336,7 +1336,6 @@ namespace Assets.Noyau.Cards.controller
         public UsableCard CreateStealCardChoicesDiscardAllOthers(Player thiefPlayer, Player stolenPlayer)
         {
             GameManager.TurnEndable.Value = false;
-            GameManager.AttackAvailable.Value = false;
             List<CardEffect> effects = new List<CardEffect>();
             int nbcards = stolenPlayer.ListCard.Count;
             for (int i = 0; i < nbcards; i++)
@@ -1362,8 +1361,8 @@ namespace Assets.Noyau.Cards.controller
 
                             c.unequipe(target, c);
 
+                            GameManager.TurnEndable.Value = true;
                         }
-                        GameManager.AttackAvailable.Value = true;
                     },
                     targetableCondition: (target, owner) =>
                     {
