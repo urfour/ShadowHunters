@@ -1276,6 +1276,8 @@ namespace Assets.Noyau.Cards.controller
 
         public UsableCard CreateStealCardChoices(Player thiefPlayer, Player stolenPlayer, int cardId)
         {
+            GameManager.TurnEndable.Value = false;
+            GameManager.AttackAvailable.Value = false;
             Card baseCard = CardView.GetCard(cardId);
             List<CardEffect> effects = new List<CardEffect>();
             int nbcards = stolenPlayer.ListCard.Count;
@@ -1285,11 +1287,12 @@ namespace Assets.Noyau.Cards.controller
                 effects.Add(new CardEffect(stolenPlayer.ListCard[tmp].cardLabel,
                     effect: (target, owner, card) =>
                     {
-                        GameManager.AttackAvailable.Value = false;
                         EquipmentCard c = stolenPlayer.ListCard[tmp] as EquipmentCard;
                         KernelLog.Instance.StealEquipement(thiefPlayer, stolenPlayer, c.Id);
                         c.equipe(owner, c);
                         c.unequipe(target, c);
+
+                        GameManager.AttackAvailable.Value = true;
                     },
                     targetableCondition: (target, owner) =>
                     {
@@ -1303,6 +1306,8 @@ namespace Assets.Noyau.Cards.controller
 
         public UsableCard CreateStealCardChoices(Player thiefPlayer, Player stolenPlayer)
         {
+            GameManager.TurnEndable.Value = false;
+            GameManager.AttackAvailable.Value = false;
             List<CardEffect> effects = new List<CardEffect>();
             int nbcards = stolenPlayer.ListCard.Count;
             for (int i = 0; i < nbcards; i++)
@@ -1311,11 +1316,12 @@ namespace Assets.Noyau.Cards.controller
                 effects.Add(new CardEffect(stolenPlayer.ListCard[tmp].cardLabel,
                     effect: (target, owner, card) =>
                     {
-                        GameManager.AttackAvailable.Value = false;
                         EquipmentCard c = stolenPlayer.ListCard[tmp] as EquipmentCard;
                         KernelLog.Instance.StealEquipement(thiefPlayer, stolenPlayer, c.Id);
                         c.equipe(owner, c);
                         c.unequipe(target, c);
+
+                        GameManager.AttackAvailable.Value = true;
                     },
                     targetableCondition: (target, owner) =>
                     {
@@ -1329,6 +1335,8 @@ namespace Assets.Noyau.Cards.controller
 
         public UsableCard CreateStealCardChoicesDiscardAllOthers(Player thiefPlayer, Player stolenPlayer)
         {
+            GameManager.TurnEndable.Value = false;
+            GameManager.AttackAvailable.Value = false;
             List<CardEffect> effects = new List<CardEffect>();
             int nbcards = stolenPlayer.ListCard.Count;
             for (int i = 0; i < nbcards; i++)
@@ -1337,7 +1345,6 @@ namespace Assets.Noyau.Cards.controller
                 effects.Add(new CardEffect(stolenPlayer.ListCard[tmp].cardLabel,
                     effect: (target, owner, card) =>
                     {
-                        GameManager.AttackAvailable.Value = false;
                         EquipmentCard c = target.ListCard[tmp] as EquipmentCard;
                         KernelLog.Instance.StealEquipement(owner, target, c.Id);
                         c.equipe(owner, c);
@@ -1370,6 +1377,8 @@ namespace Assets.Noyau.Cards.controller
 
         public UsableCard CreateGiveCardChoices(Player playerGiver, Player playerGiven, int cardId)
         {
+            GameManager.TurnEndable.Value = false;
+            GameManager.AttackAvailable.Value = false;
             Card baseCard = CardView.GetCard(cardId);
             List<CardEffect> effects = new List<CardEffect>();
             int nbcards = playerGiver.ListCard.Count;
@@ -1379,11 +1388,12 @@ namespace Assets.Noyau.Cards.controller
                 effects.Add(new CardEffect(playerGiver.ListCard[tmp].cardLabel,
                     effect: (target, owner, card) =>
                     {
-                        GameManager.AttackAvailable.Value = false;
                         EquipmentCard c = playerGiver.ListCard[tmp] as EquipmentCard;
                         KernelLog.Instance.GiveEquipement(playerGiver, playerGiven, c.Id);
                         c.equipe(target, c);
                         c.unequipe(owner, c);
+
+                        GameManager.AttackAvailable.Value = true;
                     },
                     targetableCondition: (target, owner) =>
                     {
