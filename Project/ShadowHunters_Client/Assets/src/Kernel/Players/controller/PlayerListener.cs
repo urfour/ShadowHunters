@@ -184,6 +184,8 @@ namespace Assets.Noyau.Players.controller
             /// </summary>
             else if (e is DrawCardEvent drawCard)
             {
+                GameManager.AttackAvailable.Value = false;
+
                 switch (drawCard.SelectedCardType)
                 {
                     case CardType.Vision:
@@ -249,6 +251,7 @@ namespace Assets.Noyau.Players.controller
                         GameManager.TurnEndable.Value = true;
                         GameManager.WaitingPlayer.Value = null;
                     }
+                    GameManager.AttackAvailable.Value = true;
                 }
             }
 
@@ -262,6 +265,15 @@ namespace Assets.Noyau.Players.controller
                 Player p1 = PlayerView.GetPlayer(ecue.PlayerId);
                 Player p2 = PlayerView.GetPlayer(ecue.PlayerSelected);
 
+                UsableCard uCard = c as UsableCard;
+
+                if (uCard.cardEffect[effect].targetableCondition == null || uCard.cardEffect[effect].targetableCondition(p2, p1))
+                {
+                    uCard.cardEffect[effect].effect(p2, p1, uCard);
+                }
+
+                GameManager.AttackAvailable.Value = true;
+
                 if (!GameManager.StartOfTurn.Value)
                 {
                     if (!p1.HasSaber.Value || p1 != GameManager.PlayerTurn.Value || (p1.HasSaber.Value && p1.getTargetablePlayers().Count == 0))
@@ -274,17 +286,6 @@ namespace Assets.Noyau.Players.controller
                         GameManager.TurnEndable.Value = false;
                     }
                 }
-
-                UsableCard uCard = c as UsableCard;
-
-                if (uCard.cardEffect[effect].targetableCondition == null || uCard.cardEffect[effect].targetableCondition(p2, p1))
-                {
-                    Debug.Log("L'effet s'active !");
-                    uCard.cardEffect[effect].effect(p2, p1, uCard);
-                }
-                else
-                    Debug.Log("L'effet ne s'active pas !");
-
             }
 
             /// <summary>
