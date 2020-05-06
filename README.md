@@ -7,6 +7,10 @@ Projet Intégrateur.
 
 - Lien du serveur Discord <a href="https://discord.gg/FaEYnje">ici</a>
 - Lien du Google Sheets <a href="https://docs.google.com/spreadsheets/d/11RYW38-Xj0wrWESD_wnuNTHn5qS1vPB9lWo9fGVbRV8/edit?usp=sharing">ici</a>
+- Lien de la documentation technique <a href="http://51.91.157.30/">ici</a>
+
+- Lien de la vidéo de présentation du projet <a href="https://youtu.be/vQenALV0v0Y">ici</a>
+- Lien de la vidéo de démonstration du jeu <a href="https://youtu.be/DyAcPI6PJIQ">ici</a>
 
 ## Composition du groupe
 
