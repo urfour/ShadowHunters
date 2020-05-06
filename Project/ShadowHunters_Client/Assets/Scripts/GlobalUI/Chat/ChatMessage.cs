@@ -19,7 +19,7 @@ namespace Assets.Scripts.ChatSystem
 
         public void OnEndEdit()
         {
-            if (inputField.text != "")
+            if (Input.GetKey (KeyCode.Return) && inputField.text != "")
             {
                 EventView.Manager.Emit(new ChatMessageEvent(GAccount.Instance.LoggedAccount.Login, inputField.text));
                 inputField.text = "";
