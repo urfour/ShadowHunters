@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: main_menu
   m_EditorClassIdentifier: 
   label: mainmenu
-  clip: {fileID: 8300000, guid: 664a396210363084fb4f8611a1027b95, type: 3}
+  clip: {fileID: 8300000, guid: 8e46cdb11ea6fed41a34f781cef539dd, type: 3}
