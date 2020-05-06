@@ -5719,7 +5719,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   content: {fileID: 2059616949}
-  prefab: {fileID: 6342047222730314596, guid: 4b5bcd3b5b18ac84c9264378e9e46125, type: 3}
+  prefab: {fileID: 1391172719656009186, guid: 4fe2fa8098c14a74caab6724207f8af5, type: 3}
   viewMask: {fileID: 1372666154}
 --- !u!114 &626687263
 MonoBehaviour:
