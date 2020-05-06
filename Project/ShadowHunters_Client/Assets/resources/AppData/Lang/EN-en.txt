@@ -227,3 +227,6 @@ kernel.log.attackfailed.args.attackername_attackedname&2;&1 tried to attack &2 b
 game.logs.activechat;Activate chat
 game.chat.placeholder;...
 game.logs.activelogs;Activate logs
+game.exitvalidation.title;Do you want to leave the game?
+game.exitvalidation.cancel;Cancel
+game.exitvalidation.validate;Confirm
