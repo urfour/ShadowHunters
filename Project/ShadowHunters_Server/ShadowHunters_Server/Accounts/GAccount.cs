@@ -217,7 +217,7 @@ namespace ShadowHunter_Server.Accounts
         // Sortie : true si le compte a été créé, false sinon
         private bool CreateAccount(SignInEvent sie)
         {
-            string connectionString = @"DataSource=..\..\database.db; Version=3;";
+            string connectionString = @"DataSource=../../database.db; Version=3;";
             string login = sie.Login;
             string password = sie.Password;
 

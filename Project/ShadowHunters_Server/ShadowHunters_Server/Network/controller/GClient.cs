@@ -27,14 +27,14 @@ namespace Network.controller
         public void RemoveTCPClient(TcpClient client)
         {
             ConnectedClientsMutex.WaitOne();
-            //try
-            //{
-                ConnectedClients.Remove(client.Client.RemoteEndPoint.ToString());
-            //}
-            //catch (Exception e)
-            //{
-            //    Logger.Error(e);
-            //}
+            try
+            {
+              ConnectedClients.Remove(client.Client.RemoteEndPoint.ToString());
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
             ConnectedClientsMutex.ReleaseMutex();
         }
 
