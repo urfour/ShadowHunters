@@ -224,3 +224,6 @@ kernel.log.nothinghappen;Nothing happens.
 kernel.log.giveequipement.args.playergiver_playergiven_playergiven_cardgiven&3;&1 gives card &3 to &2.
 kernel.log.stealequipement.args.playerthief_playerstolen_cardgiven&3;&1 steals card &2 to &3.
 kernel.log.attackfailed.args.attackername_attackedname&2;&1 tried to attack &2 but failed.
+game.logs.activechat;Activate chat
+game.chat.placeholder;...
+game.logs.activelogs;Activate logs
