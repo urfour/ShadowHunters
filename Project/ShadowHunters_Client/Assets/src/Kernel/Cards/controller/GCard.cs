@@ -1258,6 +1258,7 @@ namespace Assets.Noyau.Cards.controller
                 {
                     KernelLog.Instance.GiveVision(player, target);
                     GameManager.TurnEndable.Value = false;
+                    GameManager.AttackAvailable.Value = false;
                     if (GameManager.LocalPlayer.Value == target)
                     {
                         EventView.Manager.Emit(new SelectUsableCardPickedEvent(auxilaire.Id, true, target.Id));
