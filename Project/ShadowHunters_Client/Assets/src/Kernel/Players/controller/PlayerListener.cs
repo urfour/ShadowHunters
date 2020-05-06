@@ -271,9 +271,10 @@ namespace Assets.Noyau.Players.controller
                 {
                     uCard.cardEffect[effect].effect(p2, p1, uCard);
                 }
-
-                GameManager.AttackAvailable.Value = true;
-
+                if (!GameManager.StartTurn.Value)
+                {    
+                    GameManager.AttackAvailable.Value = true;
+                }
                 if (!GameManager.StartOfTurn.Value)
                 {
                     if (!p1.HasSaber.Value || p1 != GameManager.PlayerTurn.Value || (p1.HasSaber.Value && p1.getTargetablePlayers().Count == 0))
