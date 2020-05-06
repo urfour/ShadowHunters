@@ -233,6 +233,7 @@ namespace Assets.Noyau.Players.controller
                     if (!pickedUsableCard.canDismiss)
                     {
                         GameManager.TurnEndable.Value = false;
+                        GameManager.AttackAvailable.Value = false;
                     }
                     if (!(GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId))
                     {
@@ -267,11 +268,6 @@ namespace Assets.Noyau.Players.controller
 
                 UsableCard uCard = c as UsableCard;
 
-                if (uCard.cardEffect[effect].targetableCondition == null || uCard.cardEffect[effect].targetableCondition(p2, p1))
-                {
-                    uCard.cardEffect[effect].effect(p2, p1, uCard);
-                }
-
                 if (!GameManager.StartOfTurn.Value)
                 {
                     GameManager.AttackAvailable.Value = true;
@@ -284,6 +280,11 @@ namespace Assets.Noyau.Players.controller
                     {
                         GameManager.TurnEndable.Value = false;
                     }
+                }
+
+                if (uCard.cardEffect[effect].targetableCondition == null || uCard.cardEffect[effect].targetableCondition(p2, p1))
+                {
+                    uCard.cardEffect[effect].effect(p2, p1, uCard);
                 }
             }
 
