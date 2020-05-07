@@ -262,6 +262,7 @@ namespace Assets.Noyau.Players.controller
                 //Après la fin de son tour, le pouvoir n'est plus dispo
                 if (GameManager.StartOfTurn.Value)
                 {
+                    owner.OnAttacking.Value = false;
                     owner.CanUsePower.Value = false;
                 }
 
