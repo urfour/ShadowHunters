@@ -160,8 +160,17 @@ namespace Assets.Noyau.Players.controller
                             nbDead++;
                         }
                     }
-                    if(nbDead>=3 && GameManager.HasKilled.Value)
-                        owner.HasWon.Value=true;
+                    // impossible pour Charles de gagner avec la condition normale à 5 joueurs
+                    if (PlayerView.NbPlayer == 5)
+                    {
+                        if (nbDead >= 3 && GameManager.HasKilled.Value)
+                            owner.HasWon.Value = true;
+                    }
+                    else
+                    {
+                        if (nbDead > 3 && GameManager.HasKilled.Value)
+                            owner.HasWon.Value = true;
+                    }
                 },
                 setWinningListeners: (owner) =>
                 {
