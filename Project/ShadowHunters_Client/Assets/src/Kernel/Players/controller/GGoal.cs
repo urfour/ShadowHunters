@@ -160,7 +160,7 @@ namespace Assets.Noyau.Players.controller
                             nbDead++;
                         }
                     }
-                    if(nbDead>3 && GameManager.HasKilled.Value)
+                    if(nbDead>=3 && GameManager.HasKilled.Value)
                         owner.HasWon.Value=true;
                 },
                 setWinningListeners: (owner) =>
