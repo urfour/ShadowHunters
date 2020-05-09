@@ -37,11 +37,14 @@ namespace Assets.Noyau.Players.controller
                 else if (GameManager.PlayerTurn.Value.HasAncestral.Value) // si le joueur a utilisé le savoir ancestral, le joueur suivant reste lui
                 {
                     KernelLog.Instance.Replay(GameManager.PlayerTurn.Value);
-                    GameManager.PlayerTurn.Value.ReplayTimes.Value--;
-                    if (GameManager.PlayerTurn.Value.ReplayTimes.Value <= 0)
+                    if (GameManager.PlayerTurn.Value.ReplayTimes.Value <= 1)
                     {
                         GameManager.PlayerTurn.Value.HasAncestral.Value = false;
                         GameManager.PlayerTurn.Value.ReplayTimes.Value = 0;
+                    }
+                    else
+                    {
+                        GameManager.PlayerTurn.Value.ReplayTimes.Value--;
                     }
                 }
                 else

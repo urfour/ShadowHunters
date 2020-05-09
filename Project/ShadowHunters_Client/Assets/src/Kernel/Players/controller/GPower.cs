@@ -434,7 +434,7 @@ namespace Assets.Noyau.Players.controller
             availability: (owner) =>
             {
                 // fonction qui test si le pouvoir peut être utilisé
-                bool available = GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
+                bool available = !owner.PowerDisabled.Value && GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
                 if (owner.CanUsePower.Value != available)
                 {
                     owner.CanUsePower.Value = available;
@@ -468,7 +468,7 @@ namespace Assets.Noyau.Players.controller
             availability: (owner) =>
             {
                 // fonction qui test si le pouvoir peut être utilisé
-                bool available = GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
+                bool available = !owner.PowerDisabled.Value && GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
                 if (owner.CanUsePower.Value != available)
                 {
                     owner.CanUsePower.Value = available;
@@ -499,7 +499,7 @@ namespace Assets.Noyau.Players.controller
             availability: (owner) =>
             {
                 // fonction qui test si le pouvoir peut être utilisé
-                bool available = GameManager.PlayerTurn.Value == owner && GameManager.EndOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
+                bool available = !owner.PowerDisabled.Value && GameManager.PlayerTurn.Value == owner && GameManager.EndOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
                 if (owner.CanUsePower.Value != available)
                 {
                     owner.CanUsePower.Value = available;
@@ -533,7 +533,7 @@ namespace Assets.Noyau.Players.controller
             availability: (owner) =>
             {
                 // fonction qui test si le pouvoir peut être utilisé
-                bool available = owner.Revealed.Value && !owner.PowerUsed.Value;
+                bool available = !owner.PowerDisabled.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
                 if (owner.CanUsePower.Value != available)
                 {
                     owner.CanUsePower.Value = available;
@@ -551,14 +551,19 @@ namespace Assets.Noyau.Players.controller
             (
             power: (owner) =>
             {
+                int nbdead = 0;
                 foreach (Player p in PlayerView.GetPlayers())
                 {
                     if (p.Dead.Value)
                     {
-                        owner.ReplayTimes.Value++;
+                        nbdead++;
                     }
                 }
-                owner.HasAncestral.Value = true;
+                if (nbdead > 0)
+                {
+                    owner.ReplayTimes.Value += nbdead;
+                    owner.HasAncestral.Value = true;
+                }
                 owner.PowerUsed.Value = true;
             },
             addListeners: (owner) =>
@@ -569,7 +574,7 @@ namespace Assets.Noyau.Players.controller
             availability: (owner) =>
             {
                 // fonction qui test si le pouvoir peut être utilisé
-                bool available = owner.Revealed.Value && !owner.PowerUsed.Value;
+                bool available = !owner.PowerDisabled.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
                 if (owner.CanUsePower.Value != available)
                 {
                     owner.CanUsePower.Value = available;
@@ -603,7 +608,7 @@ namespace Assets.Noyau.Players.controller
             availability: (owner) =>
             {
                 // fonction qui teste si le pouvoir peut être utilisé
-                bool available = GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
+                bool available = !owner.PowerDisabled.Value && GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
                 foreach (Player p in PlayerView.GetPlayers())
                 {
                     if (p != owner && !p.Dead.Value && GameManager.Board[p.Position.Value] == Position.Porte)
