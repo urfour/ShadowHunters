@@ -8,7 +8,7 @@ namespace Kernel.Settings
 {
     public partial class SettingManager
     {
-        public Setting<string> ServerIP { get; set; } = new Setting<string>("51.91.157.30");
+        public Setting<string> ServerIP { get; set; } = new Setting<string>("130.185.185.145");
         public Setting<int> ServerPort { get; set; } = new Setting<int>(30050);
         public Setting<int> BufferSize { get; set; } = new Setting<int>(4096);
 

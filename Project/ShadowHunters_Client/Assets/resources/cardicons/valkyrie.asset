@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41e381b97effcdc498dced6cf938e971, type: 3}
-  m_Name: valyrie
+  m_Name: valkyrie
   m_EditorClassIdentifier: 
-  label: 
-  sprite: {fileID: 0}
+  label: character.name.valkyrie
+  sprite: {fileID: 21300000, guid: 4b010620e3849a042b3263436e614677, type: 3}

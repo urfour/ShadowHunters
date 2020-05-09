@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41e381b97effcdc498dced6cf938e971, type: 3}
   m_Name: liche
   m_EditorClassIdentifier: 
-  label: 
-  sprite: {fileID: 0}
+  label: character.name.liche
+  sprite: {fileID: 21300000, guid: 05188bc3eb4c8d44981425fbb28ec16b, type: 3}
