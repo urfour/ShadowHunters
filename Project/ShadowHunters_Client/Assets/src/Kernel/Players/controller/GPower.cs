@@ -602,8 +602,15 @@ namespace Assets.Noyau.Players.controller
             },
             availability: (owner) =>
             {
-                // fonction qui test si le pouvoir peut être utilisé
+                // fonction qui teste si le pouvoir peut être utilisé
                 bool available = GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
+                foreach (Player p in PlayerView.GetPlayers())
+                {
+                    if (p != owner && !p.Dead.Value && GameManager.Board[p.Position.Value] == Position.Porte)
+                    {
+                        available = true;
+                    }
+                }
                 if (owner.CanUsePower.Value != available)
                 {
                     owner.CanUsePower.Value = available;

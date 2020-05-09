@@ -178,6 +178,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
+                        KernelLog.Instance.DefineWounds(player, 7);
                         player.Wound.Value = 7;
                     }));
 
@@ -780,6 +781,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
+                        KernelLog.Instance.DefineWounds(player, 7);
                         player.Wound.Value = 7;
                     })),
 

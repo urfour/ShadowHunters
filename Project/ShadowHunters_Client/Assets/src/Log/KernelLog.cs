@@ -25,7 +25,8 @@ namespace Log
         REVEAL,
         USEPOWER,
         DIE,
-        REPLAY
+        REPLAY,
+        DEFINE
     }
     public class KernelLog : ListenableObject
     {
@@ -126,6 +127,12 @@ namespace Log
         public void Replay(Player player)
         {
             Messages.Add((KernelLogType.REPLAY, "kernel.log.replay.args.playername&" + player.Name));
+            Notify();
+        }
+
+        public void DefineWounds(Player player, int wounds)
+        {
+            Messages.Add((KernelLogType.DEFINE, "kernel.log.define.args.playername_wounds&" + player.Name + "&" + wounds));
             Notify();
         }
     }
