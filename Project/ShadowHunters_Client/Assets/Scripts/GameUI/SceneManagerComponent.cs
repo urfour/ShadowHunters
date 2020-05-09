@@ -66,7 +66,7 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
             }
         }
 
-        GameManager.Init(room.MaxNbPlayer.Value, room.RawData.Code, LocalPlayerId.Value);
+        GameManager.Init(room.MaxNbPlayer.Value, room.RawData.Code, room.WithExtension.Value, LocalPlayerId.Value);
 
         for (int i = 0; i < room.MaxNbPlayer.Value; i++)
         {

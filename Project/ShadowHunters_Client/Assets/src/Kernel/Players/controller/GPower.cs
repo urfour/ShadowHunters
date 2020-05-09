@@ -47,7 +47,7 @@ namespace Assets.Noyau.Players.controller
             availability: (owner) =>
             {
                 // fonction qui test si le pouvoir peut être utilisé
-                bool available = GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
+                bool available = !owner.PowerDisabled.Value && GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
                 if (owner.CanUsePower.Value != available)
                 {
                     owner.CanUsePower.Value = available;
@@ -82,7 +82,7 @@ namespace Assets.Noyau.Players.controller
             availability: (owner) =>
             {
                 // fonction qui test si le pouvoir peut être utilisé
-                bool available = GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
+                bool available = !owner.PowerDisabled.Value && GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
                 if (owner.CanUsePower.Value != available)
                 {
                     owner.CanUsePower.Value = available;
@@ -139,7 +139,7 @@ namespace Assets.Noyau.Players.controller
                     }
                     else
                     {
-                        if (owner.OnAttackedBy.Value != -1 && owner.CanUsePower.Value == false)
+                        if (owner.OnAttackedBy.Value != -1 && owner.CanUsePower.Value == false && !owner.PowerDisabled.Value)
                         {
                             owner.CanUsePower.Value = true;
                         }
@@ -165,7 +165,7 @@ namespace Assets.Noyau.Players.controller
             },
             availability: (owner) =>
             {
-                if(owner.Revealed.Value && owner.DamageDealed.Value > 0)
+                if(owner.Revealed.Value && owner.DamageDealed.Value > 0 && !owner.PowerDisabled.Value)
                 {
                     owner.Character.power.power(owner);
                 }
@@ -197,7 +197,7 @@ namespace Assets.Noyau.Players.controller
             availability: (owner) =>
             {
                 // A partir du moment où elle se révèle, elle peut utiliser son pouvoir n'importe quand (mais pas forcément immédiatement)
-                if(owner.Revealed.Value)
+                if(owner.Revealed.Value && !owner.PowerDisabled.Value)
                 {
                     owner.CanUsePower.Value = true;
                 }
@@ -225,7 +225,7 @@ namespace Assets.Noyau.Players.controller
             },
             availability: (owner) =>
             {
-                if(owner.Revealed.Value && owner.DamageDealed.Value >= 2)
+                if(owner.Revealed.Value && owner.DamageDealed.Value >= 2 && !owner.PowerDisabled.Value)
                 {
                     owner.Character.power.power(owner);
                 }
@@ -270,7 +270,7 @@ namespace Assets.Noyau.Players.controller
                 }
 
                 // Si la raison de l'appel vient de OnAttacking (donc pas start) et que Charles est révélé, on active le pouvoir
-                else if (owner.OnAttacking.Value && owner.Revealed.Value)
+                else if (owner.OnAttacking.Value && owner.Revealed.Value && !owner.PowerDisabled.Value)
                 {
                     owner.CanUsePower.Value = true;
                 }
@@ -300,12 +300,315 @@ namespace Assets.Noyau.Players.controller
             availability: (owner) =>
             {
                 // A ce moment Daniel est forcément vivant car sinon il aurait gagné
-                if (!owner.Revealed.Value)
+                if (!owner.Revealed.Value && !owner.PowerDisabled.Value)
                 {
                     owner.Character.power.power(owner);
                 }
             }
             );
+
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir de Bryan.
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
+        public static Power Bryan = new Power
+            (
+            power: (owner) =>
+            {
+                owner.Revealed.Value = true;
+            },
+            addListeners: (owner) =>
+            {
+                GameManager.HasKilled.AddListener((sender) => { owner.Character.power.availability(owner); });
+            },
+            availability: (owner) =>
+            {
+            if (!owner.PowerDisabled.Value && GameManager.PlayerTurn.Value == owner && PlayerView.GetPlayer(owner.OnAttackingPlayer.Value).Character.characterHP <= 12)
+                {
+                    owner.Character.power.power(owner);
+                }
+            }
+            );
+
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir de Catherine (extension).
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
+        public static Power Catherine = new Power
+            (
+            power: (owner) =>
+            {
+                owner.Healed(1);
+            },
+            addListeners: (owner) =>
+            {
+                GameManager.StartOfTurn.AddListener((sender) => { owner.Character.power.availability(owner); });
+            },
+            availability: (owner) =>
+            {
+                if (!owner.PowerDisabled.Value && owner.Revealed.Value && GameManager.StartOfTurn.Value && GameManager.PlayerTurn.Value == owner)
+                {
+                    owner.Character.power.power(owner);
+                }
+            }
+            );
+
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir de Agnes (extension).
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
+        public static Power Agnes = new Power
+            (
+            power: (owner) =>
+            {
+                owner.Character.goal = GGoal.AgnesGoalPower;
+            },
+            addListeners: (owner) =>
+            {
+                GameManager.StartOfTurn.AddListener((sender) => { owner.Character.power.availability(owner); });
+            },
+            availability: (owner) =>
+            {
+                if (!owner.PowerDisabled.Value && owner.Revealed.Value && GameManager.StartOfTurn.Value && GameManager.PlayerTurn.Value == owner)
+                {
+                    owner.Character.power.power(owner);
+                }
+            }
+            );
+
+
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir de Bob (extension).
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
+        public static Power BobExtension = new Power
+            (
+            power: (owner) =>
+            {
+                owner.HasCrucifix.Value = true;
+            },
+            addListeners: (owner) =>
+            {
+                owner.Revealed.AddListener((sender) => { owner.Character.power.availability(owner); });
+            },
+            availability: (owner) =>
+            {
+                if (!owner.PowerDisabled.Value && owner.Revealed.Value)
+                {
+                    owner.Character.power.power(owner);
+                }
+            }
+            );
+
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir de Ellen (extension).
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
+        public static Power Ellen = new Power
+            (
+            power: (owner) =>
+            {
+                KernelLog.Instance.UsePower(owner);
+                if (GameManager.LocalPlayer.Value == owner)
+                {
+                    EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.EllenPower.Id, false, owner.Id));
+                }
+                owner.PowerUsed.Value = true;
+            },
+            addListeners: (owner) =>
+            {
+                GameManager.StartOfTurn.AddListener((sender) => { owner.Character.power.availability(owner); });
+                owner.Revealed.AddListener((sender) => { owner.Character.power.availability(owner); });
+                owner.PowerUsed.AddListener((sender) => { owner.Character.power.availability(owner); });
+            },
+            availability: (owner) =>
+            {
+                // fonction qui test si le pouvoir peut être utilisé
+                bool available = GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
+                if (owner.CanUsePower.Value != available)
+                {
+                    owner.CanUsePower.Value = available;
+                }
+            }
+            );
+
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir de Fu-Ka (extension).
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
+        public static Power Fuka = new Power
+            (
+            power: (owner) =>
+            {
+                KernelLog.Instance.UsePower(owner);
+                if (GameManager.LocalPlayer.Value == owner)
+                {
+                    EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.FukaPower.Id, false, owner.Id));
+                }
+                owner.PowerUsed.Value = true;
+            },
+            addListeners: (owner) =>
+            {
+                GameManager.StartOfTurn.AddListener((sender) => { owner.Character.power.availability(owner); });
+                owner.Revealed.AddListener((sender) => { owner.Character.power.availability(owner); });
+                owner.PowerUsed.AddListener((sender) => { owner.Character.power.availability(owner); });
+            },
+            availability: (owner) =>
+            {
+                // fonction qui test si le pouvoir peut être utilisé
+                bool available = GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
+                if (owner.CanUsePower.Value != available)
+                {
+                    owner.CanUsePower.Value = available;
+                }
+            }
+            );
+
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir de Gregor (extension).
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
+        public static Power Gregor = new Power
+            (
+            power: (owner) =>
+            {
+                KernelLog.Instance.UsePower(owner);
+                owner.HasGuardian.Value = true;
+                owner.PowerUsed.Value = true;
+            },
+            addListeners: (owner) =>
+            {
+                GameManager.EndOfTurn.AddListener((sender) => { owner.Character.power.availability(owner); });
+                owner.Revealed.AddListener((sender) => { owner.Character.power.availability(owner); });
+                owner.PowerUsed.AddListener((sender) => { owner.Character.power.availability(owner); });
+            },
+            availability: (owner) =>
+            {
+                // fonction qui test si le pouvoir peut être utilisé
+                bool available = GameManager.PlayerTurn.Value == owner && GameManager.EndOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
+                if (owner.CanUsePower.Value != available)
+                {
+                    owner.CanUsePower.Value = available;
+                }
+            }
+            );
+
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir de David (extension).
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
+        public static Power David = new Power
+            (
+            power: (owner) =>
+            {
+                KernelLog.Instance.UsePower(owner);
+                CardView.GCard.DavidPower = CardView.GCard.CreateDiscardCardsChoices(owner);
+                if (GameManager.LocalPlayer.Value == owner)
+                {
+                    EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.DavidPower.Id, false, owner.Id));
+                }
+                owner.PowerUsed.Value = true;
+            },
+            addListeners: (owner) =>
+            {
+                owner.Revealed.AddListener((sender) => { owner.Character.power.availability(owner); });
+                owner.PowerUsed.AddListener((sender) => { owner.Character.power.availability(owner); });
+            },
+            availability: (owner) =>
+            {
+                // fonction qui test si le pouvoir peut être utilisé
+                bool available = owner.Revealed.Value && !owner.PowerUsed.Value;
+                if (owner.CanUsePower.Value != available)
+                {
+                    owner.CanUsePower.Value = available;
+                }
+            }
+            );
+
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir de Liche (extension).
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
+        public static Power Liche = new Power
+            (
+            power: (owner) =>
+            {
+                foreach (Player p in PlayerView.GetPlayers())
+                {
+                    if (p.Dead.Value)
+                    {
+                        owner.ReplayTimes.Value++;
+                    }
+                }
+                owner.HasAncestral.Value = true;
+                owner.PowerUsed.Value = true;
+            },
+            addListeners: (owner) =>
+            {
+                owner.Revealed.AddListener((sender) => { owner.Character.power.availability(owner); });
+                owner.PowerUsed.AddListener((sender) => { owner.Character.power.availability(owner); });
+            },
+            availability: (owner) =>
+            {
+                // fonction qui test si le pouvoir peut être utilisé
+                bool available = owner.Revealed.Value && !owner.PowerUsed.Value;
+                if (owner.CanUsePower.Value != available)
+                {
+                    owner.CanUsePower.Value = available;
+                }
+            }
+            );
+
+        /// <summary>
+        /// Fonction qui va instancier le pouvoir de Momie (extension).
+        /// </summary>
+        /// <param name="power">Fonction de l'effet du pouvoir du personnage</param>
+        /// <param name="addListeners">Fonction qui ajoute des Listeners uniquement sur les Setting concernés</param>
+        /// <param name="availability">Fonction qui test quand le pouvoir est utilisable</param>
+        public static Power Momie = new Power
+            (
+            power: (owner) =>
+            {
+                KernelLog.Instance.UsePower(owner);
+                if (GameManager.LocalPlayer.Value == owner)
+                {
+                    EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.MomiePower.Id, false, owner.Id));
+                }
+                owner.PowerUsed.Value = true;
+            },
+            addListeners: (owner) =>
+            {
+                GameManager.StartOfTurn.AddListener((sender) => { owner.Character.power.availability(owner); });
+                owner.Revealed.AddListener((sender) => { owner.Character.power.availability(owner); });
+                owner.PowerUsed.AddListener((sender) => { owner.Character.power.availability(owner); });
+            },
+            availability: (owner) =>
+            {
+                // fonction qui test si le pouvoir peut être utilisé
+                bool available = GameManager.PlayerTurn.Value == owner && GameManager.StartOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
+                if (owner.CanUsePower.Value != available)
+                {
+                    owner.CanUsePower.Value = available;
+                }
+            }
+            );
     }
 }
-

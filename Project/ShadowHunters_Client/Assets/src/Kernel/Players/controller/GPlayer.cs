@@ -18,9 +18,9 @@ namespace Assets.Noyau.Players.controller
         /// Fonction qui va instancier chaque joueur avec un personnage différent.
         /// </summary>
         /// <param name="nbPlayers">Le nombre de joueurs</param>
-        public GPlayer(int nbPlayers)
+        public GPlayer(int nbPlayers, bool withExtension)
         {
-            GCharacter characters = new GCharacter(nbPlayers);
+            GCharacter characters = new GCharacter(nbPlayers, withExtension);
 
             Players = new Player[nbPlayers];
             for (int i = 0; i < nbPlayers; i++)

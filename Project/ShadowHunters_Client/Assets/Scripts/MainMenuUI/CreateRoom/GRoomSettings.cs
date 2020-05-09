@@ -18,6 +18,7 @@ namespace Assets.Scripts.MainMenuUI.CreateRoom
     {
         public InputField name;
         public Toggle isPrivate;
+        public Toggle withExtension;
         public Slider nbPlayers;
         public Text displayNbPlayers;
 
@@ -32,6 +33,7 @@ namespace Assets.Scripts.MainMenuUI.CreateRoom
 
             OnNbPlayerChange();
             OnNameChange();
+            OnWithExtensionChange();
         }
 
         public void OnNameChange()
@@ -45,9 +47,15 @@ namespace Assets.Scripts.MainMenuUI.CreateRoom
             displayNbPlayers.text = nbPlayers.value.ToString();
         }
 
+        public void OnWithExtensionChange()
+        {
+            data.WithExtension = withExtension.isOn;
+        }
+
         public void Create()
         {
             data.IsPrivate = isPrivate.isOn;
+            data.WithExtension = withExtension.isOn;
             EventView.Manager.Emit(new CreateRoomEvent(data));
         }
 

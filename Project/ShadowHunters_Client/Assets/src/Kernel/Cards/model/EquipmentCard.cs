@@ -38,6 +38,7 @@ namespace Assets.Noyau.Cards.model
         /// <param name="unequipe">Fonction qui enlève l'quipement au joueur</param>
         /// <param name="condition">Fonction qui désigne les cibles</param>
         /// <param name="effect">Fonction qui implémente l'effet de la carte</param>
+        /// <param name="isEquipement>Carte equipement ?</param>
         public EquipmentCard(string cardLabel, CardType cardType, string description, int id, Equipe equipe, Unequipe unequipe, EquipmentCondition condition, EquipmentAddEffect addeffect, EquipmentRemoveEffect rmeffect) :
             base(cardLabel, cardType, description, id)
         {

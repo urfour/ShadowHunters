@@ -14,7 +14,7 @@ public class Character
     public readonly CharacterTeam team;
     public readonly int characterHP;
     public readonly Power power;
-    public readonly Goal goal;
+    public Goal goal;
 
     /// <summary>
     /// Constructeur d'un personnage.

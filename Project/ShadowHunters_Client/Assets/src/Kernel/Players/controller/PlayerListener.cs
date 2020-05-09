@@ -26,6 +26,7 @@ namespace Assets.Noyau.Players.controller
             /// </summary>
             if (e is EndTurnEvent ete)
             {
+                GameManager.EndOfTurn.Value = false;
                 GameManager.AttackAvailable.Value = false;
                 GameManager.AttackDone.Value = false;
 
@@ -35,7 +36,13 @@ namespace Assets.Noyau.Players.controller
                 }
                 else if (GameManager.PlayerTurn.Value.HasAncestral.Value) // si le joueur a utilisé le savoir ancestral, le joueur suivant reste lui
                 {
-                    GameManager.PlayerTurn.Value.HasAncestral.Value = false;
+                    KernelLog.Instance.Replay(GameManager.PlayerTurn.Value);
+                    GameManager.PlayerTurn.Value.ReplayTimes.Value--;
+                    if (GameManager.PlayerTurn.Value.ReplayTimes.Value <= 0)
+                    {
+                        GameManager.PlayerTurn.Value.HasAncestral.Value = false;
+                        GameManager.PlayerTurn.Value.ReplayTimes.Value = 0;
+                    }
                 }
                 else
                 {
@@ -148,6 +155,7 @@ namespace Assets.Noyau.Players.controller
                 currentPlayer.Position.Value = mo.Location;
 
                 GameManager.AttackAvailable.Value = true;
+                GameManager.EndOfTurn.Value = true;
 
                 if (!currentPlayer.HasSaber.Value || currentPlayer.getTargetablePlayers().Count == 0)
                     GameManager.TurnEndable.Value = true;
@@ -186,6 +194,7 @@ namespace Assets.Noyau.Players.controller
             else if (e is DrawCardEvent drawCard)
             {
                 GameManager.AttackAvailable.Value = false;
+                GameManager.EndOfTurn.Value = false;
 
                 switch (drawCard.SelectedCardType)
                 {
@@ -288,6 +297,7 @@ namespace Assets.Noyau.Players.controller
                 {
                     uCard.cardEffect[effect].effect(p2, p1, uCard);
                 }
+                GameManager.EndOfTurn.Value = true;
             }
 
             /// <summary>
@@ -338,7 +348,8 @@ namespace Assets.Noyau.Players.controller
                     int lancer = 0;
                     int damages = 0;
 
-                    if (playerAttacking.HasSaber.Value)
+                    if (playerAttacking.HasSaber.Value || 
+                       (playerAttacking.Character.characterName == "character.name.valkyrie" && playerAttacking.Revealed.Value))
                         lancer = GameManager.rand.Next(1, 4);
                     else
                         lancer = Math.Abs(GameManager.rand.Next(1, 6) - GameManager.rand.Next(1, 4));

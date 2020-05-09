@@ -21,10 +21,10 @@ namespace Assets.Noyau.Players.view
         /// Initialise les joueurs.
         /// </summary>
         /// <param name="nbPlayers">Le nombre de joueurs de la partie</param>
-        public static void Init(int nbPlayers)
+        public static void Init(int nbPlayers, bool withExtension)
         {
             NbPlayer = nbPlayers;
-            gPlayer = new GPlayer(nbPlayers);
+            gPlayer = new GPlayer(nbPlayers, withExtension);
 
 
             foreach (Player p in GetPlayers())

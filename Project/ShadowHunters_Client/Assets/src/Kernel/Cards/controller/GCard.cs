@@ -31,6 +31,10 @@ namespace Assets.Noyau.Cards.controller
         public UsableCard GeorgesPower;
         public UsableCard FranklinPower;
         public UsableCard BobPower;
+        public UsableCard EllenPower;
+        public UsableCard FukaPower;
+        public UsableCard DavidPower;
+        public UsableCard MomiePower;
 
         public UsableCard stealCard;
         public UsableCard giveCard;
@@ -153,6 +157,42 @@ namespace Assets.Noyau.Cards.controller
                     effect: (target, owner, card) =>
                     {
                         target.Wounded(owner.DamageDealed.Value, owner, true);
+                    }));
+
+            EllenPower = CreateUsableCard("character.name.ellen", CardType.Light, "character.name.ellen.description", false,
+                new CardEffect("character.name.ellen.power",
+                    targetableCondition: (player, owner) =>
+                    {
+                        return player != owner && !player.Dead.Value;
+                    },
+                    effect: (target, owner, card) =>
+                    {
+                        target.PowerDisabled.Value = true;
+                    }));
+
+            FukaPower = CreateUsableCard("character.name.fuka", CardType.Light, "character.name.fuka.description", false,
+                new CardEffect("character.name.fuka.power",
+                    targetableCondition: (player, owner) =>
+                    {
+                        return !player.Dead.Value;
+                    },
+                    effect: (player, owner, card) =>
+                    {
+                        player.Wound.Value = 7;
+                    }));
+
+            DavidPower = CreateUsableCard("character.name.david", CardType.Light, "character.name.david.description", false,
+                new CardEffect("character.name.david.power", null, null));
+
+            MomiePower = CreateUsableCard("character.name.momie", CardType.Light, "character.name.momie.description", false,
+                new CardEffect("character.name.momie.power",
+                    targetableCondition: (player, owner) =>
+                    {
+                        return !player.Dead.Value && GameManager.Board[player.Position.Value] == Position.Porte;
+                    },
+                    effect: (player, owner, card) =>
+                    {
+                        player.Wounded(3, owner, false);
                     }));
 
             darknessDiscard = new List<Card>();
@@ -652,7 +692,11 @@ namespace Assets.Noyau.Cards.controller
                     },
                     rmeffect: (player, card) =>
                     {
-                        player.HasCrucifix.Value = false;
+                        if (player.Character.characterName != "character.name.bob" 
+                         || (player.Character.characterName == "character.name.bob" && !player.Revealed.Value))
+                        {
+                            player.HasCrucifix.Value = false;
+                        }
                     }),
 
 
@@ -748,6 +792,7 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         player.HasAncestral.Value = true;
+                        player.ReplayTimes.Value++;
                     })),
 
                 CreateEquipmentCard("card.light.light_toge", CardType.Light, "card.light.light_toge.description",
@@ -1380,5 +1425,51 @@ namespace Assets.Noyau.Cards.controller
             }
             return CreateUsableCard(baseCard.cardLabel, baseCard.cardType, baseCard.description, false, effects.ToArray());
         }
+
+        public UsableCard CreateDiscardCardsChoices(Player player)
+        {
+            Card baseCard = CardView.GetCard(this.DavidPower.Id);
+            List<CardEffect> effects = new List<CardEffect>();
+            for (int i = 0; i < this.lightDiscard.Count; i++)
+            {
+                int tmp = i;
+                if (this.lightDiscard[tmp] is EquipmentCard)
+                {
+                    effects.Add(new CardEffect(this.lightDiscard[tmp].cardLabel,
+                        effect: (target, owner, card) =>
+                        {
+                            EquipmentCard c = this.lightDiscard[tmp] as EquipmentCard;
+                            KernelLog.Instance.DrawCard(player, c.Id, false);
+                            c.equipe(player, c);
+                        },
+                        targetableCondition: (target, owner) =>
+                        {
+                            return owner == player;
+                        }
+                        ));
+                }
+            }
+            for (int i = 0; i < this.darknessDiscard.Count; i++)
+            {
+                int tmp = i;
+                if (this.darknessDiscard[tmp] is EquipmentCard)
+                {
+                    effects.Add(new CardEffect(this.darknessDiscard[tmp].cardLabel,
+                        effect: (target, owner, card) =>
+                        {
+                            EquipmentCard c = this.darknessDiscard[tmp] as EquipmentCard;
+                            KernelLog.Instance.DrawCard(player, c.Id, false);
+                            c.equipe(player, c);
+                        },
+                        targetableCondition: (target, owner) =>
+                        {
+                            return owner == player;
+                        }
+                        ));
+                }
+            }
+            return CreateUsableCard(baseCard.cardLabel, baseCard.cardType, baseCard.description, false, effects.ToArray());
+        }
+
     }
 }

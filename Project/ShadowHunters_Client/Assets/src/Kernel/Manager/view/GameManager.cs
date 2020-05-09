@@ -62,6 +62,10 @@ namespace Assets.Noyau.Manager.view
         /// <summary>
         /// Booléen qui annonce si le déplacement du personnage est possible.
         /// </summary>
+        public static Setting<bool> EndOfTurn { get; private set; } = new Setting<bool>(false);
+        /// <summary>
+        /// Booléen qui annonce si le déplacement du personnage est possible.
+        /// </summary>
         public static Setting<bool> MovementAvailable { get; private set; } = new Setting<bool>(false);
         /// <summary>
         /// Booléen qui annonce si l'action d'attaquer est possible.
@@ -109,7 +113,7 @@ namespace Assets.Noyau.Manager.view
         /// Initialise l'ensemble du jeu.
         /// </summary>
         /// <param name="nbPlayers">Le nombre de joueurs de la partie</param>
-        public static void Init(int nbPlayers, int randSeed, int localPlayer = -1)
+        public static void Init(int nbPlayers, int randSeed, bool withExtension, int localPlayer = -1)
         {
             new KernelLog();
             playerListener = new PlayerListener();
@@ -119,7 +123,7 @@ namespace Assets.Noyau.Manager.view
 
             rand = new System.Random(randSeed);
             
-            PlayerView.Init(nbPlayers);
+            PlayerView.Init(nbPlayers, withExtension);
             if (localPlayer != -1)
             {
                 LocalPlayer.Value = PlayerView.GetPlayer(localPlayer);

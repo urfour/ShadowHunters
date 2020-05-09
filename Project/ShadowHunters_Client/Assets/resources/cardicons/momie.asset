@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41e381b97effcdc498dced6cf938e971, type: 3}
-  m_Name: new_icon
+  m_Name: momie
   m_EditorClassIdentifier: 
-  label: character.name.unknown
-  sprite: {fileID: 21300000, guid: f66bb2784d948e740a1611c5f24612bb, type: 3}
+  label: 
+  sprite: {fileID: 0}

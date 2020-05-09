@@ -24,7 +24,8 @@ namespace Log
         ATTACKFAILED,
         REVEAL,
         USEPOWER,
-        DIE
+        DIE,
+        REPLAY
     }
     public class KernelLog : ListenableObject
     {
@@ -120,6 +121,11 @@ namespace Log
             {
                 Messages.Add((KernelLogType.DIE, "kernel.log.die.args.playername&" + player.Name));
             }
+            Notify();
+        }
+        public void Replay(Player player)
+        {
+            Messages.Add((KernelLogType.REPLAY, "kernel.log.replay.args.playername&" + player.Name));
             Notify();
         }
     }

@@ -165,12 +165,18 @@ public class Player
     /// Nombre de dommage infligé pour la dernière fois en attaquant
     /// </summary>
     public Setting<int> DamageDealed { get; private set; } = new Setting<int>(-1);
-
     /// <summary>
     /// Le joueur est-il déconnecté ?
     /// </summary>
     public Setting<bool> Disconnected { get; private set; } = new Setting<bool>(false);
-    
+    /// <summary>
+    /// Le joueur est-il déconnecté ?
+    /// </summary>
+    public Setting<bool> PowerDisabled { get; private set; } = new Setting<bool>(false);
+    /// <summary>
+    /// Nombre de fois que le joueur peut rejouer son tour
+    /// </summary>
+    public Setting<int> ReplayTimes { get; private set; } = new Setting<int>(0);
 
     public ListenableObject OnEquipmentLoose { get; private set; } = new ListenableObject();
     public ListenableObject OnEquipmentGet { get; private set; } = new ListenableObject();
@@ -188,7 +194,7 @@ public class Player
         this.Name = ((PlayerNames)id).ToString();
         this.ListCard = new List<Card>();
         this.Character = c;
-        if (this.Character.characterName == "character.name.daniel")
+        if (this.Character.characterName == "character.name.daniel" || this.Character.characterName == "character.name.bryan")
             this.Revealable.Value = false;
 
         // add death logic
@@ -286,6 +292,10 @@ public class Player
         if (attacker.Character.characterName == "character.name.charles" && isAttack)
         {
             attacker.OnAttacking.Value = true;
+            attacker.OnAttackingPlayer.Value = this.Id;
+        }
+        if (attacker.Character.characterName == "character.name.bryan")
+        {
             attacker.OnAttackingPlayer.Value = this.Id;
         }
 
