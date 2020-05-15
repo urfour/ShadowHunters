@@ -48,10 +48,10 @@ namespace Assets.Noyau.Cards.controller
             /// <returns> Renvoie un UsableCard</returns>
             Foret = CreateUsableCard("card.location.foret", CardType.Location, "card.location.foret.description", true,
                 new CardEffect("card.location.foret.effect.args.wound&2",
-                    effect : (target, owner, card) =>
-                    {
-                        target.Wounded(2, owner, false);
-                    },
+                    effect: (target, owner, card) =>
+                   {
+                       target.Wounded(2, owner, false);
+                   },
                     targetableCondition: (target, owner) =>
                     {
                         return !target.HasBroche.Value
@@ -189,7 +189,7 @@ namespace Assets.Noyau.Cards.controller
                 new CardEffect("character.name.momie.power",
                     targetableCondition: (player, owner) =>
                     {
-                        return !player.Dead.Value && GameManager.Board[player.Position.Value] == Position.Porte;
+                        return player != owner && !player.Dead.Value && GameManager.Board[player.Position.Value] == Position.Porte;
                     },
                     effect: (player, owner, card) =>
                     {
@@ -532,7 +532,7 @@ namespace Assets.Noyau.Cards.controller
                     }),
 
             };
-            
+
             /// <summary>
             /// Fonction qui va instancier les cartes lumières avec leur pouvoirs.
             /// </summary>
@@ -693,7 +693,7 @@ namespace Assets.Noyau.Cards.controller
                     },
                     rmeffect: (player, card) =>
                     {
-                        if (player.Character.characterName != "character.name.bob" 
+                        if (player.Character.characterName != "character.name.bob"
                          || (player.Character.characterName == "character.name.bob" && !player.Revealed.Value))
                         {
                             player.HasCrucifix.Value = false;
@@ -1213,12 +1213,12 @@ namespace Assets.Noyau.Cards.controller
                     player.AddCard(card);
                     if (card.condition(player))
                         card.addEffect(player, card);
-                }, 
+                },
                 unequipe: (player, card) =>
                 {
                     player.RemoveCard(player.HasCard(card.cardLabel));
                     card.rmEffect(player, card);
-                }, 
+                },
                 condition, addeffect, rmeffect);
             cards.Add(c);
             return c;
@@ -1276,7 +1276,7 @@ namespace Assets.Noyau.Cards.controller
             int effectscount = effects.Count;
             effects.Add(new CardEffect(cardLabel + ".nothing_happen",
                 effect: (target, player, card) => { KernelLog.Instance.NothingHappen(); },
-                targetableCondition: (target, owner) => 
+                targetableCondition: (target, owner) =>
                 {
                     bool nothing_available = true;
                     for (int i = 0; i < effectscount; i++)
