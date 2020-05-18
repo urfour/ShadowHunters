@@ -148,7 +148,7 @@ namespace ShadowHunter_Server.Rooms
                     room.RoomData_Mutex.WaitOne();
                     RoomData r = room.Data;
                     bool ready = true;
-                    for (int i = 0; i < r.MaxNbPlayer; i++)
+                    for (int i = 0; i < r.CurrentNbPlayer; i++)
                     {
                         if (!r.ReadyPlayers[i])
                         {

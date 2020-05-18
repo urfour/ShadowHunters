@@ -63,7 +63,7 @@ class WaitingRoomComponent : MonoBehaviour
                 if (r.Players.Value[0] == GAccount.Instance.LoggedAccount.Login)
                 {
                     bool ready = true;
-                    for (int i = 0; i < r.MaxNbPlayer.Value; i++)
+                    for (int i = 0; i < r.CurrentNbPlayer.Value; i++)
                     {
                         if (!r.RawData.ReadyPlayers[i])
                         {
