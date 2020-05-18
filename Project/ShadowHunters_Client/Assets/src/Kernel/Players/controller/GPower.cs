@@ -500,7 +500,7 @@ namespace Assets.Noyau.Players.controller
             {
                 // fonction qui test si le pouvoir peut être utilisé
                 bool available = GameManager.TurnEndable.Value && !owner.PowerDisabled.Value && GameManager.PlayerTurn.Value == owner
-                    && GameManager.EndOfTurn.Value && owner.Revealed.Value && !owner.PowerUsed.Value;
+                    && owner.Revealed.Value && !owner.PowerUsed.Value;
                 if (owner.CanUsePower.Value != available)
                 {
                     owner.CanUsePower.Value = available;
