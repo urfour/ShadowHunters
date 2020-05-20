@@ -3170,6 +3170,7 @@ MonoBehaviour:
   playerPositionDisplayer: {fileID: 88666761321652871, guid: 3ace114a411b4b2469f422c2e29966f8,
     type: 3}
   Board: {fileID: 1923571030}
+  ExitValidation: {fileID: 344560787}
 --- !u!114 &569584312
 MonoBehaviour:
   m_ObjectHideFlags: 0

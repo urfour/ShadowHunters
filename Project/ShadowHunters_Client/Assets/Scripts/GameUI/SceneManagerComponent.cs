@@ -49,6 +49,7 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     public RectTransform playerPositionDisplayer;
 
     public GameObject Board;
+    public GameObject ExitValidation;
 
     public static void InitBeforeScene(Room room)
     {
@@ -194,11 +195,14 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
         EventView.Manager.ExecMainThreaded();
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            GameObject.Find("ExitValidation").SetActive(true);
-        }
-        if (Input.GetKeyDown(KeyCode.Menu))
-        {
-            SettingsToggle();
+            if (!settings.gameObject.activeInHierarchy)
+            {
+                SettingsToggle();
+            }
+            else
+            {
+                ExitValidation.SetActive(true);
+            }
         }
     }
 
