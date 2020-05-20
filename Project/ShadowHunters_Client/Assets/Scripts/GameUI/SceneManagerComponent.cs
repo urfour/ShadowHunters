@@ -192,6 +192,14 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
     private void Update()
     {
         EventView.Manager.ExecMainThreaded();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameObject.Find("ExitValidation").SetActive(true);
+        }
+        if (Input.GetKeyDown(KeyCode.Menu))
+        {
+            SettingsToggle();
+        }
     }
 
     public void AddListeners()
