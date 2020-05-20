@@ -613,12 +613,17 @@ namespace Assets.Noyau.Players.controller
                 && GameManager.StartOfTurn.Value && owner.Revealed.Value;
                 if (available && owner.PowerUsed.Value)
                     owner.PowerUsed.Value = false;
+                int nbPlayers = 0;
                 foreach (Player p in PlayerView.GetPlayers())
                 {
                     if (available && p != owner && !p.Dead.Value && GameManager.Board[p.Position.Value] == Position.Porte)
                     {
-                        available = true;
+                        nbPlayers++;
                     }
+                }
+                if (nbPlayers == 0)
+                {
+                    available = false;
                 }
                 if (owner.CanUsePower.Value != available)
                 {

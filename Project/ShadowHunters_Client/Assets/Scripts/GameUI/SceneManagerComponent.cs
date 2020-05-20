@@ -17,6 +17,7 @@ using Assets.Noyau.Cards.view;
 using Assets.Noyau.Cards.model;
 using Assets.src.Kernel.event_in;
 using ServerInterface.RoomEvents;
+using Assets.Noyau.event_in;
 
 public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
 {
@@ -66,15 +67,15 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
             }
         }
 
-        GameManager.Init(room.MaxNbPlayer.Value, room.RawData.Code, room.WithExtension.Value, LocalPlayerId.Value);
+        GameManager.Init(room.MaxNbPlayer.Value, room.CurrentNbPlayer.Value, room.RawData.Code, room.WithExtension.Value, LocalPlayerId.Value);
 
-        for (int i = 0; i < room.MaxNbPlayer.Value; i++)
+        for (int i = 0; i < room.CurrentNbPlayer.Value; i++)
         {
             PlayerView.GetPlayer(i).Name = room.Players.Value[i];
         }
         if (LocalPlayerId.Value == 0)
         {
-            EventView.Manager.Emit(new EndTurnEvent());
+            EventView.Manager.Emit(new FirstTurnEvent());
         }
         //PlayerBarComponent.Init();
     }
@@ -151,8 +152,8 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
         RemoveListeners();
         EventView.Manager.RemoveListener(this);
     }
-    
-    
+
+
 
     public void OnEvent(PlayerEvent e, string[] tags = null)
     {

@@ -39,7 +39,7 @@ public class CardDisplayer : MonoBehaviour
         else
         {
             cardImage.sprite = null;
-            Debug.LogWarning("Unknown card label : " + card.cardLabel);
+            Debug.LogWarning("Unknown card label: " + card.cardLabel);
         }
         DismissButton.gameObject.SetActive(true);
         gameObject.SetActive(true);
@@ -85,7 +85,7 @@ public class CardDisplayer : MonoBehaviour
             else
             {
                 cardImage.sprite = null;
-                Debug.LogWarning("Unknown card label : " + card.cardLabel);
+                Debug.LogWarning("Unknown card label: " + card.cardLabel);
             }
             if (!card.hiddenChoices || GameManager.LocalPlayer.Value == player)
             {
@@ -170,7 +170,7 @@ public class CardDisplayer : MonoBehaviour
 
     public void Clear()
     {
-        for (int i = ChoiceContent.childCount - 1; i >=0; i--)
+        for (int i = ChoiceContent.childCount - 1; i >= 0; i--)
         {
             Destroy(ChoiceContent.GetChild(i).gameObject);
         }

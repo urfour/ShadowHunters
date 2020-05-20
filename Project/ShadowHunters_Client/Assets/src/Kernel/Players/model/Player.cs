@@ -34,7 +34,7 @@ public class Player
     /// </summary>
     public int Id { get; private set; }
     /// <summary>
-    /// nom du joueur
+    /// le joueur est-il un bot ?
     /// </summary>
     public string Name { get; set; }
     /// <summary>
@@ -48,6 +48,10 @@ public class Player
 
     /// <summary>
     /// nombre de blessure
+    /// </summary>
+    public Setting<bool> IsBot { get; private set; } = new Setting<bool>(false);
+    /// <summary>
+    /// nom du joueur
     /// </summary>
     public Setting<int> Wound { get; private set; } = new Setting<int>(0);
     /// <summary>
@@ -140,7 +144,7 @@ public class Player
     /// nb d'équipements
     /// </summary>
     public Setting<int> NbEquipment { get; private set; } = new Setting<int>(0);
-    
+
     /// <summary>
     /// Id du joueur qui m'a attaqué en dernier
     /// </summary>
@@ -188,9 +192,10 @@ public class Player
     /// </summary>
     /// <param name="id">Id du joueur</param>
     /// <param name="c">Personnage qu'il va jouer</param>
-    public Player(int id, Character c)
+    public Player(int id, Character c, bool isBot)
     {
         this.Id = id;
+        this.IsBot.Value = isBot;
         this.Name = ((PlayerNames)id).ToString();
         this.ListCard = new List<Card>();
         this.Character = c;
@@ -260,7 +265,8 @@ public class Player
                 else
                 {
                     CardView.GCard.stealCardDiscardAllOthers = CardView.GCard.CreateStealCardChoicesDiscardAllOthers(playerAttacking, this);
-                    if (GameManager.LocalPlayer.Value == playerAttacking)
+                    if (GameManager.LocalPlayer.Value == playerAttacking
+                        || playerAttacking.IsBot.Value && GameManager.LocalPlayer.Value == GameManager.BotHandler.Value)
                     {
                         EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.stealCardDiscardAllOthers.Id, false, playerAttacking.Id));
                     }
@@ -318,7 +324,7 @@ public class Player
             //si c'est une attaque pour les pouvoirs du Vampire
             if (isAttack && attacker.Character.characterName == "character.name.vampire")
                 attacker.DamageDealed.Value = damage;
-            
+
             this.Wound.Value += damage;
 
             if (attacker.Character.characterName == "character.name.charles" && isAttack && this.Dead.Value)
@@ -387,14 +393,14 @@ public class Player
         NbEquipment.Value--;
         this.OnEquipmentLoose.Notify();
     }
-    
+
     /// <summary>
     /// Fonction qui renvoie l'indice de la carte chez un joueur
     /// </summary>
     /// <param name="cardName">Le nom de la carte recherchée</param>
     public int HasCard(string cardName)
     {
-        for (int i = 0 ; i < ListCard.Count ; i++)
+        for (int i = 0; i < ListCard.Count; i++)
         {
             if (ListCard[i].cardLabel.Equals(cardName))
                 return i;
@@ -426,5 +432,5 @@ public class Player
 
         return tps;
     }
-    
-}   
+
+}

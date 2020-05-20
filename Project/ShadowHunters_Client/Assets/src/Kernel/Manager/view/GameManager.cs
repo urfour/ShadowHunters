@@ -50,6 +50,7 @@ namespace Assets.Noyau.Manager.view
         }
 
         public static Setting<Player> LocalPlayer { get; private set; } = new Setting<Player>(null);
+        public static Setting<Player> BotHandler { get; private set; } = new Setting<Player>(null);
 
         /// <summary>
         /// Propriété d'accès au joueur dont c'est le tour.
@@ -73,7 +74,7 @@ namespace Assets.Noyau.Manager.view
         public static Setting<bool> AttackAvailable { get; private set; } = new Setting<bool>(false);
 
         public static Setting<bool> AttackDone { get; private set; } = new Setting<bool>(false);
-        
+
         /// <summary>
         /// Booléen qui annonce si l'on peut piocher une carte Vision.
         /// </summary>
@@ -86,12 +87,12 @@ namespace Assets.Noyau.Manager.view
         /// Booléen qui annonce si l'on peut piocher une carte Lumière.
         /// </summary>
         public static Setting<bool> PickLightnessDeck { get; private set; } = new Setting<bool>(false);
-        
+
         /// <summary>
         /// Booléen qui annonce si l'on a tué un autre personnage.
         /// </summary>
-        public static Setting<bool> HasKilled {get; private set; } = new Setting<bool>(false);
-        
+        public static Setting<bool> HasKilled { get; private set; } = new Setting<bool>(false);
+
         /// <summary>
         /// Booléen qui annonce si l'on peut terminer le tour.
         /// </summary>
@@ -113,21 +114,23 @@ namespace Assets.Noyau.Manager.view
         /// Initialise l'ensemble du jeu.
         /// </summary>
         /// <param name="nbPlayers">Le nombre de joueurs de la partie</param>
-        public static void Init(int nbPlayers, int randSeed, bool withExtension, int localPlayer = -1)
+        public static void Init(int nbPlayers, int realPlayers, int randSeed, bool withExtension, int localPlayer = -1)
         {
             new KernelLog();
+            new WaitHandler();
             playerListener = new PlayerListener();
             disconnectionListener = new DisconnectionListener();
             EventView.Manager.AddListener(playerListener, true);
             EventView.Manager.AddListener(disconnectionListener);
 
             rand = new System.Random(randSeed);
-            
-            PlayerView.Init(nbPlayers, withExtension);
+
+            PlayerView.Init(nbPlayers, realPlayers, withExtension);
             if (localPlayer != -1)
             {
                 LocalPlayer.Value = PlayerView.GetPlayer(localPlayer);
             }
+            BotHandler.Value = PlayerView.GetPlayer(0);
             CardView.Init();
 
             List<Position> p = new List<Position>()
@@ -139,7 +142,7 @@ namespace Assets.Noyau.Manager.view
                 Position.Porte,
                 Position.Sanctuaire
             };
-            
+
             int index;
 
             for (int i = 0; i < 6; i++)
@@ -156,7 +159,7 @@ namespace Assets.Noyau.Manager.view
                     AttackAvailable.Value = false;
                 }
             });
-            
+
             foreach (Player player in PlayerView.GetPlayers())
             {
                 player.Character.goal.setWinningListeners(player);
@@ -164,7 +167,7 @@ namespace Assets.Noyau.Manager.view
                 {
                     if (player.HasWon.Value && !GameEnded.Value)
                     {
-                        foreach(Player pl in PlayerView.GetPlayers())
+                        foreach (Player pl in PlayerView.GetPlayers())
                         {
                             pl.Character.goal.checkWinning(pl);
                         }

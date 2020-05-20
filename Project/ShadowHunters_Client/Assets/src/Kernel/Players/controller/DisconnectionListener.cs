@@ -1,4 +1,5 @@
-﻿using Assets.Noyau.Players.view;
+﻿using Assets.Noyau.Manager.view;
+using Assets.Noyau.Players.view;
 using Assets.Scripts.MainMenuUI.SearchGame;
 using EventSystem;
 using Network.events;
@@ -28,6 +29,10 @@ namespace Assets.src.Kernel.Players.controller
                         if (!p.Dead.Value)
                         {
                             p.Dead.Value = true;
+                        }
+                        if (GameManager.BotHandler.Value == p)
+                        {
+                            GameManager.BotHandler.Value = PlayerView.GetPlayer(p.Id + 1);
                         }
                         break;
                     }

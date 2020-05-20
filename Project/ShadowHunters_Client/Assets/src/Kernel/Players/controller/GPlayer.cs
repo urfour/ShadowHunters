@@ -18,15 +18,21 @@ namespace Assets.Noyau.Players.controller
         /// Fonction qui va instancier chaque joueur avec un personnage différent.
         /// </summary>
         /// <param name="nbPlayers">Le nombre de joueurs</param>
-        public GPlayer(int nbPlayers, bool withExtension)
+        /// <param name="realPlayers">Nombre de vrais joueurs</param>
+        /// <param name="withExtension">Activation ou non de l'extension</param>
+        public GPlayer(int nbPlayers, int realPlayers, bool withExtension)
         {
             GCharacter characters = new GCharacter(nbPlayers, withExtension);
 
             Players = new Player[nbPlayers];
-            for (int i = 0; i < nbPlayers; i++)
+            for (int i = 0; i < realPlayers; i++)
             {
-                Players[i] = new Player(i, characters.PickCharacter());
+                Players[i] = new Player(i, characters.PickCharacter(), false);
             }
-        }  
+            for (int i = realPlayers; i < nbPlayers; i++)
+            {
+                Players[i] = new Player(i, characters.PickCharacter(), true);
+            }
+        }
     }
 }

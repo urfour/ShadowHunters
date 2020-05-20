@@ -78,7 +78,8 @@ namespace Assets.Noyau.Cards.controller
                     effect: (target, owner, card) =>
                     {
                         stealCard = CreateStealCardChoices(owner, target, card.Id);
-                        if (GameManager.LocalPlayer.Value == owner)
+                        if (GameManager.LocalPlayer.Value == owner
+                            || owner.IsBot.Value && GameManager.LocalPlayer.Value == GameManager.BotHandler.Value)
                         {
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(stealCard.Id, false, owner.Id));
                         }
@@ -144,7 +145,8 @@ namespace Assets.Noyau.Cards.controller
                     effect: (target, owner, card) =>
                     {
                         stealCard = CreateStealCardChoices(owner, target, card.Id);
-                        if (GameManager.LocalPlayer.Value == owner)
+                        if (GameManager.LocalPlayer.Value == owner
+                            || owner.IsBot.Value && GameManager.LocalPlayer.Value == GameManager.BotHandler.Value)
                         {
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(stealCard.Id, false, owner.Id));
                         }
@@ -232,7 +234,8 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         giveCard = CreateGiveCardChoices(owner, player, card.Id);
-                        if (GameManager.LocalPlayer.Value == owner)
+                        if (GameManager.LocalPlayer.Value == owner
+                            || owner.IsBot.Value && GameManager.LocalPlayer.Value == GameManager.BotHandler.Value)
                         {
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
                         }
@@ -470,7 +473,8 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         stealCard = CreateStealCardChoices(owner, player, card.Id);
-                        if (GameManager.LocalPlayer.Value == owner)
+                        if (GameManager.LocalPlayer.Value == owner
+                            || owner.IsBot.Value && GameManager.LocalPlayer.Value == GameManager.BotHandler.Value)
                         {
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(stealCard.Id, false, owner.Id));
                         }
@@ -499,7 +503,8 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         stealCard = CreateStealCardChoices(owner, player, card.Id);
-                        if (GameManager.LocalPlayer.Value == owner)
+                        if (GameManager.LocalPlayer.Value == owner
+                            || owner.IsBot.Value && GameManager.LocalPlayer.Value == GameManager.BotHandler.Value)
                         {
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(stealCard.Id, false, owner.Id));
                         }
@@ -872,7 +877,8 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         giveCard = CreateGiveCardChoices(owner, GameManager.PlayerTurn.Value, card.Id);
-                        if (GameManager.LocalPlayer.Value == owner)
+                        if (GameManager.LocalPlayer.Value == owner
+                            || owner.IsBot.Value && GameManager.LocalPlayer.Value == GameManager.BotHandler.Value)
                         {
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
                         }
@@ -901,7 +907,8 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         giveCard = CreateGiveCardChoices(owner, GameManager.PlayerTurn.Value, card.Id);
-                        if (GameManager.LocalPlayer.Value == owner)
+                        if (GameManager.LocalPlayer.Value == owner
+                            || owner.IsBot.Value && GameManager.LocalPlayer.Value == GameManager.BotHandler.Value)
                         {
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
                         }
@@ -932,7 +939,8 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         giveCard = CreateGiveCardChoices(owner, GameManager.PlayerTurn.Value, card.Id);
-                        if (GameManager.LocalPlayer.Value == owner)
+                        if (GameManager.LocalPlayer.Value == owner
+                            || owner.IsBot.Value && GameManager.LocalPlayer.Value == GameManager.BotHandler.Value)
                         {
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
                         }
@@ -963,7 +971,8 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         giveCard = CreateGiveCardChoices(owner, GameManager.PlayerTurn.Value, card.Id);
-                        if (GameManager.LocalPlayer.Value == owner)
+                        if (GameManager.LocalPlayer.Value == owner
+                            || owner.IsBot.Value && GameManager.LocalPlayer.Value == GameManager.BotHandler.Value)
                         {
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
                         }
@@ -992,7 +1001,8 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         giveCard = CreateGiveCardChoices(owner, GameManager.PlayerTurn.Value, card.Id);
-                        if (GameManager.LocalPlayer.Value == owner)
+                        if (GameManager.LocalPlayer.Value == owner
+                            || owner.IsBot.Value && GameManager.LocalPlayer.Value == GameManager.BotHandler.Value)
                         {
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
                         }
@@ -1021,7 +1031,8 @@ namespace Assets.Noyau.Cards.controller
                     effect: (player, owner, card) =>
                     {
                         giveCard = CreateGiveCardChoices(owner, GameManager.PlayerTurn.Value, card.Id);
-                        if (GameManager.LocalPlayer.Value == owner)
+                        if (GameManager.LocalPlayer.Value == owner
+                            || owner.IsBot.Value && GameManager.LocalPlayer.Value == GameManager.BotHandler.Value)
                         {
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(giveCard.Id, false, owner.Id));
                         }
@@ -1188,7 +1199,8 @@ namespace Assets.Noyau.Cards.controller
                     },
                     effect: (player, owner, card) =>
                     {
-                        if (GameManager.LocalPlayer.Value == owner)
+                        if (GameManager.LocalPlayer.Value == owner
+                            || owner.IsBot.Value && GameManager.LocalPlayer.Value == GameManager.BotHandler.Value)
                         {
                             EventView.Manager.Emit(new ShowCharacterCardEvent(owner.Character.characterName, GameManager.PlayerTurn.Value.Id));
                         }
@@ -1306,7 +1318,8 @@ namespace Assets.Noyau.Cards.controller
                     KernelLog.Instance.GiveVision(player, target);
                     GameManager.TurnEndable.Value = false;
                     GameManager.AttackAvailable.Value = false;
-                    if (GameManager.LocalPlayer.Value == target)
+                    if (GameManager.LocalPlayer.Value == target ||
+                        (target.IsBot.Value && GameManager.LocalPlayer.Value == GameManager.BotHandler.Value))
                     {
                         EventView.Manager.Emit(new SelectUsableCardPickedEvent(auxilaire.Id, true, target.Id));
                     }

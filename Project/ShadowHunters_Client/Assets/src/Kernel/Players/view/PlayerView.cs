@@ -21,16 +21,18 @@ namespace Assets.Noyau.Players.view
         /// Initialise les joueurs.
         /// </summary>
         /// <param name="nbPlayers">Le nombre de joueurs de la partie</param>
-        public static void Init(int nbPlayers, bool withExtension)
+        /// <param name="realPlayers">Nombre de vrais joueurs</param>
+        /// <param name="withExtension">Activation ou non de l'extension</param>
+        public static void Init(int nbPlayers, int realPlayers, bool withExtension)
         {
             NbPlayer = nbPlayers;
-            gPlayer = new GPlayer(nbPlayers, withExtension);
+            gPlayer = new GPlayer(nbPlayers, realPlayers, withExtension);
 
 
             foreach (Player p in GetPlayers())
             {
                 if (p.Character.goal != null)
-                p.Character.goal.setWinningListeners(p);
+                    p.Character.goal.setWinningListeners(p);
                 if (p.Character.power != null)
                     p.Character.power.addListeners(p);
             }
