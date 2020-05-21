@@ -3171,6 +3171,8 @@ MonoBehaviour:
     type: 3}
   Board: {fileID: 1923571030}
   ExitValidation: {fileID: 344560787}
+  SettingsButton: {fileID: 1639616538}
+  ExitButton: {fileID: 1497205384}
 --- !u!114 &569584312
 MonoBehaviour:
   m_ObjectHideFlags: 0

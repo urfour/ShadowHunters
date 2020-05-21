@@ -50,6 +50,8 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
 
     public GameObject Board;
     public GameObject ExitValidation;
+    public Button SettingsButton;
+    public Button ExitButton;
 
     public static void InitBeforeScene(Room room)
     {
@@ -121,6 +123,12 @@ public class SceneManagerComponent : MonoBehaviour, IListener<PlayerEvent>
 
         AudioManager.Instance.Play("game.music.main");
         AddListeners();
+
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            SettingsButton.gameObject.SetActive(false);
+            ExitButton.gameObject.SetActive(false);
+        }
 
         EndGameScreen.Init();
     }
