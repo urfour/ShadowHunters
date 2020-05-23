@@ -833,7 +833,7 @@ namespace Assets.Noyau.Cards.controller
                     targetableCondition: (player, owner) =>
                     {
                         return (player.Character.characterHP >= 12
-                                || player.Character.characterName.Equals("character.name.metamorphe"))
+                                || (player.Character.characterName.Equals("character.name.metamorphe")) && !player.PowerDisabled.Value)
                                 && player == owner;
                     },
                     effect: (player, owner, card) =>
@@ -846,7 +846,7 @@ namespace Assets.Noyau.Cards.controller
                     targetableCondition: (player, owner) =>
                     {
                         return (player.Character.characterHP <= 11
-                                || player.Character.characterName.Equals("character.name.metamorphe"))
+                                || (player.Character.characterName.Equals("character.name.metamorphe")) && !player.PowerDisabled.Value)
                                 && player == owner;
                     },
                     effect: (player, owner, card) =>
@@ -920,7 +920,7 @@ namespace Assets.Noyau.Cards.controller
                     {
                         return (player.Character.team == CharacterTeam.Neutral
                             || player.Character.team == CharacterTeam.Hunter
-                            || player.Character.characterName == "character.name.metamorphe")
+                            || (player.Character.characterName.Equals("character.name.metamorphe")) && !player.PowerDisabled.Value)
                             && player == owner;
                     },
                     effect: (player, owner, card) =>
@@ -932,7 +932,7 @@ namespace Assets.Noyau.Cards.controller
                     {
                         return (player.Character.team == CharacterTeam.Neutral
                             || player.Character.team == CharacterTeam.Hunter
-                            || player.Character.characterName == "character.name.metamorphe")
+                            || (player.Character.characterName.Equals("character.name.metamorphe")) && !player.PowerDisabled.Value)
                             && player.ListCard.Count > 0
                             && player == owner;
                     },
@@ -952,7 +952,7 @@ namespace Assets.Noyau.Cards.controller
                     {
                         return (player.Character.team == CharacterTeam.Neutral
                             || player.Character.team == CharacterTeam.Hunter
-                            || player.Character.characterName == "character.name.metamorphe")
+                            || (player.Character.characterName.Equals("character.name.metamorphe")) && !player.PowerDisabled.Value)
                             && player == owner;
                     },
                     effect: (player, owner, card) =>
@@ -964,7 +964,7 @@ namespace Assets.Noyau.Cards.controller
                     {
                         return (player.Character.team == CharacterTeam.Neutral
                             || player.Character.team == CharacterTeam.Hunter
-                            || player.Character.characterName == "character.name.metamorphe")
+                            || (player.Character.characterName.Equals("character.name.metamorphe")) && !player.PowerDisabled.Value)
                             && player.ListCard.Count > 0
                             && player == owner;
                     },
@@ -1043,7 +1043,7 @@ namespace Assets.Noyau.Cards.controller
                     targetableCondition: (player, owner) =>
                     {
                         return (player.Character.team == CharacterTeam.Hunter
-                            || player.Character.characterName == "character.name.metamorphe")
+                            || (player.Character.characterName.Equals("character.name.metamorphe")) && !player.PowerDisabled.Value)
                             && player.Wound.Value == 0
                             && player == owner;
                     },
@@ -1055,7 +1055,7 @@ namespace Assets.Noyau.Cards.controller
                     targetableCondition: (player, owner) =>
                     {
                         return (player.Character.team == CharacterTeam.Hunter
-                            || player.Character.characterName == "character.name.metamorphe")
+                            || (player.Character.characterName.Equals("character.name.metamorphe")) && !player.PowerDisabled.Value)
                             && player.Wound.Value != 0
                             && player == owner;
                     },
@@ -1070,7 +1070,7 @@ namespace Assets.Noyau.Cards.controller
                     targetableCondition: (player, owner) =>
                     {
                         return (player.Character.team == CharacterTeam.Hunter
-                            || player.Character.characterName == "character.name.metamorphe")
+                            || (player.Character.characterName.Equals("character.name.metamorphe")) && !player.PowerDisabled.Value)
                             && player.Wound.Value == 0
                             && player == owner;
                     },
@@ -1082,7 +1082,7 @@ namespace Assets.Noyau.Cards.controller
                     targetableCondition: (player, owner) =>
                     {
                         return (player.Character.team == CharacterTeam.Hunter
-                            || player.Character.characterName == "character.name.metamorphe")
+                            || (player.Character.characterName.Equals("character.name.metamorphe")) && !player.PowerDisabled.Value)
                             && player.Wound.Value != 0
                             && player == owner;
                     },
@@ -1120,7 +1120,7 @@ namespace Assets.Noyau.Cards.controller
                     targetableCondition: (player, owner) =>
                     {
                         return (player.Character.team == CharacterTeam.Neutral
-                            || player.Character.characterName == "character.name.metamorphe")
+                            || (player.Character.characterName.Equals("character.name.metamorphe")) && !player.PowerDisabled.Value)
                             && player.Wound.Value == 0
                             && player == owner;
                     },
@@ -1132,7 +1132,7 @@ namespace Assets.Noyau.Cards.controller
                     targetableCondition: (player, owner) =>
                     {
                         return (player.Character.team == CharacterTeam.Neutral
-                            || player.Character.characterName == "character.name.metamorphe")
+                            || (player.Character.characterName.Equals("character.name.metamorphe")) && !player.PowerDisabled.Value)
                             && player.Wound.Value != 0
                             && player == owner;
                     },
@@ -1158,7 +1158,7 @@ namespace Assets.Noyau.Cards.controller
                     targetableCondition: (player, owner) =>
                     {
                         return (player.Character.team == CharacterTeam.Hunter
-                            || player.Character.characterName == "character.name.metamorphe")
+                            || (player.Character.characterName.Equals("character.name.metamorphe")) && !player.PowerDisabled.Value)
                             && player == owner;
                     },
                     effect: (player, owner, card) =>
@@ -1171,7 +1171,7 @@ namespace Assets.Noyau.Cards.controller
                     targetableCondition: (player, owner) =>
                     {
                         return (player.Character.team == CharacterTeam.Hunter
-                            || player.Character.characterName == "character.name.metamorphe")
+                            || (player.Character.characterName.Equals("character.name.metamorphe")) && !player.PowerDisabled.Value)
                             && player == owner;
                     },
                     effect: (player, owner, card) =>
