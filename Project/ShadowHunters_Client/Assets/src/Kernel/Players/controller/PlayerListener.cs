@@ -30,7 +30,7 @@ namespace Assets.Noyau.Players.controller
                 int nbRealPlayers = 0;
                 foreach (Player p in PlayerView.GetPlayers())
                 {
-                    if (!p.IsBot.Value)
+                    if (!(p is Bot))
                     {
                         nbRealPlayers++;
                     }
@@ -38,7 +38,7 @@ namespace Assets.Noyau.Players.controller
                 GameManager.PlayerTurn.Value = PlayerView.GetPlayer(GameManager.rand.Next(0, nbRealPlayers));
                 GameManager.WaitingPlayer.Value = GameManager.PlayerTurn.Value;
                 KernelLog.Instance.StartTurn();
-                if (GameManager.PlayerTurn.Value.IsBot.Value && GameManager.LocalPlayer.Value.Id == 0)
+                if (GameManager.PlayerTurn.Value is Bot && GameManager.LocalPlayer.Value.Id == 0)
                 {
                     WaitHandler.Instance.BotChoice(2.0f,
                         new AskMovement() { PlayerId = GameManager.PlayerTurn.Value.Id });
@@ -88,7 +88,7 @@ namespace Assets.Noyau.Players.controller
                 GameManager.WaitingPlayer.Value = GameManager.PlayerTurn.Value;
 
                 KernelLog.Instance.StartTurn();
-                if (GameManager.PlayerTurn.Value.IsBot.Value && GameManager.LocalPlayer.Value.Id == 0)
+                if (GameManager.PlayerTurn.Value is Bot && GameManager.LocalPlayer.Value.Id == 0)
                 {
                     WaitHandler.Instance.BotChoice(2.0f,
                         new AskMovement() { PlayerId = GameManager.PlayerTurn.Value.Id });
@@ -106,8 +106,8 @@ namespace Assets.Noyau.Players.controller
                 GameManager.MovementAvailable.Value = false;
 
                 // la gestion de cet événement est uniquement fait pour le client qui l'envoie
-                if ((GameManager.PlayerTurn.Value.IsBot.Value && GameManager.LocalPlayer.Value.Id != GameManager.BotHandler.Value.Id)
-                    || (!GameManager.PlayerTurn.Value.IsBot.Value && GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId))
+                if ((GameManager.PlayerTurn.Value is Bot && GameManager.LocalPlayer.Value.Id != GameManager.BotHandler.Value.Id)
+                    || (!(GameManager.PlayerTurn.Value is Bot) && GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId))
                 {
                     return;
                 }
@@ -164,9 +164,16 @@ namespace Assets.Noyau.Players.controller
 
                             if (GameManager.PlayerTurn.Value.Character.characterName.Equals("character.name.emi") && GameManager.PlayerTurn.Value.Revealed.Value && GameManager.PlayerTurn.Value.Position.Value != -1)
                             {
-                                availableDestination.Add((GameManager.PlayerTurn.Value.Position.Value + 7) % 6);
-                                availableDestination.Add((GameManager.PlayerTurn.Value.Position.Value + 5) % 6);
+                                if (GameManager.PlayerTurn.Value.Position.Value % 2 == 0)
+                                {
+                                    availableDestination.Add((GameManager.PlayerTurn.Value.Position.Value + 7) % 6);
+                                }
+                                else
+                                {
+                                    availableDestination.Add((GameManager.PlayerTurn.Value.Position.Value + 5) % 6);
+                                }
                             }
+                         
 
                             nbrolls--;
                         }
@@ -180,7 +187,7 @@ namespace Assets.Noyau.Players.controller
                     LocationAvailable = availableDestination.ToArray()
                 });
 
-                if (GameManager.PlayerTurn.Value.IsBot.Value)
+                if (GameManager.PlayerTurn.Value is Bot)
                 {
                     WaitHandler.Instance.BotChoice(1.0f, new MoveOn()
                     {
@@ -208,7 +215,7 @@ namespace Assets.Noyau.Players.controller
                 {
                     case Position.Antre:
                         GameManager.PickVisionDeck.Value = true;
-                        if (GameManager.PlayerTurn.Value.IsBot.Value && GameManager.LocalPlayer.Value.Id == GameManager.BotHandler.Value.Id)
+                        if (GameManager.PlayerTurn.Value is Bot && GameManager.LocalPlayer.Value.Id == GameManager.BotHandler.Value.Id)
                         {
                             WaitHandler.Instance.BotChoice(2.0f, new DrawCardEvent()
                             {
@@ -221,7 +228,7 @@ namespace Assets.Noyau.Players.controller
                         GameManager.PickVisionDeck.Value = true;
                         GameManager.PickLightnessDeck.Value = true;
                         GameManager.PickDarknessDeck.Value = true;
-                        if (GameManager.PlayerTurn.Value.IsBot.Value && GameManager.LocalPlayer.Value.Id == GameManager.BotHandler.Value.Id)
+                        if (GameManager.PlayerTurn.Value is Bot && GameManager.LocalPlayer.Value.Id == GameManager.BotHandler.Value.Id)
                         {
                             int cardChoosen = UnityEngine.Random.Range(1, 3);
                             CardType cardChoosenType = CardType.Darkness;
@@ -246,7 +253,7 @@ namespace Assets.Noyau.Players.controller
                         break;
                     case Position.Monastere:
                         GameManager.PickLightnessDeck.Value = true;
-                        if (GameManager.PlayerTurn.Value.IsBot.Value && GameManager.LocalPlayer.Value.Id == GameManager.BotHandler.Value.Id)
+                        if (GameManager.PlayerTurn.Value is Bot && GameManager.LocalPlayer.Value.Id == GameManager.BotHandler.Value.Id)
                         {
                             WaitHandler.Instance.BotChoice(2.0f, new DrawCardEvent()
                             {
@@ -257,7 +264,7 @@ namespace Assets.Noyau.Players.controller
                         break;
                     case Position.Cimetiere:
                         GameManager.PickDarknessDeck.Value = true;
-                        if (GameManager.PlayerTurn.Value.IsBot.Value && GameManager.LocalPlayer.Value.Id == GameManager.BotHandler.Value.Id)
+                        if (GameManager.PlayerTurn.Value is Bot && GameManager.LocalPlayer.Value.Id == GameManager.BotHandler.Value.Id)
                         {
                             WaitHandler.Instance.BotChoice(2.0f, new DrawCardEvent()
                             {
@@ -268,12 +275,12 @@ namespace Assets.Noyau.Players.controller
                         break;
                     case Position.Foret:
                         if (!(GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId)
-                            || !(GameManager.PlayerTurn.Value.IsBot.Value && GameManager.LocalPlayer.Value.Id != GameManager.BotHandler.Value.Id))
+                            || !(GameManager.PlayerTurn.Value is Bot && GameManager.LocalPlayer.Value.Id != GameManager.BotHandler.Value.Id))
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Foret.Id, false, e.PlayerId));
                         break;
                     case Position.Sanctuaire:
                         if (!(GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId)
-                            || !(GameManager.PlayerTurn.Value.IsBot.Value && GameManager.LocalPlayer.Value.Id != GameManager.BotHandler.Value.Id))
+                            || !(GameManager.PlayerTurn.Value is Bot && GameManager.LocalPlayer.Value.Id != GameManager.BotHandler.Value.Id))
                             EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.Sanctuaire.Id, false, e.PlayerId));
                         break;
                 }
@@ -337,16 +344,16 @@ namespace Assets.Noyau.Players.controller
                         GameManager.TurnEndable.Value = false;
                         GameManager.AttackAvailable.Value = false;
                     }
-                    if (!((GameManager.PlayerTurn.Value.IsBot.Value && GameManager.LocalPlayer.Value.Id != GameManager.BotHandler.Value.Id)
-                    || (!GameManager.PlayerTurn.Value.IsBot.Value && GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId)))
+                    if (!((GameManager.PlayerTurn.Value is Bot && GameManager.LocalPlayer.Value.Id != GameManager.BotHandler.Value.Id)
+                    || (!(GameManager.PlayerTurn.Value is Bot) && GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId)))
                     {
                         EventView.Manager.Emit(new SelectUsableCardPickedEvent(pickedUsableCard.Id, pickedUsableCard.cardType == CardType.Vision, e.PlayerId));
                     }
                 }
                 else if (pickedCard is EquipmentCard pickedEquipmentCard)
                 {
-                    if (!((GameManager.PlayerTurn.Value.IsBot.Value && GameManager.LocalPlayer.Value.Id != GameManager.BotHandler.Value.Id)
-                        || (!GameManager.PlayerTurn.Value.IsBot.Value && GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId)))
+                    if (!((GameManager.PlayerTurn.Value is Bot && GameManager.LocalPlayer.Value.Id != GameManager.BotHandler.Value.Id)
+                        || (!(GameManager.PlayerTurn.Value is Bot) && GameManager.LocalPlayer.Value != null && GameManager.LocalPlayer.Value.Id != e.PlayerId)))
                     {
                         EventView.Manager.Emit(new DrawEquipmentCardEvent(player.Id, pickedEquipmentCard.Id));
                     }
@@ -357,7 +364,7 @@ namespace Assets.Noyau.Players.controller
                         GameManager.WaitingPlayer.Value = null;
                     }
                     GameManager.AttackAvailable.Value = true;
-                    if (GameManager.PlayerTurn.Value.IsBot.Value
+                    if (GameManager.PlayerTurn.Value is Bot
                         && GameManager.LocalPlayer.Value.Id == GameManager.BotHandler.Value.Id)
                     {
                         List<Player> targetablePlayers = GameManager.PlayerTurn.Value.getTargetablePlayers();
@@ -412,7 +419,7 @@ namespace Assets.Noyau.Players.controller
                 }
                 GameManager.EndOfTurn.Value = true;
 
-                if (GameManager.PlayerTurn.Value.IsBot.Value
+                if (GameManager.PlayerTurn.Value is Bot
                     && GameManager.LocalPlayer.Value.Id == GameManager.BotHandler.Value.Id)
                 {
                     List<Player> targetablePlayers = GameManager.PlayerTurn.Value.getTargetablePlayers();
@@ -557,7 +564,7 @@ namespace Assets.Noyau.Players.controller
                     GameManager.AttackDone.Value = true;
                     GameManager.AttackAvailable.Value = false;
 
-                    if (GameManager.PlayerTurn.Value.IsBot.Value
+                    if (GameManager.PlayerTurn.Value is Bot
                         && GameManager.LocalPlayer.Value.Id == GameManager.BotHandler.Value.Id)
                     {
                         WaitHandler.Instance.BotChoice(1.0f, new EndTurnEvent()
@@ -620,7 +627,7 @@ namespace Assets.Noyau.Players.controller
             {
                 Player player = PlayerView.GetPlayer(sucpe.PlayerId);
                 UsableCard card = (UsableCard)CardView.GetCard(sucpe.CardId);
-                if (player.IsBot.Value
+                if (player is Bot
                             && GameManager.LocalPlayer.Value.Id == GameManager.BotHandler.Value.Id)
                 {
                     List<(int ceIndex, Player player)> choices = new List<(int, Player)>();

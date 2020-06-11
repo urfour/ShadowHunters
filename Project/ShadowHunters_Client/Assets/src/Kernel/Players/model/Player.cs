@@ -49,10 +49,6 @@ public class Player
     /// <summary>
     /// nombre de blessure
     /// </summary>
-    public Setting<bool> IsBot { get; private set; } = new Setting<bool>(false);
-    /// <summary>
-    /// nom du joueur
-    /// </summary>
     public Setting<int> Wound { get; private set; } = new Setting<int>(0);
     /// <summary>
     /// le joueur peut-il être révélé ?
@@ -192,10 +188,9 @@ public class Player
     /// </summary>
     /// <param name="id">Id du joueur</param>
     /// <param name="c">Personnage qu'il va jouer</param>
-    public Player(int id, Character c, bool isBot)
+    public Player(int id, Character c)
     {
         this.Id = id;
-        this.IsBot.Value = isBot;
         this.Name = ((PlayerNames)id).ToString();
         this.ListCard = new List<Card>();
         this.Character = c;
@@ -266,7 +261,7 @@ public class Player
                 {
                     CardView.GCard.stealCardDiscardAllOthers = CardView.GCard.CreateStealCardChoicesDiscardAllOthers(playerAttacking, this);
                     if (GameManager.LocalPlayer.Value == playerAttacking
-                        || playerAttacking.IsBot.Value && GameManager.LocalPlayer.Value == GameManager.BotHandler.Value)
+                        || playerAttacking is Bot && GameManager.LocalPlayer.Value == GameManager.BotHandler.Value)
                     {
                         EventView.Manager.Emit(new SelectUsableCardPickedEvent(CardView.GCard.stealCardDiscardAllOthers.Id, false, playerAttacking.Id));
                     }

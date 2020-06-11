@@ -27,11 +27,11 @@ namespace Assets.Noyau.Players.controller
             Players = new Player[nbPlayers];
             for (int i = 0; i < realPlayers; i++)
             {
-                Players[i] = new Player(i, characters.PickCharacter(), false);
+                Players[i] = new Player(i, characters.PickCharacter());
             }
             for (int i = realPlayers; i < nbPlayers; i++)
             {
-                Players[i] = new Player(i, characters.PickCharacter(), true);
+                Players[i] = new Bot(i, characters.PickCharacter());
             }
         }
     }

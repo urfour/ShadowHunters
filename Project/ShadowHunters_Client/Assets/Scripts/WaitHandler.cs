@@ -26,10 +26,8 @@ public class WaitHandler : MonoBehaviour
 
     IEnumerator SimulateBotChoice(float time, PlayerEvent e)
     {
-        Debug.Log("Simulation d'attente du bot");
         yield return new WaitForSeconds(time);
         EventView.Manager.Emit(e);
-        Debug.Log("Fin de l'attente");
     }
 
 }
