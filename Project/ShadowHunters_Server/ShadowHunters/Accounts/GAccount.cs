@@ -164,7 +164,7 @@ namespace ShadowHunter_Server.Accounts
         //              n'existe pas
         private byte Authentify(string login, string password)
         {
-            string connectionString = @"DataSource=../../database.db; Version=3;";
+            string connectionString = @"DataSource=database.db; Version=3;";
             int myUserId = -1;
 
             using (SQLiteConnection conn = new SQLiteConnection(connectionString))
@@ -217,7 +217,7 @@ namespace ShadowHunter_Server.Accounts
         // Sortie : true si le compte a été créé, false sinon
         private bool CreateAccount(SignInEvent sie)
         {
-            string connectionString = @"DataSource=../../database.db; Version=3;";
+            string connectionString = @"DataSource=database.db; Version=3;";
             string login = sie.Login;
             string password = sie.Password;
 
