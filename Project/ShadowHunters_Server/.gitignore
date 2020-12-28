@@ -1,5 +1,5 @@
-*/bin*
 *.config
 *Temp*
 *.vs*
 *obj*
+*bin/*
